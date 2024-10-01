@@ -1,0 +1,15 @@
+#include "PROMain.hlsl"
+#pragma kernel CSMain
+[numthreads(10, 10, 1)]
+void CSMain(int3 id : SV_DispatchThreadID)
+{
+    float3 lightColor;
+    for (int i = 0; i < 10; i++)
+    {
+        float4 sunColor = RayOcclusion_Sun(IDToLocal(id.xy), SunBuffer[i]);
+        lightColor += sunColor.xyz * sunColor.w;
+
+    }
+    LightBuffer[PixelToIndex(id.xy)] = float4(lightColor, 1); //float4(GetPixel(IDToLocal(id.xy)).color.xyz, 1);
+
+}
