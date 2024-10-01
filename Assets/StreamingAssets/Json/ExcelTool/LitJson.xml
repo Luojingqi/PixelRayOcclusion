@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LitJson</name>
+    </assembly>
+    <members>
+        <member name="M:LitJson.JsonMapper.RegisterBaseExporters">
+            <summary>
+            写出规则
+            </summary>
+        </member>
+        <member name="M:LitJson.JsonMapper.RegisterBaseImporters">
+            <summary>
+            读取规则
+            </summary>
+        </member>
+    </members>
+</doc>
