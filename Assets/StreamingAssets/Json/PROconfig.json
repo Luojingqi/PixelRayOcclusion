@@ -1,0 +1,16 @@
+{
+  //光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
+  //从相机所在的区块开始算起，超出的部分不会计算光照
+  "LightBufferBlockSize": {
+    "x": 3,
+    "y": 3
+  },
+  //每个区块接收多大范围内的光照,最小1,1,更改后需要去Shader中同步更改Block缓冲区数量
+  //Bffer_LightBuffer.hlsl 中StructuredBuffer<int> BlockBuffer0;
+  //需要与hlsl中区块数量与此属性的x*y的数量应当一致
+  "EachBlockReceiveLightSize": {
+    "x": 3,
+    "y": 3
+  }
+
+}

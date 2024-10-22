@@ -1,0 +1,27 @@
+#include "StructData.hlsl"
+RWStructuredBuffer<int4> LightBuffer;
+
+int PixelToIndex(int2 pos)
+{
+    return pos.y * BlockSizeX + pos.x;
+}
+
+#pragma kernel ResetLightBuffer
+[numthreads(8, 8, 1)]
+void ResetLightBuffer(int3 id : SV_DispatchThreadID)
+{
+    LightBuffer[PixelToIndex(id.xy)] = int4(0, 0, 0, 0);
+}
+
+RWStructuredBuffer<int4> LightBufferTemp;
+#pragma kernel BlendLightBuffer
+[numthreads(8, 8, 1)]
+void BlendLightBuffer(int3 id : SV_DispatchThreadID)
+{
+    int index = PixelToIndex(id.xy);
+    int4 color = LightBufferTemp[index];
+    if (color.w > 0)
+        LightBuffer[index] += int4(color.xyz / color.w, 0);
+    LightBufferTemp[index] = int4(0, 0, 0, 0);
+}
+
