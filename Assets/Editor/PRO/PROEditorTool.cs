@@ -10,12 +10,12 @@ using UnityEngine;
 public static class PROEditorTool
 {
 
-    [MenuItem("PRO/启动ExcelTool")]
+    [MenuItem("PRO/1.启动ExcelTool")]
     public static void StartExcelToolEXE()
     {
         ExcelTool.ExcelMain.Start();
     }
-    [MenuItem("PRO/创建HLSL文件")]
+    [MenuItem("PRO/2.创建HLSL文件")]
     public static void AutoCreateHLSL()
     {
         if (!JsonTool.LoadingText(Application.streamingAssetsPath + @"\Json\LightSourceInfo.json", out string lightSourceInfoText))

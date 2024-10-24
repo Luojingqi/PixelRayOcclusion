@@ -16,7 +16,7 @@ namespace ExcelTool
 
             #region 加载路径配置文件
             //string exePath = Directory.GetCurrentDirectory();
-            string exePath = Application.streamingAssetsPath + @"\Json\ExcelTool";
+            string exePath = Application.streamingAssetsPath + @"\Excel\ExcelTool";
             JsonTool.LoadingText(exePath + @"\path.json", out string pathText);
             Console.WriteLine($"读取path文件：{exePath + @"\path.json"}");
             var path = JsonTool.ToObject<JsonOnPath>(pathText);
@@ -76,10 +76,12 @@ namespace ExcelTool
                 {
                     jsonOnAllWorksheetList.Add(new JsonData());
                     ExcelWorksheet workbook = package.Workbook.Worksheets[workIndex];
+                    //遍历每一行
                     for (int row = 4; row <= workbook.Dimension.Rows; row++)
                     {
                         //单行数据
                         JsonData jsonData = new JsonData();
+                        //遍历每一列
                         for (int col = 2; col <= 1 + Name_Type_Dic.Count; col++)
                         {
                             string attributeName = workbook.Cells[1, col].Value.ToString().Trim(' ');
@@ -92,7 +94,7 @@ namespace ExcelTool
                             if (value == "")
                                 continue;
                             bool IsList = attributeTpye.Contains("[]");
-                            if (!IsList)
+                            if (IsList == false)
                                 ToJsonData.Run(attributeTpye.ToLower(), attributeName, value, ref jsonData);
                             else
                             {

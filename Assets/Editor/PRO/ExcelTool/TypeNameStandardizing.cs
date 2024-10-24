@@ -18,7 +18,7 @@
         {
             bool IsList = typeString.Contains("[]");
             string typeName = null;
-            if (IsList) typeName = typeName.Split('[')[0];
+            if (IsList) typeName = typeString.Split('[')[0];
             switch (typeString.ToLower())
             {
                 case "string": typeName = _System + "string"; break;
@@ -35,6 +35,7 @@
                 case "fixvector3": typeName = _Fix64PhysicsData + "FixVector3"; break;
                 case "fixvector2": typeName = _Fix64PhysicsData + "FixVector2"; break;
                 case "fixquaternion": typeName = _Fix64PhysicsData + "FixQuaternion"; break;
+                default: typeName = typeString; break;
             }
             if (IsList)
             {
