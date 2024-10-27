@@ -13,7 +13,7 @@ namespace PRO.Tool
         /// <summary>
         /// 记录当前已经加载了的包
         /// </summary>
-        private static Dictionary<string, LocalAssetBundle> bundleDic = new Dictionary<string, LocalAssetBundle>();
+        private static Dictionary<string, AssetBundleEntity> bundleDic = new Dictionary<string, AssetBundleEntity>();
         /// <summary>
         /// 已经加载了的resource资源
         /// </summary>
@@ -24,7 +24,7 @@ namespace PRO.Tool
         /// </summary>
         /// <param name="bundlePath">相对路径或名字</param>
         /// <returns></returns>
-        private static async UniTask<LocalAssetBundle> LoadBundle(string bundlePath, bool CitedBy = false)
+        private static async UniTask<AssetBundleEntity> LoadBundle(string bundlePath, bool CitedBy = false)
         {
             if (MainManifest == null)
             {
@@ -49,7 +49,7 @@ namespace PRO.Tool
                 AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(SaveABPath + bundlePath);
                 AssetBundle ab = await request.ToUniTask();
                 Log.Print($"加载ab资源包： ab = {bundlePath}", ab != null ? new Color32(146, 208, 80, 0) : new Color32(255, 0, 0, 0));
-                LocalAssetBundle bundle = new LocalAssetBundle(ab);
+                AssetBundleEntity bundle = new AssetBundleEntity(ab);
                 if (CitedBy)
                     bundle.CitedBy++;
                 bundleDic.Add(name, bundle);
@@ -77,7 +77,7 @@ namespace PRO.Tool
                 case nameof(GameObject): analysisPath += ".prefab"; break;
                 case nameof(Material): analysisPath += ".mat"; break;
             }
-            LocalAssetBundle bundle = await LoadBundle(bundlePath);
+            AssetBundleEntity bundle = await LoadBundle(bundlePath);
             T asset = await bundle.AnalysisAsync<T>(analysisPath);
             Log.Print($"解析包内资源： ab = {bundlePath}   asset = {analysisPath}", asset != null ? new Color32(146, 208, 80, 0) : new Color32(255, 0, 0, 0));
             CheckUnload();
@@ -120,7 +120,7 @@ namespace PRO.Tool
                     Log.Print("卸载ab包" + keyValue.Key, new Color32(255, 0, 0, 0));
                     string[] CitedByBundle = MainManifest.GetAllDependencies(keyValue.Key);
                     foreach (string name in CitedByBundle)
-                        if (bundleDic.TryGetValue(name, out LocalAssetBundle bundle))
+                        if (bundleDic.TryGetValue(name, out AssetBundleEntity bundle))
                             bundle.CitedBy--;
                     canUnload.Add(keyValue.Key);
                 }

@@ -1,0 +1,16 @@
+{
+    "name": "PRO.GenericFramework.Assembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4fcb97b18a27a96448d941093379c834"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

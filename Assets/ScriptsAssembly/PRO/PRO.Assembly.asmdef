@@ -1,0 +1,18 @@
+{
+    "name": "PRO.Assembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:4fcb97b18a27a96448d941093379c834",
+        "GUID:ec61fd18fc4ead0498c60958d20a4931"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

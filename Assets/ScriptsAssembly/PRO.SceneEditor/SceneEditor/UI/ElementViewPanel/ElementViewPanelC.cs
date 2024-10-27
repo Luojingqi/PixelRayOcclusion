@@ -1,4 +1,3 @@
-using UnityEngine;
 namespace PRO.SceneEditor
 {
     public class ElementViewPanelC : UIControllerBase

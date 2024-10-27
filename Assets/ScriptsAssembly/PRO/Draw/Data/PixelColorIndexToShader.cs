@@ -2,7 +2,6 @@ using PRO.Data;
 using System;
 using System.Runtime.InteropServices;
 using Unity.Mathematics;
-using UnityEngine;
 [StructLayout(LayoutKind.Sequential)]
 public struct PixelColorInfoToShader
 {

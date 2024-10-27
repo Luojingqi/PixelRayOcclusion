@@ -5,9 +5,9 @@ using Cysharp.Threading.Tasks;
 
 namespace PRO.Tool
 {
-    public class LocalAssetBundle
+    public class AssetBundleEntity
     {
-        public LocalAssetBundle(AssetBundle bundle)
+        public AssetBundleEntity(AssetBundle bundle)
         {
             this.ab = bundle;
         }
