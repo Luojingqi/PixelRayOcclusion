@@ -53,6 +53,41 @@ namespace PRO
             if (pos.x < 0 || pos.x >= Block.Size.x || pos.y < 0 || pos.y >= Block.Size.y) return false;
             else return true;
         }
+
+        /// <summary>
+        /// 修正，如果当前点不在区块内，返回修正的区块和点
+        /// <returns></returns>
+        public static bool Relocation(BlockBase block, Vector2Int pos, out Vector2Int rightBlock, out Vector2Byte rightPos)
+        {
+            rightBlock = block.BlockPos;
+            rightPos = (Vector2Byte)pos;
+            bool ret = true;
+            if (pos.x < 0)
+            {
+                rightBlock.x = block.BlockPos.x - 1 - pos.x / Block.Size.x;
+                rightPos.x = (byte)(pos.x % Block.Size.x + Block.Size.x);
+                ret = false;
+            }
+            else if (pos.x >= Block.Size.x)
+            {
+                rightBlock.x = block.BlockPos.x + pos.x / Block.Size.x;
+                rightPos.x = (byte)(pos.x % Block.Size.x);
+                ret = false;
+            }
+            if (pos.y < 0)
+            {
+                rightBlock.y = block.BlockPos.y - 1 - pos.y / Block.Size.y;
+                rightPos.y = (byte)(pos.y % Block.Size.y + Block.Size.y);
+                ret = false;
+            }
+            else if (pos.y >= Block.Size.y)
+            {
+                rightBlock.y = block.BlockPos.y + pos.y / Block.Size.y;
+                rightPos.y = (byte)(pos.y % Block.Size.y);
+                ret = false;
+            }
+            return ret;
+        }
         #endregion
 
         public override void Init()
@@ -71,11 +106,11 @@ namespace PRO
             return block.GetPixel(block.GloabToPixel(worldPos));
         }
         /// <summary>
-        /// 获取点（如果点不在此区块会被修正）
+        /// 获取点（如果点不在此区块会被修正到对应区块）
         /// </summary>
         public Pixel GetPixelRelocation(int x, int y)
         {
-            if (BlockManager.Relocation(this, new Vector2Int(x, y), out Vector2Int rightBlock, out Vector2Byte rightPos))
+            if (Block.Relocation(this, new Vector2Int(x, y), out Vector2Int rightBlock, out Vector2Byte rightPos))
             {
                 return allPixel[x, y];
             }
@@ -253,8 +288,8 @@ namespace PRO
             p1.pos = t;
             SetPixel(p0);
             SetPixel(p1);
-            DrawPixelAsync(p0.pos, BlockMaterial.GetPixelColorInfo(p0.name).color);
-            DrawPixelAsync(p1.pos, BlockMaterial.GetPixelColorInfo(p1.name).color);
+            DrawPixelAsync(p0.pos, BlockMaterial.GetPixelColorInfo(p0.colorName).color);
+            DrawPixelAsync(p1.pos, BlockMaterial.GetPixelColorInfo(p1.colorName).color);
         }
 
         /// <summary>
@@ -271,8 +306,8 @@ namespace PRO
             p1.pos = t;
             block1.SetPixel(p0);
             block0.SetPixel(p1);
-            block1.DrawPixelAsync(p0.pos, BlockMaterial.GetPixelColorInfo(p0.name).color);
-            block0.DrawPixelAsync(p1.pos, BlockMaterial.GetPixelColorInfo(p1.name).color);
+            block1.DrawPixelAsync(p0.pos, BlockMaterial.GetPixelColorInfo(p0.colorName).color);
+            block0.DrawPixelAsync(p1.pos, BlockMaterial.GetPixelColorInfo(p1.colorName).color);
         }
     }
 }

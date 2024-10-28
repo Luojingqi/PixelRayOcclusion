@@ -44,45 +44,8 @@ namespace PRO
         }
         #endregion
 
-        /// <summary>
-        /// 修正，如果当前点不在区块内，返回修正的区块和点
-        /// <returns></returns>
-        public static bool Relocation(BlockBase block, Vector2Int pos, out Vector2Int rightBlock, out Vector2Byte rightPos)
-        {
-            rightBlock = block.BlockPos;
-            rightPos = (Vector2Byte)pos;
-            bool ret = true;
-            if (pos.x < 0)
-            {
-                rightBlock.x = block.BlockPos.x - 1 - pos.x / Block.Size.x;
-                rightPos.x = (byte)(pos.x % Block.Size.x + Block.Size.x);
-                ret = false;
-            }
-            else if (pos.x >= Block.Size.x)
-            {
-                rightBlock.x = block.BlockPos.x + pos.x / Block.Size.x;
-                rightPos.x = (byte)(pos.x % Block.Size.x);
-                ret = false;
-            }
-            if (pos.y < 0)
-            {
-                rightBlock.y = block.BlockPos.y - 1 - pos.y / Block.Size.y;
-                rightPos.y = (byte)(pos.y % Block.Size.y + Block.Size.y);
-                ret = false;
-            }
-            else if (pos.y >= Block.Size.y)
-            {
-                rightBlock.y = block.BlockPos.y + pos.y / Block.Size.y;
-                rightPos.y = (byte)(pos.y % Block.Size.y);
-                ret = false;
-            }
-            return ret;
-        }
 
 
-        private GameObjectPool<Block> BlockPool;
-        private GameObjectPool<BackgroundBlock> BackgroundPool;
-        public GameObjectPool<BoxCollider2D> BoxCollider2DPool;
 
         public void Start()
         {
@@ -93,34 +56,17 @@ namespace PRO
             InitBackgroundPool();
             InitBoxCollider2DPool();
 
+            Pixel.LoadPixelTypeInfo();
             DrawThread.Init(() =>
            {
-               //创建行星
-               //ThreadPool.QueueUserWorkItem((obj) =>
-               //{
-               //    StarManager.Inst.CreateStar(new(50, 50), 20, 20, 3, 10);
-               //    StarManager.Inst.CreateStar(new(47, 52), 10, 10, 2, 10);
-               //    StarManager.Inst.CreateStar(new(52, 48), 30, 10, 1, 10);
-               //    StarManager.Inst.CreateStar(new(52, 48), 31, 10, 1, 10);
-               //    StarManager.Inst.CreateStar(new(52, 48), 32, 10, 1, 10);
-               //    StarManager.Inst.CreateStar(new(52, 48), 33, 10, 1, 10);
-               //    //StarManager.Inst.CreateStar(new(45, 55), 19, 10, 2, 10);
-               //    for (int i = 0; i <= 0; i++)
-               //    {
-               //        for (int j = 0; j <= 0; j++)
-               //        {
-               //            var block = BlockManager.Inst.BlockCrossList[i][j];
-               //            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-               //            lock (BlockManager.Inst.mainThreadEventLock)
-               //                BlockManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); };
-               //            BlockManager.Inst.En_Lock_DrawApplyQueue(block);
-               //        }
-               //    }
-               //});
-
                BlockMaterial.FirstBind();
            });
         }
+        #region 初始化对象池
+        private GameObjectPool<Block> BlockPool;
+        private GameObjectPool<BackgroundBlock> BackgroundPool;
+        public GameObjectPool<BoxCollider2D> BoxCollider2DPool;
+
         Transform BlockNode;
         Transform PoolNode;
 
@@ -170,6 +116,7 @@ namespace PRO
             boxCollider.transform.parent = boxCollider2DPoolGo.transform;
             BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform, 10000, true);
         }
+        #endregion
 
         [NonSerialized]
         /// <summary>
@@ -226,7 +173,6 @@ namespace PRO
                     StarManager.Inst.CreateStar(new(15, 15), 30, 10, "不透光墙", 10);
                     StarManager.Inst.CreateStar(new(15, 15), 31, 10, "不透光墙", 10);
                     StarManager.Inst.CreateStar(new(15, 15), 33, 10, "不透光墙", 10);
-                    //StarManager.Inst.CreateStar(new(0, 0), 19, 10, "光源", 10);
                     for (int i = 0; i <= 0; i++)
                     {
                         for (int j = 0; j <= 0; j++)
@@ -239,11 +185,6 @@ namespace PRO
                     }
                 });
             }
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                //mat.pixelColorIndexToShaderArray[0] = new PixelColorIndexToShader() { color = new Vector4(0, 1, 0, 1) };
-                //mat.pixelColorIndexToShaderBufffer.SetData(mat.pixelColorIndexToShaderArray);
-            }
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 n = "光源0";
             if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -255,7 +196,7 @@ namespace PRO
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 Block block = BlockCrossList[blockPos];
-                block.SetPixel(Pixel.TakeOut(n, pixelPos));
+                block.SetPixel(Pixel.TakeOut("光源",n, pixelPos));
                 block.DrawPixelAsync();
             }
             BlockMaterial.Update();

@@ -99,12 +99,12 @@ namespace ExcelTool
                             else
                             {
                                 //数组使用'|'分开
-                                string[] strs = value.Split('|');
+                                string[] strs = value.Split('|', '，');
                                 string tpyeName = attributeTpye.Split('[')[0].ToLower();
                                 JsonData dataList = new JsonData();
                                 foreach (var str in strs)
                                 {
-                                    ToJsonData.Run(tpyeName, attributeName, str, ref dataList, true);
+                                    ToJsonData.Run(tpyeName, attributeName, str.Trim(), ref dataList, true);
                                 }
                                 jsonData[attributeName] = dataList;
                             }

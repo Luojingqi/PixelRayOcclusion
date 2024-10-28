@@ -14,13 +14,13 @@ namespace PRO
         {
             Liquid liquid = null;
             lock (liquidPool) { liquid = liquidPool.TakeOut(); }
-            liquid.name = name;
+            //liquid.name = name;
             liquid.pos = pixelPos;
             return liquid;
         }
         public static void PutIn(Liquid liquid)
         {
-            liquid.name = null;
+            //liquid.name = null;
             liquidPool.PutIn(liquid);
         }
     }

@@ -12,66 +12,66 @@ namespace PRO.Data
 {
     
     
-    public class UIConfig
+    public class PixelTypeInfo
     {
         
-        private string name;
+        private string typename;
         
-        private bool showmode;
+        private System.Collections.Generic.List<System.String> availablecolors;
         
-        private string loadmode;
+        private bool _collider;
         
-        private string path;
+        private int fluiddensity;
         
-        // UI名称
-        public string Name
+        // 类型名称
+        public string typeName
         {
             get
             {
-                return this.name;
+                return this.typename;
             }
             set
             {
-                this.name = value;
+                this.typename = value;
             }
         }
         
-        // 是否自动反切
-        public bool ShowMode
+        // 可用颜色
+        public System.Collections.Generic.List<System.String> availableColors
         {
             get
             {
-                return this.showmode;
+                return this.availablecolors;
             }
             set
             {
-                this.showmode = value;
+                this.availablecolors = value;
             }
         }
         
-        // 加载模式
-        public string LoadMode
+        // 需要碰撞
+        public bool collider
         {
             get
             {
-                return this.loadmode;
+                return this._collider;
             }
             set
             {
-                this.loadmode = value;
+                this._collider = value;
             }
         }
         
-        // UI路径
-        public string Path
+        // 流体密度
+        public int fluidDensity
         {
             get
             {
-                return this.path;
+                return this.fluiddensity;
             }
             set
             {
-                this.path = value;
+                this.fluiddensity = value;
             }
         }
     }

@@ -15,7 +15,7 @@ namespace PRO.Data
     public class PixelColorInfo
     {
         
-        private string _name;
+        private string colorname;
         
         private UnityEngine.Color32 _color;
         
@@ -25,16 +25,16 @@ namespace PRO.Data
         
         private int _index;
         
-        // 名称
-        public string name
+        // 颜色的名称
+        public string colorName
         {
             get
             {
-                return this._name;
+                return this.colorname;
             }
             set
             {
-                this._name = value;
+                this.colorname = value;
             }
         }
         

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace PRO
 {
+    /// <summary>
+    /// 贪心算法生成碰撞箱
+    /// </summary>
     public static class GreedyCollider
     {
         public struct ColliderData
@@ -34,7 +37,7 @@ namespace PRO
             List<ColliderData> colliderDataList = new List<ColliderData>();
             for (int y = max.y; y >= min.y; y--)
                 for (int x = min.x; x <= max.x; x++)
-                    if (!hash.Contains(new Vector2Int(x, y)) && block.GetPixelRelocation(x, y).name != "空气")
+                    if (!hash.Contains(new Vector2Int(x, y)) && Pixel.GetPixelTypeInfo(block.GetPixelRelocation(x, y).typeName).collider)
                     {
                         hash.Add(new Vector2Int(x, y));
 
@@ -44,7 +47,7 @@ namespace PRO
                         colliderData.position = block.PixelToWorld(new Vector2Byte(x, y));
                         colliderData.pos = new Vector2Byte(x, y);
                         int xShifting = x + 1;
-                        while (xShifting <= max.x && !hash.Contains(new Vector2Int(xShifting, y)) && block.GetPixelRelocation(xShifting, y).name != "空气")
+                        while (xShifting <= max.x && !hash.Contains(new Vector2Int(xShifting, y)) && Pixel.GetPixelTypeInfo(block.GetPixelRelocation(x, y).typeName).collider)
                             hash.Add(new Vector2Int(xShifting++, y));
                         xShifting = xShifting - x;
                         colliderData.size.x = Pixel.Size * xShifting;
@@ -55,7 +58,7 @@ namespace PRO
                         {
                             for (int i = 0; i < xShifting; i++)
                             {
-                                if (!hash.Contains(new Vector2Int(x + i, yShifting)) && block.GetPixelRelocation(x + i, yShifting).name == "空气")
+                                if (!hash.Contains(new Vector2Int(x + i, yShifting)) && Pixel.GetPixelTypeInfo(block.GetPixelRelocation(x, y).typeName).collider)
                                 {
                                     ok = false;
                                     break;

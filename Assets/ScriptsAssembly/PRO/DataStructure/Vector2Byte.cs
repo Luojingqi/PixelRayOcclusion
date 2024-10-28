@@ -55,5 +55,8 @@ namespace PRO.DataStructure
         public static explicit operator Vector2Int(Vector2Byte v) => new Vector2Int(v.x, v.y);
         public static explicit operator Vector3(Vector2Byte v) => new Vector3(v.x, v.y);
         public static explicit operator Vector2Byte(Vector2Int v) => new Vector2Byte((byte)v.x, (byte)v.y);
+
+        public static Vector2Byte max = new Vector2Byte(byte.MaxValue, byte.MaxValue);
+        public static Vector2Byte min = new Vector2Byte(byte.MinValue, byte.MinValue);
     }
 }

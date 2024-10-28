@@ -14,7 +14,7 @@ namespace PRO.SceneEditor
             base.Init(uiName);
 
             Inst = this;
-            Scene
+            //Scene
         }
 
         public void Start()

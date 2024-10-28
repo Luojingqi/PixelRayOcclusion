@@ -36,14 +36,13 @@ namespace PRO
         public Pixel GetPixel(Vector2Byte pos) => allPixel[pos.x, pos.y];
 
         /// <summary>
-        /// 设置某个点，切记设置完后记得调用异步或者同步更新颜色，使用光线追踪无所谓调用不调用
+        /// 设置某个点，切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
         /// </summary>
         public void SetPixel(Pixel pixel)
         {
             RemovePixel(pixel.pos);
-            PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.name);
-            if (pixelColorInfo == null) return;
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
+            PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixelColorInfo.index;
             if (pixelColorInfo.lightSourceType != "null") AddLightSource(pixel, pixelColorInfo);
         }
@@ -52,11 +51,10 @@ namespace PRO
         {
             Pixel pixel = allPixel[pos.x, pos.y];
             if (pixel == null) return;
-            PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.name);
+            PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             if (pixelColorInfo.lightSourceType != "null") RemoveLightSource(pixel);
 
-            if (pixel is Liquid) Liquid.PutIn(pixel as Liquid);
-            else Pixel.PutIn(pixel);
+            Pixel.PutIn(pixel);
             allPixel[pos.x, pos.y] = null;
         }
         #endregion
@@ -108,7 +106,7 @@ namespace PRO
         public struct TextureData
         {
             /// <summary>
-            /// 颜色数据，用于渲染线程修改颜色并上传到gpu
+            /// 纹理的颜色数据，用于渲染线程修改颜色并上传到gpu
             /// </summary>
             public NativeArray<float> nativeArray;
             /// <summary>
@@ -126,10 +124,10 @@ namespace PRO
         /// <summary>
         /// 任务队列，渲染任务添加进入由渲染线程访问修改
         /// </summary>
-        public Queue<DrawPixelTask> DrawPixelTaskQueue = new Queue<DrawPixelTask>();
+        public Queue<DrawPixelTask?> DrawPixelTaskQueue = new Queue<DrawPixelTask?>();
 
 
-        protected async void Enqueue(DrawPixelTask drawTask)
+        protected async void Enqueue(DrawPixelTask? drawTask)
         {
             while (true)
             {
@@ -155,17 +153,8 @@ namespace PRO
                 }
             }
         }
-        public void DrawPixelAsync()
-        {
-            Enqueue(new DrawPixelTask() { skip = true });
-        }
-        public void DrawPixelAsync(Vector2Byte pos, Color32 color)
-        {
-            DrawPixelTask drawTask = new DrawPixelTask();
-            drawTask.pos = pos;
-            drawTask.color = color;
-            Enqueue(drawTask);
-        }
+        public void DrawPixelAsync() => Enqueue(null);
+        public void DrawPixelAsync(Vector2Byte pos, Color32 color) => Enqueue(new DrawPixelTask(pos, color));
         public async void DrawPixelAsync(Vector2Byte[] pos, Color32[] color)
         {
             int length = Math.Min(pos.Length, color.Length);

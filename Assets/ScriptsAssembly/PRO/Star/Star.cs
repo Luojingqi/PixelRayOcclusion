@@ -22,10 +22,9 @@ public class Star
         foreach (var pos_G in list)
         {
             var block = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(pos_G)];
-            var pixel = new Pixel() { pos = block.GloabToPixel(pos_G), name = name };
+            Pixel pixel = Pixel.TakeOut(name, 0, block.GloabToPixel(pos_G));
             block.SetPixel(pixel);
             block.DrawPixelAsync();
-            // block.DrawPixelAsync(pixel., BlockManager.mat.GetPixelColorInfo(pixel.id).color);
         }
     }
 

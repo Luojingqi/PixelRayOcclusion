@@ -6,12 +6,10 @@ namespace PRO.Tool
     {
         public Vector2Byte pos;
         public Color32 color;
-        public bool skip;
         public DrawPixelTask(Vector2Byte pos, Color32 color)
         {
             this.pos = pos;
             this.color = color;
-            this.skip = false;
         }
     }
     /// <summary>

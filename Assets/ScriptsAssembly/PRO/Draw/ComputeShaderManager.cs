@@ -27,8 +27,6 @@ namespace PRO.Renderer
 
         public void FirstBind()
         {
-            Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
-            CameraCenterBlockPos = nowCameraPos;
             //光缓存块里左下角的坐标
             Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
             //所有提交到cpu的区块里左下角的

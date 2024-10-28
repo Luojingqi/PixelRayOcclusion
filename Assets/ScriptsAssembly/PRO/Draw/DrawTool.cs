@@ -72,7 +72,7 @@ namespace PRO.Tool
         }
         public static Color32 GetColor32Sync(this BlockBase block, Vector2Int pos)
         {
-            if (BlockManager.Relocation(block, pos, out Vector2Int rightBlock, out Vector2Byte rightPos))
+            if (Block.Relocation(block, pos, out Vector2Int rightBlock, out Vector2Byte rightPos))
             {
                 Color ret = new Color32(0, 0, 0, 0);
                 int index = (Block.Size.x * pos.y + pos.x) * 4;

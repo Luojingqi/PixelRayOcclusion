@@ -11,18 +11,18 @@ namespace PRO
         /// <summary>
         /// 相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int CameraCenterBlockPos;
+        public static Vector2Int CameraCenterBlockPos { get; private set; }
         /// <summary>
         /// 光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
         /// </summary>
-        public static Vector2Int LightBufferBlockSize;
+        public static Vector2Int LightBufferBlockSize { get; private set; }
         /// <summary>
         /// 每个区块接收多大范围内的光照,最小1,1,更改后需要去Shader中同步更改Block缓冲区数量
         /// </summary>
-        public static Vector2Int EachBlockReceiveLightSize;
-        public static int BlockBufferLength;
-        public static int LightBufferLength;
-        public static PROconfig proConfig;
+        public static Vector2Int EachBlockReceiveLightSize { get; private set; }
+        public static int BlockBufferLength { get; private set; }
+        public static int LightBufferLength { get; private set; }
+        private static PROconfig proConfig;
         #region 公共材质
 
         public static BlockShareMaterialManager blockShareMaterialManager = new BlockShareMaterialManager();
@@ -52,8 +52,8 @@ namespace PRO
             computeShaderManager.Init();
         }
 
-        #region 点的颜色属性的加载与缓冲区
-        //所有点的颜色数据_传递给shader
+        #region 像素点的颜色属性的加载与缓冲区
+        //所有点的颜色数据_存储到数组，然后传递给GPU缓冲区，shader与计算着色器中使用
         public static PixelColorInfoToShader[] pixelColorInfoToShaderArray;
         public static ComputeBuffer pixelColorInfoToShaderBufffer;
         private static void LoadAllPixelColorInfo()
@@ -68,14 +68,14 @@ namespace PRO
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelColorInfo") continue;
                 JsonTool.LoadingText(fileInfo.FullName, out string infoText);
-                Debug.Log(fileInfo.FullName);
+                Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelColorInfo[]>(infoText);
                 for (int i = 0; i < InfoArray.Length; i++)
-                    if (pixelColorInfoDic.ContainsKey(InfoArray[i].name) == false)
+                    if (pixelColorInfoDic.ContainsKey(InfoArray[i].colorName) == false)
                     {
                         InfoArray[i].index = pixelCount++;
-                        pixelColorInfoDic.Add(InfoArray[i].name, InfoArray[i]);
+                        pixelColorInfoDic.Add(InfoArray[i].colorName, InfoArray[i]);
                         pixelColorInfoList.Add(InfoArray[i]);
                     }
             }
@@ -102,7 +102,7 @@ namespace PRO
         public static PixelColorInfo GetPixelColorInfo(string pixelName)
         {
             if (pixelColorInfoDic.TryGetValue(pixelName, out PixelColorInfo value)) return value;
-            else Debug.Log($"没有像素名称为{pixelName}");
+            else Debug.Log($"没有像素颜色名称为{pixelName}");
             return null;
         }
         public static PixelColorInfo GetPixelColorInfo(int id)
@@ -124,7 +124,7 @@ namespace PRO
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "LightSourceInfo") continue;
                 JsonTool.LoadingText(fileInfo.FullName, out string infoText);
-                Debug.Log(fileInfo.FullName);
+                Log.Print(fileInfo.FullName, Color.green);
                 int lightSourceCount = 0;
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<LightSourceInfo[]>(infoText);
@@ -138,8 +138,9 @@ namespace PRO
             }
             #endregion
         }
-
+        ///光源信息的顺序索引
         private static List<LightSourceInfo> lightSourceInfoList = new List<LightSourceInfo>();
+        //光源信息的字典索引
         private static Dictionary<string, LightSourceInfo> lightSourceInfoDic = new Dictionary<string, LightSourceInfo>();
         public static LightSourceInfo GetLightSourceInfo(string lightSourceName)
         {
@@ -154,7 +155,7 @@ namespace PRO
         }
         public static int LightSourceInfoListCount => lightSourceInfoList.Count;
         #endregion
-
+        #region 将块数据传递到GPU
         public static void SetBlock(Block block)
         {
             Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
@@ -189,7 +190,7 @@ namespace PRO
             backgroundShareMaterialManager.SetBufferData(Info, background.textureData.PixelIDToShader);
             //Debug.Log($"背景坐标{background.BlockPos}  传递背景数据   背景缓存索引{Info}");
         }
-
+        #endregion
 
         public static void FirstBind()
         {
@@ -197,7 +198,7 @@ namespace PRO
             backgroundShareMaterialManager.FirstBind();
             computeShaderManager.FirstBind();
 
-            //computeShaderManager.Update();
+            Update();
         }
 
 

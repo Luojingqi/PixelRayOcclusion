@@ -65,9 +65,8 @@ namespace PRO
                             {
                                 while (block.DrawPixelTaskQueue.Count > 0)
                                 {
-                                    DrawPixelTask task = block.DrawPixelTaskQueue.Dequeue();
-                                    if (task.skip == false)
-                                        DrawTool.DrawPixelSync(block, task.pos, task.color);
+                                    DrawPixelTask? task = block.DrawPixelTaskQueue.Dequeue();
+                                    if (task != null) DrawTool.DrawPixelSync(block, task.Value.pos, task.Value.color);
                                 }
                                 BlockManager.Inst.En_Lock_DrawApplyQueue(block);
                             }
@@ -81,50 +80,13 @@ namespace PRO
                             {
                                 while (background.DrawPixelTaskQueue.Count > 0)
                                 {
-                                    DrawPixelTask task = background.DrawPixelTaskQueue.Dequeue();
-                                    if (task.skip == false)
-                                        DrawTool.DrawPixelSync(background, task.pos, task.color);
+                                    DrawPixelTask? task = background.DrawPixelTaskQueue.Dequeue();
+                                    if (task != null) DrawTool.DrawPixelSync(background, task.Value.pos, task.Value.color);
                                 }
                                 BlockManager.Inst.En_Lock_DrawApplyQueue(background);
                             }
                         }
                     }
-
-                #region 弃用
-                ////遍历所有需要更新的区块，取出其中需要更新的点，更新，最后提交给GPU
-                //for (int i = 0; i < BlockManager.Inst.BlockUpdateList.Count; i++)
-                //{
-                //    Block block = BlockManager.Inst.BlockUpdateList[i];
-                //    if (block.DrawPixelTaskQueue.Count > 0)
-                //    {
-                //        lock (block.DrawPixelTaskQueue)
-                //        {
-                //            while (block.DrawPixelTaskQueue.Count > 0)
-                //            {
-                //                DrawPixelTask task = block.DrawPixelTaskQueue.Dequeue();
-                //                DrawTool.DrawPixelSync(block, task.pos, task.color);
-                //            }
-                //            BlockManager.Inst.En_Lock_DrawApplyQueue(block);
-                //        }
-                //    }
-
-                //    //更新背景
-                //    BackgroundBlock background = BlockManager.Inst.BackgroundCrossList[block.BlockPos];
-                //    if (background.DrawPixelTaskQueue.Count > 0)
-                //    {
-                //        lock (background.DrawPixelTaskQueue)
-                //        {
-                //            while (background.DrawPixelTaskQueue.Count > 0)
-                //            {
-                //                DrawPixelTask task = background.DrawPixelTaskQueue.Dequeue();
-                //                DrawTool.DrawPixelSync(background, task.pos, task.color);
-                //            }
-                //            BlockManager.Inst.En_Lock_DrawApplyQueue(background);
-                //        }
-                //    }
-
-                //}
-                #endregion
                 Thread.Sleep(50);
             }
         }
@@ -173,7 +135,7 @@ namespace PRO
         /// </summary>
         private static void StartFillBlock(object obj)
         {
-
+            try
             {
                 var block = (Block)obj;
                 RandomFill(block, new System.Random());
@@ -184,6 +146,10 @@ namespace PRO
                 //BlockManager.Inst.En_Lock_DrawApplyQueue(block);
                 Interlocked.Add(ref endNum, -1);
             }
+            catch(Exception e)
+            {
+                Log.Print($"线程报错：{e}", Color.red);
+            }
         }
         private static void RandomFill(Block block, System.Random random)
         {
@@ -193,15 +159,15 @@ namespace PRO
                     int r = random.Next(0, 4);
                     if (r > 10)//>= 2)
                     {
-                        PixelColorInfo info = BlockMaterial.GetPixelColorInfo(1);
-                        block.SetPixel(new Pixel() { name = info.name, pos = new(x, y) });
-                        block.DrawPixelSync(new Vector2Byte(x, y), info.color);
+                        Pixel pixel = Pixel.New("空气", 0, new(x, y));
+                        block.SetPixel(pixel);
+                        block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
                     }
                     else
                     {
-                        PixelColorInfo info = BlockMaterial.GetPixelColorInfo(0);
-                        block.SetPixel(new Pixel() { name = info.name, pos = new(x, y) });
-                        block.DrawPixelSync(new Vector2Byte(x, y), info.color);
+                        Pixel pixel = Pixel.New("空气", 0, new(x, y));
+                        block.SetPixel(pixel);
+                        block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
                     }
                 }
         }
@@ -240,25 +206,32 @@ namespace PRO
         /// </summary>
         private static void StartFillBackground(object obj)
         {
-            var background = (BackgroundBlock)obj;
-            for (int x = 0; x < Block.Size.x; x++)
-                for (int y = 0; y < Block.Size.y; y++)
-                {
-                    if (x < Block.Size.x / 2 - 10)
+            try
+            {
+                var background = (BackgroundBlock)obj;
+                for (int x = 0; x < Block.Size.x; x++)
+                    for (int y = 0; y < Block.Size.y; y++)
                     {
-                        PixelColorInfo info = BlockMaterial.GetPixelColorInfo("背景2");
-                        background.SetPixel(new Pixel() { name = info.name, pos = new(x, y) });
-                        background.DrawPixelSync(new Vector2Byte(x, y), info.color);
+                        if (x < Block.Size.x / 2 - 10)
+                        {
+                            Pixel pixel = Pixel.New("背景", 0, new(x, y));
+                            background.SetPixel(pixel);
+                            background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        }
+                        else
+                        {
+                            Pixel pixel = Pixel.New("背景", 1, new(x, y));
+                            background.SetPixel(pixel);
+                            background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        }
                     }
-                    else
-                    {
-                        PixelColorInfo info = BlockMaterial.GetPixelColorInfo("背景2");
-                        background.SetPixel(new Pixel() { name = info.name, pos = new(x, y) });
-                        background.DrawPixelSync(new Vector2Byte(x, y), info.color);
-                    }
-                }
-            // BlockManager.Inst.En_Lock_DrawApplyQueue(background);
-            Interlocked.Add(ref endNum, -1);
+                // BlockManager.Inst.En_Lock_DrawApplyQueue(background);
+                Interlocked.Add(ref endNum, -1);
+            }
+            catch (Exception e)
+            {
+                Log.Print($"线程报错：{e}", Color.red);
+            }
         }
     }
 }
