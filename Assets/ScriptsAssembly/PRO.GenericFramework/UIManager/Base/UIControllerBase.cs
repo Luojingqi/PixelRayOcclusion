@@ -7,8 +7,9 @@ namespace PRO
 
         public abstract UIViewBase View { get; }
         public abstract UIModelBase Model { get; }
+        public string UIName { get; private set; }
 
-        public string UIName;
+
 
         //public LanguageManager.LanguageEnum NowUseLanguage { get; set; }
 
@@ -18,10 +19,11 @@ namespace PRO
         /// <summary>
         /// Ui初始化值调用一次
         /// </summary>
-        public virtual void Init()
+        public virtual void Init(string uiName)
         {
             View.Init(transform);
             Model.Init(transform);
+            this.UIName = uiName;
         }
 
         public event Action OpenEvent;
@@ -31,12 +33,7 @@ namespace PRO
         public virtual void Open()
         {
             gameObject.SetActive(true);
-            if (IsPause == false)
-            {
-                IsPause = false;
-                View.canvasGroup.blocksRaycasts = true;
-                View.canvasGroup.alpha = 1f;
-            }
+            if (IsPause == true) UnPause();
             OpenEvent?.Invoke();
         }
         public event Action CloseEvent;
@@ -55,10 +52,7 @@ namespace PRO
             HideEvent?.Invoke();
         }
 
-        /// <summary>
-        /// 暂停标记
-        /// </summary>
-        public bool IsPause { get; private set; }
+        private bool IsPause = false;
         /// <summary>
         /// 禁用当前UI所有交互操作
         /// </summary>
@@ -67,6 +61,15 @@ namespace PRO
             IsPause = true;
             View.canvasGroup.blocksRaycasts = false;
             View.canvasGroup.alpha = 0.3f;
+        }
+        /// <summary>
+        /// 解除禁用
+        /// </summary>
+        public virtual void UnPause()
+        {
+            IsPause = false;
+            View.canvasGroup.blocksRaycasts = true;
+            View.canvasGroup.alpha = 1f;
         }
 
     }

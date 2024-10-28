@@ -4,6 +4,7 @@ namespace PRO.Tool
 {
     public static class Log
     {
+        public static void Print(string text, Color color) => Print(text, (Color32)color);
         public static void Print(string text, Color32 color)
         {
             Debug.Log($"<color={color.ToHex()}>{text}</color>");

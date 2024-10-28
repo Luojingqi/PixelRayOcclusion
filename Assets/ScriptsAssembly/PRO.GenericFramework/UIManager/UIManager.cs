@@ -51,8 +51,6 @@ namespace PRO
             UIParent = GameObject.Find("UIPool").transform;
             SortOrder = 0;
         }
-
-
         private UIConfig GetUIConfig(string uiName)
         {
             UIConfigsDic.TryGetValue(uiName, out UIConfig uiConfig);
@@ -136,24 +134,6 @@ namespace PRO
             return ret;
         }
 
-        /// <summary>
-        /// UI切换模式
-        /// </summary>
-        public enum SwitchUIMode
-        {
-            /// <summary>
-            /// 隐藏上一个UI
-            /// </summary>
-            HideOldUI,
-            /// <summary>
-            /// 暂停上一个UI
-            /// </summary>
-            PauseOldUI,
-            /// <summary>
-            /// 关闭上一个UI
-            /// </summary>
-            CloseOldUI,
-        }
 
         /// <summary>
         /// UI工厂，通过配置文件初始化
@@ -174,7 +154,7 @@ namespace PRO
                 preform = await AssetManager.LoadAsync_A<GameObject>(strs[0], strs[1]);
             }
             UIControllerBase ui = preform.GetComponent<UIControllerBase>();
-            ui.Init();
+            ui.Init(uiConfig.Name);
             return ui;
         }
     }

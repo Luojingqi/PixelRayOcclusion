@@ -58,7 +58,7 @@ namespace PRO.Tool
             if (item == null) return;
 
             usedHashSet.Remove(item);
-
+            PutInEvent?.Invoke(item);
             if (notUsedList.Count + usedHashSet.Count < MaxNumber)
             {
                 notUsedList.Add(item);
