@@ -44,7 +44,7 @@ namespace PRO.Renderer
                     Vector2Int localBlockBufferPos = gloabBlockPos - minBlockBufferPos;
                     int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightBufferBlockSize.x);
                     int lightIndex = x + y * LightBufferBlockSize.x;
-                    Block block = BlockManager.Inst.BlockCrossList[gloabBlockPos];
+                    Block block = SceneManager.Inst.NowScene.GetBlock(gloabBlockPos);
                     //Debug.Log($"块坐标{block.BlockPos}  第一次绑定 块缓存索引{blockIndex}  光照缓存索引{lightIndex}");
                     block.materialPropertyBlock.SetBuffer("BlockBuffer", blockBuffer[blockIndex]);
                     block.materialPropertyBlock.SetBuffer("LightBuffer", computeShaderManager.lightBufferCSArray[lightIndex].LightBuffer);

@@ -3,6 +3,7 @@ using PRO.Renderer;
 using PRO.Tool;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 namespace PRO
 {
@@ -33,7 +34,7 @@ namespace PRO
 
         public static void Init()
         {
-            if (!JsonTool.LoadingText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
+            if (!JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
             {
                 Debug.Log("PROconfig.json加载失败，BlockMaterial无法初始化");
                 return;
@@ -67,7 +68,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelColorInfo") continue;
-                JsonTool.LoadingText(fileInfo.FullName, out string infoText);
+                JsonTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelColorInfo[]>(infoText);
@@ -123,7 +124,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "LightSourceInfo") continue;
-                JsonTool.LoadingText(fileInfo.FullName, out string infoText);
+                JsonTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 int lightSourceCount = 0;
                 //加载到的像素数组
@@ -200,19 +201,55 @@ namespace PRO
 
             Update();
         }
+        public static void UpdateBind()
+        {
+            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
+            blockShareMaterialManager.UpdateBind();
+            backgroundShareMaterialManager.UpdateBind();
+            computeShaderManager.UpdateBind();
+        }
 
 
         public static void Update()
         {
             Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
-            if (nowCameraPos != CameraCenterBlockPos)
-            {
-                CameraCenterBlockPos = nowCameraPos;
-                blockShareMaterialManager.UpdateBind();
-                backgroundShareMaterialManager.UpdateBind();
-                computeShaderManager.UpdateBind();
-            }
+            if (nowCameraPos != CameraCenterBlockPos) UpdateBind();
             computeShaderManager.Update();
+
+
+            if (Monitor.TryEnter(DrawApplyQueue))
+            {
+                try
+                {
+                    while (DrawApplyQueue.Count > 0)
+                    {
+                        BlockBase blockBase = DrawApplyQueue.Dequeue();
+                        blockBase.spriteRenderer.sprite.texture.Apply();
+                        switch (blockBase)
+                        {
+                            case Block block: BlockMaterial.SetBlock(block); break;
+                            case BackgroundBlock background: BlockMaterial.SetBackgroundBlock(background); break;
+                        }
+                    }
+                }
+                finally
+                {
+                    Monitor.Exit(DrawApplyQueue);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 纹理绘制完成需要提交的队列，渲染线程添加，主线程取出（纹理只是提供一种选择，但最终显示RO不使用纹理）
+        /// </summary>
+        public static readonly Queue<BlockBase> DrawApplyQueue = new Queue<BlockBase>();
+        /// <summary>
+        /// 加入&锁住 提交绘制引用队列(新数据提交到显卡)
+        /// </summary>
+        public static void En_Lock_DrawApplyQueue(BlockBase block)
+        {
+            lock (DrawApplyQueue)
+                DrawApplyQueue.Enqueue(block);
         }
 
 

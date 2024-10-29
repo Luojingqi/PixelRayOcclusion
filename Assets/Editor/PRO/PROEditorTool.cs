@@ -18,7 +18,7 @@ public static class PROEditorTool
     [MenuItem("PRO/2.创建HLSL文件")]
     public static void AutoCreateHLSL()
     {
-        if (!JsonTool.LoadingText(Application.streamingAssetsPath + @"\Json\LightSourceInfo.json", out string lightSourceInfoText))
+        if (!JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\LightSourceInfo.json", out string lightSourceInfoText))
         {
             Debug.Log("加载失败");
             return;
@@ -36,7 +36,7 @@ public static class PROEditorTool
             if (fileInfo.Extension != ".json") continue;
             string[] strArray = fileInfo.Name.Split('^');
             if (strArray.Length <= 1 || strArray[0] != "LightSourceInfo") continue;
-            JsonTool.LoadingText(fileInfo.FullName, out string infoText);
+            JsonTool.LoadText(fileInfo.FullName, out string infoText);
             //加载到的像素数组
             var indexArray = JsonTool.ToObject<LightSourceInfo[]>(infoText);
             for (int i = 0; i < indexArray.Length; i++)
@@ -150,7 +150,7 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         JsonTool.StoreText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "SetLightBuffer.compute", autoSetLightbuffer);
 
         #region 创建SetLightBuffer_Buffer.hlsl文件
-        JsonTool.LoadingText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText);
+        JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText);
         PROconfig proConfig = JsonTool.ToObject<PROconfig>(proConfigText);
         string autoSetLightBuffer_Buffer = "#include \"../StructData.hlsl\"\n";
         int BlockLength = proConfig.EachBlockReceiveLightSize.x * proConfig.EachBlockReceiveLightSize.y;

@@ -62,33 +62,33 @@ namespace PRO.Tool
             block.textureData.nativeArray[index++] = color.b;
             block.textureData.nativeArray[index++] = color.a;
         }
-        public static void DrawPixelSync(List<Vector2Int> list, Color32 color)
-        {
-            foreach (var v in list)
-            {
-                var block = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(v)];
-                block.DrawPixelSync(block.GloabToPixel(v), color);
-            }
-        }
-        public static Color32 GetColor32Sync(this BlockBase block, Vector2Int pos)
-        {
-            if (Block.Relocation(block, pos, out Vector2Int rightBlock, out Vector2Byte rightPos))
-            {
-                Color ret = new Color32(0, 0, 0, 0);
-                int index = (Block.Size.x * pos.y + pos.x) * 4;
-                ret.r = block.textureData.nativeArray[index++];
-                ret.g = block.textureData.nativeArray[index++];
-                ret.b = block.textureData.nativeArray[index++];
-                ret.a = block.textureData.nativeArray[index++];
-                return ret;
-            }
-            else
-            {
-                var newBlock = BlockManager.Inst.BlockCrossList[rightBlock];
-                if (newBlock == null) return new Color32(0, 0, 0, 0);
-                else return newBlock.GetColor32Sync((Vector2Int)rightPos);
-            }
-        }
+        //public static void DrawPixelSync(List<Vector2Int> list, Color32 color)
+        //{
+        //    foreach (var v in list)
+        //    {
+        //        var block = SceneManager.Inst.BlockCrossList[Block.GloabToBlock(v)];
+        //        block.DrawPixelSync(block.GloabToPixel(v), color);
+        //    }
+        //}
+        //public static Color32 GetColor32Sync(this BlockBase block, Vector2Int pos)
+        //{
+        //    if (Block.Relocation(block, pos, out Vector2Int rightBlock, out Vector2Byte rightPos))
+        //    {
+        //        Color ret = new Color32(0, 0, 0, 0);
+        //        int index = (Block.Size.x * pos.y + pos.x) * 4;
+        //        ret.r = block.textureData.nativeArray[index++];
+        //        ret.g = block.textureData.nativeArray[index++];
+        //        ret.b = block.textureData.nativeArray[index++];
+        //        ret.a = block.textureData.nativeArray[index++];
+        //        return ret;
+        //    }
+        //    else
+        //    {
+        //        var newBlock = SceneManager.Inst.BlockCrossList[rightBlock];
+        //        if (newBlock == null) return new Color32(0, 0, 0, 0);
+        //        else return newBlock.GetColor32Sync((Vector2Int)rightPos);
+        //    }
+        //}
         public static Color32 GetColor32Sync(NativeArray<byte> png, int width, Vector2Int pos)
         {
             Color32 ret = new Color32(0, 0, 0, 0);

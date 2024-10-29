@@ -1,4 +1,5 @@
 using PRO.DataStructure;
+using PRO.Tool;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,21 @@ namespace PRO
     /// </summary>
     public static class GreedyCollider
     {
+        #region 碰撞箱对象池
+        private static GameObjectPool<BoxCollider2D> BoxCollider2DPool;
+        public static void InitBoxCollider2DPool()
+        {
+            GameObject boxCollider2DPoolGo = new GameObject("BoxCollider2DPool");
+            boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
+            BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
+            boxCollider.gameObject.SetActive(false);
+            boxCollider.gameObject.layer = 9;
+            boxCollider.transform.parent = boxCollider2DPoolGo.transform;
+            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform, 10000, true);
+        }
+        private static BoxCollider2D TakeOut() => BoxCollider2DPool.TakeOutT();
+        public static void PutIn(BoxCollider2D box) => BoxCollider2DPool.PutIn(box.gameObject);
+        #endregion
         public struct ColliderData
         {
             /// <summary>
@@ -31,13 +47,13 @@ namespace PRO
         /// <summary>
         /// 返回用于创建碰撞箱的数据集合
         /// </summary>
-        public static List<ColliderData> CreateColliderDataList(Block block, Vector2Byte min, Vector2Byte max)
+        public static List<ColliderData> CreateColliderDataList(this Block block, Vector2Byte min, Vector2Byte max)
         {
             HashSet<Vector2Int> hash = new HashSet<Vector2Int>();
             List<ColliderData> colliderDataList = new List<ColliderData>();
             for (int y = max.y; y >= min.y; y--)
                 for (int x = min.x; x <= max.x; x++)
-                    if (!hash.Contains(new Vector2Int(x, y)) && Pixel.GetPixelTypeInfo(block.GetPixelRelocation(x, y).typeName).collider)
+                    if (!hash.Contains(new Vector2Int(x, y)) && block.GetPixelRelocation(x, y).info.collider)
                     {
                         hash.Add(new Vector2Int(x, y));
 
@@ -47,7 +63,7 @@ namespace PRO
                         colliderData.position = block.PixelToWorld(new Vector2Byte(x, y));
                         colliderData.pos = new Vector2Byte(x, y);
                         int xShifting = x + 1;
-                        while (xShifting <= max.x && !hash.Contains(new Vector2Int(xShifting, y)) && Pixel.GetPixelTypeInfo(block.GetPixelRelocation(x, y).typeName).collider)
+                        while (xShifting <= max.x && !hash.Contains(new Vector2Int(xShifting, y)) && block.GetPixelRelocation(xShifting, y).info.collider)
                             hash.Add(new Vector2Int(xShifting++, y));
                         xShifting = xShifting - x;
                         colliderData.size.x = Pixel.Size * xShifting;
@@ -58,7 +74,7 @@ namespace PRO
                         {
                             for (int i = 0; i < xShifting; i++)
                             {
-                                if (!hash.Contains(new Vector2Int(x + i, yShifting)) && Pixel.GetPixelTypeInfo(block.GetPixelRelocation(x, y).typeName).collider)
+                                if (!hash.Contains(new Vector2Int(x + i, yShifting)) && !block.GetPixelRelocation(x + i, yShifting).info.collider)
                                 {
                                     ok = false;
                                     break;
@@ -84,13 +100,13 @@ namespace PRO
         /// <summary>
         /// 根据提供的碰撞箱数据列表在区块内对应位置创建碰撞箱
         /// </summary>
-        public static void CreateColliderAction(Block block, List<ColliderData> colliderDataList, bool bb = false)
+        public static void CreateColliderAction(this Block block, List<ColliderData> colliderDataList, bool bb = false)
         {
             for (int i = 0; i < colliderDataList.Count; i++)
             {
                 Color32 color = new Color32((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255), 255);
                 var data = colliderDataList[i];
-                var box = BlockManager.Inst.BoxCollider2DPool.TakeOutT();
+                var box = TakeOut();
                 box.size = data.size;
                 box.transform.position = data.position;
 
@@ -108,7 +124,7 @@ namespace PRO
         /// <summary>
         /// 尝试在一点内创建新碰撞箱，自动与周围可合成的碰撞箱合成
         /// </summary>
-        public static void TryExpandCollider(Block block, Vector2Byte pos)
+        public static void TryExpandCollider(this Block block, Vector2Byte pos)
         {
             if (Block.Check(pos) == false || block.allCollider[pos.x, pos.y] != null) return;
             Span<Vector2Byte> span = stackalloc Vector2Byte[] { pos + new Vector2Byte(1, 0), pos + new Vector2Byte(-1, 0), pos + new Vector2Byte(0, 1), pos + new Vector2Byte(0, -1) };
@@ -139,7 +155,7 @@ namespace PRO
         /// <summary>
         /// 尝试删除一点的碰撞箱，并将此处原本的碰撞箱拆分为合适大小
         /// </summary>
-        public static void TryShrinkCollider(Block block, Vector2Byte pos)
+        public static void TryShrinkCollider(this Block block, Vector2Byte pos)
         {
             if (Block.Check(pos) == false || block.allCollider[pos.x, pos.y] == null) return;
             var box = block.allCollider[pos.x, pos.y];
@@ -153,7 +169,7 @@ namespace PRO
                     block.allCollider[x, y] = null;
                     block.DrawPixelAsync(new Vector2Byte(x, y), color);
                 }
-            GameObject.Destroy(box.gameObject);
+            PutIn(box);
             var list = CreateColliderDataList(block, colliderPos, colliderPos + colliderSize - new Vector2Byte(1, 1));
             CreateColliderAction(block, list, true);
         }

@@ -41,7 +41,7 @@ namespace PRO.Renderer
                 {
                     Vector2Int gloabBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
                     int lightIndex = x + y * LightBufferBlockSize.x;
-                    BackgroundBlock background = BlockManager.Inst.BackgroundCrossList[gloabBlockPos];
+                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(gloabBlockPos);
                     //Debug.Log($"背景坐标{background.BlockPos}  第一次绑定  背景缓存索引{lightIndex}  光照缓存索引{lightIndex}");
                     background.materialPropertyBlock.SetBuffer("BackgroundBuffer", backgroundBuffer[lightIndex]);
                     background.materialPropertyBlock.SetBuffer("LightBuffer", computeShaderManager.lightBufferCSArray[lightIndex].LightBuffer);

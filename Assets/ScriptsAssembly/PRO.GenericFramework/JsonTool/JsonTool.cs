@@ -41,7 +41,7 @@ namespace PRO.Tool
         /// <param name="path"></param>
         /// <param name="jsonText"></param>
         /// <returns></returns>
-        public static bool LoadingText(string path, out string text)
+        public static bool LoadText(string path, out string text)
         {
             try
             {

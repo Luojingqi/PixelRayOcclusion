@@ -15,7 +15,7 @@ namespace PRO
         /// <summary>
         /// 类型名称
         /// </summary>
-        public string typeName;
+        public PixelTypeInfo info;
         /// <summary>
         /// 使用的颜色名称
         /// </summary>
@@ -24,7 +24,7 @@ namespace PRO
         private static void InitPixel(Pixel pixel, PixelTypeInfo info, string colorName, Vector2Byte pixelPos)
         {
             pixel.pos = pixelPos;
-            pixel.typeName = info.typeName;
+            pixel.info = info;
             pixel.colorName = colorName;
         }
 
@@ -42,7 +42,7 @@ namespace PRO
         private static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>(Block.Size.x * Block.Size.y * 50, true);
         public static void PutIn(Pixel pixel)
         {
-            pixel.typeName = null;
+            pixel.info = null;
             pixel.colorName = null;
             pixel.pos = Vector2Byte.max;
             pixelPool.PutIn(pixel);
@@ -149,7 +149,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelTypeInfo") continue;
-                JsonTool.LoadingText(fileInfo.FullName, out string infoText);
+                JsonTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelTypeInfo[]>(infoText);

@@ -17,7 +17,7 @@ namespace ExcelTool
             #region 加载路径配置文件
             //string exePath = Directory.GetCurrentDirectory();
             string exePath = Application.streamingAssetsPath + @"\Excel\ExcelTool";
-            JsonTool.LoadingText(exePath + @"\path.json", out string pathText);
+            JsonTool.LoadText(exePath + @"\path.json", out string pathText);
             Console.WriteLine($"读取path文件：{exePath + @"\path.json"}");
             var path = JsonTool.ToObject<JsonOnPath>(pathText);
             string xlsxPath = exePath + path.xlsxPath;

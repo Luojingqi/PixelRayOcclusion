@@ -15,24 +15,27 @@ namespace PRO
         private static int endNum = (a * 2 + 1) * (a * 2 + 1) * 2;
         public static void Init(Action endAction)
         {
-            for (int i = x.x; i <= x.y; i++)
-            {
-                for (int j = y.x; j <= y.y; j++)
-                {
-                    //创建区块并填充
-                    BlockManager.Inst.CreateBlock(new Vector2Int(i, j));
-                    BlockManager.Inst.AddUpdateBlock(BlockManager.Inst.BlockCrossList[i][j]);
-                    ThreadPool.QueueUserWorkItem(StartFillBlock, BlockManager.Inst.BlockCrossList[i][j]);
-                    //创建背景并填充
-                    BlockManager.Inst.CreateBackground(new Vector2Int(i, j));
-                    ThreadPool.QueueUserWorkItem(StartFillBackground, BlockManager.Inst.BackgroundCrossList[i][j]);
-                }
-            }
+            InitScene(SceneManager.Inst.NowScene);
             Thread thread = new Thread(LoopDraw);
             thread.Start();
             while (true) if (endNum <= 0) break;
 
             endAction();
+        }
+        public static void InitScene(SceneEntity scene)
+        {
+            for (int i = x.x; i <= x.y; i++)
+            {
+                for (int j = y.x; j <= y.y; j++)
+                {
+                    //创建区块并填充
+                    scene.CreateBlock(new Vector2Int(i, j));
+                    ThreadPool.QueueUserWorkItem(StartFillBlock, scene.GetBlock(new(i, j)));
+                    //创建背景并填充
+                    scene.CreateBackground(new Vector2Int(i, j));
+                    ThreadPool.QueueUserWorkItem(StartFillBackground, scene.GetBackground(new(i, j)));
+                }
+            }
         }
 
 
@@ -45,20 +48,20 @@ namespace PRO
             while (true)
             {
                 //更新需要绘制图形的任务
-                lock (BlockManager.Inst.DrawGraphTaskQueue)
-                    while (BlockManager.Inst.DrawGraphTaskQueue.Count > 0)
-                    {
-                        DrawGraphTaskData task = BlockManager.Inst.DrawGraphTaskQueue.Dequeue();
-                        DrawGraphTaskInvoke(task);
-                    }
-
+                //lock (SceneManager.Inst.DrawGraphTaskQueue)
+                //    while (SceneManager.Inst.DrawGraphTaskQueue.Count > 0)
+                //    {
+                //        DrawGraphTaskData task = SceneManager.Inst.DrawGraphTaskQueue.Dequeue();
+                //        DrawGraphTaskInvoke(task);
+                //    }
+                SceneEntity scene = SceneManager.Inst.NowScene;
                 Vector2Int minLightBufferBlockPos = BlockMaterial.CameraCenterBlockPos - BlockMaterial.LightBufferBlockSize / 2;
                 for (int x = 0; x < BlockMaterial.LightBufferBlockSize.x; x++)
                     for (int y = 0; y < BlockMaterial.LightBufferBlockSize.y; y++)
                     {
                         Vector2Int nowBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
 
-                        Block block = BlockManager.Inst.BlockCrossList[nowBlockPos];
+                        Block block = scene.GetBlock(nowBlockPos);
                         if (block.DrawPixelTaskQueue.Count > 0)
                         {
                             lock (block.DrawPixelTaskQueue)
@@ -68,12 +71,12 @@ namespace PRO
                                     DrawPixelTask? task = block.DrawPixelTaskQueue.Dequeue();
                                     if (task != null) DrawTool.DrawPixelSync(block, task.Value.pos, task.Value.color);
                                 }
-                                BlockManager.Inst.En_Lock_DrawApplyQueue(block);
+                                BlockMaterial.En_Lock_DrawApplyQueue(block);
                             }
                         }
 
                         //更新背景
-                        BackgroundBlock background = BlockManager.Inst.BackgroundCrossList[nowBlockPos];
+                        BackgroundBlock background = scene.GetBackground(nowBlockPos);
                         if (background.DrawPixelTaskQueue.Count > 0)
                         {
                             lock (background.DrawPixelTaskQueue)
@@ -83,53 +86,54 @@ namespace PRO
                                     DrawPixelTask? task = background.DrawPixelTaskQueue.Dequeue();
                                     if (task != null) DrawTool.DrawPixelSync(background, task.Value.pos, task.Value.color);
                                 }
-                                BlockManager.Inst.En_Lock_DrawApplyQueue(background);
+                                BlockMaterial.En_Lock_DrawApplyQueue(background);
                             }
                         }
                     }
                 Thread.Sleep(50);
             }
         }
+        #region 绘制图形任务，暂时弃用
         /// <summary>
         /// 绘制任务执行
         /// </summary>
-        private static void DrawGraphTaskInvoke(DrawGraphTaskData task)
-        {
-            switch (task)
-            {
-                case DrawGraph_Line data:
-                    {
-                        var list = GetLine(data.pos_G0, data.pos_G1);
-                        DrawPixelSync(list, data.color);
-                        break;
-                    }
-                case DrawGraph_Ring data:
-                    {
-                        var list = GetRing(data.pos_G, data.r);
-                        DrawPixelSync(list, data.color);
-                        break;
-                    }
-                case DrawGraph_Circle data:
-                    {
-                        var list = GetCircle(data.pos_G, data.r);
-                        DrawPixelSync(list, data.color);
-                        break;
-                    }
-                case DrawGraph_Polygon data:
-                    {
-                        var list = GetPolygon(data.pos_G, data.r, data.n, data.rotate);
-                        DrawPixelSync(list, data.color);
-                        break;
-                    }
-                case DrawGraph_Octagon data:
-                    {
-                        var list = GetOctagon(data.pos_G, data.r);
-                        DrawPixelSync(list, data.color);
-                        break;
-                    }
-            }
-        }
-
+        //private static void DrawGraphTaskInvoke(DrawGraphTaskData task)
+        //{
+        //    switch (task)
+        //    {
+        //        case DrawGraph_Line data:
+        //            {
+        //                var list = GetLine(data.pos_G0, data.pos_G1);
+        //                DrawPixelSync(list, data.color);
+        //                break;
+        //            }
+        //        case DrawGraph_Ring data:
+        //            {
+        //                var list = GetRing(data.pos_G, data.r);
+        //                DrawPixelSync(list, data.color);
+        //                break;
+        //            }
+        //        case DrawGraph_Circle data:
+        //            {
+        //                var list = GetCircle(data.pos_G, data.r);
+        //                DrawPixelSync(list, data.color);
+        //                break;
+        //            }
+        //        case DrawGraph_Polygon data:
+        //            {
+        //                var list = GetPolygon(data.pos_G, data.r, data.n, data.rotate);
+        //                DrawPixelSync(list, data.color);
+        //                break;
+        //            }
+        //        case DrawGraph_Octagon data:
+        //            {
+        //                var list = GetOctagon(data.pos_G, data.r);
+        //                DrawPixelSync(list, data.color);
+        //                break;
+        //            }
+        //    }
+        //}
+        #endregion
         /// <summary>
         /// 开始填充一个区块
         /// </summary>
@@ -141,9 +145,9 @@ namespace PRO
                 RandomFill(block, new System.Random());
                 //Iteration(block);
                 //var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-                //lock (BlockManager.Inst.mainThreadEventLock)
-                //    BlockManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); };
-                //BlockManager.Inst.En_Lock_DrawApplyQueue(block);
+                //lock (SceneManager.Inst.mainThreadEventLock)
+                //    SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); };
+                //SceneManager.Inst.En_Lock_DrawApplyQueue(block);
                 Interlocked.Add(ref endNum, -1);
             }
             catch(Exception e)
@@ -225,7 +229,7 @@ namespace PRO
                             background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
                         }
                     }
-                // BlockManager.Inst.En_Lock_DrawApplyQueue(background);
+                // SceneManager.Inst.En_Lock_DrawApplyQueue(background);
                 Interlocked.Add(ref endNum, -1);
             }
             catch (Exception e)

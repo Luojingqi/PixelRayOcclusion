@@ -1,6 +1,10 @@
+using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
+using PRO.Renderer;
+using PRO.Tool;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 namespace PRO
 {
@@ -89,7 +93,50 @@ namespace PRO
             return ret;
         }
         #endregion
+        #region 静态对象池
+        private static Transform BlockNode;
+        private static GameObjectPool<Block> BlockPool;
+        public static void InitBlockPool()
+        {
+            #region 加载Block初始GameObject
+            GameObject go = new GameObject("Block");
+            SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sharedMaterial = BlockShareMaterialManager.ShareMaterial;
+            go.gameObject.SetActive(false);
+            go.AddComponent<Block>();
+            #endregion
+            GameObject blockPoolGo = new GameObject("BlockPool");
+            blockPoolGo.transform.parent = SceneManager.Inst.PoolNode;
+            BlockPool = new GameObjectPool<Block>(go, blockPoolGo.transform, 20, true);
+            BlockPool.CreateEventT += (g, t) =>
+            {
+                t.Init();
+            };
+            go.transform.parent = blockPoolGo.transform;
+        }
 
+        public static Block TakeOut() => BlockPool.TakeOutT();
+
+        public static async void PutIn(Block block)
+        {
+            block.gameObject.SetActive(false);
+            for (int y = 0; y < Block.Size.y; y++)
+            {
+                for (int x = 0; x < Block.Size.x; x++)
+                {
+                    Pixel pixel = block.allPixel[x, y];
+                    block.allPixel[x, y] = null;
+                    Pixel.PutIn(pixel);
+
+                    BoxCollider2D box = block.allCollider[x, y];
+                    block.allCollider[x, y] = null;
+                    GreedyCollider.PutIn(box);
+                }
+                await UniTask.Yield();
+            }
+            BlockPool.PutIn(block.gameObject);
+        }
+        #endregion 
         public override void Init()
         {
             base.Init();
@@ -101,7 +148,7 @@ namespace PRO
 
         public static Pixel GetPixel(Vector2Int worldPos)
         {
-            var block = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(worldPos)];
+            var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(worldPos));
             if (block == null) return null;
             return block.GetPixel(block.GloabToPixel(worldPos));
         }
@@ -116,7 +163,7 @@ namespace PRO
             }
             else
             {
-                Block block = BlockManager.Inst.BlockCrossList[rightBlock];
+                Block block = SceneManager.Inst.NowScene.GetBlock(rightBlock);
                 if (block == null)
                     return null;
                 else
@@ -139,7 +186,7 @@ namespace PRO
             {
                 hash.Add(liquid);
                 Vector2Int posG = this.PixelToGloab(liquid.pos);
-                var block = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(posG + Vector2Int.up)];
+                var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(posG + Vector2Int.up));
                 if (block == null) UpdateLiquidPressure(posG, 0);
                 else
                 {
@@ -159,13 +206,13 @@ namespace PRO
         {
             try
             {
-                var block = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(posG)];
+                var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(posG));
                 while (true)
                 {
                     var blockPos = Block.GloabToBlock(posG);
                     if (blockPos != block.BlockPos)
                     {
-                        block = BlockManager.Inst.BlockCrossList[blockPos];
+                        block = SceneManager.Inst.NowScene.GetBlock(blockPos);
                         if (block == null) return;
                     }
                     Pixel pixel = block.GetPixel(block.GloabToPixel(posG));
@@ -215,10 +262,10 @@ namespace PRO
             Vector2Int g = PixelToGloab(liquid.pos);
             AddQueueHash(g + Vector2Int.down);
             Vector2Int right = g + Vector2Int.right;
-            var rightBlock = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(right)];
+            var rightBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(right));
             if (rightBlock != null && rightBlock.GetPixel(rightBlock.GloabToPixel(right)) is Liquid) AddQueueHash(right);
             Vector2Int left = g + Vector2Int.left;
-            var leftBlock = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(left)];
+            var leftBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(left));
             if (leftBlock != null && leftBlock.GetPixel(leftBlock.GloabToPixel(left)) is Liquid) AddQueueHash(left);
 
             AddQueueHash(g + Vector2Int.right + Vector2Int.down);
@@ -226,7 +273,7 @@ namespace PRO
             while (_queue.Count > 0)
             {
                 Vector2Int posG = _queue.Dequeue();
-                Block block = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(posG)];
+                Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(posG));
                 if (block == null) return false;
                 Vector2Byte pos = block.GloabToPixel(posG);
 
@@ -297,8 +344,8 @@ namespace PRO
         /// </summary>
         public static void Swap(Vector2Int p0_G, Vector2Int p1_G)
         {
-            var block0 = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(p0_G)];
-            var block1 = BlockManager.Inst.BlockCrossList[Block.GloabToBlock(p1_G)];
+            var block0 = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(p0_G));
+            var block1 = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(p1_G));
             var p0 = block0.GetPixel(block0.GloabToPixel(p0_G));
             var p1 = block1.GetPixel(block1.GloabToPixel(p1_G));
             Vector2Byte t = p0.pos;

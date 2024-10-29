@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace PRO.Tool
 {
@@ -8,11 +9,11 @@ namespace PRO.Tool
         /// <summary>
         /// 未使用的对象
         /// </summary>
-        private List<T> notUsedList = new List<T>();
+        private HashSet<T> notUsedObject = new HashSet<T>();
         /// <summary>
         /// 使用中的对象
         /// </summary>
-        private HashSet<T> usedHashSet = new HashSet<T>();
+        private HashSet<T> usedObject = new HashSet<T>();
 
         /// <summary>
         /// 对象池内最大存储对象数量
@@ -57,11 +58,12 @@ namespace PRO.Tool
         {
             if (item == null) return;
 
-            usedHashSet.Remove(item);
+            usedObject.Remove(item);
             PutInEvent?.Invoke(item);
-            if (notUsedList.Count + usedHashSet.Count < MaxNumber)
+            if (notUsedObject.Count + usedObject.Count < MaxNumber)
             {
-                notUsedList.Add(item);
+                if (notUsedObject.Contains(item) == false)
+                    notUsedObject.Add(item);
             }
             else
             {
@@ -99,11 +101,11 @@ namespace PRO.Tool
         public virtual T TakeOut()
         {
             T takeOutData = null;
-            if (notUsedList.Count > 0)
+            if (notUsedObject.Count > 0)
             {
-                takeOutData = notUsedList[notUsedList.Count - 1];
-                notUsedList.RemoveAt(notUsedList.Count - 1);
-                usedHashSet.Add(takeOutData);
+                takeOutData = notUsedObject.ElementAt(0);
+                notUsedObject.Remove(takeOutData);
+                usedObject.Add(takeOutData);
                 TakeOutEvent?.Invoke(takeOutData);
             }
             else
@@ -111,7 +113,7 @@ namespace PRO.Tool
                 if (IsCanExceed == true)
                 {
                     takeOutData = ClonePoolData();
-                    usedHashSet.Add(takeOutData);
+                    usedObject.Add(takeOutData);
                     TakeOutEvent?.Invoke(takeOutData);
                 }
                 else
@@ -123,22 +125,22 @@ namespace PRO.Tool
         }
 
         /// <summary>
-        /// 强制取出对象，一般用于UI中使用对象池，但仅允许存在一个实例的对象池取出
+        /// 强制取出对象
         /// </summary>
         /// <returns></returns>
         public T ForceTakeOut()
         {
             T takeOutData = null;
-            if (notUsedList.Count > 0)
+            if (notUsedObject.Count > 0)
             {
-                takeOutData = notUsedList[notUsedList.Count - 1];
-                notUsedList.RemoveAt(notUsedList.Count - 1);
+                takeOutData = notUsedObject.ElementAt(0);
+                notUsedObject.Remove(takeOutData);
                 TakeOutEvent?.Invoke(takeOutData);
             }
             else
             {
                 takeOutData = ClonePoolData();
-                usedHashSet.Add(takeOutData);
+                usedObject.Add(takeOutData);
                 TakeOutEvent?.Invoke(takeOutData);
             }
             return takeOutData;
@@ -175,8 +177,8 @@ namespace PRO.Tool
 
         public virtual void Clear()
         {
-            usedHashSet.Clear();
-            notUsedList.Clear();
+            usedObject.Clear();
+            notUsedObject.Clear();
         }
 
         protected void CreateEventInvoke(T t)

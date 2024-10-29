@@ -42,7 +42,7 @@ namespace PRO
         private void LoadUIConfig()
         {
             UIConfigsDic.Clear();
-            JsonTool.LoadingText(Application.streamingAssetsPath + @"\Json\UIConfig.json", out string uiConfigTaxt);
+            JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\UIConfig.json", out string uiConfigTaxt);
             var array = JsonTool.ToObject<UIConfig[]>(uiConfigTaxt);
             foreach (var item in array)
                 UIConfigsDic.Add(item.Name, item);

@@ -40,22 +40,35 @@ namespace PRO
         /// </summary>
         public void SetPixel(Pixel pixel)
         {
-            RemovePixel(pixel.pos);
+            PixelTypeInfo removeInfo = RemovePixel(pixel.pos);
+            if (this is Block) ChangeCollider(removeInfo, pixel);
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixelColorInfo.index;
             if (pixelColorInfo.lightSourceType != "null") AddLightSource(pixel, pixelColorInfo);
         }
 
-        private void RemovePixel(Vector2Byte pos)
+        private PixelTypeInfo RemovePixel(Vector2Byte pos)
         {
+            PixelTypeInfo ret = null;
             Pixel pixel = allPixel[pos.x, pos.y];
-            if (pixel == null) return;
+            if (pixel == null) return ret;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             if (pixelColorInfo.lightSourceType != "null") RemoveLightSource(pixel);
-
+            ret = pixel.info;
             Pixel.PutIn(pixel);
             allPixel[pos.x, pos.y] = null;
+            return ret;
+        }
+
+        private void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
+        {
+            
+            //bool oldCollider = (old == null || !old.collider) ? false : true;
+            ////原本无碰撞箱，现在有就创建，反之删除
+            //if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider((Block)this, nowPixel.pos);
+            //else if (oldCollider && nowPixel.info.collider == false) GreedyCollider.TryShrinkCollider((Block)this, nowPixel.pos);
+            //Log.Print(oldCollider +"|"+nowPixel.info.collider);
         }
         #endregion
 

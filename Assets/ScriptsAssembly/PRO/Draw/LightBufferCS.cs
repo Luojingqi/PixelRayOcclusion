@@ -88,9 +88,9 @@ namespace PRO.Renderer
                 for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
                 {
                     Vector2Int nowGloabBlockBufferPos = gloabBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
-                    Block block = BlockManager.Inst.BlockCrossList[nowGloabBlockBufferPos];
+                    Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
                     ForeachLightSource(block.lightSourceDic, blockMinPos, blockMaxPos);
-                    BackgroundBlock background = BlockManager.Inst.BackgroundCrossList[nowGloabBlockBufferPos];
+                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(nowGloabBlockBufferPos);
                     ForeachLightSource(background.lightSourceDic, blockMinPos, blockMaxPos);
                 }
         }
