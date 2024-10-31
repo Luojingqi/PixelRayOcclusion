@@ -1,7 +1,7 @@
 ﻿using PRO.DataStructure;
 using UnityEngine;
 
-namespace PRO.SceneToDisk
+namespace PRO.Disk.Scene
 {
     public class BackgroundToDisk
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PRO.Data
+namespace PRO.Disk
 {
     
     

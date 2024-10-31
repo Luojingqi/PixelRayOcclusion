@@ -63,7 +63,7 @@ namespace ExcelTool
                 #endregion
 
                 #region 生成cs文件
-                CreateCS.Run(csPath, xlsxFileName, "PRO.Data", Name_Type_Dic, Name_Note_Dic);
+                CreateCS.Run(csPath, xlsxFileName, "PRO.Disk", Name_Type_Dic, Name_Note_Dic);
                 Console.WriteLine(f.Name + "\n生成cs文件成功");
                 Debug.Log(f.Name + "\n生成cs文件成功");
                 #endregion

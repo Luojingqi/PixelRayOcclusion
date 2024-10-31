@@ -1,4 +1,4 @@
-namespace PRO.SceneToDisk
+namespace PRO.Disk.Scene
 {
     public class PixelToDisk
     {

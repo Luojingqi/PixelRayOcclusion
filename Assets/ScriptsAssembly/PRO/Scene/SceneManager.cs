@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
+using PRO.Disk.Scene;
 using PRO.Tool;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,12 @@ namespace PRO
         public async void SwitchScene(string toSceneName)
         {
             // if (toSceneName == nowScene.name) return;
-            SceneEntity toSceen = new SceneEntity("123");
-            DrawThread.InitScene(toSceen);
-            await UniTask.Delay(2500);
-            Log.Print("切换场景");
-            nowScene = toSceen;
-            BlockMaterial.UpdateBind();
+            //SceneEntity toSceen = new SceneEntity("123");
+            //DrawThread.InitScene(toSceen);
+            //await UniTask.Delay(2500);
+            //Log.Print("切换场景");
+            //nowScene = toSceen;
+            //BlockMaterial.UpdateBind();
         }
 
 
@@ -44,12 +45,26 @@ namespace PRO
             Block.InitBlockPool();
             BackgroundBlock.InitBackgroundPool();
             Pixel.LoadPixelTypeInfo();
-            scenes.Add("main", new SceneEntity(""));
-            nowScene = scenes["main"];
+            //加载所有的存档目录
+            var catalogList = GameSaveManager.Inst.LoadAllSaveCatalog();
+            catalogList.ForEach(item => Log.Print(item.name));
+            //选择第一个存档
+            GameSaveManager.Inst.SwitchSave(catalogList[0]);
+            GameSaveCatalog nowSave = GameSaveManager.Inst.NowGameSave;
+            //选择存档的第一个场景
+            SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];
+            //转换为实体数据
+            SceneEntity scene = new SceneEntity(sceneCatalog);
+            scenes.Add(scene.sceneInfo.name, scene);
+            nowScene = scene;
+            //填充
             DrawThread.Init(() =>
            {
                BlockMaterial.FirstBind();
            });
+            //scenes.Add("main", new SceneEntity(""));
+            //nowScene = scenes["main"];
+
         }
 
         public Transform PoolNode;

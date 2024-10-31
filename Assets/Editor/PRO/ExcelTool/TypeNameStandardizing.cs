@@ -6,7 +6,7 @@
         public static string _System = "System.";
         public static string _UnityEngine = "UnityEngine.";
         public static string _SystemCollectionsGeneric = "System.Collections.Generic.List";
-        public static string _Fix64PhysicsData = "Fix64Physics.Data.";
+        public static string _Fix64PhysicsData = "Fix64Physics.Disk.";
         public static string _UnityMathematics = "Unity.Mathematics.";
 
         /// <summary>

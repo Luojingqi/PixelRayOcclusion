@@ -1,7 +1,7 @@
 using LitJson;
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 namespace PRO.Tool
 {
@@ -9,15 +9,19 @@ namespace PRO.Tool
     {
         public static string ToJson(object obj)
         {
-            if (!JsonToolCustom.isInit) JsonToolCustom.Init();
-            string JsonText = JsonMapper.ToJson(obj);
-            return Regex.Unescape(JsonText);
+            //if (!JsonToolCustom.isInit) JsonToolCustom.Init();
+            //string jsonText = JsonMapper.ToJson(obj);
+            //return Regex.Unescape(jsonText);
+            string jsonText = JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return jsonText;
+
         }
 
         public static T ToObject<T>(string jsonText)
         {
-            if (!JsonToolCustom.isInit) JsonToolCustom.Init();
-            return JsonMapper.ToObject<T>(jsonText);
+            //if (!JsonToolCustom.isInit) JsonToolCustom.Init();
+            //return JsonMapper.ToObject<T>(jsonText);
+            return JsonConvert.DeserializeObject<T>(jsonText);
         }
 
         public static bool ToObject<T>(string jsonText, out T obj)
@@ -25,13 +29,6 @@ namespace PRO.Tool
             if (!JsonToolCustom.isInit) JsonToolCustom.Init();
             obj = JsonMapper.ToObject<T>(jsonText);
             return true;
-        }
-
-        public static JsonData ToObjects(string jsonText)
-        {
-            if (!JsonToolCustom.isInit) JsonToolCustom.Init();
-            JsonData jsonData = JsonMapper.ToObject(jsonText);
-            return jsonData;
         }
 
 
