@@ -1,6 +1,7 @@
 using PRO.DataStructure;
 using PRO.Disk.Scene;
 using PRO.Tool;
+using System.IO;
 using UnityEngine;
 
 namespace PRO
@@ -42,10 +43,12 @@ namespace PRO
 
         public void SaveBlockData(Vector2Int blockPos)
         {
+            string path = $@"{sceneInfo.directoryInfo}\Block\{blockPos}";
+            if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
             BlockToDisk blockToDisk = new BlockToDisk(GetBlock(blockPos));
             BackgroundToDisk backgroundToDisk = new BackgroundToDisk(GetBackground(blockPos));
-
-
+            JsonTool.StoreObject(@$"{path}\block.json", blockToDisk);
+            JsonTool.StoreObject($@"{path}\background.json", backgroundToDisk);
         }
 
         public void Unload()

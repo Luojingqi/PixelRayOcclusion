@@ -1,33 +1,40 @@
-using LitJson;
 using System;
 using System.IO;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 namespace PRO.Tool
 {
-    public class JsonTool
+    public static class JsonTool
     {
+        private static JsonSerializerSettings writeSetting;
+        private static JsonSerializerSettings readSetting;
+        private static void Init()
+        {
+            writeSetting = new JsonSerializerSettings();
+            writeSetting.Converters.Add(new JsonToolWriteCustom());
+            readSetting = new JsonSerializerSettings();
+            readSetting.Converters.Add(new JsonToolReadCustom());
+
+        }
+
         public static string ToJson(object obj)
         {
-            //if (!JsonToolCustom.isInit) JsonToolCustom.Init();
-            //string jsonText = JsonMapper.ToJson(obj);
-            //return Regex.Unescape(jsonText);
-            string jsonText = JsonConvert.SerializeObject(obj, Formatting.Indented);
+            if (writeSetting == null) Init();
+            string jsonText = JsonConvert.SerializeObject(obj, Formatting.Indented, writeSetting);
             return jsonText;
 
         }
 
         public static T ToObject<T>(string jsonText)
         {
-            //if (!JsonToolCustom.isInit) JsonToolCustom.Init();
-            //return JsonMapper.ToObject<T>(jsonText);
-            return JsonConvert.DeserializeObject<T>(jsonText);
+            if (writeSetting == null) Init();
+            return JsonConvert.DeserializeObject<T>(jsonText, readSetting);
         }
 
         public static bool ToObject<T>(string jsonText, out T obj)
         {
-            if (!JsonToolCustom.isInit) JsonToolCustom.Init();
-            obj = JsonMapper.ToObject<T>(jsonText);
+            if (writeSetting == null) Init();
+            obj = JsonConvert.DeserializeObject<T>(jsonText, readSetting);
             return true;
         }
 
@@ -83,6 +90,11 @@ namespace PRO.Tool
                 Debug.Log("保存文本到磁盘失败" + e);
                 return false;
             }
+        }
+
+        public static bool StoreObject(string path, object obj)
+        {
+            return StoreText(path, ToJson(obj));
         }
     }
 }

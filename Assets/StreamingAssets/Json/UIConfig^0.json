@@ -1,1 +1,8 @@
-[{"LoadMode":"R"},{"LoadMode":"A"}]
+[
+  {
+    "LoadMode": "R"
+  },
+  {
+    "LoadMode": "A"
+  }
+]

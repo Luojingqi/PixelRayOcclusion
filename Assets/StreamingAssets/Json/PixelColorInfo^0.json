@@ -1,1 +1,112 @@
-[{"colorName":"空气","color":{"r":0,"g":0,"b":0,"a":0},"affectsLight":false,"lightSourceType":"null"},{"colorName":"不透光墙","color":{"r":0,"g":0,"b":255,"a":255},"affectsLight":true,"lightSourceType":"self-0.1"},{"colorName":"透光墙","color":{"r":248,"g":203,"b":173,"a":100},"affectsLight":true,"lightSourceType":"null"},{"colorName":"背景0","color":{"r":112,"g":48,"b":160,"a":255},"affectsLight":true,"lightSourceType":"null"},{"colorName":"背景1","color":{"r":0,"g":176,"b":240,"a":255},"affectsLight":true,"lightSourceType":"null"},{"colorName":"背景2","color":{"r":255,"g":255,"b":255,"a":255},"affectsLight":true,"lightSourceType":"null"},{"colorName":"光源0","color":{"r":123,"g":123,"b":50,"a":255},"affectsLight":false,"lightSourceType":"0"},{"colorName":"光源1","color":{"r":255,"g":255,"b":255,"a":255},"affectsLight":false,"lightSourceType":"1"},{"colorName":"光源2","color":{"r":80,"g":80,"b":80,"a":255},"affectsLight":false,"lightSourceType":"2"},{"colorName":"光源3","color":{"r":200,"g":100,"b":30,"a":255},"affectsLight":false,"lightSourceType":"3"}]
+[
+  {
+    "colorName": "空气",
+    "color": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "affectsLight": false,
+    "lightSourceType": "null"
+  },
+  {
+    "colorName": "不透光墙",
+    "color": {
+      "r": 0,
+      "g": 0,
+      "b": 255,
+      "a": 255
+    },
+    "affectsLight": true,
+    "lightSourceType": "self-0.1"
+  },
+  {
+    "colorName": "透光墙",
+    "color": {
+      "r": 248,
+      "g": 203,
+      "b": 173,
+      "a": 100
+    },
+    "affectsLight": true,
+    "lightSourceType": "null"
+  },
+  {
+    "colorName": "背景0",
+    "color": {
+      "r": 112,
+      "g": 48,
+      "b": 160,
+      "a": 255
+    },
+    "affectsLight": true,
+    "lightSourceType": "null"
+  },
+  {
+    "colorName": "背景1",
+    "color": {
+      "r": 0,
+      "g": 176,
+      "b": 240,
+      "a": 255
+    },
+    "affectsLight": true,
+    "lightSourceType": "null"
+  },
+  {
+    "colorName": "背景2",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "affectsLight": true,
+    "lightSourceType": "null"
+  },
+  {
+    "colorName": "光源0",
+    "color": {
+      "r": 123,
+      "g": 123,
+      "b": 50,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "0"
+  },
+  {
+    "colorName": "光源1",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "1"
+  },
+  {
+    "colorName": "光源2",
+    "color": {
+      "r": 80,
+      "g": 80,
+      "b": 80,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "2"
+  },
+  {
+    "colorName": "光源3",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "3"
+  }
+]

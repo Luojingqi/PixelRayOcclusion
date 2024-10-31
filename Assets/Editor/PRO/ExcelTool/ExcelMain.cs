@@ -1,10 +1,11 @@
-using LitJson;
 using OfficeOpenXml;
 using PRO.Tool;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using Unity.Plastic.Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEngine;
 namespace ExcelTool
 {
@@ -70,22 +71,22 @@ namespace ExcelTool
 
                 #region 生成Json文件
                 //全工作表数据
-                JsonData jsonOnAllWorksheet = new JsonData();
-                List<JsonData> jsonOnAllWorksheetList = new List<JsonData>();
+                JArray jsonOnAllWorksheet = new JArray();
+                List<JArray> jsonOnAllWorksheetList = new List<JArray>();
                 for (int workIndex = 0; workIndex < package.Workbook.Worksheets.Count; workIndex++)
                 {
-                    jsonOnAllWorksheetList.Add(new JsonData());
+                    jsonOnAllWorksheetList.Add(new JArray());
                     ExcelWorksheet workbook = package.Workbook.Worksheets[workIndex];
                     //遍历每一行
                     for (int row = 4; row <= workbook.Dimension.Rows; row++)
                     {
                         //单行数据
-                        JsonData jsonData = new JsonData();
+                        JObject JObject = new JObject();
                         //遍历每一列
                         for (int col = 2; col <= 1 + Name_Type_Dic.Count; col++)
                         {
                             string attributeName = workbook.Cells[1, col].Value.ToString().Trim(' ');
-                            Name_Type_Dic.TryGetValue(attributeName, out string attributeTpye);
+                            string attributeTpye = Name_Type_Dic[attributeName];
                             if (workbook.Cells[row, col].Value == null)
                                 continue;
 
@@ -95,28 +96,31 @@ namespace ExcelTool
                                 continue;
                             bool IsList = attributeTpye.Contains("[]");
                             if (IsList == false)
-                                ToJsonData.Run(attributeTpye.ToLower(), attributeName, value, ref jsonData);
+                                ToJsonData.RunObject(attributeTpye.ToLower(), attributeName, value, ref JObject);
                             else
                             {
                                 //数组使用'|'分开
                                 string[] strs = value.Split('|', '，');
                                 string tpyeName = attributeTpye.Split('[')[0].ToLower();
-                                JsonData dataList = new JsonData();
+                                JArray dataList = new JArray();
                                 foreach (var str in strs)
                                 {
-                                    ToJsonData.Run(tpyeName, attributeName, str.Trim(), ref dataList, true);
+                                    ToJsonData.RunArray(tpyeName, attributeName, str.Trim(), ref dataList);
                                 }
-                                jsonData[attributeName] = dataList;
+                                JObject[attributeName] = dataList;
                             }
                         }
-                        jsonOnAllWorksheetList[workIndex].Add(jsonData);
-                        jsonOnAllWorksheet.Add(jsonData);
+                        if (JObject.Count > 0)
+                        {
+                            jsonOnAllWorksheetList[workIndex].Add(JObject);
+                            jsonOnAllWorksheet.Add(JObject);
+                        }
                     }
                 }
 
                 for (int i = 0; i < jsonOnAllWorksheetList.Count; i++)
                 {
-                    string JsonText = JsonMapper.ToJson(jsonOnAllWorksheetList[i]);
+                    string JsonText = JsonConvert.SerializeObject(jsonOnAllWorksheetList[i], Formatting.Indented);
                     JsonText = Regex.Unescape(JsonText);
                     using (StreamWriter sw = new StreamWriter($@"{jsonPath}\{xlsxFileName}^{i}.json", false))
                     {
@@ -128,7 +132,8 @@ namespace ExcelTool
                 }
                 using (StreamWriter sw = new StreamWriter($@"{jsonPath}\{xlsxFileName}.json", false))
                 {
-                    string JsonText = JsonMapper.ToJson(jsonOnAllWorksheet);
+
+                    string JsonText = JsonConvert.SerializeObject(jsonOnAllWorksheet, Formatting.Indented);
                     sw.Write(Regex.Unescape(JsonText));
                     sw.Close();
                     Console.WriteLine($"生成Json文件成功{xlsxFileName}\n");

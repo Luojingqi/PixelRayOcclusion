@@ -62,8 +62,6 @@ namespace PRO
            {
                BlockMaterial.FirstBind();
            });
-            //scenes.Add("main", new SceneEntity(""));
-            //nowScene = scenes["main"];
 
         }
 
@@ -138,7 +136,8 @@ namespace PRO
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                SwitchScene("123");
+                // SwitchScene("123");
+                nowScene.SaveBlockData(new(0, 0));
             }
             #region นโิด
             if (Input.GetKeyDown(KeyCode.Alpha1))

@@ -1,1 +1,46 @@
-[{"typeName":"空气","availableColors":["空气"],"collider":false,"fluidDensity":0},{"typeName":"背景","availableColors":["背景0","背景1"],"collider":false,"fluidDensity":0},{"typeName":"光源","availableColors":["光源0","光源1","光源2","光源3"],"collider":true,"fluidDensity":0},{"typeName":"透光墙","availableColors":["透光墙"],"collider":true,"fluidDensity":0},{"typeName":"不透光墙","availableColors":["不透光墙"],"collider":true,"fluidDensity":0}]
+[
+  {
+    "typeName": "空气",
+    "availableColors": [
+      "空气"
+    ],
+    "collider": false,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "背景",
+    "availableColors": [
+      "背景0",
+      "背景1"
+    ],
+    "collider": false,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "光源",
+    "availableColors": [
+      "光源0",
+      "光源1",
+      "光源2",
+      "光源3"
+    ],
+    "collider": true,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "透光墙",
+    "availableColors": [
+      "透光墙"
+    ],
+    "collider": true,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "不透光墙",
+    "availableColors": [
+      "不透光墙"
+    ],
+    "collider": true,
+    "fluidDensity": 0
+  }
+]
