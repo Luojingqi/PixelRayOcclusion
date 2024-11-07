@@ -1,0 +1,46 @@
+[
+  {
+    "colorName": "光源0",
+    "color": {
+      "r": 123,
+      "g": 123,
+      "b": 50,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "0"
+  },
+  {
+    "colorName": "光源1",
+    "color": {
+      "r": 200,
+      "g": 200,
+      "b": 200,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "1"
+  },
+  {
+    "colorName": "光源2",
+    "color": {
+      "r": 146,
+      "g": 208,
+      "b": 80,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "2"
+  },
+  {
+    "colorName": "光源3",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "3"
+  }
+]

@@ -60,7 +60,7 @@ namespace PRO
         private static void LoadAllPixelColorInfo()
         {
             #region 加载路径下的所有PixelColorInfo.json文件，并存储到PixelColorInfoDic与List
-            string rootPath = Application.streamingAssetsPath + @"\Json";
+            string rootPath = AssetManager.ExcelToolSaveJsonPath;
             DirectoryInfo root = new DirectoryInfo(rootPath);
             int pixelCount = 0;
             foreach (var fileInfo in root.GetFiles())
@@ -117,7 +117,7 @@ namespace PRO
         private static void LoadAllLightSourceInfo()
         {
             #region 加载路径下的所有LightSourceInfo.json文件，并存储到LightSourceInfoDic与List
-            string rootPath = Application.streamingAssetsPath + @"\Json";
+            string rootPath = AssetManager.ExcelToolSaveJsonPath;
             DirectoryInfo root = new DirectoryInfo(rootPath);
             foreach (var fileInfo in root.GetFiles())
             {

@@ -1,0 +1,49 @@
+[
+  {
+    "typeName": "空气",
+    "availableColors": [
+      "空气色"
+    ],
+    "collider": false,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "背景",
+    "availableColors": [
+      "背景色0",
+      "背景色1",
+      "背景色2"
+    ],
+    "collider": false,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "光源",
+    "availableColors": [
+      "光源0",
+      "光源1",
+      "光源2",
+      "光源3"
+    ],
+    "collider": true,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "木头",
+    "availableColors": [
+      "木头色0",
+      "木头色1"
+    ],
+    "collider": true,
+    "fluidDensity": 0
+  },
+  {
+    "typeName": "岩石",
+    "availableColors": [
+      "岩石色0",
+      "岩石色1"
+    ],
+    "collider": true,
+    "fluidDensity": 0
+  }
+]

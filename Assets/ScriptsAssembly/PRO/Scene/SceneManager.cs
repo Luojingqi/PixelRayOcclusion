@@ -19,7 +19,7 @@ namespace PRO
         private SceneEntity nowScene;
         public SceneEntity NowScene { get => nowScene; }
         private Dictionary<string, SceneEntity> scenes = new Dictionary<string, SceneEntity>();
-        public Block GetBlock(Vector2Int blockPos, string sceneName ) => scenes[sceneName].GetBlock(blockPos);
+        public Block GetBlock(Vector2Int blockPos, string sceneName) => scenes[sceneName].GetBlock(blockPos);
         public BackgroundBlock GetBackground(Vector2Int blockPos, string sceneName) => scenes[sceneName].GetBackground(blockPos);
         public SceneEntity GetScene(string sceneName) => scenes[sceneName];
 
@@ -116,12 +116,12 @@ namespace PRO
             {
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
-                    StarManager.Inst.CreateStar(new(10, 10), 20, 20, "透光墙", 10);
-                    StarManager.Inst.CreateStar(new(10, 10), 21, 20, "透光墙", 10);
-                    StarManager.Inst.CreateStar(new(15, 15), 10, 10, "透光墙", 10);
-                    StarManager.Inst.CreateStar(new(15, 15), 30, 10, "不透光墙", 10);
-                    StarManager.Inst.CreateStar(new(15, 15), 31, 10, "不透光墙", 10);
-                    StarManager.Inst.CreateStar(new(15, 15), 33, 10, "不透光墙", 10);
+                    //StarManager.Inst.CreateStar(new(10, 10), 20, 20, "透光墙", 10);
+                    //StarManager.Inst.CreateStar(new(10, 10), 21, 20, "透光墙", 10);
+                    //StarManager.Inst.CreateStar(new(15, 15), 10, 10, "透光墙", 10);
+                    //StarManager.Inst.CreateStar(new(15, 15), 30, 10, "不透光墙", 10);
+                    //StarManager.Inst.CreateStar(new(15, 15), 31, 10, "不透光墙", 10);
+                    //StarManager.Inst.CreateStar(new(15, 15), 33, 10, "不透光墙", 10);
                     //for (int i = 0; i <= 0; i++)
                     //{
                     //    for (int j = 0; j <= 0; j++)
@@ -137,7 +137,19 @@ namespace PRO
             if (Input.GetKeyDown(KeyCode.S))
             {
                 // SwitchScene("123");
-                nowScene.SaveBlockData(new(0, 0));
+                Log.Print("保存");
+                for (int x = -1; x <= 1; x++)
+                    for (int y = -1; y <= 1; y++)
+                        nowScene.SaveBlockData(new(x, y));
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Log.Print("加载");
+                for (int x = -1; x <= 1; x++)
+                    for (int y = -1; y <= 1; y++)
+                        nowScene.LoadBlockData(new(x, y));
+                BlockMaterial.UpdateBind();
+
             }
             #region 光源
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -148,8 +160,11 @@ namespace PRO
                 n = "光源2";
             if (Input.GetKeyDown(KeyCode.Alpha4))
                 n = "光源3";
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
+                //Block block = NowScene.GetBlock(blockPos);
+                //block.SetPixel(Pixel.TakeOut("空气", 0, pixelPos));
+                //block.DrawPixelAsync();
                 Block block = NowScene.GetBlock(blockPos);
                 block.SetPixel(Pixel.TakeOut("光源", n, pixelPos));
                 block.DrawPixelAsync();

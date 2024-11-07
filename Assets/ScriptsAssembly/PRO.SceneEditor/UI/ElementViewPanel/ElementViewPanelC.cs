@@ -1,6 +1,7 @@
 using PRO.Tool;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 
 namespace PRO.SceneEditor
 {
@@ -32,9 +33,23 @@ namespace PRO.SceneEditor
             Clear();
             for (int i = 0; i < infos.Length; i++)
             {
+                ElementEntity entity = TryGetEntity(infos[i]);
+                if (entity == null) continue;
+                
                 ElementC element = TakeOut();
-                element.SetFileInfo(infos[i]);
+                element.SetEntity(infos[i], entity);
                 showElementList.Add(element);
+            }
+        }
+
+        private ElementEntity TryGetEntity(FileInfo info)
+        {
+            if (info.Extension != ".json") return null;
+            if (JsonTool.LoadText(info.FullName, out string text) == false) return null;
+            else
+            {
+                ElementEntity entity = JsonTool.ToObject<ElementEntity>(text);
+                return entity;
             }
         }
 

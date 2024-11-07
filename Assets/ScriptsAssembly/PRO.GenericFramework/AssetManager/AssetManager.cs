@@ -1,14 +1,29 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 namespace PRO.Tool
 {
     public static class AssetManager
     {
         private static string SaveABPath;
         private static AssetBundleManifest MainManifest;
-
+        private static string excelToolSaveJsonPath;
+        public static string ExcelToolSaveJsonPath
+        {
+            get
+            {
+                if (excelToolSaveJsonPath != null) return excelToolSaveJsonPath;
+                else
+                {
+                    string excelToolPath = Application.streamingAssetsPath + @"\Excel\ExcelTool\";
+                    JsonTool.LoadText(excelToolPath + "path.json", out string pathText);
+                    excelToolSaveJsonPath = excelToolPath + (string)JsonTool.ToObject<JObject>(pathText)["jsonPath"];
+                    return excelToolSaveJsonPath;
+                }
+            }
+        }
 
         /// <summary>
         /// 记录当前已经加载了的包

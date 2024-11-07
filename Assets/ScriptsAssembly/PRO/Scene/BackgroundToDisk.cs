@@ -7,7 +7,7 @@ namespace PRO.Disk.Scene
     {
         public Vector2Int blockPos;
         public PixelToDisk[,] allPixel;
-
+        public BackgroundToDisk() { }
         public BackgroundToDisk(BackgroundBlock block)
         {
             blockPos = block.BlockPos;

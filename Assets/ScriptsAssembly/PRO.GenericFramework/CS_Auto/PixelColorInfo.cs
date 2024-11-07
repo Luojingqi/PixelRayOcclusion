@@ -64,7 +64,7 @@ namespace PRO.Disk
             }
         }
         
-        // 光源类型，为空不发光
+        // 光源类型
         public string lightSourceType
         {
             get

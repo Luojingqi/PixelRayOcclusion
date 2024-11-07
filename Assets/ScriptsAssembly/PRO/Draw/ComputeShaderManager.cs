@@ -58,10 +58,11 @@ namespace PRO.Renderer
                     lightBufferCSArray[lightIndex].UpdateBind(gloabBlockPos, localBlockBufferPos);
                 }
         }
+        private int nowRenderCS = 0;
         public void Update()
         {
-            for (int i = 0; i < LightBufferLength; i++)
-                lightBufferCSArray[i].Update();
+            lightBufferCSArray[nowRenderCS++].Update();
+            if (nowRenderCS >= LightBufferLength) nowRenderCS = 0;
         }
 
         public struct LightSourceToShader

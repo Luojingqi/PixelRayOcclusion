@@ -8,6 +8,7 @@ namespace PRO.Disk.Scene
         public Vector2Int blockPos;
         public PixelToDisk[,] allPixel;
 
+        public BlockToDisk() { }
         public BlockToDisk(Block block)
         {
             blockPos = block.BlockPos;

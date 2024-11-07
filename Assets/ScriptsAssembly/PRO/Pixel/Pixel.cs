@@ -4,6 +4,7 @@ using PRO.Tool;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using PRO.Disk.Scene;
 namespace PRO
 {
     public class Pixel
@@ -20,6 +21,11 @@ namespace PRO
         /// 使用的颜色名称
         /// </summary>
         public string colorName;
+
+        /// <summary>
+        /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查
+        /// </summary>
+        public Pixel() { }
 
         private static void InitPixel(Pixel pixel, PixelTypeInfo info, string colorName, Vector2Byte pixelPos)
         {
@@ -47,6 +53,8 @@ namespace PRO
             pixel.pos = Vector2Byte.max;
             pixelPool.PutIn(pixel);
         }
+
+        public static Pixel TakeOut(PixelToDisk pixelToDisk, Vector2Byte pixelPos) => TakeOut(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
         public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos)
         {
@@ -106,6 +114,7 @@ namespace PRO
             }
             else return null;
         }
+        public static Pixel New(PixelToDisk pixelToDisk, Vector2Byte pixelPos) => New(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
         private static bool CheckNew(string typeName, string colorName, Vector2Byte pixelPos, out PixelTypeInfo info)
         {
@@ -142,7 +151,7 @@ namespace PRO
         #endregion
         public static void LoadPixelTypeInfo()
         {
-            string rootPath = Application.streamingAssetsPath + @"\Json";
+            string rootPath = AssetManager.ExcelToolSaveJsonPath;
             DirectoryInfo root = new DirectoryInfo(rootPath);
             foreach (var fileInfo in root.GetFiles())
             {

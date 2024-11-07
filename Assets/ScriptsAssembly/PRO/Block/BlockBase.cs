@@ -38,14 +38,14 @@ namespace PRO
         /// <summary>
         /// 设置某个点，切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
         /// </summary>
-        public void SetPixel(Pixel pixel)
+        public void SetPixel(Pixel pixel, bool updateCollider = true)
         {
             PixelTypeInfo removeInfo = RemovePixel(pixel.pos);
-            if (this is Block) ChangeCollider(removeInfo, pixel);
+            if (this is Block && updateCollider) ChangeCollider(removeInfo, pixel);
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixelColorInfo.index;
-            if (pixelColorInfo.lightSourceType != "null") AddLightSource(pixel, pixelColorInfo);
+            if (pixelColorInfo.lightSourceType != null && pixelColorInfo.lightSourceType != "null") AddLightSource(pixel, pixelColorInfo);
         }
 
         private PixelTypeInfo RemovePixel(Vector2Byte pos)
@@ -54,7 +54,7 @@ namespace PRO
             Pixel pixel = allPixel[pos.x, pos.y];
             if (pixel == null) return ret;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
-            if (pixelColorInfo.lightSourceType != "null") RemoveLightSource(pixel);
+            if (pixelColorInfo.lightSourceType != null && pixelColorInfo.lightSourceType != "null") RemoveLightSource(pixel);
             ret = pixel.info;
             Pixel.PutIn(pixel);
             allPixel[pos.x, pos.y] = null;
@@ -63,7 +63,7 @@ namespace PRO
 
         private void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
         {
-            
+
             //bool oldCollider = (old == null || !old.collider) ? false : true;
             ////原本无碰撞箱，现在有就创建，反之删除
             //if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider((Block)this, nowPixel.pos);
@@ -95,6 +95,7 @@ namespace PRO
 
         private void RemoveLightSource(Pixel pixel)
         {
+            lightSourceDic.Remove(pixel.pos);
             //while (true)
             //{
             //    if (Monitor.TryEnter(lightSourceDic))

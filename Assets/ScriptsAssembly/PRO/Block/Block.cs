@@ -93,11 +93,13 @@ namespace PRO
             return ret;
         }
         #endregion
+
         #region 静态对象池
         private static Transform BlockNode;
         private static GameObjectPool<Block> BlockPool;
         public static void InitBlockPool()
         {
+            BlockNode = new GameObject("BlockNode").transform;
             #region 加载Block初始GameObject
             GameObject go = new GameObject("Block");
             SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
@@ -115,7 +117,12 @@ namespace PRO
             go.transform.parent = blockPoolGo.transform;
         }
 
-        public static Block TakeOut() => BlockPool.TakeOutT();
+        public static Block TakeOut()
+        {
+            Block block = BlockPool.TakeOutT();
+            block.transform.parent = BlockNode;
+            return block;
+        }
 
         public static async void PutIn(Block block)
         {
@@ -134,6 +141,7 @@ namespace PRO
                 }
                 await UniTask.Yield();
             }
+            block.name = "Block(Clone)";
             BlockPool.PutIn(block.gameObject);
         }
         #endregion 

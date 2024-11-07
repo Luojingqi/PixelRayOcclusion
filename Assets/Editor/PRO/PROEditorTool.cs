@@ -18,17 +18,10 @@ public static class PROEditorTool
     [MenuItem("PRO/2.创建HLSL文件")]
     public static void AutoCreateHLSL()
     {
-        if (!JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\LightSourceInfo.json", out string lightSourceInfoText))
-        {
-            Debug.Log("加载失败");
-            return;
-        }
-        LightSourceInfo[] array = JsonTool.ToObject<LightSourceInfo[]>(lightSourceInfoText);
-
         Dictionary<string, LightSourceInfo> lightSourceInfoDic = new Dictionary<string, LightSourceInfo>();
         List<LightSourceInfo> lightSourceInfoList = new List<LightSourceInfo>();
         #region 加载路径下的所有LightSourceInfo.json文件，并存储到字典LightSourceInfoDic
-        string rootPath = Application.streamingAssetsPath + @"\Json";
+        string rootPath = Application.streamingAssetsPath + @"\Json_Auto";
         DirectoryInfo root = new DirectoryInfo(rootPath);
         //int pixelCount = 0;
         foreach (var fileInfo in root.GetFiles())
@@ -48,6 +41,7 @@ public static class PROEditorTool
                 }
         }
         #endregion
+        Log.Print("加载到光源文件");
         //现在我们有了所有的光照
 
         #region 创建GetLine.hlsl
@@ -129,7 +123,7 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
         int index = PixelToIndex(GloabToPixel(lineArray[i]));" + "\n" +
 $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} + 1), 0, 1), 2);\n" +
 @"      int3 color = filterColor * 255 * weak;
-        InterlockedAdd(LightBufferTemp[index].x, color.y);
+        InterlockedAdd(LightBufferTemp[index].x, color.x);
         InterlockedAdd(LightBufferTemp[index].y, color.y);
         InterlockedAdd(LightBufferTemp[index].z, color.z);
         InterlockedAdd(LightBufferTemp[index].w, 1);

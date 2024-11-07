@@ -1,0 +1,32 @@
+[
+  {
+    "colorName": "背景色0",
+    "color": {
+      "r": 112,
+      "g": 48,
+      "b": 160,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "背景色1",
+    "color": {
+      "r": 0,
+      "g": 176,
+      "b": 240,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "背景色2",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "affectsLight": true
+  }
+]

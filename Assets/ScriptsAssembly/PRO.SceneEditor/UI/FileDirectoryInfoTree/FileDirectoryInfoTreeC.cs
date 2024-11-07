@@ -52,7 +52,7 @@ namespace PRO.SceneEditor
 
         public void SwitchDirectoryInfo(DirectoryInfo info)
         {
-            if (info.FullName == selectDirectoryInfo?.FullName) return;
+            if (selectDirectoryInfo != null && info.FullName == selectDirectoryInfo.FullName) return;
             Clear();
             selectDirectoryInfo = info;
             ElementViewPanelC.Inst.ShowFiles(info.GetFiles());
@@ -70,7 +70,11 @@ namespace PRO.SceneEditor
             }
             Sort();
         }
-
+        /// <summary>
+        /// 展示当前文件夹下的所有文件
+        /// </summary>
+        /// <param name="info">展示此文件夹下的文件</param>
+        /// <param name="mark">如果mark在此文件夹中，会被标记</param>
         private void ShowDirectoryInfo(DirectoryInfo info, DirectoryInfo mark = null)
         {
             var infos = info.GetDirectories();

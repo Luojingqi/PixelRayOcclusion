@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PRO.SceneEditor
 {
-    public class ElementViewPanelV : UIChildViewBase
+    internal class ElementViewPanelV : UIChildViewBase
     {
         public Transform Content { get; private set; }
         public ElementC Element { get; private set; }

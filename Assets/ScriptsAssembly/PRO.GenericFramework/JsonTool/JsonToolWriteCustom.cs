@@ -45,7 +45,6 @@ namespace PRO.Tool
                 var v = (Vector2Int)value;
                 jsonObject.Add("x", v.x);
                 jsonObject.Add("y", v.y);
-                jsonObject.WriteTo(writer);
             }
             else if (value is Color32)
             {

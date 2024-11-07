@@ -1,0 +1,126 @@
+[
+  {
+    "colorName": "空气色",
+    "color": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "affectsLight": false
+  },
+  {
+    "colorName": "木头色0",
+    "color": {
+      "r": 128,
+      "g": 96,
+      "b": 0,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "木头色1",
+    "color": {
+      "r": 191,
+      "g": 143,
+      "b": 0,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "岩石色0",
+    "color": {
+      "r": 144,
+      "g": 143,
+      "b": 149,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "岩石色1",
+    "color": {
+      "r": 166,
+      "g": 166,
+      "b": 166,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "光源0",
+    "color": {
+      "r": 123,
+      "g": 123,
+      "b": 50,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "0"
+  },
+  {
+    "colorName": "光源1",
+    "color": {
+      "r": 200,
+      "g": 200,
+      "b": 200,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "1"
+  },
+  {
+    "colorName": "光源2",
+    "color": {
+      "r": 146,
+      "g": 208,
+      "b": 80,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "2"
+  },
+  {
+    "colorName": "光源3",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLight": false,
+    "lightSourceType": "3"
+  },
+  {
+    "colorName": "背景色0",
+    "color": {
+      "r": 112,
+      "g": 48,
+      "b": 160,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "背景色1",
+    "color": {
+      "r": 0,
+      "g": 176,
+      "b": 240,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "背景色2",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "affectsLight": true
+  }
+]

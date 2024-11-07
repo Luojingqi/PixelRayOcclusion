@@ -1,0 +1,22 @@
+[
+  {
+    "colorName": "岩石色0",
+    "color": {
+      "r": 144,
+      "g": 143,
+      "b": 149,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "岩石色1",
+    "color": {
+      "r": 166,
+      "g": 166,
+      "b": 166,
+      "a": 255
+    },
+    "affectsLight": true
+  }
+]

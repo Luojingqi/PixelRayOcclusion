@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace PRO.Tool
 {
-    public class GameObjectPool<T> : ObjectPool<GameObject>
+    public class GameObjectPool<T> : ObjectPoolBase<GameObject>
     {
         private GameObject holdPrefab;
         public readonly Transform toolParent;
@@ -28,7 +28,7 @@ namespace PRO.Tool
         /// 是否可以直接在unity中Get组件
         /// </summary>
         bool canGet;
-        protected override GameObject ClonePoolData()
+        protected override GameObject NewObject()
         {
             GameObject go = null;
             if (holdPrefab != null)
@@ -37,14 +37,11 @@ namespace PRO.Tool
                 goToTDic.Add(go, go.GetComponent<T>());
             else
                 goToTDic.Add(go, (T)Activator.CreateInstance(typeof(T)));
-            base.CreateEventInvoke(go);
             return go;
         }
 
         public override void Remove(GameObject item)
         {
-            base.Remove(item);
-
             goToTDic.Remove(item);
             GameObject.Destroy(item);
         }

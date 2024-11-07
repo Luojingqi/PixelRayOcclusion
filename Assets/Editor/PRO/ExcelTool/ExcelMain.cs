@@ -72,11 +72,13 @@ namespace ExcelTool
                 #region 生成Json文件
                 //全工作表数据
                 JArray jsonOnAllWorksheet = new JArray();
-                List<JArray> jsonOnAllWorksheetList = new List<JArray>();
+                Dictionary<string, JArray> jsonOnWorksheetDic = new Dictionary<string, JArray>();
                 for (int workIndex = 0; workIndex < package.Workbook.Worksheets.Count; workIndex++)
                 {
-                    jsonOnAllWorksheetList.Add(new JArray());
+
                     ExcelWorksheet workbook = package.Workbook.Worksheets[workIndex];
+                    JArray jsonOnWorksheet = new JArray();
+                    jsonOnWorksheetDic.Add(workbook.Name, jsonOnWorksheet);
                     //遍历每一行
                     for (int row = 4; row <= workbook.Dimension.Rows; row++)
                     {
@@ -112,27 +114,25 @@ namespace ExcelTool
                         }
                         if (JObject.Count > 0)
                         {
-                            jsonOnAllWorksheetList[workIndex].Add(JObject);
+                            jsonOnWorksheet.Add(JObject);
                             jsonOnAllWorksheet.Add(JObject);
                         }
                     }
                 }
-
-                for (int i = 0; i < jsonOnAllWorksheetList.Count; i++)
+                foreach(var sheet in jsonOnWorksheetDic)
                 {
-                    string JsonText = JsonConvert.SerializeObject(jsonOnAllWorksheetList[i], Formatting.Indented);
+                    string JsonText = JsonConvert.SerializeObject(sheet.Value, Formatting.Indented);
                     JsonText = Regex.Unescape(JsonText);
-                    using (StreamWriter sw = new StreamWriter($@"{jsonPath}\{xlsxFileName}^{i}.json", false))
+                    using (StreamWriter sw = new StreamWriter($@"{jsonPath}\{xlsxFileName}^{sheet.Key}.json", false))
                     {
                         sw.Write(JsonText);
                         sw.Close();
                     }
-                    Console.WriteLine($"生成Json文件成功{xlsxFileName}^{i}");
-                    Debug.Log($"生成Json文件成功{xlsxFileName}^{i}");
+                    Console.WriteLine($"生成Json文件成功{xlsxFileName}^{sheet.Key}");
+                    Debug.Log($"生成Json文件成功{xlsxFileName}^{sheet.Key}");
                 }
                 using (StreamWriter sw = new StreamWriter($@"{jsonPath}\{xlsxFileName}.json", false))
                 {
-
                     string JsonText = JsonConvert.SerializeObject(jsonOnAllWorksheet, Formatting.Indented);
                     sw.Write(Regex.Unescape(JsonText));
                     sw.Close();

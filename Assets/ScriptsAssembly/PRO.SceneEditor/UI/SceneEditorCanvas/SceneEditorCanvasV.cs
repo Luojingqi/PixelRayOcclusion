@@ -1,4 +1,6 @@
+using PRO.Tool;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PRO.SceneEditor
 {
@@ -6,6 +8,8 @@ namespace PRO.SceneEditor
     {
         public FileDirectoryInfoTreeC FileDirectoryInfoTree { get; private set; }
         public ElementViewPanelC ElementViewPanel { get; private set; }
+
+        public SpriteRenderer HoldIcon { get; private set; }
         public override void Init(Transform transform)
         {
             base.Init(transform);
@@ -15,7 +19,9 @@ namespace PRO.SceneEditor
 
             ElementViewPanel.Init();
             FileDirectoryInfoTree.Init();
-            
+
+            HoldIcon = new GameObject("HoldIcon").AddComponent<SpriteRenderer>();
+            HoldIcon.sprite = DrawTool.CreateSprite(DrawTool.CreateTexture());
 
         }
     }

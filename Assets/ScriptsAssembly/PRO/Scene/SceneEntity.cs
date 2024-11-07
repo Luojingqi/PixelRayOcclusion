@@ -28,12 +28,21 @@ namespace PRO
 
         public void LoadBlockData(Vector2Int blockPos)
         {
-            if (JsonTool.LoadText($@"{sceneInfo.directoryInfo}\Blcok\{blockPos}\block.json", out string blockText)
-                && JsonTool.LoadText($@"{sceneInfo.directoryInfo}\Blcok\{blockPos}\background.json", out string backgroundText))
+            if (JsonTool.LoadText($@"{sceneInfo.directoryInfo}\Block\{blockPos}\block.json", out string blockText)
+                && JsonTool.LoadText($@"{sceneInfo.directoryInfo}\Block\{blockPos}\background.json", out string backgroundText))
             {
                 BlockToDisk blockToDisk = JsonTool.ToObject<BlockToDisk>(blockText);
                 BackgroundToDisk backgroundToDisk = JsonTool.ToObject<BackgroundToDisk>(backgroundText);
-
+                Block block = CreateBlock(blockPos);
+                BackgroundBlock background = CreateBackground(blockPos);
+                for (int x = 0; x < Block.Size.x; x++)
+                    for (int y = 0; y < Block.Size.y; y++)
+                    {
+                        block.SetPixel(Pixel.TakeOut(blockToDisk.allPixel[x, y], new(x, y)));
+                        background.SetPixel(Pixel.TakeOut(backgroundToDisk.allPixel[x, y], new(x, y)));
+                    }
+                block.DrawPixelAsync();
+                background.DrawPixelAsync();
             }
             else
             {
@@ -56,21 +65,23 @@ namespace PRO
 
         }
 
-        public void CreateBlock(Vector2Int blockPos)
+        public Block CreateBlock(Vector2Int blockPos)
         {
             var block = Block.TakeOut();
+            block.name = $"Block{blockPos}";
             BlockInRAM[blockPos] = block;
             block.transform.position = Block.BlockToWorld(blockPos);
-            // block.transform.parent = BlockNode;
             block.BlockPos = blockPos;
+            return block;
         }
-        public void CreateBackground(Vector2Int blockPos)
+        public BackgroundBlock CreateBackground(Vector2Int blockPos)
         {
             var back = BackgroundBlock.TakeOut();
             BackgroundInRAM[blockPos] = back;
             back.transform.position = Block.BlockToWorld(blockPos);
             back.transform.parent = GetBlock(blockPos).transform;
             back.BlockPos = blockPos;
+            return back;
         }
     }
 }

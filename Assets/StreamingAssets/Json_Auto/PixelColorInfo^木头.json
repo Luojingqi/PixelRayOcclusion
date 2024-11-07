@@ -1,0 +1,22 @@
+[
+  {
+    "colorName": "木头色0",
+    "color": {
+      "r": 128,
+      "g": 96,
+      "b": 0,
+      "a": 255
+    },
+    "affectsLight": true
+  },
+  {
+    "colorName": "木头色1",
+    "color": {
+      "r": 191,
+      "g": 143,
+      "b": 0,
+      "a": 255
+    },
+    "affectsLight": true
+  }
+]
