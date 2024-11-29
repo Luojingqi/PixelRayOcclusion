@@ -6,15 +6,18 @@ using UnityEngine;
 
 namespace PRO
 {
+    /// <summary>
+    /// 场景实体类，在游戏运行时存储场景运行数据
+    /// </summary>
     public class SceneEntity
     {
         private CrossList<Block> BlockInRAM = new CrossList<Block>();
         private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
 
-        public SceneCatalog sceneInfo { get; private set; }
-        public SceneEntity(SceneCatalog sceneInfo)
+        public SceneCatalog sceneCatalog { get; private set; }
+        public SceneEntity(SceneCatalog sceneCatalog)
         {
-            this.sceneInfo = sceneInfo;
+            this.sceneCatalog = sceneCatalog;
         }
 
         public Block GetBlock(Vector2Int blockPos)
@@ -28,8 +31,8 @@ namespace PRO
 
         public void LoadBlockData(Vector2Int blockPos)
         {
-            if (JsonTool.LoadText($@"{sceneInfo.directoryInfo}\Block\{blockPos}\block.json", out string blockText)
-                && JsonTool.LoadText($@"{sceneInfo.directoryInfo}\Block\{blockPos}\background.json", out string backgroundText))
+            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.json", out string blockText)
+                && JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background.json", out string backgroundText))
             {
                 BlockToDisk blockToDisk = JsonTool.ToObject<BlockToDisk>(blockText);
                 BackgroundToDisk backgroundToDisk = JsonTool.ToObject<BackgroundToDisk>(backgroundText);
@@ -52,7 +55,7 @@ namespace PRO
 
         public void SaveBlockData(Vector2Int blockPos)
         {
-            string path = $@"{sceneInfo.directoryInfo}\Block\{blockPos}";
+            string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
             BlockToDisk blockToDisk = new BlockToDisk(GetBlock(blockPos));
             BackgroundToDisk backgroundToDisk = new BackgroundToDisk(GetBackground(blockPos));
@@ -64,7 +67,11 @@ namespace PRO
         {
 
         }
-
+        /// <summary>
+        /// 创建一个块的游戏物体，内部像素点数据为空
+        /// </summary>
+        /// <param name="blockPos"></param>
+        /// <returns></returns>
         public Block CreateBlock(Vector2Int blockPos)
         {
             var block = Block.TakeOut();
@@ -74,6 +81,11 @@ namespace PRO
             block.BlockPos = blockPos;
             return block;
         }
+        /// <summary>
+        /// 创建一个背景的游戏物体，内部像素点数据为空
+        /// </summary>
+        /// <param name="blockPos"></param>
+        /// <returns></returns>
         public BackgroundBlock CreateBackground(Vector2Int blockPos)
         {
             var back = BackgroundBlock.TakeOut();

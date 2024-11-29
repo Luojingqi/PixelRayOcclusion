@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="Top" style="flex-grow: 0; height: 50px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-bottom-width: 1px; background-color: rgba(0, 0, 0, 0); flex-direction: row-reverse;">
+        <ui:VisualElement name="Right" style="flex-grow: 0; width: 250px;">
+            <ui:IntegerField label="帧持续时间/ms" value="200" name="FrameTimeField" style="align-self: auto; justify-content: flex-start; align-items: auto; width: 214px;" />
+            <uie:ObjectField label="技能配置文件" name="ConfigField" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row-reverse;">
+            <uie:ObjectField label="技能执行人" name="AgentField" style="height: 50%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Down" style="flex-grow: 1; flex-direction: row; flex-basis: auto; flex-shrink: 1;">
+        <ui:VisualElement name="Left" style="flex-grow: 0.1; flex-shrink: 0; height: auto; width: 100px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-right-width: 1px; border-top-right-radius: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:VisualElement name="Console" style="flex-grow: 0; height: 54px;">
+                <ui:VisualElement name="ButtonList" style="flex-grow: 0; height: 50%; flex-direction: row;">
+                    <ui:Button text="☜ﾟヮﾟ" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LeftFrameButton" style="height: auto; width: 33.4%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 18px;" />
+                    <ui:Button text="Play" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PlayFrameButton" style="width: 33%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 18px;" />
+                    <ui:Button text="ﾟヮﾟ☞" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RightFrameButton" style="width: 33.4%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; font-size: 18px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="FrameInfo" style="flex-grow: 1; height: auto; flex-direction: row;">
+                    <ui:VisualElement name="Left" style="flex-grow: 1;">
+                        <ui:Label tabindex="-1" text="QAQ" parse-escape-sequences="true" display-tooltip-when-elided="true" name="QAQ" style="-unity-font-style: bold; font-size: 18px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-center; padding-top: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Right" style="flex-grow: 0; flex-direction: row; width: 66%;">
+                        <ui:IntegerField value="0" name="NowFrameField" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 45%; -unity-font-style: bold; font-size: 17px;" />
+                        <ui:Label tabindex="-1" text="/" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-style: bold; font-size: 20px; color: rgb(255, 255, 255); width: 10%;" />
+                        <ui:IntegerField value="5" focusable="true" name="MaxFrameField" is-delayed="false" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: auto; justify-content: flex-end; width: 45%; -unity-font-style: bold; font-size: 17px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="TrackHeadingParent" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Right" style="flex-grow: 1; flex-shrink: 1;">
+            <ui:VisualElement name="TimeScaleAxis" style="flex-grow: 0; height: 54px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-direction: row; flex-shrink: 0; width: 2000px; padding-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; margin-left: 0;" />
+            <ui:ScrollView name="View" focusable="false" horizontal-scroller-visibility="Auto" style="flex-direction: column;">
+                <ui:VisualElement name="TrackView" style="flex-grow: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; height: 390px; width: 2000px; flex-shrink: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 0; border-bottom-left-radius: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0;" />
+            </ui:ScrollView>
+            <ui:VisualElement name="TimeLine" style="flex-grow: 0; flex-shrink: 0; flex-basis: auto; flex-direction: column-reverse; height: 10px; padding-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; margin-left: 0;">
+                <ui:VisualElement name="Line" style="flex-grow: 1; flex-shrink: 0; width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-right-width: 1px; height: 400px; margin-left: 0; border-bottom-width: 0; border-left-width: 1px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

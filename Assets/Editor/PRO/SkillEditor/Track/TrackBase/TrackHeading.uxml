@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="OneTrackHeading" style="flex-grow: 0;">
+        <ui:Label tabindex="-1" text="轨道头名称" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Name" style="-unity-font-style: bold; -unity-text-align: middle-center; font-size: 18px; height: 100%;" />
+    </ui:VisualElement>
+</ui:UXML>

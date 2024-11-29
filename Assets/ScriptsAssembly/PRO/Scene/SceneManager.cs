@@ -55,7 +55,7 @@ namespace PRO
             SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];
             //转换为实体数据
             SceneEntity scene = new SceneEntity(sceneCatalog);
-            scenes.Add(scene.sceneInfo.name, scene);
+            scenes.Add(scene.sceneCatalog.name, scene);
             nowScene = scene;
             //填充
             DrawThread.Init(() =>

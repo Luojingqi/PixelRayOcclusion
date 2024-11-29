@@ -2,6 +2,9 @@ using PRO.DataStructure;
 using UnityEngine;
 namespace PRO.Disk.Scene
 {
+    /// <summary>
+    /// 块数据存储到磁盘与从磁盘中加载的类
+    /// </summary>
     public class BlockToDisk
     {
 

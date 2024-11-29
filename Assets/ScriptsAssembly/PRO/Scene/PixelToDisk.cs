@@ -2,6 +2,9 @@ using PRO.Tool;
 
 namespace PRO.Disk.Scene
 {
+    /// <summary>
+    /// 像素数据存储到磁盘与从磁盘中加载的类
+    /// </summary>
     public class PixelToDisk
     {
         public string typeName;
