@@ -16,8 +16,7 @@ namespace PRO.SkillEditor
         public Vector3 Position { get => DiskData_AT.position; set => DiskData_AT.position = value; }
         [LabelText("旋转")]
         [ShowInInspector]
-        public Vector3 Rotation { get => rotation; set { DiskData_AT.rotation = Quaternion.Euler(value); rotation = value; } }
-        private Vector3 rotation;
+        public Quaternion Rotation { get => DiskData_AT.rotation; set => DiskData_AT.rotation = value; }
         [LabelText("缩放")]
         [ShowInInspector]
         public Vector3 Scale { get => DiskData_AT.scale; set => DiskData_AT.scale = value; }

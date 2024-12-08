@@ -21,6 +21,7 @@ namespace PRO.SceneEditor
             FileDirectoryInfoTree.Init();
 
             HoldIcon = new GameObject("HoldIcon").AddComponent<SpriteRenderer>();
+            HoldIcon.gameObject.SetActive(false);
             HoldIcon.sprite = DrawTool.CreateSprite(DrawTool.CreateTexture());
 
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace PRO.SkillEditor
 {
@@ -9,11 +10,19 @@ namespace PRO.SkillEditor
             Name = "矩形";
         }
 
+        private AttackTestSlice2D_Rect_Disk diskData => DiskData as AttackTestSlice2D_Rect_Disk;
 
-        public override void DrawGizmo()
+        public override void DrawGizmo(SkillPlayAgent agent)
         {
-            Gizmos.matrix = Matrix4x4.TRS(DiskData_AT.position, DiskData_AT.rotation, DiskData_AT.scale);
-            Gizmos.DrawWireCube(DiskData_AT.position, new Vector3(DiskData_AT.scale.x, DiskData_AT.scale.y, 0));
+            Gizmos.matrix = Matrix4x4.TRS(diskData.position + agent.transform.position, diskData.rotation * agent.transform.rotation, V3mV3(diskData.scale, agent.transform.lossyScale));
+            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+        }
+
+        public override void DrawHandle(SkillPlayAgent agent)
+        {
+            HandlePosition(agent, diskData.rotation, ref diskData.position);
+            HandleRotation(agent, diskData.position, ref diskData.rotation);
+            HandleScale(agent, diskData.position, diskData.rotation, ref diskData.scale);
         }
     }
 }

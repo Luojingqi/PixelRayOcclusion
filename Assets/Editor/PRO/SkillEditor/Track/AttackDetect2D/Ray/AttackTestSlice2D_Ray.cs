@@ -13,12 +13,16 @@ namespace PRO.SkillEditor
 
 
 
-        public override void DrawGizmo()
+        public override void DrawGizmo(SkillPlayAgent agent)
         {
             Gizmos.matrix = Matrix4x4.TRS(DiskData_AT.position, DiskData_AT.rotation, DiskData_AT.scale);
             Gizmos.DrawRay(DiskData_AT.position, Direction);
         }
 
+        public override void DrawHandle(SkillPlayAgent agent)
+        {
+            
+        }
 
         [LabelText("方向")]
         [ShowInInspector]

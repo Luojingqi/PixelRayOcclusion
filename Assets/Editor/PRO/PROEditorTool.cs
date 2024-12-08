@@ -36,7 +36,7 @@ public static class PROEditorTool
                 if (lightSourceInfoDic.ContainsKey(indexArray[i].name) == false)
                 {
                     lightSourceInfoDic.Add(indexArray[i].name, indexArray[i]);
-                    //indexArray[i].index = pixelCount++;
+                    //indexArray[i].Index = pixelCount++;
                     lightSourceInfoList.Add(indexArray[i]);
                 }
         }
@@ -63,7 +63,7 @@ int dy = abs(pos_G1.y - pos_G0.y);
 int sx = pos_G0.x < pos_G1.x ? 1 : -1;
 int sy = pos_G0.y < pos_G1.y ? 1 : -1;
 int err = dx - dy;
-int index = (dx > dy) ? dx : dy;
+int Index = (dx > dy) ? dx : dy;
 int2 nowPoint = pos_G0;" + "\n" +
 $"for (int i = 0; i < Line{r}; i++)\n" +
 @"{
@@ -80,9 +80,9 @@ err += dx;
 nowPoint.y += sy;
 }
 }" + "\n" +
-$"if (index >= Line{r})\n" +
-@"index = -1;
-return index;
+$"if (Index >= Line{r})\n" +
+@"Index = -1;
+return Index;
 }" + "\n\n";
                 #endregion
             }
@@ -120,13 +120,13 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int index = PixelToIndex(GloabToPixel(lineArray[i]));" + "\n" +
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));" + "\n" +
 $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} + 1), 0, 1), 2);\n" +
 @"      int3 color = filterColor * 255 * weak;
-        InterlockedAdd(LightBufferTemp[index].x, color.x);
-        InterlockedAdd(LightBufferTemp[index].y, color.y);
-        InterlockedAdd(LightBufferTemp[index].z, color.z);
-        InterlockedAdd(LightBufferTemp[index].w, 1);
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if (info.affectsLight)
@@ -151,13 +151,13 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         for (int i = 0; i < BlockLength; i++)
             autoSetLightBuffer_Buffer += $"StructuredBuffer<int> BlockBuffer{i};\n";
         autoSetLightBuffer_Buffer +=
-@"int GetBlockBuffer(int buffer, int index)
+@"int GetBlockBuffer(int buffer, int Index)
 {
     switch (buffer)
     {
         default:" + "\n";
         for (int i = 0; i < BlockLength; i++)
-            autoSetLightBuffer_Buffer += $"case {i}:\n return BlockBuffer{i}[index];\n";
+            autoSetLightBuffer_Buffer += $"case {i}:\n return BlockBuffer{i}[Index];\n";
         autoSetLightBuffer_Buffer +=
         #region Ê£Óà²¿·Ö
 @"    }
@@ -229,8 +229,8 @@ bool Equalsi2(int2 i0, int2 i1)
 PixelColorInfo GetPixel(int2 gloabPos)
 {
     int2 rlPos = GloabToReceiveLight(gloabPos);
-    int index = ReceiveLightToBlockIndex(rlPos);
-    return AllPixelColorInfo[GetBlockBuffer(index, PixelToIndex(ReceiveLightToPixel(rlPos)))];
+    int Index = ReceiveLightToBlockIndex(rlPos);
+    return AllPixelColorInfo[GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)))];
 }
 
 int2 beMixed_Min;

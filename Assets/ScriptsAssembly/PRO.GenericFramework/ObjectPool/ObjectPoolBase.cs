@@ -110,7 +110,7 @@ namespace PRO.Tool
             }
             else
             {
-                if (IsCanExceed == true)
+                if (usedObject.Count < MaxNumber || IsCanExceed == true)
                 {
                     takeOutData = ClonePoolData();
                     usedObject.Add(takeOutData);

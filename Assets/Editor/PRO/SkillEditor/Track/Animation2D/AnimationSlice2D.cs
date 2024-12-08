@@ -15,7 +15,12 @@ namespace PRO.SkillEditor
 
         private AnimationSlice2D_Disk diskData => DiskData as AnimationSlice2D_Disk;
 
-        public override void DrawGizmo()
+        public override void DrawGizmo(SkillPlayAgent agent)
+        {
+
+        }
+
+        public override void DrawHandle(SkillPlayAgent agent)
         {
 
         }

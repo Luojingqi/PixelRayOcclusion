@@ -20,12 +20,13 @@ namespace PRO.SkillEditor
         {
             this.View = view;
             InitMouseEvent();
+            #region 添加0刻度线
             OneScaleLine scaleLine = new OneScaleLine();
             View.Add(scaleLine.View);
             scaleLine.SetScaleLine(OneScaleLine.ScaleLineType.l);
             scaleLine.SetText("0");
             scaleLineList.Add(scaleLine);
-
+            #endregion
 
             View.RegisterCallback<WheelEvent>(evt =>
             {
@@ -69,20 +70,18 @@ namespace PRO.SkillEditor
             }
         }
 
-        private int nowFrame = 0;
         public int NowFrame
         {
             get
             {
-                return nowFrame;
+                return SkillEditorWindow.Inst.Config.Agent.NowFrame;
             }
             set
             {
-                if (value == nowFrame) return;
-                nowFrame = Math.Clamp(value, 0, MaxFrame - 1);
+                if (value == NowFrame) return;
+                SkillEditorWindow.Inst.Config.Agent.NowFrame = Math.Clamp(value, 0, MaxFrame - 1);
                 SkillEditorWindow.Inst.Console.FrameUpdate();
-
-                SkillEditorWindow.Inst.Skill_Disk?.UpdateFrame(SkillEditorWindow.Inst.Agent, nowFrame);
+                SkillEditorWindow.Inst.UpdateFrame();
             }
         }
         /// <summary>
@@ -118,6 +117,7 @@ namespace PRO.SkillEditor
                     {
                         OneScaleLine scaleLine = new OneScaleLine();
                         View.Add(scaleLine.View);
+                        //每5个刻度线显示刻度字
                         if (i % 5 == 0)
                         {
                             scaleLine.SetText(i.ToString());
@@ -134,7 +134,7 @@ namespace PRO.SkillEditor
                 }
 
                 SkillEditorWindow.Inst.TrackParent.style.width = new StyleLength(new Length(value * Spacing, LengthUnit.Pixel));
-                SkillEditorWindow.Inst.Skill_Disk.MaxFrame = value;
+                SkillEditorWindow.Inst.Config.Skill_Disk.MaxFrame = value;
 
                 maxFrame = value;
 

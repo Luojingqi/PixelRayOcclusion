@@ -1,12 +1,11 @@
+using Sirenix.OdinInspector;
 using System;
-using UnityEngine;
 namespace PRO
 {
-    public abstract class UIControllerBase : MonoBehaviour
+    public abstract class UIControllerBase : SerializedMonoBehaviour
     {
 
         public abstract UIViewBase View { get; }
-        public abstract UIModelBase Model { get; }
         public string UIName { get; private set; }
 
 
@@ -22,7 +21,6 @@ namespace PRO
         public virtual void Init(string uiName)
         {
             View.Init(transform);
-            Model.Init(transform);
             this.UIName = uiName;
         }
 

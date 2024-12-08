@@ -8,10 +8,14 @@ namespace PRO.SkillEditor
             Name = "空";
         }
 
-        public override void DrawGizmo()
+        public override void DrawGizmo(SkillPlayAgent agent)
         {
 
         }
 
+        public override void DrawHandle(SkillPlayAgent agent)
+        {
+
+        }
     }
 }

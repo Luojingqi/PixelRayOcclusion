@@ -7,7 +7,7 @@ namespace PRO.SkillEditor
     /// <summary>
     /// 技能播放的执行人
     /// </summary>
-    public class SkillPlayAgent : MonoBehaviour
+    public class SkillPlayAgent : SerializedMonoBehaviour
     {
         #region 对象池
         private static ObjectPool<List<RaycastHit2D>> listPool;
@@ -25,14 +25,26 @@ namespace PRO.SkillEditor
         }
         #endregion
 
-        public void Start()
+        public void Awake()
         {
             AgentSprice = transform.GetComponent<SpriteRenderer>();
+            Skill = idle;
+            Play = true;
         }
-        [ShowInInspector]
-        public SpriteRenderer AgentSprice { get; protected set; }
 
+        public SpriteRenderer AgentSprice;
+        /// <summary>
+        /// 攻击检测轨道每帧返回存储
+        /// </summary>
         public Dictionary<string, List<RaycastHit2D>> AttackTestTrack2DDic = new Dictionary<string, List<RaycastHit2D>>();
+        /// <summary>
+        /// 特效轨道的精灵图渲染器
+        /// </summary>
+        public List<SpriteRenderer> SpecialEffect2DSpriteList = new List<SpriteRenderer>();
+        [ShowInInspector]
+        /// <summary>
+        /// 当前播放的技能，设置会立即播放
+        /// </summary>
         public Skill_Disk Skill
         {
             get { return skill; }
@@ -40,29 +52,33 @@ namespace PRO.SkillEditor
             {
                 skill = value;
                 nowFrame = 0;
-                skillPlay = false;
+                Skill.UpdateFrame(this, 0);
+                play = true;
+                time = 0;
             }
         }
         private Skill_Disk skill;
 
-
+        [LabelText("空闲时播放")]
+        public Skill_Disk idle;
+        [ShowInInspector]
         /// <summary>
         /// 播放，暂停播放技能
         /// </summary>
-        public bool SkillPlay
+        public bool Play
         {
-            get { return skillPlay; }
+            get { return play; }
             set
             {
-                if (skillPlay == value) return;
-                skillPlay = value;
-                if (skillPlay == true)
+                if (play == value) return;
+                play = value;
+                if (play == false)
                 {
-                    Skill.UpdateFrame(this, nowFrame++);
+                    Skill = idle;
                 }
             }
         }
-        private bool skillPlay = false;
+        private bool play = false;
 
         public int NowFrame
         {
@@ -73,26 +89,27 @@ namespace PRO.SkillEditor
                 nowFrame = value;
             }
         }
+        [ShowInInspector]
         private int nowFrame;
 
-        
+
         public void Update()
         {
-            UpdateFrame();
-            
+         //   if (Input.GetKeyDown(KeyCode.V))
+                UpdateFrame();
         }
         private float time;
         private void UpdateFrame()
         {
-            if (SkillPlay == false) return;
+            if (Play == false || skill == null) return;
             time += Time.deltaTime * 1000;
             while (time >= Skill.FrameTime)
             {
                 time -= Skill.FrameTime;
-                Skill.UpdateFrame(this, nowFrame++);
+                Skill.UpdateFrame(this, ++nowFrame);
                 if (nowFrame >= Skill.MaxFrame)
                 {
-                    skillPlay = false;
+                    Play = false;
                     return;
                 }
             }

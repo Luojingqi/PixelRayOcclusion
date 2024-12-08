@@ -23,7 +23,6 @@ namespace PRO.SkillEditor
             {
                 case AttackTestSlice2D_Ray_Disk disk: { AddSlice(new AttackTestSlice2D_Ray(disk)); break; }
                 case AttackTestSlice2D_Rect_Disk disk: { AddSlice(new AttackTestSlice2D_Rect(disk)); break; }
-                case NullSlice_Disk disk: { AddSlice(new NullSlice(disk)); break; }
             }
         }
 

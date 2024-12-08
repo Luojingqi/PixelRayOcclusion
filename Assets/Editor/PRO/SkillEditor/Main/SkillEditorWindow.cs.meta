@@ -5,9 +5,8 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - m_ViewDataDictionary: {instanceID: 0}
-  - skillDisk: {fileID: 11400000, guid: 54a3f5b095934a64e9fa75e1986ff8ba, type: 2}
+  - Config: {fileID: 11400000, guid: 0b95e6d6e77bbe241b80c0cef8984c05, type: 2}
   - m_VisualTreeAsset: {fileID: 9197481963319205126, guid: 51a12f1c71ee7a240a58a28e172ca78b, type: 3}
-  - sprite: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

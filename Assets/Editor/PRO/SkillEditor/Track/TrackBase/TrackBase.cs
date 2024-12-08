@@ -10,8 +10,7 @@ namespace PRO.SkillEditor
     /// </summary>
     internal abstract class TrackBase
     {
-
-
+        public int trackIndex = -1;
         public VisualElement View { get; private set; }
         public OneTrackHeading Heading { get; private set; }
         public TrackBase(Track_Disk track_Disk)
@@ -64,6 +63,11 @@ namespace PRO.SkillEditor
                 if (hashSet.Contains(sliceDisk) == false)
                 {
                     hashSet.Add(sliceDisk);
+                    if (sliceDisk is NullSlice_Disk disk)
+                    {
+                        AddSlice(new NullSlice(disk));
+                        continue;
+                    }
                     ForeachSliceDiskToSlice(sliceDisk);
                 }
             }

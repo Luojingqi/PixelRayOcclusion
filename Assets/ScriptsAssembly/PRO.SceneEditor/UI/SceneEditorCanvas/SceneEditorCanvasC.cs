@@ -9,8 +9,6 @@ namespace PRO.SceneEditor
     {
         public override UIViewBase View => view;
         private SceneEditorCanvasV view = new SceneEditorCanvasV();
-        public override UIModelBase Model => model;
-        private SceneEditorCanvasM model = new SceneEditorCanvasM();
 
         public static SceneEditorCanvasC Inst;
 

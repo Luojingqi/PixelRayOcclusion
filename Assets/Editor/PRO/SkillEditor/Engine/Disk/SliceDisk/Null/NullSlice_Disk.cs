@@ -4,9 +4,9 @@ namespace PRO.SkillEditor
 {
     public class NullSlice_Disk : SliceBase_Disk
     {
-        public override void UpdateFrame(SkillPlayAgent agent, int frame, int index)
+        public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
-            Debug.Log(frame);
+
         }
     }
 }

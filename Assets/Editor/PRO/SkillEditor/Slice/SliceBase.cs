@@ -1,14 +1,17 @@
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Codice.Client.Common.WebApi.WebApiEndpoints;
 namespace PRO.SkillEditor
 {
-    internal abstract class SliceBase : SerializedScriptableObject //ScriptableObject
+    internal abstract class SliceBase : SerializedScriptableObject
     {
         private static int margin = 4;
         public VisualElement View { get; private set; }
         private VisualElement SpriteView;
         private Label LabelView;
+        [HideInInspector]
         public TrackBase Track;
         public SliceBase(SliceBase_Disk sliceDisk)
         {
@@ -33,8 +36,7 @@ namespace PRO.SkillEditor
             LabelView.style.color = new StyleColor(Color.black);
             LabelView.style.fontSize = new StyleLength(new Length(15, LengthUnit.Pixel));
             #endregion
-            // Background = new StyleBackground();
-            Enable = true;
+            Enable = sliceDisk.enable;
             #region 鼠标事件
             View.RegisterCallback<PointerDownEvent>(evt =>
             {
@@ -131,16 +133,10 @@ namespace PRO.SkillEditor
         }
 
         #region 设置样式
-
-
         public StyleBackground Background
         {
             get { return SpriteView.style.backgroundImage; }
-            set
-            {
-                SpriteView.style.backgroundImage = value;
-                Align();
-            }
+            set { SpriteView.style.backgroundImage = value; Align(); }
         }
 
         public void SetWidth(float value)
@@ -155,7 +151,6 @@ namespace PRO.SkillEditor
         }
 
         [BoxGroup("切片基本信息")]
-        [PropertyOrder(19999)]
         [LabelText("背景")]
         [ShowInInspector]
         public Sprite Background_Sprite
@@ -165,7 +160,6 @@ namespace PRO.SkillEditor
         }
 
         [BoxGroup("切片基本信息")]
-        [PropertyOrder(19999)]
         [LabelText("背景")]
         [ShowInInspector]
         public Texture2D Background_texture
@@ -212,30 +206,98 @@ namespace PRO.SkillEditor
         #region 选择与取消选择
         public virtual void Select()
         {
-            SkillEditorInspector.SetShowSlice(this);
+            Selection.activeObject = this;
             var color = new StyleColor(Color.yellow);
-            View.style.borderTopColor = color;
-            View.style.borderLeftColor = color;
-            View.style.borderRightColor = color;
+            try
+            {
+                View.style.borderTopColor = color;
+                View.style.borderLeftColor = color;
+                View.style.borderRightColor = color;
+            }
+            catch
+            {
+                Debug.Log("脚本发生更改，请重新打开技能编辑器");
+            }
         }
         public virtual void UnSelect()
         {
-            SkillEditorInspector.SetShowSlice(null);
+            Selection.activeObject = null;
             var color = new StyleColor(Color.clear);
-            View.style.borderTopColor = color;
-            View.style.borderLeftColor = color;
-            View.style.borderRightColor = color;
+            try
+            {
+                View.style.borderTopColor = color;
+                View.style.borderLeftColor = color;
+                View.style.borderRightColor = color;
+            }
+            catch
+            {
+                Debug.Log("脚本发生更改，请重新打开技能编辑器");
+            }
         }
         #endregion
         [BoxGroup("切片基本信息")]
-        [PropertyOrder(20001)]
         [Button("删除")]
         public void Delete()
         {
             Track.RemoveSlice(StartFrame);
             SkillEditorWindow.Inst.SelectSlice = null;
         }
+        [GUIColor(0, 0, 0, 0)]
+        [ShowInInspector]
+        [PropertyOrder(0)]
+        int Divider0 { get; }
 
-        public abstract void DrawGizmo();
+        [GUIColor(0, 0, 0, 0)]
+        [ShowInInspector]
+        [PropertyOrder(19999)]
+        void Divider1() { }
+        /// <summary>
+        /// 绘制场景框线
+        /// </summary>
+        public abstract void DrawGizmo(SkillPlayAgent agent);
+        /// <summary>
+        /// 绘制场景控制手柄
+        /// </summary>
+        public abstract void DrawHandle(SkillPlayAgent agent);
+
+
+        #region 一些手柄的实现
+        protected Vector3 V3mV3(Vector3 a, Vector3 b) => new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+        protected Vector3 V3dV3(Vector3 a, Vector3 b) => new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+
+        protected void HandlePosition(SkillPlayAgent agent, Quaternion rotation, ref Vector3 position)
+        {
+            if (Tools.current != UnityEditor.Tool.Move) return;
+            EditorGUI.BeginChangeCheck();
+            Vector3 ret = Handles.PositionHandle(position + agent.transform.position, rotation * agent.transform.rotation);
+            if (EditorGUI.EndChangeCheck())
+            {
+                position = ret - agent.transform.position;
+                SkillEditorWindow.Inst.UpdateFrame();
+            }
+        }
+        protected void HandleRotation(SkillPlayAgent agent, Vector3 position, ref Quaternion rotation)
+        {
+            if (Tools.current != UnityEditor.Tool.Rotate) return;
+            EditorGUI.BeginChangeCheck();
+            Quaternion ret = Handles.RotationHandle(rotation * agent.transform.rotation, position + agent.transform.position);
+            if (EditorGUI.EndChangeCheck())
+            {
+                rotation = ret * Quaternion.Inverse(agent.transform.rotation);
+                SkillEditorWindow.Inst.UpdateFrame();
+            }
+        }
+        protected void HandleScale(SkillPlayAgent agent, Vector3 position, Quaternion rotation, ref Vector3 scale)
+        {
+            if (Tools.current != UnityEditor.Tool.Scale) return;
+            EditorGUI.BeginChangeCheck();
+            Vector3 ret = Handles.ScaleHandle(V3mV3(scale, agent.transform.lossyScale), position + agent.transform.position, rotation * agent.transform.rotation);
+            if (EditorGUI.EndChangeCheck())
+            {
+                scale = V3dV3(ret, agent.transform.lossyScale);
+                SkillEditorWindow.Inst.UpdateFrame();
+            }
+        }
+        #endregion
     }
 }

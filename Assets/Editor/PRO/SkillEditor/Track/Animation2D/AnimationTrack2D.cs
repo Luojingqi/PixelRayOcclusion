@@ -18,16 +18,7 @@ namespace PRO.SkillEditor
         {
             switch (sliceDisk)
             {
-                case AnimationSlice2D_Disk disk:
-                    {
-                        AddSlice(new AnimationSlice2D(disk));
-                        break;
-                    }
-                case NullSlice_Disk disk:
-                    {
-                        AddSlice(new NullSlice(disk));
-                        break;
-                    }
+                case AnimationSlice2D_Disk disk: { AddSlice(new AnimationSlice2D(disk)); break; }
             }
         }
 

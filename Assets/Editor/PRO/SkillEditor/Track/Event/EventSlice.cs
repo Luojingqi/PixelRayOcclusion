@@ -6,11 +6,17 @@ namespace PRO.SkillEditor
     {
         public EventSlice(EventSlice_Disk sliceDisk) : base(sliceDisk)
         {
-            Name = DiskData.GetType().Name;
+            Name = sliceDisk.name;
         }
 
-        public override void DrawGizmo() { }
+        public override void DrawGizmo(SkillPlayAgent agent)
+        {
+            throw new System.NotImplementedException();
+        }
 
-
+        public override void DrawHandle(SkillPlayAgent agent)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

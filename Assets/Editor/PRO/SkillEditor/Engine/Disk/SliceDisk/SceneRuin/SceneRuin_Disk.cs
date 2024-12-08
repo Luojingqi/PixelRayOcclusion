@@ -1,28 +1,60 @@
-﻿using System.Collections.Generic;
+﻿using PRO.DataStructure;
+using PRO.Tool;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.SkillEditor
 {
     public class SceneRuin_Disk : SliceBase_Disk
     {
-        public Vector3 position;
+        public Vector2Int offset;
 
         public Texture2D texture;
 
         public Dictionary<string, List<Vector2Int>> RuinPixelDic = new Dictionary<string, List<Vector2Int>>();
 
 
-        public override void UpdateFrame(SkillPlayAgent agent, int frame, int index)
+        public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
-            foreach (var kv in RuinPixelDic)
+            try
             {
-                foreach (var pos in kv.Value)
+                foreach (var kv in RuinPixelDic)
                 {
-                    Vector2Int gloabPos = Block.WorldToGloab(agent.transform.position + position) + pos;
-                    Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(gloabPos));
-                    block.SetPixel(Pixel.TakeOut("空气", "空气色", block.GloabToPixel(gloabPos)));
+                    foreach (var pos in kv.Value)
+                    {
+                        Vector2Int gloabPos = Block.WorldToGloab(agent.transform.position) + pos + offset;
+                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(gloabPos));
+                        Vector2Byte pixelPos = block.GloabToPixel(gloabPos);
+                        Pixel pixel = Pixel.TakeOut("岩石", "岩石色0", pixelPos);
+                        block.SetPixel(pixel);
+                        block.DrawPixelAsync(pixelPos, BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                    }
                 }
             }
+            catch
+            {
+                Debug.Log("请在运行模式下查看效果：场景破坏轨道");
+            }
+#if UNITY_EDITOR
+            EditorShow(agent, trackIndex);
+#endif
+        }
+        public void EditorShow(SkillPlayAgent agent, int trackIndex)
+        {
+            Transform trans = agent.transform.Find($"场景破坏轨道{trackIndex}");
+            SpriteRenderer renderer = null;
+            if (trans == null)
+            {
+                renderer = new GameObject($"场景破坏轨道{trackIndex}").AddComponent<SpriteRenderer>();
+                renderer.transform.parent = agent.transform;
+                renderer.transform.position = Vector3.zero;
+            }
+            else
+            {
+                renderer = trans.GetComponent<SpriteRenderer>();
+            }
+            renderer.sprite = DrawTool.CreateSprite(texture);
+            renderer.transform.position = agent.transform.position + Block.GloabToWorld(offset);
         }
     }
 }

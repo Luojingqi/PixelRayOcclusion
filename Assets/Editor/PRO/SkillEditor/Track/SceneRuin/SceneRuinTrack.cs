@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,8 +19,7 @@ namespace PRO.SkillEditor
             switch (sliceDisk)
             {
                 case SceneRuin_Disk disk: { AddSlice(new SceneRuinSlice(disk)); break; }
-                case NullSlice_Disk disk: { AddSlice(new NullSlice(disk)); break; }
-            }
+            }   
         }
 
         protected override bool DragAssetCheck(Type type)

@@ -50,10 +50,17 @@ namespace PRO.SkillEditor
                 SkillEditorWindow.Inst.IsUpdate = !SkillEditorWindow.Inst.IsUpdate;
             };
         }
-
+        /// <summary>
+        /// 设置当前帧文本
+        /// </summary>
+        /// <param name="value"></param>
         public void SetNowFrameText(int value)
         {
             NowFrameField.value = value;
+        }
+        public void SetMaxFrameText(int value)
+        {
+            MaxFrameField.value = value;
         }
 
         private Button LeftFrameButton;

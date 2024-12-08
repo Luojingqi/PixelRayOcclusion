@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEngine;
 namespace PRO.Tool
 {
@@ -38,6 +38,16 @@ namespace PRO.Tool
             return true;
         }
 
+        public static void AddWriteJsonConverter(JsonConverter converter)
+        {
+            if (writeSetting == null) Init();
+            writeSetting.Converters.Add(converter);
+        }
+        public static void AddReadJsonConverter(JsonConverter converter)
+        {
+            if (readSetting == null) Init();
+            readSetting.Converters.Add(converter);
+        }
 
         /// <summary>
         /// 加载磁盘中文本数据
