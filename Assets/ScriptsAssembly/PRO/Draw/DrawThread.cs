@@ -9,7 +9,7 @@ namespace PRO
 {
     public static class DrawThread
     {
-        private static int a = 3;
+        private static int a = 10;
         private static Vector2Int x = new Vector2Int(-a, a);
         private static Vector2Int y = new Vector2Int(-a, a);
         private static int endNum = (a * 2 + 1) * (a * 2 + 1) * 2;
@@ -150,7 +150,7 @@ namespace PRO
                 //SceneManager.Inst.En_Lock_DrawApplyQueue(block);
                 Interlocked.Add(ref endNum, -1);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Print($"线程报错：{e}", Color.red);
             }
@@ -164,13 +164,13 @@ namespace PRO
                     if (r > 10)//>= 2)
                     {
                         Pixel pixel = Pixel.New("空气", 0, new(x, y));
-                        block.SetPixel(pixel);
+                        block.SetPixel(pixel, false, false);
                         block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
                     }
                     else
                     {
                         Pixel pixel = Pixel.New("空气", 0, new(x, y));
-                        block.SetPixel(pixel);
+                        block.SetPixel(pixel, false, false);
                         block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
                     }
                 }

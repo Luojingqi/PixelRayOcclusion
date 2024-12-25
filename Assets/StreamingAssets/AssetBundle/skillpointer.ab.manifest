@@ -1,0 +1,36 @@
+ManifestFileVersion: 0
+CRC: 387006262
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0977440a21d3f6e249be8c185675ba3c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bd7c2de23d46283164cd0f020182095c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 0977440a21d3f6e249be8c185675ba3c
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 22d2bd009e42d864cbaa7a787b881bca, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u7BAD\u5934\u7C7B/SkillPointer_\u7BAD\u5934\u7C7B.prefab"
+Dependencies: []

@@ -1,6 +1,8 @@
 ﻿using PRO.Tool;
 using System.IO;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace PRO.Disk.Scene
 {
@@ -9,7 +11,9 @@ namespace PRO.Disk.Scene
     /// </summary>
     public class SceneCatalog
     {
-        public string name;
+
+        public Dictionary<string, Type> buildingTypeDic;
+
         /// <summary>
         /// 场景文件夹的目录/{GameSave}/Scene/{SceneName}
         /// </summary>
@@ -28,12 +32,17 @@ namespace PRO.Disk.Scene
         public static SceneCatalog CreateFile(string name, GameSaveCatalog saveInfo, DirectoryInfo sceneRoot)
         {
             SceneCatalog info = new SceneCatalog();
-            info.name = name;
+            //创建场景根文件夹
             DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{sceneRoot.FullName}\{name}");
+            //创建块文件夹
             Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Block");
-            JsonTool.StoreText(@$"{sceneDirectory.FullName}\SceneCatalog.json", JsonTool.ToJson(info));
+            //创建建筑文件夹
+            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
+            info.buildingTypeDic = new Dictionary<string, Type>();
+           // info.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(Building));
+            JsonTool.StoreText(@$"{sceneDirectory.FullName}\SceneCatalog.json", JsonTool.ToJson(info));
             return info;
         }
 

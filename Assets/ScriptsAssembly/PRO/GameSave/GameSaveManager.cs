@@ -1,5 +1,3 @@
-using PRO.Tool;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -10,8 +8,13 @@ namespace PRO
         public static GameSaveManager Inst { get; private set; }
 
         private GameSaveCatalog nowGameSave;
+        /// <summary>
+        /// 当前活动的游戏存档
+        /// </summary>
         public GameSaveCatalog NowGameSave { get => nowGameSave; }
-
+        /// <summary>
+        /// 存档文件的加载与保存路径
+        /// </summary>
         public static string SavePath;
 
         private void Awake()
@@ -28,7 +31,10 @@ namespace PRO
                 // nowGameSave = LoadAllSaveInfo()[0];
             }
         }
-
+        /// <summary>
+        /// 从SavePath中加载所有的存档文件目录
+        /// </summary>
+        /// <returns></returns>
         public List<GameSaveCatalog> LoadAllSaveCatalog()
         {
             List<GameSaveCatalog> ret = new List<GameSaveCatalog>();

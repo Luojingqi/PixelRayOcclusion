@@ -40,7 +40,7 @@ namespace PRO.Tool
             return go;
         }
 
-        public override void Remove(GameObject item)
+        public override void Destroy(GameObject item)
         {
             goToTDic.Remove(item);
             GameObject.Destroy(item);

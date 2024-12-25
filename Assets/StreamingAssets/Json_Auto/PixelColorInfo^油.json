@@ -1,0 +1,12 @@
+[
+  {
+    "colorName": "油色0",
+    "color": {
+      "r": 242,
+      "g": 184,
+      "b": 0,
+      "a": 100
+    },
+    "affectsLight": true
+  }
+]

@@ -6,7 +6,7 @@
         {
         }
 
-        public override void Remove(T item)
+        public override void Destroy(T item)
         {
 
         }

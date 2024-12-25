@@ -21,6 +21,8 @@ namespace PRO.Disk
         
         private bool _collider;
         
+        private int fluidtype;
+        
         private int fluiddensity;
         
         // 类型名称
@@ -59,6 +61,19 @@ namespace PRO.Disk
             set
             {
                 this._collider = value;
+            }
+        }
+        
+        // 流体类型
+        public int fluidType
+        {
+            get
+            {
+                return this.fluidtype;
+            }
+            set
+            {
+                this.fluidtype = value;
             }
         }
         

@@ -52,9 +52,12 @@ namespace PRO.SkillEditor
             {
                 skill = value;
                 nowFrame = 0;
-                Skill.UpdateFrame(this, 0);
-                play = true;
                 time = 0;
+                if (value != null)
+                {
+                    Skill.UpdateFrame(this, 0);
+                    play = true;
+                }
             }
         }
         private Skill_Disk skill;

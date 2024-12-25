@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using System;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using UnityEditor.VersionControl;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace PRO.Tool
 {
@@ -17,65 +18,53 @@ namespace PRO.Tool
         /// </summary>
         public AssetBundle ab { get; private set; }
         /// <summary>
-        /// 解析出来的数据的弱引用
+        /// 解析出来的数据
         /// </summary>
-        private Dictionary<string, WeakReference> counter = new Dictionary<string, WeakReference>();
+        private Dictionary<string, UnityEngine.Object> dataDic = new Dictionary<string, UnityEngine.Object>();
 
         /// <summary>
         /// 从这个包中解析一个资源，异步
         /// </summary>
         /// <returns></returns>
-        public async UniTask<T> AnalysisAsync<T>(string name) where T : UnityEngine.Object
+        public async UniTask<T> AnalysisAsync<T>(string analysisPath) where T : UnityEngine.Object
         {
-            if (counter.TryGetValue(name, out WeakReference weak))
+            if (dataDic.TryGetValue(analysisPath, out UnityEngine.Object data) == false)
             {
-                if (weak.Target == null)
+                AssetBundleRequest request = ab.LoadAssetAsync<T>(analysisPath);
+                data = await request.ToUniTask();
+                if (data == null)
                 {
-                    counter.Remove(name);
-                    return await AnalysisAsync<T>(name);
-                }
-                return weak.Target as T;
-            }
-            else
-            {
-                //加载包并存储弱引用
-                AssetBundleRequest request = ab.LoadAssetAsync<T>(name);
-                T asset = await request.ToUniTask() as T;
-                WeakReference cite = new WeakReference(asset);
-                counter.Add(name, cite);
-                return asset;
-            }
-        }
-
-        /// <summary>
-        /// 检查ab包使用情况，是否可以销毁
-        /// </summary>
-        /// <returns></returns>
-        public bool CheckUnload()
-        {
-            bool canUnload = true;
-
-            foreach (WeakReference value in counter.Values)
-            {
-                if (value.Target == null)
-                {
-                    //加载的资源不存在
-                    //不做任何操作，当所有的资源不存在则canUnload仍未true
+                    Log.Print($"解析包内资源： ab = {ab.name}   asset = {analysisPath}", new Color32(255, 0, 0, 0));
                 }
                 else
                 {
-                    //资源存在
-                    canUnload = false;
+                    Log.Print($"解析包内资源： ab = {ab.name}   asset = {analysisPath}", new Color32(146, 208, 80, 0));
+                    dataDic.Add(analysisPath, data);
                 }
             }
-            if (CitedBy == 0 && canUnload)
-                canUnload = true;
-            else
-                canUnload = false;
-            //加载的所有资源已经被CG且本资源包被引用计数为0
-            return canUnload;
+            return data as T;
         }
-
+        /// <summary>
+        /// 从这个包中解析一个资源
+        /// </summary>
+        /// <returns></returns>
+        public T Analysis<T>(string analysisPath) where T : UnityEngine.Object
+        {
+            if (dataDic.TryGetValue(analysisPath, out UnityEngine.Object data) == false)
+            {
+                data = ab.LoadAsset<T>(analysisPath);
+                if (data == null)
+                {
+                    Log.Print($"解析包内资源： ab = {ab.name}   asset = {analysisPath}", new Color32(255, 0, 0, 0));
+                }
+                else
+                {
+                    Log.Print($"解析包内资源： ab = {ab.name}   asset = {analysisPath}", new Color32(146, 208, 80, 0));
+                    dataDic.Add(analysisPath, data);
+                }
+            }
+            return data as T;
+        }
         /// <summary>
         /// 被引用计数器
         /// 当被其他包引用时++
@@ -83,9 +72,13 @@ namespace PRO.Tool
         /// </summary>
         public int CitedBy { get; set; }
 
-        public void Unload()
+        /// <summary>
+        /// 卸载此ab包（包括解析出来的资源）
+        /// </summary>
+        public async UniTask Unload()
         {
-            ab.Unload(true);
+            dataDic.Clear();
+            await ab.UnloadAsync(true);
         }
     }
 }

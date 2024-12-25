@@ -1,10 +1,9 @@
 using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
+using PRO.Disk;
 using PRO.Renderer;
 using PRO.Tool;
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 namespace PRO
 {
@@ -18,7 +17,7 @@ namespace PRO
         /// <summary>
         /// 世界坐标点to块坐标
         /// </summary>
-        public static Vector2Int WorldToBlock(Vector2 worldPos) => new Vector2Int((int)Math.Round(worldPos.x / Block.Size.x / Pixel.Size - 0.5f), (int)Math.Round(worldPos.y / Block.Size.y / Pixel.Size - 0.5f));
+        public static Vector2Int WorldToBlock(Vector2 worldPos) => new Vector2Int((int)Mathf.Round(worldPos.x / Block.Size.x / Pixel.Size - 0.5f), (int)Mathf.Round(worldPos.y / Block.Size.y / Pixel.Size - 0.5f));
         public static Vector2Int WorldToGloab(Vector2 worldPos) => new Vector2Int((int)(worldPos.x / Pixel.Size), (int)(worldPos.y / Pixel.Size));
         /// <summary>
         /// 块坐标to世界坐标点
@@ -35,13 +34,7 @@ namespace PRO
             if (y < 0) y += Block.Size.y;
             return new Vector2Byte(x, y);
         }
-        /// <summary>
-        /// 点坐标（局部）to世界坐标点
-        /// </summary>
-        public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((BlockPos.x * Block.Size.x + pixelPos.x) * Pixel.Size, (BlockPos.y * Block.Size.y + pixelPos.y) * Pixel.Size);
-        public Vector2Int PixelToGloab(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
         public static Vector2Int PixelToGloab(Vector2Int blockPos, Vector2Byte pixelPos) => new Vector2Int(blockPos.x * Block.Size.x + pixelPos.x, blockPos.y * Block.Size.y + pixelPos.y);
-        public Vector2Byte GloabToPixel(Vector2Int gloabPos) => new Vector2Byte(gloabPos.x - BlockPos.x * Block.Size.x, gloabPos.y - BlockPos.y * Block.Size.y);
         public static Vector2Int GloabToBlock(Vector2Int gloabPos)
         {
             if (gloabPos.x < 0) gloabPos.x -= Block.Size.x - 1;
@@ -148,8 +141,12 @@ namespace PRO
         public override void Init()
         {
             base.Init();
-            for (int i = 0; i < AllLiquid.Length; i++)
-                AllLiquid[i] = new HashSet<Liquid>();
+            for (int i = 0; i < Block.Size.y; i++)
+            {
+                fluidUpdateHash1[i] = new HashSet<Vector2Byte>();
+                fluidUpdateHash2[i] = new HashSet<Vector2Byte>();
+                fluidUpdateHash3[i] = new HashSet<Vector2Byte>();
+            }
             colliderNode = new GameObject("ColliderNode").transform;
             colliderNode.parent = transform;
         }
@@ -182,187 +179,254 @@ namespace PRO
 
         #region 流体
         /// <summary>
-        /// 液体压强更新队列
+        /// 流体1的更新概率衰减
         /// </summary>
-        //  public Queue<Vector2Byte> LiquidPressureUpdateQueue = new Queue<Vector2Byte>();
-        private HashSet<Liquid>[] AllLiquid = new HashSet<Liquid>[Block.Size.y];
+        private static int updateProbabilityDecay1 = 3;
 
-        public void AddLiquid(Liquid liquid)
+
+        //流体更新队列
+        private HashSet<Vector2Byte>[] fluidUpdateHash1 = new HashSet<Vector2Byte>[Block.Size.y];
+        private HashSet<Vector2Byte>[] fluidUpdateHash2 = new HashSet<Vector2Byte>[Block.Size.y];
+        private HashSet<Vector2Byte>[] fluidUpdateHash3 = new HashSet<Vector2Byte>[Block.Size.y];
+        public static void AddFluidUpdateHash(Vector2Int pos_G)
         {
-            HashSet<Liquid> hash = AllLiquid[liquid.pos.y];
-            if (hash.Contains(liquid) == false)
+            var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(pos_G));
+            if (block != null)
             {
-                hash.Add(liquid);
-                Vector2Int posG = this.PixelToGloab(liquid.pos);
-                var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(posG + Vector2Int.up));
-                if (block == null) UpdateLiquidPressure(posG, 0);
-                else
+                Pixel pixel = block.GetPixel(block.GloabToPixel(pos_G));
+                switch (pixel.info.fluidType)
                 {
-                    var pixel = block.GetPixel(block.GloabToPixel(posG + Vector2Int.up));
-                    if (pixel is Liquid == false) UpdateLiquidPressure(posG, 0);
-                    else UpdateLiquidPressure(posG, (pixel as Liquid).pressure + 1);
+                    case 1: AddHashSet(block.fluidUpdateHash1[pixel.pos.y], pixel.pos); break;
+                    case 2: AddHashSet(block.fluidUpdateHash2[pixel.pos.y], pixel.pos); break;
+                    case 3: AddHashSet(block.fluidUpdateHash3[pixel.pos.y], pixel.pos); break;
                 }
             }
         }
-        public void RemoveLiquid(Liquid liquid)
+        private static void AddHashSet(HashSet<Vector2Byte> hash, Vector2Byte pos)
         {
-            AllLiquid[liquid.pos.y].Remove(liquid);
-            UpdateLiquidPressure(this.PixelToGloab(liquid.pos) + Vector2Int.down, 0);
+            if (hash.Contains(pos) == false)
+                hash.Add(pos);
         }
-
-        private static void UpdateLiquidPressure(Vector2Int posG, int pressure)
+        public void UpdateFluid1()
         {
-            try
+            for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
-                var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(posG));
-                while (true)
+                _posList.Clear();
+                foreach (var pos in fluidUpdateHash1[i])
+                    _posList.Add(pos);
+                foreach (var pos in _posList)
                 {
-                    var blockPos = Block.GloabToBlock(posG);
-                    if (blockPos != block.BlockPos)
+                    _queue.Clear();
+                    _hash.Clear();
+                    Pixel pixel = GetPixel(pos);
+                    //标记位为false时，代表此点无法流动，移除更新队列
+                    bool stopUpdate = true;
+                    if (pixel.info.fluidType != 1)
+                        goto end;
+                    //根据概率来看优先向哪个方向移动
+                    AddQueueHash(pixel.posG + Vector2Int.down);
+                    Random.InitState((int)(Time.deltaTime * 1000000));
+                    if (Random.Range(0, 100) >= 50)
                     {
-                        block = SceneManager.Inst.NowScene.GetBlock(blockPos);
-                        if (block == null) return;
+                        AddQueueHash(pixel.posG + Vector2Int.right);
+                        AddQueueHash(pixel.posG + Vector2Int.left);
                     }
-                    Pixel pixel = block.GetPixel(block.GloabToPixel(posG));
-                    if (pixel is Liquid)
+                    else
                     {
-                        Liquid liquid_Next = (Liquid)pixel;
-                        liquid_Next.pressure = pressure;
-                        pressure++;
-                        posG += Vector2Int.down;
+                        AddQueueHash(pixel.posG + Vector2Int.left);
+                        AddQueueHash(pixel.posG + Vector2Int.right);
                     }
-                    else break;
+
+                    if (Random.Range(0, 100) >= 50)
+                    {
+                        AddQueueHash(pixel.posG + Vector2Int.right + Vector2Int.down);
+                        AddQueueHash(pixel.posG + Vector2Int.left + Vector2Int.down);
+                    }
+                    else
+                    {
+                        AddQueueHash(pixel.posG + Vector2Int.left + Vector2Int.down);
+                        AddQueueHash(pixel.posG + Vector2Int.right + Vector2Int.down);
+                    }
+
+                    int updateProbability = 100;
+                    while (_queue.Count > 0)
+                    {
+                        Vector2Int nextPosG = _queue.Dequeue();
+                        Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(nextPosG));
+                        if (nextBlock == null)
+                        {
+                            updateProbability -= updateProbabilityDecay1;
+                            continue;
+                        }
+
+                        Pixel nextPixel = nextBlock.GetPixel(nextBlock.GloabToPixel(nextPosG));
+
+                        if ((nextPixel.info.typeName == "空气") ||    //下一个点为空气
+                            (nextPixel.info.fluidType == 1 && pixel.info.fluidDensity > nextPixel.info.fluidDensity) ||  //下个点为液体，且密度高于他
+                            (nextPixel.info.fluidType == 2))  //下个点为气体
+                        {
+                            if (Random.Range(0, 100) < updateProbability)
+                            {
+                                //将被交换点附近3x3的点都加入流体更新队列
+                                for (int y = -2; y <= 2; y++)
+                                    for (int x = -2; x <= 2; x++)
+                                    {
+                                        //  var tempG = nextPosG + new Vector2Int(0, 0);
+                                        var tempG = nextPosG + new Vector2Int(x, y);
+                                        Block timpBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(tempG));
+                                        if (timpBlock == null) continue;
+                                        var tempP = timpBlock.GloabToPixel(tempG);
+                                        AddHashSet(timpBlock.fluidUpdateHash1[tempP.y], tempP);
+                                    }
+                                SwapFluid(nextPosG, pixel.posG);
+                                stopUpdate = false;
+
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            updateProbability -= updateProbabilityDecay1;
+                            continue;
+                        }
+                    }
+                end:
+                    if (stopUpdate == true)
+                    {
+                        RemoveFluidUpdateHash(pos);
+                    }
                 }
+
             }
-            catch
+        }
+        public void UpdateFluid3()
+        {
+            for (int i = 0; i < fluidUpdateHash3.Length; i++)
             {
-                Debug.Log("错误" + Block.GloabToBlock(posG));
+                _posList.Clear();
+                foreach (var pos in fluidUpdateHash3[i])
+                    _posList.Add(pos);
+                foreach (var pos in _posList)
+                {
+                    _queue.Clear();
+                    _hash.Clear();
+                    Pixel pixel = GetPixel(pos);
+                    //标记位为false时，代表此点无法流动，移除更新队列
+                    bool stopUpdate = true;
+                    if (pixel.info.fluidType != 3)
+                        goto end;
+                    //根据概率来看优先向哪个方向移动
+                    AddQueueHash(pixel.posG + Vector2Int.down);
+                    Random.InitState((int)(Time.deltaTime * 1000000));
+                    //if (Random.Range(0, 100) >= 50)
+                    //{
+                    //    AddQueueHash(g + Vector2Int.right);
+                    //    AddQueueHash(g + Vector2Int.left);
+                    //}
+                    //else
+                    //{
+                    //    AddQueueHash(g + Vector2Int.left);
+                    //    AddQueueHash(g + Vector2Int.right);
+                    //}
+
+                    if (Random.Range(0, 100) >= 50)
+                    {
+                        AddQueueHash(pixel.posG + Vector2Int.right + Vector2Int.down);
+                        AddQueueHash(pixel.posG + Vector2Int.left + Vector2Int.down);
+                    }
+                    else
+                    {
+                        AddQueueHash(pixel.posG + Vector2Int.left + Vector2Int.down);
+                        AddQueueHash(pixel.posG + Vector2Int.right + Vector2Int.down);
+                    }
+
+
+                    while (_queue.Count > 0)
+                    {
+                        Vector2Int nextPosG = _queue.Dequeue();
+                        Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(nextPosG));
+                        if (nextBlock == null) continue;
+
+                        Pixel nextPixel = nextBlock.GetPixel(nextBlock.GloabToPixel(nextPosG));
+
+                        if ((nextPixel.info.typeName == "空气") ||    //下一个点为空气
+                            (nextPixel.info.fluidType == 1) ||  //下个点为液体
+                            (nextPixel.info.fluidType == 2) ||  //下个点为气体
+                            (nextPixel.info.fluidType == 3 && pixel.info.fluidDensity > nextPixel.info.fluidDensity && Random.Range(0, 100) >= 50))//下个点为固体，当密度比他大的时候概率会沉入
+                        {
+                            //将被交换点附近3x3的点都加入流体更新队列
+                            for (int y = -1; y <= 1; y++)
+                                for (int x = -1; x <= 1; x++)
+                                {
+                                    //  var tempG = nextPosG + new Vector2Int(0, 0);
+                                    var tempG = nextPosG + new Vector2Int(x, y);
+                                    Block timpBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(tempG));
+                                    if (timpBlock == null) continue;
+                                    var tempP = timpBlock.GloabToPixel(tempG);
+                                    AddHashSet(timpBlock.fluidUpdateHash3[tempP.y], tempP);
+                                }
+                            SwapFluid(nextPosG, pixel.posG);
+                            stopUpdate = false;
+
+                            break;
+                        }
+                    }
+                end:
+                    if (stopUpdate == true)
+                    {
+                        RemoveFluidUpdateHash(pos);
+                    }
+                }
+
             }
         }
 
-        private Liquid[] liquids = new Liquid[Block.Size.x];
-        public void UpdateLiquid()
+        private void RemoveFluidUpdateHash(Vector2Byte pos)
         {
-            for (int i = 0; i < AllLiquid.Length; i++)
-            {
-                AllLiquid[i].CopyTo(liquids);
-                foreach (Liquid liquid in liquids)
-                {
-                    if (liquid == null) break;
-                    TryLiquidFlow(liquid);
-                }
-                for (int j = 0; j < liquids.Length; j++)
-                    if (liquids[j] == null) break;
-                    else liquids[j] = null;
-            }
+            fluidUpdateHash1[pos.y].Remove(pos);
+            fluidUpdateHash2[pos.y].Remove(pos);
+            fluidUpdateHash3[pos.y].Remove(pos);
         }
-        Queue<Vector2Int> _queue = new Queue<Vector2Int>();
-        HashSet<Vector2Int> _hash = new HashSet<Vector2Int>();
+
+        private void SwapFluid(Vector2Int p0_G, Vector2Int p1_G)
+        {
+            var block0 = SceneManager.Inst.NowScene.GetBlock(GloabToBlock(p0_G));
+            var block1 = SceneManager.Inst.NowScene.GetBlock(GloabToBlock(p1_G));
+            var p0 = block0.GetPixel(block0.GloabToPixel(p0_G));
+            var p1 = block1.GetPixel(block1.GloabToPixel(p1_G));
+            var temp = p0.pos;
+            p0.pos = p1.pos;
+            p1.pos = temp;
+            var p0_Clone = p0.Clone();
+            var p1_Clone = p1.Clone();
+            block1.SetPixel(p0_Clone, false, false);
+            block0.SetPixel(p1_Clone, false, false);
+            block1.DrawPixelAsync(p0_Clone.pos, BlockMaterial.GetPixelColorInfo(p0_Clone.colorName).color);
+            block0.DrawPixelAsync(p1_Clone.pos, BlockMaterial.GetPixelColorInfo(p1_Clone.colorName).color);
+        }
+
+        #region 更新流体的临时变量
+        private Queue<Vector2Int> _queue = new Queue<Vector2Int>();
+        private HashSet<Vector2Int> _hash = new HashSet<Vector2Int>();
+        private List<Vector2Byte> _posList = new List<Vector2Byte>();
         private void AddQueueHash(Vector2Int posG)
         {
             if (_hash.Contains(posG)) return;
             _queue.Enqueue(posG); _hash.Add(posG);
         }
-        private bool TryLiquidFlow(Liquid liquid)
-        {
-            _queue.Clear();
-            _hash.Clear();
-            Vector2Int g = PixelToGloab(liquid.pos);
-            AddQueueHash(g + Vector2Int.down);
-            Vector2Int right = g + Vector2Int.right;
-            var rightBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(right));
-            if (rightBlock != null && rightBlock.GetPixel(rightBlock.GloabToPixel(right)) is Liquid) AddQueueHash(right);
-            Vector2Int left = g + Vector2Int.left;
-            var leftBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(left));
-            if (leftBlock != null && leftBlock.GetPixel(leftBlock.GloabToPixel(left)) is Liquid) AddQueueHash(left);
-
-            AddQueueHash(g + Vector2Int.right + Vector2Int.down);
-            AddQueueHash(g + Vector2Int.left + Vector2Int.down);
-            while (_queue.Count > 0)
-            {
-                Vector2Int posG = _queue.Dequeue();
-                Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(posG));
-                if (block == null) return false;
-                Vector2Byte pos = block.GloabToPixel(posG);
-
-                Pixel pixel = block.GetPixel(pos);
-                //switch (pixel.id)
-                //{
-                //    case 0://空气
-                //        if (block.BlockPos == this.BlockPos)
-                //        {
-                //            RemoveLiquid(liquid);
-                //            Swap(liquid, pixel);
-                //            AddLiquid(liquid);
-                //        }
-                //        else
-                //        {
-                //            this.RemoveLiquid(liquid);
-                //            Block.Swap(this.PixelToGloab(liquid.pos), posG);
-                //            block.AddLiquid(liquid);
-                //        }
-                //        return true;
-                //    case 1://墙
-
-                //        break;
-                //    case 2://液体
-                //        Liquid liquid_Now = (Liquid)pixel;
-                //        if (liquid.pressure - liquid_Now.pressure > 1)
-                //        {
-                //            //Vector2Int _down = posG + Vector2Int.down;
-                //            //if (_hash.Check(_down) == false) { _queue.Enqueue(_down); _hash.Add(_down); }
-                //            Vector2Int _right = posG + Vector2Int.right;
-                //            if (_hash.Contains(_right) == false) { _queue.Enqueue(_right); _hash.Add(_right); }
-                //            Vector2Int _left = posG + Vector2Int.left;
-                //            if (_hash.Contains(_left) == false) { _queue.Enqueue(_left); _hash.Add(_left); }
-                //            Vector2Int _up = posG + Vector2Int.up;
-                //            if (_hash.Contains(_up) == false) { _queue.Enqueue(_up); _hash.Add(_up); }
-                //        }
-                //        else if (liquid.pressure == 1 && liquid_Now.pressure == 0)
-                //        {
-                //            AddQueueHash(posG + Vector2Int.right);
-                //            AddQueueHash(posG + Vector2Int.left);
-                //        }
-                //        break;
-                //}
-            }
-            return false;
-        }
+        #endregion
         #endregion
 
         public Transform colliderNode;
         public readonly BoxCollider2D[,] allCollider = new BoxCollider2D[Block.Size.x, Block.Size.y];
-
-        /// <summary>
-        /// 交换块内两个点，并提交绘制请求
-        /// </summary>
-        public void Swap(Pixel p0, Pixel p1)
+        protected void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
         {
-            Vector2Byte t = p0.pos;
-            p0.pos = p1.pos;
-            p1.pos = t;
-            SetPixel(p0);
-            SetPixel(p1);
-            DrawPixelAsync(p0.pos, BlockMaterial.GetPixelColorInfo(p0.colorName).color);
-            DrawPixelAsync(p1.pos, BlockMaterial.GetPixelColorInfo(p1.colorName).color);
-        }
 
-        /// <summary>
-        /// 交换块内两个点，并提交绘制请求
-        /// </summary>
-        public static void Swap(Vector2Int p0_G, Vector2Int p1_G)
-        {
-            var block0 = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(p0_G));
-            var block1 = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(p1_G));
-            var p0 = block0.GetPixel(block0.GloabToPixel(p0_G));
-            var p1 = block1.GetPixel(block1.GloabToPixel(p1_G));
-            Vector2Byte t = p0.pos;
-            p0.pos = p1.pos;
-            p1.pos = t;
-            block1.SetPixel(p0);
-            block0.SetPixel(p1);
-            block1.DrawPixelAsync(p0.pos, BlockMaterial.GetPixelColorInfo(p0.colorName).color);
-            block0.DrawPixelAsync(p1.pos, BlockMaterial.GetPixelColorInfo(p1.colorName).color);
+            //bool oldCollider = (old == null || !old.collider) ? false : true;
+            ////原本无碰撞箱，现在有就创建，反之删除
+            //if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider((Block)this, nowPixel.pos);
+            //else if (oldCollider && nowPixel.info.collider == false) GreedyCollider.TryShrinkCollider((Block)this, nowPixel.pos);
+            //Log.Print(oldCollider +"|"+nowPixel.info.collider);
         }
     }
 }

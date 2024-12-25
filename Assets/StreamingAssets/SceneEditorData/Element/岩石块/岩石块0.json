@@ -1,1 +1,808 @@
-{"height": 10, "name": "岩石块0", "pixels": [{"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色1", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "岩石色0", "typeName": "岩石"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}, {"colorName": "空气色", "typeName": "空气"}], "width": 20}
+{
+  "height": 10,
+  "name": "岩石块0",
+  "pixels": [
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色1",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "岩石色0",
+      "typeName": "岩石"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    },
+    {
+      "colorName": "空气色",
+      "typeName": "空气"
+    }
+  ],
+  "width": 20,
+  "pngBytes": "iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAMAAACDi47UAAAAAXNSR0IArs4c6QAAACdQTFRFyAAAAAAAcDCgALDw////e3syktBQyMjIyGQegGAAv48AkI+Vpqam9kIEbAAAAA10Uk5TAAD//////////////xsdMMgAAABFSURBVAiZTc7BEgAgBEVRrfn/7413SW/RTCfEjuKbvBkQL8IfRu0IOWhxtaMFdDmV/UcEpY1U9HhwXU9v5kCSz567eOUCEVYHhBKwGDsAAAAASUVORK5CYII="
+}

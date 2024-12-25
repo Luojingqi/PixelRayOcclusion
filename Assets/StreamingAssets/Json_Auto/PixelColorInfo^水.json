@@ -1,0 +1,12 @@
+[
+  {
+    "colorName": "水色0",
+    "color": {
+      "r": 155,
+      "g": 194,
+      "b": 230,
+      "a": 100
+    },
+    "affectsLight": true
+  }
+]

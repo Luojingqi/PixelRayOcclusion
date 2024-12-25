@@ -142,18 +142,9 @@ namespace PRO
         /// <returns></returns>
         private async UniTask<UIControllerBase> LoadUI(UIConfig uiConfig)
         {
-
-            GameObject preform = null;
-            if (uiConfig.LoadMode[0] == 'R')
-            {
-                preform = await AssetManager.LoadAsync_R<GameObject>(uiConfig.Path);
-            }
-            else if (uiConfig.LoadMode[0] == 'A')
-            {
-                string[] strs = uiConfig.Path.Split('|');
-                preform = await AssetManager.LoadAsync_A<GameObject>(strs[0], strs[1]);
-            }
-            UIControllerBase ui = preform.GetComponent<UIControllerBase>();
+            string[] strs = uiConfig.Path.Split('|');
+            GameObject uiClone = GameObject.Instantiate(await AssetManager.LoadAsync_A<GameObject>(strs[0], strs[1]));
+            UIControllerBase ui = uiClone.GetComponent<UIControllerBase>();
             ui.Init(uiConfig.Name);
             return ui;
         }

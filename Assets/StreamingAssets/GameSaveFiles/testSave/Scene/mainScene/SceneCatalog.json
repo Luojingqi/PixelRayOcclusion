@@ -1,3 +1,5 @@
 {
-  "name": "mainScene"
+  "buildingTypeDic": {
+    "06c1fdfb-83b4-42a9-acfe-60def04e7b0f": "PRO.Building, PRO.Assembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"
+  }
 }

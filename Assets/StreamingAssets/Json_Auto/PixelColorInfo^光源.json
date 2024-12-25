@@ -13,9 +13,9 @@
   {
     "colorName": "光源1",
     "color": {
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 146,
+      "g": 208,
+      "b": 80,
       "a": 255
     },
     "affectsLight": false,
@@ -24,9 +24,9 @@
   {
     "colorName": "光源2",
     "color": {
-      "r": 146,
-      "g": 208,
-      "b": 80,
+      "r": 200,
+      "g": 200,
+      "b": 200,
       "a": 255
     },
     "affectsLight": false,

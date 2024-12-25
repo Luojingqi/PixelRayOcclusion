@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 3054105067
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cd2dab0c2fcc0512b1417e250a3c3c07
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9e66b8be59dd0015eb8c0b3821f96871
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: cd2dab0c2fcc0512b1417e250a3c3c07
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2362ee7c1d4867249919b6c045c44770, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Sirenix.Serialization
+  ClassName: Sirenix.Serialization.SerializationData
+Assets:
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7A7A\u95F2/\u7A7A\u95F2.asset"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u653B\u51FB/\u653B\u51FB.asset"
+Dependencies: []

@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
 using PRO.Disk.Scene;
 using PRO.Tool;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -34,7 +35,7 @@ namespace PRO
             //BlockMaterial.UpdateBind();
         }
 
-
+        public GameObject g;
         public void Start()
         {
             DontDestroyOnLoad(this);
@@ -45,6 +46,7 @@ namespace PRO
             Block.InitBlockPool();
             BackgroundBlock.InitBackgroundPool();
             Pixel.LoadPixelTypeInfo();
+            // GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
             var catalogList = GameSaveManager.Inst.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
@@ -55,8 +57,9 @@ namespace PRO
             SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];
             //转换为实体数据
             SceneEntity scene = new SceneEntity(sceneCatalog);
-            scenes.Add(scene.sceneCatalog.name, scene);
+            scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
+            // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.Value.ToString()));
             //填充
             DrawThread.Init(() =>
            {
@@ -101,7 +104,7 @@ namespace PRO
         //    }
         //}
         #endregion
-
+        float time = 0;
         string n = "光源2";
         public void Update()
         {
@@ -134,8 +137,17 @@ namespace PRO
                     //}
                 });
             }
+            time += Time.deltaTime;
+            while (time > 0.1f)
+            {
+                time -= 0.1f;
+                for (int y = -2; y <= 2; y++)
+                    for (int x = -2; x <= 2; x++)
+                        NowScene.GetBlock(new(x, y)).UpdateFluid1();
+            }
             if (Input.GetKeyDown(KeyCode.S))
             {
+                Span<int> aaa = stackalloc[] { 123 };
                 // SwitchScene("123");
                 Log.Print("保存");
                 for (int x = -1; x <= 1; x++)
@@ -167,6 +179,55 @@ namespace PRO
                 //block.DrawPixelAsync();
                 Block block = NowScene.GetBlock(blockPos);
                 block.SetPixel(Pixel.TakeOut("光源", n, pixelPos));
+                block.DrawPixelAsync();
+            }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Block block = NowScene.GetBlock(blockPos);
+                for (int x = -1; x <= 1; x++)
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        var pixel = Pixel.TakeOut("水", 0, pixelPos + new Vector2Byte(x, y));
+                        if (pixel != null)
+                            block.SetPixel(pixel);
+                    }
+
+                block.DrawPixelAsync();
+            }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Block block = NowScene.GetBlock(blockPos);
+                for (int x = -1; x <= 1; x++)
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        var pixel = Pixel.TakeOut("油", 0, pixelPos + new Vector2Byte(x, y));
+                        if (pixel != null)
+                            block.SetPixel(pixel);
+                    }
+                block.DrawPixelAsync();
+            }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse3))
+            {
+                Block block = NowScene.GetBlock(blockPos);
+                for (int x = -1; x <= 1; x++)
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        var pixel = Pixel.TakeOut("沙子", 0, pixelPos + new Vector2Byte(x, y));
+                        if (pixel != null)
+                            block.SetPixel(pixel);
+                    }
+                block.DrawPixelAsync();
+            }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse4))
+            {
+                Block block = NowScene.GetBlock(blockPos);
+                for (int x = -1; x <= 1; x++)
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        var pixel = Pixel.TakeOut("砂砾", 0, pixelPos + new Vector2Byte(x, y));
+                        if (pixel != null)
+                            block.SetPixel(pixel);
+                    }
                 block.DrawPixelAsync();
             }
             #endregion

@@ -12,9 +12,20 @@ namespace PRO
     /// </summary>
     public class GameSaveCatalog
     {
+        /// <summary>
+        /// 存档名
+        /// </summary>
         public string name;
+        /// <summary>
+        /// 上次保存时间
+        /// </summary>
         public DateTime saveTime;
+        /// <summary>
+        /// 存档包含的场景名
+        /// </summary>
         public List<string> sceneNameList = new List<string>();
+
+
         /// <summary>
         /// 路径/{GameSave}
         /// </summary>
@@ -31,7 +42,7 @@ namespace PRO
 
 
         /// <summary>
-        /// 创建一个存档目录，包括文件夹等
+        /// 创建一个空存档目录，包括文件夹等
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -48,7 +59,7 @@ namespace PRO
             DirectoryInfo sceneRoot = Directory.CreateDirectory(@$"{root.FullName}\Scene");
             //创建一个场景
             SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog, sceneRoot);
-            gameSaveCatalog.sceneCatalogDic.Add(sceneCatalog.name, sceneCatalog);
+            gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
             JsonTool.StoreText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
             return gameSaveCatalog;
         }
@@ -72,7 +83,7 @@ namespace PRO
                         SceneCatalog sceneCatalog = SceneCatalog.LoadSceneInfo(new DirectoryInfo(@$"{saveDirectoryInfo.FullName}\Scene\{sceneName}"));
                         if (sceneCatalog != null)
                         {
-                            gameSaveCatalog.sceneCatalogDic.Add(sceneCatalog.name, sceneCatalog);
+                            gameSaveCatalog.sceneCatalogDic.Add(sceneName, sceneCatalog);
                         }
                     }
                     return gameSaveCatalog;

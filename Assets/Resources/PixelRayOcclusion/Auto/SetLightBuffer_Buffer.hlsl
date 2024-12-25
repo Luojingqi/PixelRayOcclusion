@@ -8,29 +8,77 @@ StructuredBuffer<int> BlockBuffer5;
 StructuredBuffer<int> BlockBuffer6;
 StructuredBuffer<int> BlockBuffer7;
 StructuredBuffer<int> BlockBuffer8;
-int GetBlockBuffer(int buffer, int index)
+StructuredBuffer<int> BlockBuffer9;
+StructuredBuffer<int> BlockBuffer10;
+StructuredBuffer<int> BlockBuffer11;
+StructuredBuffer<int> BlockBuffer12;
+StructuredBuffer<int> BlockBuffer13;
+StructuredBuffer<int> BlockBuffer14;
+StructuredBuffer<int> BlockBuffer15;
+StructuredBuffer<int> BlockBuffer16;
+StructuredBuffer<int> BlockBuffer17;
+StructuredBuffer<int> BlockBuffer18;
+StructuredBuffer<int> BlockBuffer19;
+StructuredBuffer<int> BlockBuffer20;
+StructuredBuffer<int> BlockBuffer21;
+StructuredBuffer<int> BlockBuffer22;
+StructuredBuffer<int> BlockBuffer23;
+StructuredBuffer<int> BlockBuffer24;
+int GetBlockBuffer(int buffer, int Index)
 {
     switch (buffer)
     {
         default:
 case 0:
- return BlockBuffer0[index];
+ return BlockBuffer0[Index];
 case 1:
- return BlockBuffer1[index];
+ return BlockBuffer1[Index];
 case 2:
- return BlockBuffer2[index];
+ return BlockBuffer2[Index];
 case 3:
- return BlockBuffer3[index];
+ return BlockBuffer3[Index];
 case 4:
- return BlockBuffer4[index];
+ return BlockBuffer4[Index];
 case 5:
- return BlockBuffer5[index];
+ return BlockBuffer5[Index];
 case 6:
- return BlockBuffer6[index];
+ return BlockBuffer6[Index];
 case 7:
- return BlockBuffer7[index];
+ return BlockBuffer7[Index];
 case 8:
- return BlockBuffer8[index];
+ return BlockBuffer8[Index];
+case 9:
+ return BlockBuffer9[Index];
+case 10:
+ return BlockBuffer10[Index];
+case 11:
+ return BlockBuffer11[Index];
+case 12:
+ return BlockBuffer12[Index];
+case 13:
+ return BlockBuffer13[Index];
+case 14:
+ return BlockBuffer14[Index];
+case 15:
+ return BlockBuffer15[Index];
+case 16:
+ return BlockBuffer16[Index];
+case 17:
+ return BlockBuffer17[Index];
+case 18:
+ return BlockBuffer18[Index];
+case 19:
+ return BlockBuffer19[Index];
+case 20:
+ return BlockBuffer20[Index];
+case 21:
+ return BlockBuffer21[Index];
+case 22:
+ return BlockBuffer22[Index];
+case 23:
+ return BlockBuffer23[Index];
+case 24:
+ return BlockBuffer24[Index];
     }
 }
 RWStructuredBuffer<int4> LightBufferTemp;
@@ -100,8 +148,8 @@ bool Equalsi2(int2 i0, int2 i1)
 PixelColorInfo GetPixel(int2 gloabPos)
 {
     int2 rlPos = GloabToReceiveLight(gloabPos);
-    int index = ReceiveLightToBlockIndex(rlPos);
-    return AllPixelColorInfo[GetBlockBuffer(index, PixelToIndex(ReceiveLightToPixel(rlPos)))];
+    int Index = ReceiveLightToBlockIndex(rlPos);
+    return AllPixelColorInfo[GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)))];
 }
 
 int2 beMixed_Min;

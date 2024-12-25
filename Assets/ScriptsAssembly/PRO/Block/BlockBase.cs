@@ -12,6 +12,15 @@ namespace PRO
 {
     public class BlockBase : MonoBehaviour
     {
+        #region 坐标转换
+        /// <summary>
+        /// 点坐标（局部）to世界坐标点
+        /// </summary>
+        public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((BlockPos.x * Block.Size.x + pixelPos.x) * Pixel.Size, (BlockPos.y * Block.Size.y + pixelPos.y) * Pixel.Size);
+        public Vector2Int PixelToGloab(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
+        public Vector2Byte GloabToPixel(Vector2Int gloabPos) => new Vector2Byte(gloabPos.x - BlockPos.x * Block.Size.x, gloabPos.y - BlockPos.y * Block.Size.y);
+        #endregion
+
         public virtual void Init()
         {
             materialPropertyBlock = new MaterialPropertyBlock();
@@ -36,40 +45,49 @@ namespace PRO
         public Pixel GetPixel(Vector2Byte pos) => allPixel[pos.x, pos.y];
 
         /// <summary>
-        /// 设置某个点，切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
+        /// 设置某个点（坐标为Pixel.pos），切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
         /// </summary>
-        public void SetPixel(Pixel pixel, bool updateCollider = true)
+        public void SetPixel(Pixel pixel, bool updateCollider = true, bool updateLiquidOrGas = true)
         {
             PixelTypeInfo removeInfo = RemovePixel(pixel.pos);
-            if (this is Block && updateCollider) ChangeCollider(removeInfo, pixel);
+
+            pixel.posG = this.PixelToGloab(pixel.pos);
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixelColorInfo.index;
-            if (pixelColorInfo.lightSourceType != null && pixelColorInfo.lightSourceType != "null") AddLightSource(pixel, pixelColorInfo);
+
+            if (pixelColorInfo.lightSourceType != null )
+                AddLightSource(pixel, pixelColorInfo);
+
+            if (this is Block)
+            {
+                Block block = this as Block;
+                //if (updateCollider)
+                //    block.ChangeCollider(removeInfo, pixel);
+                if (updateLiquidOrGas)
+                    for (int y = -1; y <= 1; y++)
+                        for (int x = -1; x <= 1; x++)
+                            Block.AddFluidUpdateHash(pixel.posG + new Vector2Int(x, y));
+            }
         }
+
 
         private PixelTypeInfo RemovePixel(Vector2Byte pos)
         {
             PixelTypeInfo ret = null;
             Pixel pixel = allPixel[pos.x, pos.y];
-            if (pixel == null) return ret;
+            if (pixel == null)
+                return ret;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
-            if (pixelColorInfo.lightSourceType != null && pixelColorInfo.lightSourceType != "null") RemoveLightSource(pixel);
+            if (pixelColorInfo.lightSourceType != null && pixelColorInfo.lightSourceType != "null")
+                RemoveLightSource(pixel);
             ret = pixel.info;
             Pixel.PutIn(pixel);
             allPixel[pos.x, pos.y] = null;
             return ret;
         }
 
-        private void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
-        {
 
-            //bool oldCollider = (old == null || !old.collider) ? false : true;
-            ////原本无碰撞箱，现在有就创建，反之删除
-            //if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider((Block)this, nowPixel.pos);
-            //else if (oldCollider && nowPixel.info.collider == false) GreedyCollider.TryShrinkCollider((Block)this, nowPixel.pos);
-            //Log.Print(oldCollider +"|"+nowPixel.info.collider);
-        }
         #endregion
 
         #region 光源集合
@@ -80,7 +98,6 @@ namespace PRO
             Vector2Int gloabPos = Block.PixelToGloab(blockPos, pixel.pos);
             var lightSourceInfo = BlockMaterial.GetLightSourceInfo(pixelColorInfo.lightSourceType);
             if (lightSourceInfo == null) return;
-            //lightSourceDic.Clear();
             if (lightSourceDic.ContainsKey(pixel.pos))
             {
                 lightSourceDic[pixel.pos] = new LightSource(gloabPos, pixelColorInfo.color, lightSourceInfo);
@@ -89,25 +106,11 @@ namespace PRO
             {
                 lightSourceDic.Add(pixel.pos, new LightSource(gloabPos, pixelColorInfo.color, lightSourceInfo));
             }
-            // if (lightSourceDic.Count >= 10) lightSourceDic.Clear();
-
         }
 
         private void RemoveLightSource(Pixel pixel)
         {
             lightSourceDic.Remove(pixel.pos);
-            //while (true)
-            //{
-            //    if (Monitor.TryEnter(lightSourceDic))
-            //    {
-            //        lightSourceDic.Remove(pixel.pos);
-            //        lightSourceBufferNeedUpdate = true;
-            //    }
-            //    else
-            //    {
-            //        await UniTask.Yield();
-            //    }
-            //}
         }
         #endregion
 

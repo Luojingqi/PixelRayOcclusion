@@ -37,28 +37,27 @@ namespace PRO.Tool
         /// <summary>
         /// 加载一个ab包以及它的依赖
         /// </summary>
-        /// <param name="bundlePath">相对路径或名字</param>
+        /// <param name="bundlePath">包名</param>
         /// <returns></returns>
-        private static async UniTask<AssetBundleEntity> LoadBundle(string bundlePath, bool CitedBy = false)
+        private static async UniTask<AssetBundleEntity> LoadBundleAsync(string bundlePath, bool CitedBy = false)
         {
             if (MainManifest == null)
             {
-                SaveABPath = Application.streamingAssetsPath + $@"\AB\";
+                SaveABPath = Application.streamingAssetsPath + $@"\AssetBundle\";
                 AssetBundle assetBundleMainManifest = await AssetBundle.LoadFromFileAsync(SaveABPath + "AssetBundle");
                 MainManifest = assetBundleMainManifest.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
                 Debug.Log("加载AssetBundleManifest");
             }
 
-            string[] strings = bundlePath.Split('\\', '/');
-            string name = strings[strings.Length - 1];
             //获取包名
-            if (bundleDic.ContainsKey(name) == false)
+            if (bundleDic.ContainsKey(bundlePath) == false)
             {
-                string[] dependencies = MainManifest.GetAllDependencies(name);
+                //获取准备加载包的依赖包名
+                string[] dependencies = MainManifest.GetAllDependencies(bundlePath);
                 for (int i = 0; i < dependencies.Length; i++)
                 {
                     //递归加载依赖
-                    await LoadBundle(dependencies[i], true);
+                    await LoadBundleAsync(dependencies[i], true);
                 }
                 //记录并返回
                 AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(SaveABPath + bundlePath);
@@ -67,38 +66,99 @@ namespace PRO.Tool
                 AssetBundleEntity bundle = new AssetBundleEntity(ab);
                 if (CitedBy)
                     bundle.CitedBy++;
-                bundleDic.Add(name, bundle);
+                bundleDic.Add(bundlePath, bundle);
                 return bundle;
             }
             else
             {
-                return bundleDic[name];
+                return bundleDic[bundlePath];
             }
         }
 
+        /// <summary>
+        /// 加载一个ab包以及它的依赖
+        /// </summary>
+        /// <param name="bundlePath">包名</param>
+        /// <returns></returns>
+        private static AssetBundleEntity LoadBundle(string bundlePath, bool CitedBy = false)
+        {
+            if (MainManifest == null)
+            {
+                SaveABPath = Application.streamingAssetsPath + $@"\AssetBundle\";
+                AssetBundle assetBundleMainManifest = AssetBundle.LoadFromFile(SaveABPath + "AssetBundle");
+                MainManifest = assetBundleMainManifest.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+                Debug.Log("加载AssetBundleManifest");
+            }
+
+            //获取包名
+            if (bundleDic.ContainsKey(bundlePath) == false)
+            {
+                //获取准备加载包的依赖包名
+                string[] dependencies = MainManifest.GetAllDependencies(bundlePath);
+                for (int i = 0; i < dependencies.Length; i++)
+                {
+                    //递归加载依赖
+                    LoadBundle(dependencies[i], true);
+                }
+                //记录并返回
+                AssetBundle ab = AssetBundle.LoadFromFile(SaveABPath + bundlePath);
+                Log.Print($"加载ab资源包： ab = {bundlePath}", ab != null ? new Color32(146, 208, 80, 0) : new Color32(255, 0, 0, 0));
+                AssetBundleEntity bundle = new AssetBundleEntity(ab);
+                if (CitedBy)
+                    bundle.CitedBy++;
+                bundleDic.Add(bundlePath, bundle);
+                return bundle;
+            }
+            else
+            {
+                return bundleDic[bundlePath];
+            }
+        }
 
         /// <summary>
         /// 加载一个包中的资源
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="bundlePath">包路径</param>
+        /// <param name="bundleName">包名，需要包含后缀</param>
         /// <param name="analysisPath">资源路径</param>
         /// <returns></returns>
-        public static async UniTask<T> LoadAsync_A<T>(string bundlePath, string analysisPath) where T : UnityEngine.Object
+        public static async UniTask<T> LoadAsync_A<T>(string bundleName, string analysisPath) where T : UnityEngine.Object
         {
-            analysisPath = "Assets/" + analysisPath;
+            analysisPath = @"Assets/" + analysisPath;
             switch (typeof(T).Name)
             {
                 case nameof(GameObject): analysisPath += ".prefab"; break;
                 case nameof(Material): analysisPath += ".mat"; break;
             }
-            AssetBundleEntity bundle = await LoadBundle(bundlePath);
+            AssetBundleEntity bundle = await LoadBundleAsync(bundleName);
             T asset = await bundle.AnalysisAsync<T>(analysisPath);
-            Log.Print($"解析包内资源： ab = {bundlePath}   asset = {analysisPath}", asset != null ? new Color32(146, 208, 80, 0) : new Color32(255, 0, 0, 0));
-            CheckUnload();
             return asset;
         }
-
+        /// <summary>
+        /// 加载一个包中的资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bundleName">包名，需要包含后缀</param>
+        /// <param name="analysisPath">资源路径</param>
+        /// <returns></returns>
+        public static T Load_A<T>(string bundleName, string analysisPath) where T : UnityEngine.Object
+        {
+            analysisPath = @"Assets/" + analysisPath;
+            switch (typeof(T).Name)
+            {
+                case nameof(GameObject): analysisPath += ".prefab"; break;
+                case nameof(Material): analysisPath += ".mat"; break;
+            }
+            AssetBundleEntity bundle = LoadBundle(bundleName);
+            T asset = bundle.Analysis<T>(analysisPath);
+            return asset;
+        }
+        /// <summary>
+        /// 通过Resource加载资源 (不建议)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="resourcePath"></param>
+        /// <returns></returns>
         public static async UniTask<T> LoadAsync_R<T>(string resourcePath) where T : UnityEngine.Object
         {
             if (resourceDic.TryGetValue(resourcePath, out WeakReference weak))
@@ -120,33 +180,29 @@ namespace PRO.Tool
                 return asset;
             }
         }
-
-
         /// <summary>
-        /// 检查所有资源包是否可以销毁
+        /// 尝试卸载一个包（如果此包没有被其他包引用）（卸载包包括解析的资源）
         /// </summary>
-        private static void CheckUnload()
+        /// <param name="bundleName"></param>
+        /// <returns></returns>
+        public static async UniTask<bool> TryUnload_A(string bundleName)
         {
-            canUnload.Clear();
-            foreach (var keyValue in bundleDic)
+            if (bundleDic.TryGetValue(bundleName, out AssetBundleEntity bundle))
             {
-                if (keyValue.Value.CheckUnload())
+                if (bundle.CitedBy == 0)
                 {
-                    Log.Print("卸载ab包" + keyValue.Key, new Color32(255, 0, 0, 0));
-                    string[] CitedByBundle = MainManifest.GetAllDependencies(keyValue.Key);
-                    foreach (string name in CitedByBundle)
-                        if (bundleDic.TryGetValue(name, out AssetBundleEntity bundle))
-                            bundle.CitedBy--;
-                    canUnload.Add(keyValue.Key);
+                    bundleDic.Remove(bundleName);
+                    await bundle.Unload();
+                    Log.Print("卸载ab包" + bundleName, Color.yellow);
+                    //获取当前包引用的包
+                    string[] CitedByBundleNameArray = MainManifest.GetAllDependencies(bundleName);
+                    foreach (string name in CitedByBundleNameArray)
+                        if (bundleDic.TryGetValue(name, out AssetBundleEntity citedByBundle))
+                            citedByBundle.CitedBy--;
+                    return true;
                 }
             }
-
-            foreach (var key in canUnload)
-            {
-                bundleDic[key].Unload();
-                bundleDic.Remove(key);
-            }
+            return false;
         }
-        private static List<string> canUnload = new List<string>();
     }
 }

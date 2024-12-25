@@ -1,0 +1,22 @@
+[
+  {
+    "colorName": "沙子色0",
+    "color": {
+      "r": 255,
+      "g": 207,
+      "b": 55,
+      "a": 255
+    },
+    "affectsLight": false
+  },
+  {
+    "colorName": "砂砾色0",
+    "color": {
+      "r": 214,
+      "g": 220,
+      "b": 228,
+      "a": 255
+    },
+    "affectsLight": false
+  }
+]

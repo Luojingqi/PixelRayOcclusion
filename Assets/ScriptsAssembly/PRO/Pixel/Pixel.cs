@@ -14,6 +14,10 @@ namespace PRO
         /// </summary>
         public Vector2Byte pos;
         /// <summary>
+        /// 全局坐标
+        /// </summary>
+        public Vector2Int posG;
+        /// <summary>
         /// 类型名称
         /// </summary>
         public PixelTypeInfo info;
@@ -21,11 +25,20 @@ namespace PRO
         /// 使用的颜色名称
         /// </summary>
         public string colorName;
+        /// <summary>
+        /// 所属的建筑
+        /// </summary>
+        public Building building;
 
         /// <summary>
         /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查
         /// </summary>
         public Pixel() { }
+
+        public Pixel Clone()
+        {
+            return Pixel.TakeOut(info.typeName, colorName, pos);
+        }
 
         private static void InitPixel(Pixel pixel, PixelTypeInfo info, string colorName, Vector2Byte pixelPos)
         {
@@ -51,10 +64,11 @@ namespace PRO
             pixel.info = null;
             pixel.colorName = null;
             pixel.pos = Vector2Byte.max;
+            pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
             pixelPool.PutIn(pixel);
         }
 
-        public static Pixel TakeOut(PixelToDisk pixelToDisk, Vector2Byte pixelPos) => TakeOut(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
+        public static Pixel TakeOut(Pixel_Disk pixelToDisk, Vector2Byte pixelPos) => TakeOut(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
         public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos)
         {
@@ -114,7 +128,7 @@ namespace PRO
             }
             else return null;
         }
-        public static Pixel New(PixelToDisk pixelToDisk, Vector2Byte pixelPos) => New(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
+        public static Pixel New(Pixel_Disk pixelToDisk, Vector2Byte pixelPos) => New(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
         private static bool CheckNew(string typeName, string colorName, Vector2Byte pixelPos, out PixelTypeInfo info)
         {
@@ -148,6 +162,7 @@ namespace PRO
                 return false;
             }
         }
+
         #endregion
         public static void LoadPixelTypeInfo()
         {

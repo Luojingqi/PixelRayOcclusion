@@ -1,25 +1,22 @@
 using PRO.SceneEditor;
 using PRO.Tool;
-using System;
 using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 internal class ElementC : MonoBehaviour
 {
     public RawImage icon;
     private TMP_Text name_Text;
     private Button button;
-    public ElementEntity entity;
-    
+    public Element_Disk entity;
+
     public void Init()
     {
         icon = transform.Find("icon").GetComponent<RawImage>();
         name_Text = transform.Find("Name").GetComponent<TMP_Text>();
         button = transform.GetComponent<Button>();
-        // icon.sprite = Sprite.Create(new Texture2D(0, 0), new Rect(), new Vector2());
         button.onClick.AddListener(() => { SceneEditorCanvasC.Inst.SwitchHold(this); });
     }
 
@@ -31,19 +28,13 @@ internal class ElementC : MonoBehaviour
         icon.texture = null;
     }
 
-    public void SetEntity(FileInfo info, ElementEntity entity)
+    public void SetEntity(FileInfo info, Element_Disk entity)
     {
-        string infoName = info.Name.Substring(0, info.Name.Length - info.Extension.Length);
-        name_Text.text = infoName;
+        name_Text.text = entity.name;
         this.entity = entity;
-
-        string pngPath = info.FullName.Substring(0, info.FullName.Length - info.Extension.Length) + ".png";
-        if (File.Exists(pngPath))
-        {
-            Texture2D texture2D = texture2DPool.TakeOut();
-            texture2D.LoadImage(File.ReadAllBytes(pngPath));
-            icon.texture = texture2D;
-        }
+        Texture2D texture2D = texture2DPool.TakeOut();
+        texture2D.LoadImage(entity.pngBytes);
+        icon.texture = texture2D;
     }
 
     #region Œ∆¿Ì≥ÿ
@@ -54,7 +45,7 @@ internal class ElementC : MonoBehaviour
         {
         }
 
-        public override void Remove(Texture2D item)
+        public override void Destroy(Texture2D item)
         {
             GameObject.Destroy(item);
         }

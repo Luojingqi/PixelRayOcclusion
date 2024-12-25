@@ -213,7 +213,11 @@ namespace PRO
         public static void Update()
         {
             Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
-            if (nowCameraPos != CameraCenterBlockPos) UpdateBind();
+            if (nowCameraPos != CameraCenterBlockPos)
+            {
+                UpdateBind();
+                return;
+            }
             computeShaderManager.Update();
 
 
@@ -227,8 +231,8 @@ namespace PRO
                         blockBase.spriteRenderer.sprite.texture.Apply();
                         switch (blockBase)
                         {
-                            case Block block: BlockMaterial.SetBlock(block); break;
-                            case BackgroundBlock background: BlockMaterial.SetBackgroundBlock(background); break;
+                            case Block block: SetBlock(block); break;
+                            case BackgroundBlock background: SetBackgroundBlock(background); break;
                         }
                     }
                 }
@@ -249,7 +253,8 @@ namespace PRO
         public static void En_Lock_DrawApplyQueue(BlockBase block)
         {
             lock (DrawApplyQueue)
-                DrawApplyQueue.Enqueue(block);
+                if (DrawApplyQueue.Contains(block) == false)
+                    DrawApplyQueue.Enqueue(block);
         }
 
 

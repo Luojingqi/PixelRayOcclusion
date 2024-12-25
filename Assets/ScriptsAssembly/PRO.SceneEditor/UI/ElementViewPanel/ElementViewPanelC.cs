@@ -9,8 +9,6 @@ namespace PRO.SceneEditor
         public override UIChildViewBase View => view;
         private ElementViewPanelV view = new ElementViewPanelV();
 
-        public override UIChildModelBase Model => model;
-        private ElementViewPanelM model = new ElementViewPanelM();
 
         public static ElementViewPanelC Inst { get; private set; }
 
@@ -32,7 +30,7 @@ namespace PRO.SceneEditor
             Clear();
             for (int i = 0; i < infos.Length; i++)
             {
-                ElementEntity entity = TryGetEntity(infos[i]);
+                Element_Disk entity = TryGetEntity(infos[i]);
                 if (entity == null) continue;
                 
                 ElementC element = TakeOut();
@@ -41,13 +39,13 @@ namespace PRO.SceneEditor
             }
         }
 
-        private ElementEntity TryGetEntity(FileInfo info)
+        private Element_Disk TryGetEntity(FileInfo info)
         {
             if (info.Extension != ".json") return null;
             if (JsonTool.LoadText(info.FullName, out string text) == false) return null;
             else
             {
-                ElementEntity entity = JsonTool.ToObject<ElementEntity>(text);
+                Element_Disk entity = JsonTool.ToObject<Element_Disk>(text);
                 return entity;
             }
         }

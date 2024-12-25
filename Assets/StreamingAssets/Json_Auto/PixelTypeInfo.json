@@ -4,8 +4,7 @@
     "availableColors": [
       "空气色"
     ],
-    "collider": false,
-    "fluidDensity": 0
+    "collider": false
   },
   {
     "typeName": "背景",
@@ -14,8 +13,7 @@
       "背景色1",
       "背景色2"
     ],
-    "collider": false,
-    "fluidDensity": 0
+    "collider": false
   },
   {
     "typeName": "光源",
@@ -25,8 +23,7 @@
       "光源2",
       "光源3"
     ],
-    "collider": true,
-    "fluidDensity": 0
+    "collider": true
   },
   {
     "typeName": "木头",
@@ -34,8 +31,7 @@
       "木头色0",
       "木头色1"
     ],
-    "collider": true,
-    "fluidDensity": 0
+    "collider": true
   },
   {
     "typeName": "岩石",
@@ -43,7 +39,43 @@
       "岩石色0",
       "岩石色1"
     ],
-    "collider": true,
-    "fluidDensity": 0
+    "collider": true
+  },
+  {
+    "typeName": "水",
+    "availableColors": [
+      "水色0"
+    ],
+    "collider": false,
+    "fluidType": 1,
+    "fluidDensity": 10
+  },
+  {
+    "typeName": "油",
+    "availableColors": [
+      "油色0"
+    ],
+    "collider": false,
+    "fluidType": 1,
+    "fluidDensity": 6
+  },
+  {
+    "typeName": "沙子",
+    "availableColors": [
+      "沙子色0",
+      "沙子色1"
+    ],
+    "collider": false,
+    "fluidType": 3,
+    "fluidDensity": 10
+  },
+  {
+    "typeName": "砂砾",
+    "availableColors": [
+      "砂砾色0"
+    ],
+    "collider": false,
+    "fluidType": 3,
+    "fluidDensity": 20
   }
 ]

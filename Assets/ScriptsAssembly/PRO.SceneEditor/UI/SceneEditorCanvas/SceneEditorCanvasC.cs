@@ -25,7 +25,7 @@ namespace PRO.SceneEditor
             Init("123");
         }
 
-        private ElementEntity HoldEntity;
+        private Element_Disk HoldEntity;
         public void SwitchHold(ElementC elementC)
         {
             view.HoldIcon.gameObject.SetActive(true);

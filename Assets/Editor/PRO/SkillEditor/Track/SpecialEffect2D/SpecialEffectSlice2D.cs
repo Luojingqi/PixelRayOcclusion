@@ -42,7 +42,15 @@ namespace PRO.SkillEditor
             set { diskData.sprite = value; Background_Sprite = value; }
         }
 
-
+        [LabelText("位置")]
+        [ShowInInspector]
+        public Vector3 Position { get => diskData.position; set => diskData.position = value; }
+        [LabelText("旋转")]
+        [ShowInInspector]
+        public Quaternion Rotation { get => diskData.rotation; set => diskData.rotation = value; }
+        [LabelText("缩放")]
+        [ShowInInspector]
+        public Vector3 Scale { get => diskData.scale; set => diskData.scale = value; }
 
     }
 }

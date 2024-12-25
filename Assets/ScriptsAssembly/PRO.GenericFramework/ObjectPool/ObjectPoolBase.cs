@@ -67,7 +67,7 @@ namespace PRO.Tool
             }
             else
             {
-                Remove(item);
+                Destroy(item);
             }
         }
 
@@ -160,7 +160,7 @@ namespace PRO.Tool
 
         protected abstract T NewObject();
 
-        public abstract void Remove(T item);
+        public abstract void Destroy(T item);
 
         public virtual void Clear()
         {

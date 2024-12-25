@@ -6,7 +6,7 @@ int dy = abs(pos_G1.y - pos_G0.y);
 int sx = pos_G0.x < pos_G1.x ? 1 : -1;
 int sy = pos_G0.y < pos_G1.y ? 1 : -1;
 int err = dx - dy;
-int index = (dx > dy) ? dx : dy;
+int Index = (dx > dy) ? dx : dy;
 int2 nowPoint = pos_G0;
 for (int i = 0; i < Line5; i++)
 {
@@ -23,9 +23,9 @@ err += dx;
 nowPoint.y += sy;
 }
 }
-if (index >= Line5)
-index = -1;
-return index;
+if (Index >= Line5)
+Index = -1;
+return Index;
 }
 
 #define Line15 16
@@ -36,7 +36,7 @@ int dy = abs(pos_G1.y - pos_G0.y);
 int sx = pos_G0.x < pos_G1.x ? 1 : -1;
 int sy = pos_G0.y < pos_G1.y ? 1 : -1;
 int err = dx - dy;
-int index = (dx > dy) ? dx : dy;
+int Index = (dx > dy) ? dx : dy;
 int2 nowPoint = pos_G0;
 for (int i = 0; i < Line15; i++)
 {
@@ -53,9 +53,9 @@ err += dx;
 nowPoint.y += sy;
 }
 }
-if (index >= Line15)
-index = -1;
-return index;
+if (Index >= Line15)
+Index = -1;
+return Index;
 }
 
 #define Line35 36
@@ -66,7 +66,7 @@ int dy = abs(pos_G1.y - pos_G0.y);
 int sx = pos_G0.x < pos_G1.x ? 1 : -1;
 int sy = pos_G0.y < pos_G1.y ? 1 : -1;
 int err = dx - dy;
-int index = (dx > dy) ? dx : dy;
+int Index = (dx > dy) ? dx : dy;
 int2 nowPoint = pos_G0;
 for (int i = 0; i < Line35; i++)
 {
@@ -83,9 +83,9 @@ err += dx;
 nowPoint.y += sy;
 }
 }
-if (index >= Line35)
-index = -1;
-return index;
+if (Index >= Line35)
+Index = -1;
+return Index;
 }
 
 #define Line50 51
@@ -96,7 +96,7 @@ int dy = abs(pos_G1.y - pos_G0.y);
 int sx = pos_G0.x < pos_G1.x ? 1 : -1;
 int sy = pos_G0.y < pos_G1.y ? 1 : -1;
 int err = dx - dy;
-int index = (dx > dy) ? dx : dy;
+int Index = (dx > dy) ? dx : dy;
 int2 nowPoint = pos_G0;
 for (int i = 0; i < Line50; i++)
 {
@@ -113,8 +113,8 @@ err += dx;
 nowPoint.y += sy;
 }
 }
-if (index >= Line50)
-index = -1;
-return index;
+if (Index >= Line50)
+Index = -1;
+return Index;
 }
 
