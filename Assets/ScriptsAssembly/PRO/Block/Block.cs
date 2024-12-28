@@ -18,7 +18,14 @@ namespace PRO
         /// 世界坐标点to块坐标
         /// </summary>
         public static Vector2Int WorldToBlock(Vector2 worldPos) => new Vector2Int((int)Mathf.Round(worldPos.x / Block.Size.x / Pixel.Size - 0.5f), (int)Mathf.Round(worldPos.y / Block.Size.y / Pixel.Size - 0.5f));
-        public static Vector2Int WorldToGloab(Vector2 worldPos) => new Vector2Int((int)(worldPos.x / Pixel.Size), (int)(worldPos.y / Pixel.Size));
+        public static Vector2Int WorldToGloab(Vector2 worldPos)
+        {
+            int x = (int)(worldPos.x / Pixel.Size);
+            int y = (int)(worldPos.y / Pixel.Size);
+            if (worldPos.x < 0) x -= 1;
+            if (worldPos.y < 0) y -= 1;
+            return new Vector2Int(x, y);
+        }
         /// <summary>
         /// 块坐标to世界坐标点
         /// </summary>
@@ -26,15 +33,16 @@ namespace PRO
         /// <summary>
         /// 世界坐标点to点坐标（局部）
         /// </summary>
-        public static Vector2Byte WorldToPixel(Vector3 worldPos)
-        {
-            int x = (int)(worldPos.x / Pixel.Size) % Block.Size.x;
-            int y = (int)(worldPos.y / Pixel.Size) % Block.Size.y;
-            if (x < 0) x += Block.Size.x;
-            if (y < 0) y += Block.Size.y;
-            return new Vector2Byte(x, y);
-        }
+        public static Vector2Byte WorldToPixel(Vector3 worldPos) => GloabToPixel(WorldToGloab(worldPos));
         public static Vector2Int PixelToGloab(Vector2Int blockPos, Vector2Byte pixelPos) => new Vector2Int(blockPos.x * Block.Size.x + pixelPos.x, blockPos.y * Block.Size.y + pixelPos.y);
+        public static Vector2Byte GloabToPixel(Vector2Int gloabPos)
+        {
+            gloabPos.x %= Block.Size.x;
+            gloabPos.y %= Block.Size.y;
+            if (gloabPos.x < 0) gloabPos.x += Block.Size.x;
+            if (gloabPos.y < 0) gloabPos.y += Block.Size.y;
+            return (Vector2Byte)gloabPos;
+        }
         public static Vector2Int GloabToBlock(Vector2Int gloabPos)
         {
             if (gloabPos.x < 0) gloabPos.x -= Block.Size.x - 1;
@@ -90,7 +98,7 @@ namespace PRO
         #region 静态对象池
         private static Transform BlockNode;
         private static GameObjectPool<Block> BlockPool;
-        public static void InitBlockPool()
+        public static void InitPool()
         {
             BlockNode = new GameObject("BlockNode").transform;
             #region 加载Block初始GameObject
@@ -151,11 +159,11 @@ namespace PRO
             colliderNode.parent = transform;
         }
 
-        public static Pixel GetPixel(Vector2Int worldPos)
+        public static Pixel GetPixel(Vector2Int gloabPos)
         {
-            var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(worldPos));
+            var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(gloabPos));
             if (block == null) return null;
-            return block.GetPixel(block.GloabToPixel(worldPos));
+            return block.GetPixel(Block.GloabToPixel(gloabPos));
         }
         /// <summary>
         /// 获取点（如果点不在此区块会被修正到对应区块）
@@ -193,7 +201,7 @@ namespace PRO
             var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(pos_G));
             if (block != null)
             {
-                Pixel pixel = block.GetPixel(block.GloabToPixel(pos_G));
+                Pixel pixel = block.GetPixel(Block.GloabToPixel(pos_G));
                 switch (pixel.info.fluidType)
                 {
                     case 1: AddHashSet(block.fluidUpdateHash1[pixel.pos.y], pixel.pos); break;
@@ -259,7 +267,7 @@ namespace PRO
                             continue;
                         }
 
-                        Pixel nextPixel = nextBlock.GetPixel(nextBlock.GloabToPixel(nextPosG));
+                        Pixel nextPixel = nextBlock.GetPixel(Block.GloabToPixel(nextPosG));
 
                         if ((nextPixel.info.typeName == "空气") ||    //下一个点为空气
                             (nextPixel.info.fluidType == 1 && pixel.info.fluidDensity > nextPixel.info.fluidDensity) ||  //下个点为液体，且密度高于他
@@ -275,7 +283,7 @@ namespace PRO
                                         var tempG = nextPosG + new Vector2Int(x, y);
                                         Block timpBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(tempG));
                                         if (timpBlock == null) continue;
-                                        var tempP = timpBlock.GloabToPixel(tempG);
+                                        var tempP = Block.GloabToPixel(tempG);
                                         AddHashSet(timpBlock.fluidUpdateHash1[tempP.y], tempP);
                                     }
                                 SwapFluid(nextPosG, pixel.posG);
@@ -347,7 +355,7 @@ namespace PRO
                         Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(nextPosG));
                         if (nextBlock == null) continue;
 
-                        Pixel nextPixel = nextBlock.GetPixel(nextBlock.GloabToPixel(nextPosG));
+                        Pixel nextPixel = nextBlock.GetPixel(Block.GloabToPixel(nextPosG));
 
                         if ((nextPixel.info.typeName == "空气") ||    //下一个点为空气
                             (nextPixel.info.fluidType == 1) ||  //下个点为液体
@@ -362,7 +370,7 @@ namespace PRO
                                     var tempG = nextPosG + new Vector2Int(x, y);
                                     Block timpBlock = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(tempG));
                                     if (timpBlock == null) continue;
-                                    var tempP = timpBlock.GloabToPixel(tempG);
+                                    var tempP = Block.GloabToPixel(tempG);
                                     AddHashSet(timpBlock.fluidUpdateHash3[tempP.y], tempP);
                                 }
                             SwapFluid(nextPosG, pixel.posG);
@@ -392,8 +400,8 @@ namespace PRO
         {
             var block0 = SceneManager.Inst.NowScene.GetBlock(GloabToBlock(p0_G));
             var block1 = SceneManager.Inst.NowScene.GetBlock(GloabToBlock(p1_G));
-            var p0 = block0.GetPixel(block0.GloabToPixel(p0_G));
-            var p1 = block1.GetPixel(block1.GloabToPixel(p1_G));
+            var p0 = block0.GetPixel(Block.GloabToPixel(p0_G));
+            var p1 = block1.GetPixel(Block.GloabToPixel(p1_G));
             var temp = p0.pos;
             p0.pos = p1.pos;
             p1.pos = temp;
@@ -419,14 +427,12 @@ namespace PRO
 
         public Transform colliderNode;
         public readonly BoxCollider2D[,] allCollider = new BoxCollider2D[Block.Size.x, Block.Size.y];
-        protected void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
+        public void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
         {
-
-            //bool oldCollider = (old == null || !old.collider) ? false : true;
-            ////原本无碰撞箱，现在有就创建，反之删除
-            //if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider((Block)this, nowPixel.pos);
-            //else if (oldCollider && nowPixel.info.collider == false) GreedyCollider.TryShrinkCollider((Block)this, nowPixel.pos);
-            //Log.Print(oldCollider +"|"+nowPixel.info.collider);
+            bool oldCollider = (old == null || !old.collider) ? false : true;
+            //原本无碰撞箱，现在有就创建，反之删除
+            if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider(this, nowPixel.pos);
+            else if (oldCollider && nowPixel.info.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
         }
     }
 }

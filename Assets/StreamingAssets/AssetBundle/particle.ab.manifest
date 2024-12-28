@@ -1,0 +1,50 @@
+ManifestFileVersion: 0
+CRC: 4108210051
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9d5347a6272f1917ccaca57dd9ca4426
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 059ecc53097939299c22ab300bf8be65
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 9d5347a6272f1917ccaca57dd9ca4426
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 70
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 269f2b904029b1248a1fb18de2b3c3b3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2362ee7c1d4867249919b6c045c44770, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Sirenix.Serialization
+  ClassName: Sirenix.Serialization.SerializationData
+Assets:
+- "Assets/ScriptsAssembly/PRO/Particle/Particle_\u901A\u7528\u793A\u4F8B.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u98DE\u884C\u7BAD\u5934\u70B8\u5F39/Particle_\u98DE\u884C\u7BAD\u5934\u70B8\u5F39.prefab"
+- "Assets/ScriptsAssembly/PRO/Particle/Particle_\u5355\u50CF\u7D20.prefab"
+Dependencies: []

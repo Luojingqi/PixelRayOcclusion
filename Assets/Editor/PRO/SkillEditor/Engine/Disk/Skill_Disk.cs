@@ -19,6 +19,8 @@ namespace PRO.SkillEditor
         public List<Track_Disk> AnimationTrack2DList = new List<Track_Disk>();
         [LabelText("2D特效轨道")]
         public List<Track_Disk> SpecialEffectTrack2DList = new List<Track_Disk>();
+        [LabelText("粒子特效轨道")]
+        public List<Track_Disk> ParticleTrackList = new List<Track_Disk>();
         [LabelText("2D攻击检测轨道")]
         public List<Track_Disk> AttackTestTrack2DList = new List<Track_Disk>();
         [LabelText("场景破坏轨道")]
@@ -36,7 +38,10 @@ namespace PRO.SkillEditor
             MaxFrame = 0;
             FrameTime = 200;
             AnimationTrack2DList.Clear();
+            SpecialEffectTrack2DList.Clear();
+            ParticleTrackList.Clear();
             AttackTestTrack2DList.Clear();
+            SceneRuinTrackList.Clear();
             EventTrackList.Clear();
         }
 
@@ -49,6 +54,8 @@ namespace PRO.SkillEditor
             i = 0;
             foreach (var track in SpecialEffectTrack2DList) UpdateFrame(track, agent, frame, i++);
             i = 0;
+            foreach (var track in ParticleTrackList) UpdateFrame(track, agent, frame, i++);
+            i++;
             foreach (var track in AttackTestTrack2DList) UpdateFrame(track, agent, frame, i++);
             i = 0;
             foreach (var track in SceneRuinTrackList) UpdateFrame(track, agent, frame, i++);

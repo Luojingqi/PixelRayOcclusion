@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -24,7 +25,8 @@ namespace PRO.SkillEditor
         {
 
         }
-
+        [LabelText("¾«ÁéÍ¼")]
+        [ShowInInspector]
         public Sprite Sprite
         {
             get { return diskData.sprite; }

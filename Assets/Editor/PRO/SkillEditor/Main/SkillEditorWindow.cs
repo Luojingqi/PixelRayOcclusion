@@ -197,6 +197,7 @@ namespace PRO.SkillEditor
             int index = 0;
             Config.Skill_Disk.AnimationTrack2DList.ForEach(disk => AddTrack(new AnimationTrack2D(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.SpecialEffectTrack2DList.ForEach(disk => AddTrack(new SpecialEffectTrack2D(disk) { trackIndex = index++ })); index = 0;
+            Config.Skill_Disk.ParticleTrackList.ForEach(disk => AddTrack(new ParticleTrack(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.AttackTestTrack2DList.ForEach(disk => AddTrack(new AttackTestTrack2D(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.SceneRuinTrackList.ForEach(disk => AddTrack(new SceneRuinTrack(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.EventTrackList.ForEach(disk => AddTrack(new EventTrack(disk) { trackIndex = index++ })); index = 0;

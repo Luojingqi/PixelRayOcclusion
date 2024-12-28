@@ -78,7 +78,7 @@ namespace PRO.SceneEditor
                         if (typeName == "¿ÕÆø") continue;
                         Vector2Int nowGloab = gloabPos + new Vector2Int(x, y);
                         Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(nowGloab));
-                        block.SetPixel(Pixel.TakeOut(typeName, colorName, block.GloabToPixel(nowGloab)));
+                        block.SetPixel(Pixel.TakeOut(typeName, colorName, Block.GloabToPixel(nowGloab)));
                         block.DrawPixelAsync();
                     }
             }

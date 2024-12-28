@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1852471837
+CRC: 3332320836
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -7,4 +7,7 @@ AssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: skill.ab
+      Dependencies: {}
+    Info_2:
+      Name: particle.ab
       Dependencies: {}

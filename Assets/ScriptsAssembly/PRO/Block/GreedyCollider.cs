@@ -100,7 +100,7 @@ namespace PRO
         /// <summary>
         /// 根据提供的碰撞箱数据列表在区块内对应位置创建碰撞箱
         /// </summary>
-        public static void CreateColliderAction(this Block block, List<ColliderData> colliderDataList, bool bb = false)
+        public static void CreateColliderAction(this Block block, List<ColliderData> colliderDataList)
         {
             for (int i = 0; i < colliderDataList.Count; i++)
             {
@@ -112,7 +112,6 @@ namespace PRO
 
                 box.offset = box.size / 2;
                 box.transform.parent = block.colliderNode;
-                if (bb) box.transform.parent = null;
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
                     {
@@ -150,6 +149,15 @@ namespace PRO
                     }
                 }
             }
+            if (block.allCollider[pos.x, pos.y] == null)
+            {
+                var box = TakeOut();
+                box.size = new Vector2(Pixel.Size, Pixel.Size);
+                box.offset = box.size / 2;
+                box.transform.position = block.PixelToWorld(pos);
+                box.transform.parent = block.colliderNode;
+                block.allCollider[pos.x, pos.y] = box;
+            }
         }
         static System.Random random = new System.Random();
         /// <summary>
@@ -161,7 +169,6 @@ namespace PRO
             var box = block.allCollider[pos.x, pos.y];
             Vector2Byte colliderPos = new Vector2Byte((byte)Mathf.RoundToInt(box.transform.localPosition.x / Pixel.Size), (byte)Mathf.RoundToInt(box.transform.localPosition.y / Pixel.Size));
             Vector2Byte colliderSize = new Vector2Byte((byte)Mathf.RoundToInt(box.size.x / Pixel.Size), (byte)Mathf.RoundToInt(box.size.y / Pixel.Size));
-            Debug.Log(colliderPos + "|" + colliderSize);
             Color32 color = new Color32((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255), 255);
             for (byte x = colliderPos.x; x < colliderPos.x + colliderSize.x; x++)
                 for (byte y = colliderPos.y; y < colliderPos.y + colliderSize.y; y++)
@@ -171,7 +178,7 @@ namespace PRO
                 }
             PutIn(box);
             var list = CreateColliderDataList(block, colliderPos, colliderPos + colliderSize - new Vector2Byte(1, 1));
-            CreateColliderAction(block, list, true);
+            CreateColliderAction(block, list);
         }
     }
 }

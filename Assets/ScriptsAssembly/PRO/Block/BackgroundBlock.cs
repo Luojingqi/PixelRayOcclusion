@@ -10,7 +10,7 @@ namespace PRO
         #region 静态对象池
         private static GameObjectPool<BackgroundBlock> BackgroundPool;
 
-        public static void InitBackgroundPool()
+        public static void InitPool()
         {
             #region 加载Background初始GameObject
             GameObject go = new GameObject("BackgroundBlock");

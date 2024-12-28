@@ -15,7 +15,6 @@ namespace PRO
 
         public static SceneManager Inst;
 
-        public void Awake() { Inst = this; }
 
         private SceneEntity nowScene;
         public SceneEntity NowScene { get => nowScene; }
@@ -36,15 +35,16 @@ namespace PRO
         }
 
         public GameObject g;
-        public void Start()
+        public void Awake()
         {
+            Inst = this;
             DontDestroyOnLoad(this);
             BlockMaterial.Init();
             PoolNode = new GameObject("PoolNode").transform;
 
             GreedyCollider.InitBoxCollider2DPool();
-            Block.InitBlockPool();
-            BackgroundBlock.InitBackgroundPool();
+            Block.InitPool();
+            BackgroundBlock.InitPool();
             Pixel.LoadPixelTypeInfo();
             // GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
@@ -115,28 +115,8 @@ namespace PRO
             Vector2Int blockPos = Block.WorldToBlock(m);
             Vector2Int gloabPos = Block.WorldToGloab(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                ThreadPool.QueueUserWorkItem((obj) =>
-                {
-                    //StarManager.Inst.CreateStar(new(10, 10), 20, 20, "透光墙", 10);
-                    //StarManager.Inst.CreateStar(new(10, 10), 21, 20, "透光墙", 10);
-                    //StarManager.Inst.CreateStar(new(15, 15), 10, 10, "透光墙", 10);
-                    //StarManager.Inst.CreateStar(new(15, 15), 30, 10, "不透光墙", 10);
-                    //StarManager.Inst.CreateStar(new(15, 15), 31, 10, "不透光墙", 10);
-                    //StarManager.Inst.CreateStar(new(15, 15), 33, 10, "不透光墙", 10);
-                    //for (int i = 0; i <= 0; i++)
-                    //{
-                    //    for (int j = 0; j <= 0; j++)
-                    //    {
-                    //        var block = SceneManager.Inst.BlockCrossList[i][j];
-                    //        var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-                    //        lock (SceneManager.Inst.mainThreadEventLock)
-                    //            SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); };
-                    //    }
-                    //}
-                });
-            }
+
+
             time += Time.deltaTime;
             while (time > 0.1f)
             {
@@ -174,9 +154,6 @@ namespace PRO
                 n = "光源3";
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                //Block block = NowScene.GetBlock(blockPos);
-                //block.SetPixel(Pixel.TakeOut("空气", 0, pixelPos));
-                //block.DrawPixelAsync();
                 Block block = NowScene.GetBlock(blockPos);
                 block.SetPixel(Pixel.TakeOut("光源", n, pixelPos));
                 block.DrawPixelAsync();
@@ -187,7 +164,7 @@ namespace PRO
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("水", 0, pixelPos + new Vector2Byte(x, y));
+                        var pixel = Pixel.TakeOut("水", 0, pixelPos + new Vector2Byte(0, 0));
                         if (pixel != null)
                             block.SetPixel(pixel);
                     }
@@ -212,10 +189,10 @@ namespace PRO
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("沙子", 0, pixelPos + new Vector2Byte(x, y));
-                        if (pixel != null)
-                            block.SetPixel(pixel);
-                    }
+                    var pixel = Pixel.TakeOut("沙子", 0, pixelPos + new Vector2Byte(0, 0));
+                    if (pixel != null)
+                        block.SetPixel(pixel);
+                }
                 block.DrawPixelAsync();
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse4))

@@ -54,6 +54,10 @@ namespace PRO
                     }
                 block.DrawPixelAsync();
                 background.DrawPixelAsync();
+
+                var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1)); //此行其实可以交由多线程处理
+                GreedyCollider.CreateColliderAction(block, colliderDataList);
+
             }
             else
             {

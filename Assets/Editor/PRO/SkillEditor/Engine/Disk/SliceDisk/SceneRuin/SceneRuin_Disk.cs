@@ -24,7 +24,7 @@ namespace PRO.SkillEditor
                     {
                         Vector2Int gloabPos = Block.WorldToGloab(agent.transform.position) + pos + offset;
                         Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(gloabPos));
-                        Vector2Byte pixelPos = block.GloabToPixel(gloabPos);
+                        Vector2Byte pixelPos = Block.GloabToPixel(gloabPos);
                         Pixel pixel = Pixel.TakeOut("岩石", "岩石色0", pixelPos);
                         block.SetPixel(pixel);
                         block.DrawPixelAsync(pixelPos, BlockMaterial.GetPixelColorInfo(pixel.colorName).color);

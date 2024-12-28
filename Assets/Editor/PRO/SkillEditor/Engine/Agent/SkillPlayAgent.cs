@@ -25,13 +25,13 @@ namespace PRO.SkillEditor
         }
         #endregion
 
-        public void Awake()
+        public void Start()
         {
             AgentSprice = transform.GetComponent<SpriteRenderer>();
             Skill = idle;
             Play = true;
         }
-
+        [LabelText("动画轨道精灵渲染器")]
         public SpriteRenderer AgentSprice;
         /// <summary>
         /// 攻击检测轨道每帧返回存储
@@ -41,6 +41,7 @@ namespace PRO.SkillEditor
         /// 特效轨道的精灵图渲染器
         /// </summary>
         public List<SpriteRenderer> SpecialEffect2DSpriteList = new List<SpriteRenderer>();
+        [LabelText("正在播放")]
         [ShowInInspector]
         /// <summary>
         /// 当前播放的技能，设置会立即播放
@@ -66,19 +67,14 @@ namespace PRO.SkillEditor
         public Skill_Disk idle;
         [ShowInInspector]
         /// <summary>
-        /// 播放，暂停播放技能
+        /// 播放，暂停播放技能,
         /// </summary>
         public bool Play
         {
             get { return play; }
             set
             {
-                if (play == value) return;
                 play = value;
-                if (play == false)
-                {
-                    Skill = idle;
-                }
             }
         }
         private bool play = false;
@@ -98,8 +94,7 @@ namespace PRO.SkillEditor
 
         public void Update()
         {
-         //   if (Input.GetKeyDown(KeyCode.V))
-                UpdateFrame();
+            UpdateFrame();
         }
         private float time;
         private void UpdateFrame()
@@ -112,7 +107,7 @@ namespace PRO.SkillEditor
                 Skill.UpdateFrame(this, ++nowFrame);
                 if (nowFrame >= Skill.MaxFrame)
                 {
-                    Play = false;
+                    Skill = idle;
                     return;
                 }
             }

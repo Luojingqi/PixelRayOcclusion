@@ -14,7 +14,7 @@ namespace PRO.SkillEditor
 
         public override void DrawGizmo(SkillPlayAgent agent)
         {
-            Gizmos.matrix = Matrix4x4.TRS(diskData.position + agent.transform.position, diskData.rotation * agent.transform.rotation, V3mV3(diskData.scale, agent.transform.lossyScale));
+            Gizmos.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale) * Matrix4x4.TRS(diskData.position, diskData.rotation, diskData.scale);
             Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
         }
 

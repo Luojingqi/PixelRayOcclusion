@@ -18,7 +18,6 @@ namespace PRO
         /// </summary>
         public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((BlockPos.x * Block.Size.x + pixelPos.x) * Pixel.Size, (BlockPos.y * Block.Size.y + pixelPos.y) * Pixel.Size);
         public Vector2Int PixelToGloab(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
-        public Vector2Byte GloabToPixel(Vector2Int gloabPos) => new Vector2Byte(gloabPos.x - BlockPos.x * Block.Size.x, gloabPos.y - BlockPos.y * Block.Size.y);
         #endregion
 
         public virtual void Init()
@@ -62,8 +61,8 @@ namespace PRO
             if (this is Block)
             {
                 Block block = this as Block;
-                //if (updateCollider)
-                //    block.ChangeCollider(removeInfo, pixel);
+                if (updateCollider)
+                    block.ChangeCollider(removeInfo, pixel);
                 if (updateLiquidOrGas)
                     for (int y = -1; y <= 1; y++)
                         for (int x = -1; x <= 1; x++)

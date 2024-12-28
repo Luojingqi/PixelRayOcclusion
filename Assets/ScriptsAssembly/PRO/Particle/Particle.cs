@@ -1,40 +1,76 @@
-﻿using PRO.Tool;
+﻿using PRO.SkillEditor;
+using System;
 using UnityEngine;
 
 namespace PRO
 {
-    internal class Particle : MonoBehaviour
+    public class Particle : MonoBehaviour
     {
         public SpriteRenderer Renderer { get; private set; }
         public Rigidbody2D Rigidbody { get; private set; }
-        public void Init()
+        public Collider2D Collider { get; private set; }
+        public SkillPlayAgent SkillPlayAgent { get; private set; }
+
+        private Vector2Int surviveTimeRange = new Vector2Int(int.MaxValue, int.MaxValue);
+        public Vector2Int SurviveTimeRange
         {
-            Renderer = GetComponent<SpriteRenderer>();
-            Rigidbody = GetComponent<Rigidbody2D>();
+            get { return surviveTimeRange; }
+            set
+            {
+                surviveTimeRange = value;
+                remainTime = UnityEngine.Random.Range(SurviveTimeRange.x, SurviveTimeRange.y);
+            }
+        }
+        /// <summary>
+        /// 粒子剩余的存活时间
+        /// </summary>
+        public int remainTime { get; private set; } = int.MaxValue;
+
+        public string loadPath { get; private set; }
+
+        public void UpdateRemainTime(int cutDown)
+        {
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, Rigidbody.velocity);
+            remainTime -= cutDown;
+            if (remainTime <= 0) RemainTimeIsZeroEvent?.Invoke(this);
         }
 
-
-
-
-
-        private static Texture2DPool texture2DPool = new Texture2DPool(50, true);
-        private class Texture2DPool : ObjectPoolBase<Texture2D>
+        public void Init(string loadPath)
         {
-            public Texture2DPool(int maxNuber, bool isCanExceed) : base(maxNuber, isCanExceed)
-            {
-            }
+            this.loadPath = loadPath;
+            Renderer = GetComponent<SpriteRenderer>();
+            Rigidbody = GetComponent<Rigidbody2D>();
+            Collider = GetComponent<Collider2D>();
+            SkillPlayAgent = GetComponent<SkillPlayAgent>();
+        }
 
-            public override void Destroy(Texture2D item)
-            {
-                GameObject.Destroy(item);
-            }
+        public void TakeOut()
+        {
+            ParticleManager.Inst.ActiveParticleHash.Add(this);
+            remainTime = UnityEngine.Random.Range(SurviveTimeRange.x, SurviveTimeRange.y);
+        }
+        public void PutIn()
+        {
+            Rigidbody.velocity = Vector2.zero;
+            Rigidbody.angularVelocity = 0;
+            Renderer.color = Color.white;
+            CollisionEnterEvent = null;
+            CollisionExitEvent = null;
+            RemainTimeIsZeroEvent = null;
+            remainTime = int.MaxValue;
+            ParticleManager.Inst.ActiveParticleHash.Remove(this);
+        }
 
-            protected override Texture2D NewObject()
-            {
-                var ret = new Texture2D(0, 0);
-                ret.filterMode = FilterMode.Point;
-                return ret;
-            }
+        public event Action<Particle, Collision2D> CollisionEnterEvent;
+        public event Action<Particle, Collision2D> CollisionExitEvent;
+        public event Action<Particle> RemainTimeIsZeroEvent;
+        protected void OnCollisionEnter2D(Collision2D collision)
+        {
+            CollisionEnterEvent?.Invoke(this, collision);
+        }
+        protected void OnCollisionExit2D(Collision2D collision)
+        {
+            CollisionExitEvent?.Invoke(this, collision);
         }
     }
 }

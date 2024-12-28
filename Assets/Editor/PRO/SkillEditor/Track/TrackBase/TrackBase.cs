@@ -78,14 +78,19 @@ namespace PRO.SkillEditor
         /// <param name="sliceDisk"></param>
         protected abstract void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk);
         #region 拖拽资源进入
-        protected abstract bool DragAssetCheck(System.Type type);
+        /// <summary>
+        /// 检查拖拽进入的资源类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected abstract bool DragAssetTypeCheck(System.Type type);
 
         protected abstract void DragAssetExit(DragExitedEvent evt, object[] objects);
 
 
         private void DragAssetUpdate(DragUpdatedEvent evt)
         {
-            if (DragAssetCheck(DragAndDrop.objectReferences[0].GetType()))
+            if (DragAssetTypeCheck(DragAndDrop.objectReferences[0].GetType()))
             {
                 DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
             }

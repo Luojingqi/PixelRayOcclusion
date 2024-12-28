@@ -23,7 +23,7 @@ namespace PRO.SkillEditor
             }
         }
 
-        protected override bool DragAssetCheck(Type type)
+        protected override bool DragAssetTypeCheck(Type type)
         {
             return type == typeof(MonoScript);
         }

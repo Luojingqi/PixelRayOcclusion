@@ -1,6 +1,4 @@
-﻿
-using Sirenix.OdinInspector;
-using UnityEditor;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -15,7 +13,7 @@ namespace PRO.SkillEditor
         public override void DrawGizmo(SkillPlayAgent agent)
         {
             Vector2 wh = new Vector2(diskData.sprite.rect.width / diskData.sprite.pixelsPerUnit, diskData.sprite.rect.height / diskData.sprite.pixelsPerUnit);
-            Gizmos.matrix = Matrix4x4.TRS(diskData.position + agent.transform.position, diskData.rotation * agent.transform.rotation, V3mV3(diskData.scale, agent.transform.lossyScale));
+            Gizmos.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale) * Matrix4x4.TRS(diskData.position, diskData.rotation, diskData.scale);
             Gizmos.DrawWireCube(wh * (new Vector2(0.5f, 0.5f) - sprite.pivot / new Vector2(sprite.rect.width, sprite.rect.height)), wh);
         }
 

@@ -62,10 +62,9 @@
   {
     "typeName": "沙子",
     "availableColors": [
-      "沙子色0",
-      "沙子色1"
+      "沙子色0"
     ],
-    "collider": false,
+    "collider": true,
     "fluidType": 3,
     "fluidDensity": 10
   },
@@ -74,7 +73,7 @@
     "availableColors": [
       "砂砾色0"
     ],
-    "collider": false,
+    "collider": true,
     "fluidType": 3,
     "fluidDensity": 20
   }

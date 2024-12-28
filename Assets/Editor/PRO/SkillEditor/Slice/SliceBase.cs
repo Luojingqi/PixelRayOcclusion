@@ -2,15 +2,14 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static Codice.Client.Common.WebApi.WebApiEndpoints;
 namespace PRO.SkillEditor
 {
     internal abstract class SliceBase : SerializedScriptableObject
     {
         private static int margin = 4;
         public VisualElement View { get; private set; }
-        private VisualElement SpriteView;
-        private Label LabelView;
+        protected VisualElement SpriteView;
+        protected Label LabelView;
         [HideInInspector]
         public TrackBase Track;
         public SliceBase(SliceBase_Disk sliceDisk)
@@ -18,9 +17,6 @@ namespace PRO.SkillEditor
             DiskData = sliceDisk;
             View = new VisualElement();
             View.name = "Slice";
-            SpriteView = new VisualElement();
-            View.Add(SpriteView);
-            SpriteView.name = "Sprite";
             #region 初始化边框
             View.style.backgroundColor = new StyleColor(Color.gray);
             View.style.borderTopWidth = new StyleFloat(3);
@@ -32,10 +28,14 @@ namespace PRO.SkillEditor
             #endregion
             #region 设置背景字
             LabelView = new Label();
-            SpriteView.Add(LabelView);
+            View.Add(LabelView);
             LabelView.style.color = new StyleColor(Color.black);
             LabelView.style.fontSize = new StyleLength(new Length(15, LengthUnit.Pixel));
+            Name = Name;
             #endregion
+            SpriteView = new VisualElement();
+            LabelView.Add(SpriteView);
+            SpriteView.name = "Sprite";
             Enable = sliceDisk.enable;
             #region 鼠标事件
             View.RegisterCallback<PointerDownEvent>(evt =>
@@ -268,33 +268,36 @@ namespace PRO.SkillEditor
         protected void HandlePosition(SkillPlayAgent agent, Quaternion rotation, ref Vector3 position)
         {
             if (Tools.current != UnityEditor.Tool.Move) return;
+            Handles.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale);
             EditorGUI.BeginChangeCheck();
-            Vector3 ret = Handles.PositionHandle(position + agent.transform.position, rotation * agent.transform.rotation);
+            Vector3 ret = Handles.PositionHandle(position, rotation);
             if (EditorGUI.EndChangeCheck())
             {
-                position = ret - agent.transform.position;
+                position = ret;
                 SkillEditorWindow.Inst.UpdateFrame();
             }
         }
         protected void HandleRotation(SkillPlayAgent agent, Vector3 position, ref Quaternion rotation)
         {
             if (Tools.current != UnityEditor.Tool.Rotate) return;
+            Handles.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale);
             EditorGUI.BeginChangeCheck();
-            Quaternion ret = Handles.RotationHandle(rotation * agent.transform.rotation, position + agent.transform.position);
+            Quaternion ret = Handles.RotationHandle(rotation, position);
             if (EditorGUI.EndChangeCheck())
             {
-                rotation = ret * Quaternion.Inverse(agent.transform.rotation);
+                rotation = ret;
                 SkillEditorWindow.Inst.UpdateFrame();
             }
         }
         protected void HandleScale(SkillPlayAgent agent, Vector3 position, Quaternion rotation, ref Vector3 scale)
         {
             if (Tools.current != UnityEditor.Tool.Scale) return;
+            Handles.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale);
             EditorGUI.BeginChangeCheck();
-            Vector3 ret = Handles.ScaleHandle(V3mV3(scale, agent.transform.lossyScale), position + agent.transform.position, rotation * agent.transform.rotation);
+            Vector3 ret = Handles.ScaleHandle(scale, position, rotation);
             if (EditorGUI.EndChangeCheck())
             {
-                scale = V3dV3(ret, agent.transform.lossyScale);
+                scale = ret;
                 SkillEditorWindow.Inst.UpdateFrame();
             }
         }
