@@ -5,8 +5,8 @@
       "r": 155,
       "g": 194,
       "b": 230,
-      "a": 100
+      "a": 120
     },
-    "affectsLight": true
+    "affectsLightIntensity": 1.0
   }
 ]

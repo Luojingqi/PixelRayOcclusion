@@ -164,7 +164,7 @@ namespace PRO
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("ˮ", 0, pixelPos + new Vector2Byte(0, 0));
+                        var pixel = Pixel.TakeOut("ˮ", 0, pixelPos + new Vector2Byte(x, y));
                         if (pixel != null)
                             block.SetPixel(pixel);
                     }

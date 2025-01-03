@@ -12,17 +12,18 @@ namespace PRO
     /// </summary>
     public class SceneEntity
     {
+        public SceneCatalog sceneCatalog { get; private set; }
+        public SceneEntity(SceneCatalog sceneCatalog)
+        {
+            this.sceneCatalog = sceneCatalog;
+        }
+        #region 区块存储于获取
         private CrossList<Block> BlockInRAM = new CrossList<Block>();
         private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
         /// <summary>
         /// key：guid  value：building
         /// </summary>
         private Dictionary<string, Building> BuildingInRAM = new Dictionary<string, Building>();
-        public SceneCatalog sceneCatalog { get; private set; }
-        public SceneEntity(SceneCatalog sceneCatalog)
-        {
-            this.sceneCatalog = sceneCatalog;
-        }
 
         public Block GetBlock(Vector2Int blockPos)
         {
@@ -36,7 +37,9 @@ namespace PRO
         {
             return BuildingInRAM[guid];
         }
+        #endregion
 
+        #region 从磁盘中加载与保存区块
         public void LoadBlockData(Vector2Int blockPos)
         {
             if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.json", out string blockText)
@@ -87,11 +90,14 @@ namespace PRO
                 Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
             }
         }
+        #endregion
+
 
         public void Unload()
         {
 
         }
+        #region 创建区块的空游戏物体
         /// <summary>
         /// 创建一个块的游戏物体，内部像素点数据为空
         /// </summary>
@@ -120,5 +126,6 @@ namespace PRO
             back.BlockPos = blockPos;
             return back;
         }
+        #endregion
     }
 }

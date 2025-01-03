@@ -244,7 +244,7 @@ namespace PRO
         }
 
         /// <summary>
-        /// 纹理绘制完成需要提交的队列，渲染线程添加，主线程取出（纹理只是提供一种选择，但最终显示RO不使用纹理）
+        /// 纹理绘制完成需要提交的队列，渲染线程添加，主线程取出（纹理只是提供一种选择，但最终显示光照遮挡效果不使用纹理贴图）
         /// </summary>
         public static readonly Queue<BlockBase> DrawApplyQueue = new Queue<BlockBase>();
         /// <summary>

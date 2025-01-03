@@ -10,9 +10,9 @@ public struct PixelColorInfoToShader
     /// </summary>
     public int4 color;
     /// <summary>
-    /// 是否影响光照
+    /// 光强影响的系数
     /// </summary>
-    public int affectsLight;
+    public float affectsLightIntensity;
     /// <summary>
     /// 自发光强度
     /// </summary>
@@ -23,7 +23,7 @@ public struct PixelColorInfoToShader
     public PixelColorInfoToShader(PixelColorInfo info)
     {
         color = new int4(info.color.r, info.color.g, info.color.b, info.color.a);
-        affectsLight = info.affectsLight ? 1 : 0;
+        affectsLightIntensity = info.affectsLightIntensity;
         selfLuminous = 0;
         if (info.lightSourceType != null && info.lightSourceType.StartsWith(sign_SL))
         {

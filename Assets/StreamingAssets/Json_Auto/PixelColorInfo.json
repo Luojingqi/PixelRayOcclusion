@@ -7,7 +7,7 @@
       "b": 0,
       "a": 0
     },
-    "affectsLight": false
+    "affectsLightIntensity": -1.0
   },
   {
     "colorName": "木头色0",
@@ -17,7 +17,7 @@
       "b": 0,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.3
   },
   {
     "colorName": "木头色1",
@@ -27,7 +27,7 @@
       "b": 0,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.7
   },
   {
     "colorName": "岩石色0",
@@ -37,7 +37,7 @@
       "b": 149,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "岩石色1",
@@ -47,7 +47,7 @@
       "b": 166,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "光源0",
@@ -57,7 +57,7 @@
       "b": 50,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "0"
   },
   {
@@ -68,7 +68,7 @@
       "b": 80,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "1"
   },
   {
@@ -79,7 +79,7 @@
       "b": 200,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "2"
   },
   {
@@ -90,7 +90,7 @@
       "b": 30,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "3"
   },
   {
@@ -101,7 +101,7 @@
       "b": 160,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "背景色1",
@@ -111,7 +111,7 @@
       "b": 240,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "背景色2",
@@ -121,7 +121,7 @@
       "b": 255,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "水色0",
@@ -129,9 +129,9 @@
       "r": 155,
       "g": 194,
       "b": 230,
-      "a": 100
+      "a": 120
     },
-    "affectsLight": true
+    "affectsLightIntensity": 1.0
   },
   {
     "colorName": "油色0",
@@ -139,9 +139,9 @@
       "r": 242,
       "g": 184,
       "b": 0,
-      "a": 100
+      "a": 135
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.9
   },
   {
     "colorName": "沙子色0",
@@ -151,7 +151,7 @@
       "b": 55,
       "a": 255
     },
-    "affectsLight": false
+    "affectsLightIntensity": -1.0
   },
   {
     "colorName": "砂砾色0",
@@ -161,6 +161,6 @@
       "b": 228,
       "a": 255
     },
-    "affectsLight": false
+    "affectsLightIntensity": -1.0
   }
 ]

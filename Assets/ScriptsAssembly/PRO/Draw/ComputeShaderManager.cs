@@ -94,11 +94,5 @@ namespace PRO.Renderer
                 this.color = new Vector3Int(color.r, color.g, color.b);
             }
         }
-
-        public struct SelfLuminous
-        {
-            public Vector2Int pos;
-            public float strength;
-        }
     }
 }

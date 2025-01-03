@@ -7,7 +7,7 @@
       "b": 149,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "岩石色1",
@@ -17,6 +17,6 @@
       "b": 166,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   }
 ]

@@ -49,9 +49,10 @@ Shader "PixelRayOcclusion/Block_Renderer"
             {
                 int2 pixelPos = UVToPixel(i.uv);         
                 PixelColorInfo pixel = GetPixel(pixelPos);
-                float4 pixelColor = pixel.color / 255.0;
-                int4 lightColor = LightBuffer[PixelToIndex(pixelPos)];
-                return float4( lightColor.xyz / 255.0  *  pixelColor.xyz + pixelColor.xyz * pixel.selfLuminous , pixelColor.w);
+                float4 pixelColor = pow(pixel.color / 255.0, 2.2);
+                float3 lightColor =  LightBuffer[PixelToIndex(pixelPos)] / 255.0 ;
+                //return float4(lightColor,1);
+                return float4(lightColor *  pixelColor.xyz + pixelColor.xyz * pixel.selfLuminous , pixelColor.w);
             }
 
             ENDCG

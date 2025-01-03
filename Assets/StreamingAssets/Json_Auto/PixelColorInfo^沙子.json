@@ -7,7 +7,7 @@
       "b": 55,
       "a": 255
     },
-    "affectsLight": false
+    "affectsLightIntensity": -1.0
   },
   {
     "colorName": "砂砾色0",
@@ -17,6 +17,6 @@
       "b": 228,
       "a": 255
     },
-    "affectsLight": false
+    "affectsLightIntensity": -1.0
   }
 ]

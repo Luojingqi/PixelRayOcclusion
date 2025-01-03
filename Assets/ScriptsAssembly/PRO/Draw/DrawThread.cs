@@ -216,18 +216,21 @@ namespace PRO
                 for (int x = 0; x < Block.Size.x; x++)
                     for (int y = 0; y < Block.Size.y; y++)
                     {
-                        if (x < Block.Size.x / 2 - 10)
-                        {
-                            Pixel pixel = Pixel.New("±³¾°", 0, new(x, y));
-                            background.SetPixel(pixel);
-                            background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
-                        }
-                        else
-                        {
-                            Pixel pixel = Pixel.New("±³¾°", 1, new(x, y));
-                            background.SetPixel(pixel);
-                            background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
-                        }
+                        Pixel pixel = Pixel.New("±³¾°", 2, new(x, y));
+                        background.SetPixel(pixel);
+                        background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        //if (x < Block.Size.x / 2 - 10)
+                        //{
+                        //    Pixel pixel = Pixel.New("±³¾°", 0, new(x, y));
+                        //    background.SetPixel(pixel);
+                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        //}
+                        //else
+                        //{
+                        //    Pixel pixel = Pixel.New("±³¾°", 1, new(x, y));
+                        //    background.SetPixel(pixel);
+                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        //}
                     }
                 // SceneManager.Inst.En_Lock_DrawApplyQueue(background);
                 Interlocked.Add(ref endNum, -1);

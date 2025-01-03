@@ -19,7 +19,7 @@ namespace PRO.Disk
         
         private UnityEngine.Color32 _color;
         
-        private bool affectslight;
+        private float affectslightintensity;
         
         private string lightsourcetype;
         
@@ -51,16 +51,16 @@ namespace PRO.Disk
             }
         }
         
-        // 是否影响光照
-        public bool affectsLight
+        // 光强影响的系数
+        public float affectsLightIntensity
         {
             get
             {
-                return this.affectslight;
+                return this.affectslightintensity;
             }
             set
             {
-                this.affectslight = value;
+                this.affectslightintensity = value;
             }
         }
         

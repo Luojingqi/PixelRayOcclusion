@@ -7,7 +7,7 @@
       "b": 50,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "0"
   },
   {
@@ -18,7 +18,7 @@
       "b": 80,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "1"
   },
   {
@@ -29,7 +29,7 @@
       "b": 200,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "2"
   },
   {
@@ -40,7 +40,7 @@
       "b": 30,
       "a": 255
     },
-    "affectsLight": false,
+    "affectsLightIntensity": -1.0,
     "lightSourceType": "3"
   }
 ]

@@ -3,8 +3,8 @@ struct PixelColorInfo
 {
     //颜色
     int4 color;
-    //是否影响光照
-    bool affectsLight;
+    //光强影响的系数
+    float affectsLightIntensity;
     //自发光强度
     float selfLuminous;
 };
@@ -15,13 +15,6 @@ struct LightSource
     int2 gloabPos;
     //光的颜色
     int3 color;
-};
-
-struct SelfLuminous
-{
-    //块内坐标
-    int2 pos;
-    float strength;
 };
 
 #define BlockSizeX 64

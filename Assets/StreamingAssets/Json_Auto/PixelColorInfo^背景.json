@@ -7,7 +7,7 @@
       "b": 160,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "背景色1",
@@ -17,7 +17,7 @@
       "b": 240,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   },
   {
     "colorName": "背景色2",
@@ -27,6 +27,6 @@
       "b": 255,
       "a": 255
     },
-    "affectsLight": true
+    "affectsLightIntensity": 0.0
   }
 ]
