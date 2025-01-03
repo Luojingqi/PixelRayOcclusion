@@ -9,10 +9,34 @@
   },
   {
     "name": "2",
-    "radius": 35
+    "radius": 65
   },
   {
     "name": "3",
-    "radius": 50
+    "radius": 66
+  },
+  {
+    "name": "4",
+    "radius": 126
+  },
+  {
+    "name": "5",
+    "radius": 150
+  },
+  {
+    "name": "6",
+    "radius": 160
+  },
+  {
+    "name": "7",
+    "radius": 170
+  },
+  {
+    "name": "8",
+    "radius": 180
+  },
+  {
+    "name": "9",
+    "radius": 190
   }
 ]

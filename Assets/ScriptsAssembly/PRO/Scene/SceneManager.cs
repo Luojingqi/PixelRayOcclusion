@@ -64,6 +64,9 @@ namespace PRO
             DrawThread.Init(() =>
            {
                BlockMaterial.FirstBind();
+               Block block = NowScene.GetBlock(new Vector2Int(0, 0));
+               block.SetPixel(Pixel.TakeOut("光源", "光源3", new Vector2Byte()));
+               block.DrawPixelAsync();
            });
 
         }
@@ -151,7 +154,17 @@ namespace PRO
             if (Input.GetKeyDown(KeyCode.Alpha3))
                 n = "光源2";
             if (Input.GetKeyDown(KeyCode.Alpha4))
-                n = "光源3";
+                n = "光源4";
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+                n = "光源5";
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+                n = "光源6";
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+                n = "光源7";
+            if (Input.GetKeyDown(KeyCode.Alpha8))
+                n = "光源8";
+            if (Input.GetKeyDown(KeyCode.Alpha9))
+                n = "光源9";
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
                 Block block = NowScene.GetBlock(blockPos);
@@ -189,10 +202,10 @@ namespace PRO
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                    var pixel = Pixel.TakeOut("沙子", 0, pixelPos + new Vector2Byte(0, 0));
-                    if (pixel != null)
-                        block.SetPixel(pixel);
-                }
+                        var pixel = Pixel.TakeOut("沙子", 0, pixelPos + new Vector2Byte(0, 0));
+                        if (pixel != null)
+                            block.SetPixel(pixel);
+                    }
                 block.DrawPixelAsync();
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse4))

@@ -10,17 +10,17 @@ using UnityEngine;
 public static class PROEditorTool
 {
 
-    [MenuItem("PRO/1.Æô¶¯ExcelTool")]
+    [MenuItem("PRO/1.å¯åŠ¨ExcelTool")]
     public static void StartExcelToolEXE()
     {
         ExcelTool.ExcelMain.Start();
     }
-    [MenuItem("PRO/2.´´½¨HLSLÎÄ¼ş")]
+    [MenuItem("PRO/2.åˆ›å»ºHLSLæ–‡ä»¶")]
     public static void AutoCreateHLSL()
     {
         Dictionary<string, LightSourceInfo> lightSourceInfoDic = new Dictionary<string, LightSourceInfo>();
         List<LightSourceInfo> lightSourceInfoList = new List<LightSourceInfo>();
-        #region ¼ÓÔØÂ·¾¶ÏÂµÄËùÓĞLightSourceInfo.jsonÎÄ¼ş£¬²¢´æ´¢µ½×ÖµäLightSourceInfoDic
+        #region åŠ è½½è·¯å¾„ä¸‹çš„æ‰€æœ‰LightSourceInfo.jsonæ–‡ä»¶ï¼Œå¹¶å­˜å‚¨åˆ°å­—å…¸LightSourceInfoDic
         string rootPath = Application.streamingAssetsPath + @"\Json_Auto";
         DirectoryInfo root = new DirectoryInfo(rootPath);
         //int pixelCount = 0;
@@ -30,7 +30,7 @@ public static class PROEditorTool
             string[] strArray = fileInfo.Name.Split('^');
             if (strArray.Length <= 1 || strArray[0] != "LightSourceInfo") continue;
             JsonTool.LoadText(fileInfo.FullName, out string infoText);
-            //¼ÓÔØµ½µÄÏñËØÊı×é
+            //åŠ è½½åˆ°çš„åƒç´ æ•°ç»„
             var indexArray = JsonTool.ToObject<LightSourceInfo[]>(infoText);
             for (int i = 0; i < indexArray.Length; i++)
                 if (lightSourceInfoDic.ContainsKey(indexArray[i].name) == false)
@@ -41,10 +41,10 @@ public static class PROEditorTool
                 }
         }
         #endregion
-        Log.Print("¼ÓÔØµ½¹âÔ´ÎÄ¼ş");
-        //ÏÖÔÚÎÒÃÇÓĞÁËËùÓĞµÄ¹âÕÕ
+        Log.Print("åŠ è½½åˆ°å…‰æºæ–‡ä»¶");
+        //ç°åœ¨æˆ‘ä»¬æœ‰äº†æ‰€æœ‰çš„å…‰ç…§
 
-        #region ´´½¨GetLine.hlsl
+        #region åˆ›å»ºGetLine.hlsl
         string autoGetLine = "";
         HashSet<int> radiusHash = new HashSet<int>();
         for (int i = 0; i < lightSourceInfoList.Count; i++)
@@ -54,7 +54,7 @@ public static class PROEditorTool
             {
                 radiusHash.Add(r);
                 autoGetLine +=
-                #region GetLineº¯Êı
+                #region GetLineå‡½æ•°
 $"#define Line{r} {r + 1}\n" +
 $"int GetLine_{r}(int2 pos_G0, int2 pos_G1, out int2 points[Line{r}])\n" +
 @"{
@@ -63,12 +63,13 @@ int dy = abs(pos_G1.y - pos_G0.y);
 int sx = pos_G0.x < pos_G1.x ? 1 : -1;
 int sy = pos_G0.y < pos_G1.y ? 1 : -1;
 int err = dx - dy;
+int e2;
 int Index = (dx > dy) ? dx : dy;
-int2 nowPoint = pos_G0;" + "\n" +
+int2 nowPoint = pos_G0;" + "\n" + "[unroll]\n" +
 $"for (int i = 0; i < Line{r}; i++)\n" +
 @"{
 points[i] = nowPoint;
-int e2 = 2 * err;
+e2 = 2 * err;
 if (e2 > -dy)
 {
 err -= dy;
@@ -104,7 +105,7 @@ return Index;
             int threadX = r * 2 + 1;
             threadX = threadX > maxBlcok ? maxBlcok : threadX;
             autoSetLightbuffer +=
-            #region ´´½¨SetLightBuffer.hlsl
+            #region åˆ›å»ºSetLightBuffer.hlsl
 $"#pragma kernel SetLightBuffer{i}\n" +
 $"[numthreads({threadX}, 4, 1)]\n" +
 $"void SetLightBuffer{i}(int3 id : SV_DispatchThreadID)\n" +
@@ -147,7 +148,7 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         }
         JsonTool.StoreText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "SetLightBuffer.compute", autoSetLightbuffer);
 
-        #region ´´½¨SetLightBuffer_Buffer.hlslÎÄ¼ş
+        #region åˆ›å»ºSetLightBuffer_Buffer.hlslæ–‡ä»¶
         JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText);
         PROconfig proConfig = JsonTool.ToObject<PROconfig>(proConfigText);
         string autoSetLightBuffer_Buffer = "#include \"../StructData.hlsl\"\n";
@@ -163,22 +164,22 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         for (int i = 0; i < BlockLength; i++)
             autoSetLightBuffer_Buffer += $"case {i}:\n return BlockBuffer{i}[Index];\n";
         autoSetLightBuffer_Buffer +=
-        #region Ê£Óà²¿·Ö
+        #region å‰©ä½™éƒ¨åˆ†
 @"    }
 }
 RWStructuredBuffer<int4> LightBufferTemp;
-//µãÑÕÉ«ÊôĞÔ
+//ç‚¹é¢œè‰²å±æ€§
 StructuredBuffer<PixelColorInfo> AllPixelColorInfo;
-//¹âÔ´
+//å…‰æº
 StructuredBuffer<LightSource> LightSourceBuffer;
 
-//Ã¿¸öÇø¿é½ÓÊÕ¶à´ó·¶Î§ÄÚµÄ¹âÕÕ
+//æ¯ä¸ªåŒºå—æ¥æ”¶å¤šå¤§èŒƒå›´å†…çš„å…‰ç…§
 int2 EachBlockReceiveLightSize;
-//µ±Ç°¼ÆËãµÄÊÇÄÄ¸öÇø¿éµÄ¹âÕÕ
+//å½“å‰è®¡ç®—çš„æ˜¯å“ªä¸ªåŒºå—çš„å…‰ç…§
 int2 BlockPos;
 
 
-//½ÓÊÕ¹âÕÕ×ø±ê£¬ÔÚµ±Ç°Çø¿éµÄ½ÓÊÕ¹âÕÕµÄ·¶Î§ÄÚ£¬×î×óÏÂ½ÇÎªÔ­µã
+//æ¥æ”¶å…‰ç…§åæ ‡ï¼Œåœ¨å½“å‰åŒºå—çš„æ¥æ”¶å…‰ç…§çš„èŒƒå›´å†…ï¼Œæœ€å·¦ä¸‹è§’ä¸ºåŸç‚¹
 int2 GloabToReceiveLight(int2 gloabPos)
 {
     int2 minReceiveLightBlockPos = BlockPos - (EachBlockReceiveLightSize / 2);
@@ -200,7 +201,7 @@ int2 GloabToPixel(int2 gloabPos)
     return int2(gloabPos.x - BlockPos.x * BlockSizeX, gloabPos.y - BlockPos.y * BlockSizeY);
 }
 
-//±¾µØ×ø±ê×ªÇø¿éµÄË÷Òı
+//æœ¬åœ°åæ ‡è½¬åŒºå—çš„ç´¢å¼•
 int ReceiveLightToBlockIndex(int2 pos)
 {
     return pos.x / BlockSizeX + pos.y / BlockSizeY * EachBlockReceiveLightSize.x;
@@ -229,7 +230,7 @@ bool Equalsi2(int2 i0, int2 i1)
     return i0.x == i1.x && i0.y == i1.y;
 }
 
-//¸ù¾İ±¾µØ×ø±ê·µ»ØµãĞÅÏ¢
+//æ ¹æ®æœ¬åœ°åæ ‡è¿”å›ç‚¹ä¿¡æ¯
 PixelColorInfo GetPixel(int2 gloabPos)
 {
     int2 rlPos = GloabToReceiveLight(gloabPos);

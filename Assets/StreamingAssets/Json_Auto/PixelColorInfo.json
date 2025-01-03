@@ -94,6 +94,72 @@
     "lightSourceType": "3"
   },
   {
+    "colorName": "光源4",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightSourceType": "4"
+  },
+  {
+    "colorName": "光源5",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightSourceType": "5"
+  },
+  {
+    "colorName": "光源6",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightSourceType": "6"
+  },
+  {
+    "colorName": "光源7",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightSourceType": "7"
+  },
+  {
+    "colorName": "光源8",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightSourceType": "8"
+  },
+  {
+    "colorName": "光源9",
+    "color": {
+      "r": 200,
+      "g": 100,
+      "b": 30,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightSourceType": "9"
+  },
+  {
     "colorName": "背景色0",
     "color": {
       "r": 112,

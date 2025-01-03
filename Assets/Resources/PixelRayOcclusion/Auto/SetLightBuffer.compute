@@ -86,8 +86,8 @@ void SetLightBuffer2(int3 id : SV_DispatchThreadID)
     LightSource source = LightSourceBuffer[0];
 
     int2 gloabPos = IDToGloabPos(id.xy);
-    int2 lineArray[Line35];
-  int sourceIndex = GetLine_35(gloabPos, source.gloabPos, lineArray);
+    int2 lineArray[Line65];
+  int sourceIndex = GetLine_65(gloabPos, source.gloabPos, lineArray);
   float3 sourceColor = float3(source.color.xyz / 255.0);  
     float3 filterColor = sourceColor;
     float shadow = 1;
@@ -97,7 +97,7 @@ void SetLightBuffer2(int3 id : SV_DispatchThreadID)
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
         int Index = PixelToIndex(GloabToPixel(lineArray[i]));
-      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line35 + 1), 0, 1), 2);
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line65 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
         InterlockedAdd(LightBufferTemp[Index].x, color.x);
         InterlockedAdd(LightBufferTemp[Index].y, color.y);
@@ -125,8 +125,8 @@ void SetLightBuffer3(int3 id : SV_DispatchThreadID)
     LightSource source = LightSourceBuffer[0];
 
     int2 gloabPos = IDToGloabPos(id.xy);
-    int2 lineArray[Line50];
-  int sourceIndex = GetLine_50(gloabPos, source.gloabPos, lineArray);
+    int2 lineArray[Line66];
+  int sourceIndex = GetLine_66(gloabPos, source.gloabPos, lineArray);
   float3 sourceColor = float3(source.color.xyz / 255.0);  
     float3 filterColor = sourceColor;
     float shadow = 1;
@@ -136,7 +136,241 @@ void SetLightBuffer3(int3 id : SV_DispatchThreadID)
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
         int Index = PixelToIndex(GloabToPixel(lineArray[i]));
-      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line50 + 1), 0, 1), 2);
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line66 + 1), 0, 1), 2);
+      int3 color = filterColor * 255 * weak * shadow;
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        }
+        PixelColorInfo info = GetPixel(lineArray[i]);
+        if(info.affectsLightIntensity != -1)
+        {
+            float4 infoColor = info.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
+            if(info.affectsLightIntensity != lastAffects)
+            {
+                shadow *= info.affectsLightIntensity;
+                lastAffects = info.affectsLightIntensity;
+            }
+        }
+    }
+}
+
+#pragma kernel SetLightBuffer4
+[numthreads(64, 4, 1)]
+void SetLightBuffer4(int3 id : SV_DispatchThreadID)
+{
+    LightSource source = LightSourceBuffer[0];
+
+    int2 gloabPos = IDToGloabPos(id.xy);
+    int2 lineArray[Line126];
+  int sourceIndex = GetLine_126(gloabPos, source.gloabPos, lineArray);
+  float3 sourceColor = float3(source.color.xyz / 255.0);  
+    float3 filterColor = sourceColor;
+    float shadow = 1;
+    float lastAffects = shadow;
+    for (int i = sourceIndex; i >= 0; i--)
+    {
+        if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
+        {
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line126 + 1), 0, 1), 2);
+      int3 color = filterColor * 255 * weak * shadow;
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        }
+        PixelColorInfo info = GetPixel(lineArray[i]);
+        if(info.affectsLightIntensity != -1)
+        {
+            float4 infoColor = info.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
+            if(info.affectsLightIntensity != lastAffects)
+            {
+                shadow *= info.affectsLightIntensity;
+                lastAffects = info.affectsLightIntensity;
+            }
+        }
+    }
+}
+
+#pragma kernel SetLightBuffer5
+[numthreads(64, 4, 1)]
+void SetLightBuffer5(int3 id : SV_DispatchThreadID)
+{
+    LightSource source = LightSourceBuffer[0];
+
+    int2 gloabPos = IDToGloabPos(id.xy);
+    int2 lineArray[Line150];
+  int sourceIndex = GetLine_150(gloabPos, source.gloabPos, lineArray);
+  float3 sourceColor = float3(source.color.xyz / 255.0);  
+    float3 filterColor = sourceColor;
+    float shadow = 1;
+    float lastAffects = shadow;
+    for (int i = sourceIndex; i >= 0; i--)
+    {
+        if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
+        {
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line150 + 1), 0, 1), 2);
+      int3 color = filterColor * 255 * weak * shadow;
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        }
+        PixelColorInfo info = GetPixel(lineArray[i]);
+        if(info.affectsLightIntensity != -1)
+        {
+            float4 infoColor = info.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
+            if(info.affectsLightIntensity != lastAffects)
+            {
+                shadow *= info.affectsLightIntensity;
+                lastAffects = info.affectsLightIntensity;
+            }
+        }
+    }
+}
+
+#pragma kernel SetLightBuffer6
+[numthreads(64, 4, 1)]
+void SetLightBuffer6(int3 id : SV_DispatchThreadID)
+{
+    LightSource source = LightSourceBuffer[0];
+
+    int2 gloabPos = IDToGloabPos(id.xy);
+    int2 lineArray[Line160];
+  int sourceIndex = GetLine_160(gloabPos, source.gloabPos, lineArray);
+  float3 sourceColor = float3(source.color.xyz / 255.0);  
+    float3 filterColor = sourceColor;
+    float shadow = 1;
+    float lastAffects = shadow;
+    for (int i = sourceIndex; i >= 0; i--)
+    {
+        if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
+        {
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line160 + 1), 0, 1), 2);
+      int3 color = filterColor * 255 * weak * shadow;
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        }
+        PixelColorInfo info = GetPixel(lineArray[i]);
+        if(info.affectsLightIntensity != -1)
+        {
+            float4 infoColor = info.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
+            if(info.affectsLightIntensity != lastAffects)
+            {
+                shadow *= info.affectsLightIntensity;
+                lastAffects = info.affectsLightIntensity;
+            }
+        }
+    }
+}
+
+#pragma kernel SetLightBuffer7
+[numthreads(64, 4, 1)]
+void SetLightBuffer7(int3 id : SV_DispatchThreadID)
+{
+    LightSource source = LightSourceBuffer[0];
+
+    int2 gloabPos = IDToGloabPos(id.xy);
+    int2 lineArray[Line170];
+  int sourceIndex = GetLine_170(gloabPos, source.gloabPos, lineArray);
+  float3 sourceColor = float3(source.color.xyz / 255.0);  
+    float3 filterColor = sourceColor;
+    float shadow = 1;
+    float lastAffects = shadow;
+    for (int i = sourceIndex; i >= 0; i--)
+    {
+        if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
+        {
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line170 + 1), 0, 1), 2);
+      int3 color = filterColor * 255 * weak * shadow;
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        }
+        PixelColorInfo info = GetPixel(lineArray[i]);
+        if(info.affectsLightIntensity != -1)
+        {
+            float4 infoColor = info.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
+            if(info.affectsLightIntensity != lastAffects)
+            {
+                shadow *= info.affectsLightIntensity;
+                lastAffects = info.affectsLightIntensity;
+            }
+        }
+    }
+}
+
+#pragma kernel SetLightBuffer8
+[numthreads(64, 4, 1)]
+void SetLightBuffer8(int3 id : SV_DispatchThreadID)
+{
+    LightSource source = LightSourceBuffer[0];
+
+    int2 gloabPos = IDToGloabPos(id.xy);
+    int2 lineArray[Line180];
+  int sourceIndex = GetLine_180(gloabPos, source.gloabPos, lineArray);
+  float3 sourceColor = float3(source.color.xyz / 255.0);  
+    float3 filterColor = sourceColor;
+    float shadow = 1;
+    float lastAffects = shadow;
+    for (int i = sourceIndex; i >= 0; i--)
+    {
+        if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
+        {
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line180 + 1), 0, 1), 2);
+      int3 color = filterColor * 255 * weak * shadow;
+        InterlockedAdd(LightBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        }
+        PixelColorInfo info = GetPixel(lineArray[i]);
+        if(info.affectsLightIntensity != -1)
+        {
+            float4 infoColor = info.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
+            if(info.affectsLightIntensity != lastAffects)
+            {
+                shadow *= info.affectsLightIntensity;
+                lastAffects = info.affectsLightIntensity;
+            }
+        }
+    }
+}
+
+#pragma kernel SetLightBuffer9
+[numthreads(64, 4, 1)]
+void SetLightBuffer9(int3 id : SV_DispatchThreadID)
+{
+    LightSource source = LightSourceBuffer[0];
+
+    int2 gloabPos = IDToGloabPos(id.xy);
+    int2 lineArray[Line190];
+  int sourceIndex = GetLine_190(gloabPos, source.gloabPos, lineArray);
+  float3 sourceColor = float3(source.color.xyz / 255.0);  
+    float3 filterColor = sourceColor;
+    float shadow = 1;
+    float lastAffects = shadow;
+    for (int i = sourceIndex; i >= 0; i--)
+    {
+        if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
+        {
+        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line190 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
         InterlockedAdd(LightBufferTemp[Index].x, color.x);
         InterlockedAdd(LightBufferTemp[Index].y, color.y);

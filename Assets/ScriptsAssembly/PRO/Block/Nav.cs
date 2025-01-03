@@ -1,6 +1,7 @@
 ﻿namespace PRO
 {
-    internal class Nav
+    public class Nav
     {
+
     }
 }
