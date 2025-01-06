@@ -18,10 +18,7 @@ namespace PRO.SceneEditor
             base.Init();
             Inst = this;
 
-            ElementPool = new GameObjectPool<ElementC>(
-                view.Element.gameObject,
-                view.Content,
-                50, true);
+            ElementPool = new GameObjectPool<ElementC>(view.Element.gameObject, view.Content);
             ElementPool.CreateEventT += (g, t) => t.Init();
         }
         private List<ElementC> showElementList = new List<ElementC>();
@@ -32,7 +29,7 @@ namespace PRO.SceneEditor
             {
                 Element_Disk entity = TryGetEntity(infos[i]);
                 if (entity == null) continue;
-                
+
                 ElementC element = TakeOut();
                 element.SetEntity(infos[i], entity);
                 showElementList.Add(element);

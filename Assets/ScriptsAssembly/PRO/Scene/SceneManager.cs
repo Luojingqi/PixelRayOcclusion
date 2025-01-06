@@ -109,7 +109,8 @@ namespace PRO
         #endregion
         float time = 0;
         string n = "光源2";
-        public void Update()
+        int l = 3;
+        public async void Update()
         {
 
             Vector3 m = Input.mousePosition;
@@ -124,30 +125,44 @@ namespace PRO
             while (time > 0.1f)
             {
                 time -= 0.1f;
-                for (int y = -2; y <= 2; y++)
-                    for (int x = -2; x <= 2; x++)
+                for (int y = -l; y <= l; y++)
+                    for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid1();
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                Span<int> aaa = stackalloc[] { 123 };
+                //Span<int> aaa = stackalloc[] { 123 };
                 // SwitchScene("123");
                 Log.Print("保存");
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
+                for (int x = -l; x <= l; x++)
+                    for (int y = -l; y <= l; y++)
                         nowScene.SaveBlockData(new(x, y));
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
-                Log.Print("加载");
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
+                t = Time.realtimeSinceStartup;
+                Log.Print("加载开始，池内数量" + Pixel.pixelPool.notUsedObject.Count);
+                t = Time.realtimeSinceStartup;
+                for (int x = -l; x <= l; x++)
+                    for (int y = -l; y <= l; y++)
                     {
-                        Block.PutIn(nowScene.GetBlock(new(x, y)));
                         nowScene.LoadBlockData(new(x, y));
                     }
                 BlockMaterial.UpdateBind();
-
+                Log.Print("加载完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                t = Time.realtimeSinceStartup;
+                Log.Print("回收开始，池内数量" + Pixel.pixelPool.notUsedObject.Count);
+                t = Time.realtimeSinceStartup;
+                for (int x = -l; x <= l; x++)
+                    for (int y = -l; y <= l; y++)
+                    {
+                        Block.PutIn(nowScene.GetBlock(new(x, y)));
+                        BackgroundBlock.PutIn(nowScene.GetBackground(new(x, y)));
+                    }
+                Log.Print("回收完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
             }
             #region 光源
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -237,11 +252,8 @@ namespace PRO
                     Monitor.Exit(mainThreadEventLock);
                 }
             }
-
-
-
         }
-
+        private float t;
         #region 任务队列与线程锁
         /// <summary>
         /// 绘制图形任务队列，主线程添加，渲染线程取出

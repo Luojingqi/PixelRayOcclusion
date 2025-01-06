@@ -25,11 +25,11 @@ namespace PRO
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                CreateGameSaveFile("testSave");
-                // nowGameSave = LoadAllSaveInfo()[0];
-            }
+            //if (Input.GetKeyDown(KeyCode.K))
+            //{
+            //    CreateGameSaveFile("testSave");
+            //    // nowGameSave = LoadAllSaveInfo()[0];
+            //}
         }
         /// <summary>
         /// 从SavePath中加载所有的存档文件目录

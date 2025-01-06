@@ -8,7 +8,7 @@ namespace PRO.Tool
         private GameObject holdPrefab;
         public readonly Transform toolParent;
         public Dictionary<GameObject, T> goToTDic = new Dictionary<GameObject, T>();
-        public GameObjectPool(GameObject prefab, Transform parent, int maxNuber, bool isCanExceed) : base(maxNuber, isCanExceed)
+        public GameObjectPool(GameObject prefab, Transform parent)
         {
             holdPrefab = prefab;
             toolParent = parent;
@@ -40,33 +40,16 @@ namespace PRO.Tool
             return go;
         }
 
-        public override void Destroy(GameObject item)
-        {
-            goToTDic.Remove(item);
-            GameObject.Destroy(item);
-        }
-
         public T TakeOutT()
         {
             GameObject go = base.TakeOut();
             return goToTDic[go];
-        }
-        public GameObject TakeOutG()
-        {
-            GameObject go = base.TakeOut();
-            return go;
         }
 
         public override void Clear()
         {
             base.Clear();
             goToTDic.Clear();
-        }
-
-        public T ForceTakeOutT()
-        {
-            GameObject go = base.ForceTakeOut();
-            return goToTDic[go];
         }
 
         public event Action<GameObject, T> CreateEventT;

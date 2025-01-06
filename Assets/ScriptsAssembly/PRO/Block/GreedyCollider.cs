@@ -20,7 +20,7 @@ namespace PRO
             boxCollider.gameObject.SetActive(false);
             boxCollider.gameObject.layer = 9;
             boxCollider.transform.parent = boxCollider2DPoolGo.transform;
-            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform, 10000, true);
+            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform);
         }
         private static BoxCollider2D TakeOut() => BoxCollider2DPool.TakeOutT();
         public static void PutIn(BoxCollider2D box) => BoxCollider2DPool.PutIn(box.gameObject);

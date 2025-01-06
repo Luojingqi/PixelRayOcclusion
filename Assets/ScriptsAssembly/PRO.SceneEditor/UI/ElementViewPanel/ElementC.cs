@@ -38,18 +38,9 @@ internal class ElementC : MonoBehaviour
     }
 
     #region Œ∆¿Ì≥ÿ
-    private static Texture2DPool texture2DPool = new Texture2DPool(50, true);
+    private static Texture2DPool texture2DPool = new Texture2DPool();
     private class Texture2DPool : ObjectPoolBase<Texture2D>
     {
-        public Texture2DPool(int maxNuber, bool isCanExceed) : base(maxNuber, isCanExceed)
-        {
-        }
-
-        public override void Destroy(Texture2D item)
-        {
-            GameObject.Destroy(item);
-        }
-
         protected override Texture2D NewObject()
         {
             var ret = new Texture2D(0, 0);

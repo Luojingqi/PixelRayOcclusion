@@ -20,14 +20,8 @@ namespace PRO.SceneEditor
             base.Init();
             Inst = this;
 
-            FileDirectoryInfoListPool = new GameObjectPool<FileDirectoryInfoListC>(
-                view.FileDirectoryInfoList.gameObject,
-                transform,
-                10, true);
-            FileDirectoryInfoPool = new GameObjectPool<FileDirectoryInfoC>(
-                view.FileDirectoryInfo.gameObject,
-                view.FileDirectoryInfoList.transform,
-                20, true);
+            FileDirectoryInfoListPool = new GameObjectPool<FileDirectoryInfoListC>(view.FileDirectoryInfoList.gameObject, transform);
+            FileDirectoryInfoPool = new GameObjectPool<FileDirectoryInfoC>(view.FileDirectoryInfo.gameObject, view.FileDirectoryInfoList.transform);
 
             FileDirectoryInfoListPool.CreateEventT += (g, t) => t.Init();
             FileDirectoryInfoPool.CreateEventT += (g, t) => t.Init();

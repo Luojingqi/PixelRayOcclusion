@@ -58,7 +58,7 @@ namespace PRO
         private static List<PixelTypeInfo> pixelTypeInfoList = new List<PixelTypeInfo>();
         private static Dictionary<string, PixelTypeInfo> pixelTypeInfoDic = new Dictionary<string, PixelTypeInfo>();
         #region ∂‘œÛ≥ÿ
-        private static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>(Block.Size.x * Block.Size.y * 50, true);
+        public static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
         public static void PutIn(Pixel pixel)
         {
             pixel.info = null;

@@ -111,7 +111,7 @@ namespace PRO
             #endregion
             GameObject blockPoolGo = new GameObject("BlockPool");
             blockPoolGo.transform.parent = SceneManager.Inst.PoolNode;
-            BlockPool = new GameObjectPool<Block>(go, blockPoolGo.transform, 20, true);
+            BlockPool = new GameObjectPool<Block>(go, blockPoolGo.transform);
             BlockPool.CreateEventT += (g, t) =>
             {
                 t.Init();
@@ -126,7 +126,7 @@ namespace PRO
             return block;
         }
 
-        public static async void PutIn(Block block)
+        public static void PutIn(Block block)
         {
             block.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
@@ -135,6 +135,7 @@ namespace PRO
                 {
                     Pixel pixel = block.allPixel[x, y];
                     block.allPixel[x, y] = null;
+
                     Pixel.PutIn(pixel);
 
                     BoxCollider2D box = block.allCollider[x, y];
@@ -144,10 +145,10 @@ namespace PRO
                         GreedyCollider.PutIn(box);
                     }
                 }
-                await UniTask.Yield();
+                //await UniTask.Yield();
             }
             block.name = "Block(Clone)";
-           // block.materialPropertyBlock;
+            block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
             BlockPool.PutIn(block.gameObject);
         }
         #endregion 

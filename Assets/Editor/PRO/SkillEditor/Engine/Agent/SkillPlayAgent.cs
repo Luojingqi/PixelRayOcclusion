@@ -17,7 +17,7 @@ namespace PRO.SkillEditor
             {
                 if (listPool == null)
                 {
-                    listPool = new ObjectPool<List<RaycastHit2D>>(100, true);
+                    listPool = new ObjectPool<List<RaycastHit2D>>();
                     listPool.PutInEvent += t => t.Clear();
                 }
                 return listPool;

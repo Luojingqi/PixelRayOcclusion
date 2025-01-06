@@ -68,64 +68,64 @@ namespace PRO
             }
         }
 
-        public void SaveBlockData(Vector2Int blockPos)
-        {
-            string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
-            if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
-            BlockToDisk blockToDisk = new BlockToDisk(GetBlock(blockPos));
-            BackgroundToDisk backgroundToDisk = new BackgroundToDisk(GetBackground(blockPos));
-            JsonTool.StoreObject(@$"{path}\block.json", blockToDisk);
-            JsonTool.StoreObject($@"{path}\background.json", backgroundToDisk);
-        }
-
-        public void LoadBuilding(string guid)
-        {
-            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.json", out string buildingText))
+            public void SaveBlockData(Vector2Int blockPos)
             {
-                Building building = JsonTool.ToObject<Building>(buildingText);
-                BuildingInRAM.Add(guid, building);
+                string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
+                if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
+                BlockToDisk blockToDisk = new BlockToDisk(GetBlock(blockPos));
+                BackgroundToDisk backgroundToDisk = new BackgroundToDisk(GetBackground(blockPos));
+                JsonTool.StoreObject(@$"{path}\block.json", blockToDisk);
+                JsonTool.StoreObject($@"{path}\background.json", backgroundToDisk);
             }
-            else
+
+            public void LoadBuilding(string guid)
             {
-                Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
+                if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.json", out string buildingText))
+                {
+                    Building building = JsonTool.ToObject<Building>(buildingText);
+                    BuildingInRAM.Add(guid, building);
+                }
+                else
+                {
+                    Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
+                }
             }
-        }
-        #endregion
+            #endregion
 
 
-        public void Unload()
-        {
+            public void Unload()
+            {
 
+            }
+            #region 创建区块的空游戏物体
+            /// <summary>
+            /// 创建一个块的游戏物体，内部像素点数据为空
+            /// </summary>
+            /// <param name="blockPos"></param>
+            /// <returns></returns>
+            public Block CreateBlock(Vector2Int blockPos)
+            {
+                var block = Block.TakeOut();
+                block.name = $"Block{blockPos}";
+                BlockInRAM[blockPos] = block;
+                block.transform.position = Block.BlockToWorld(blockPos);
+                block.BlockPos = blockPos;
+                return block;
+            }
+            /// <summary>
+            /// 创建一个背景的游戏物体，内部像素点数据为空
+            /// </summary>
+            /// <param name="blockPos"></param>
+            /// <returns></returns>
+            public BackgroundBlock CreateBackground(Vector2Int blockPos)
+            {
+                var back = BackgroundBlock.TakeOut();
+                BackgroundInRAM[blockPos] = back;
+                back.transform.position = Block.BlockToWorld(blockPos);
+                back.transform.parent = GetBlock(blockPos).transform;
+                back.BlockPos = blockPos;
+                return back;
+            }
+            #endregion
         }
-        #region 创建区块的空游戏物体
-        /// <summary>
-        /// 创建一个块的游戏物体，内部像素点数据为空
-        /// </summary>
-        /// <param name="blockPos"></param>
-        /// <returns></returns>
-        public Block CreateBlock(Vector2Int blockPos)
-        {
-            var block = Block.TakeOut();
-            block.name = $"Block{blockPos}";
-            BlockInRAM[blockPos] = block;
-            block.transform.position = Block.BlockToWorld(blockPos);
-            block.BlockPos = blockPos;
-            return block;
-        }
-        /// <summary>
-        /// 创建一个背景的游戏物体，内部像素点数据为空
-        /// </summary>
-        /// <param name="blockPos"></param>
-        /// <returns></returns>
-        public BackgroundBlock CreateBackground(Vector2Int blockPos)
-        {
-            var back = BackgroundBlock.TakeOut();
-            BackgroundInRAM[blockPos] = back;
-            back.transform.position = Block.BlockToWorld(blockPos);
-            back.transform.parent = GetBlock(blockPos).transform;
-            back.BlockPos = blockPos;
-            return back;
-        }
-        #endregion
     }
-}

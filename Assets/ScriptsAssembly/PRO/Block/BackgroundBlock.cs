@@ -21,7 +21,7 @@ namespace PRO
             #endregion
             GameObject backgroundPoolGo = new GameObject("BackgroundPool");
             backgroundPoolGo.transform.parent = SceneManager.Inst.PoolNode;
-            BackgroundPool = new GameObjectPool<BackgroundBlock>(go, backgroundPoolGo.transform, 20, true);
+            BackgroundPool = new GameObjectPool<BackgroundBlock>(go, backgroundPoolGo.transform);
             BackgroundPool.CreateEventT += (g, t) =>
             {
                 t.Init();
@@ -30,7 +30,7 @@ namespace PRO
         }
         public static BackgroundBlock TakeOut() => BackgroundPool.TakeOutT();
 
-        public static async void PutIn(BackgroundBlock block)
+        public static void PutIn(BackgroundBlock block)
         {
             block.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
@@ -41,8 +41,9 @@ namespace PRO
                     block.allPixel[x, y] = null;
                     Pixel.PutIn(pixel);
                 }
-                await UniTask.Yield();
+               // await UniTask.Yield();
             }
+            block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
             BackgroundPool.PutIn(block.gameObject);
         }
         #endregion

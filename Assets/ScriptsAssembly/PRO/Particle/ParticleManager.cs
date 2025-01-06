@@ -22,7 +22,7 @@ namespace PRO
             Inst = this;
             Node = new GameObject("ParticleNode").transform;
             Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_单像素").GetComponent<Particle>();
-            var pool = new GameObjectPool<Particle>(particle.gameObject, Node, 65536, true);
+            var pool = new GameObjectPool<Particle>(particle.gameObject, Node);
             pool.CreateEventT += (g, t) => t.Init("单像素");
             pool.TakeOutEventT += (g, t) => t.TakeOut();
             pool.PutInEventT += (g, t) => t.PutIn();
@@ -51,7 +51,7 @@ namespace PRO
                 if (go == null) go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\{loadPath}");
                 if (go == null) return null;
                 Particle particle = go.GetComponent<Particle>();
-                pool = new GameObjectPool<Particle>(particle.gameObject, Node, 65536, true);
+                pool = new GameObjectPool<Particle>(particle.gameObject, Node);
                 pool.CreateEventT += (g, t) => t.Init(loadPath);
                 pool.TakeOutEventT += (g, t) => t.TakeOut();
                 pool.PutInEventT += (g, t) => t.PutIn();
