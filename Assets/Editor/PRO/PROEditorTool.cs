@@ -105,10 +105,10 @@ return Index;
             int threadX = r * 2 + 1;
             threadX = threadX > maxBlcok ? maxBlcok : threadX;
             autoSetLightbuffer +=
-            #region 创建SetLightBuffer.hlsl
-$"#pragma kernel SetLightBuffer{i}\n" +
+            #region 创建SetLightResultBuffer.hlsl
+$"#pragma kernel SetLightResultBuffer{i}\n" +
 $"[numthreads({threadX}, 4, 1)]\n" +
-$"void SetLightBuffer{i}(int3 id : SV_DispatchThreadID)\n" +
+$"void SetLightResultBuffer{i}(int3 id : SV_DispatchThreadID)\n" +
 @"{
     LightSource source = LightSourceBuffer[0];
 
@@ -123,13 +123,13 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));" + "\n" +
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));" + "\n" +
 $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} + 1), 0, 1), 2);\n" +
 @"      int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -167,7 +167,7 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         #region 剩余部分
 @"    }
 }
-RWStructuredBuffer<int4> LightBufferTemp;
+RWStructuredBuffer<int4> LightResultBufferTemp;
 //点颜色属性
 StructuredBuffer<PixelColorInfo> AllPixelColorInfo;
 //光源
@@ -196,7 +196,7 @@ int2 ReceiveLightToPixel(int2 pos)
     return int2(pos.x % BlockSizeX, pos.y % BlockSizeY);
 }
 
-int2 GloabToPixel(int2 gloabPos)
+int2 GlobalToPixel(int2 gloabPos)
 {
     return int2(gloabPos.x - BlockPos.x * BlockSizeX, gloabPos.y - BlockPos.y * BlockSizeY);
 }

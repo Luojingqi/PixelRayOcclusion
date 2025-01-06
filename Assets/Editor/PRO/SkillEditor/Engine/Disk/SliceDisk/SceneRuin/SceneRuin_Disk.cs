@@ -22,9 +22,9 @@ namespace PRO.SkillEditor
                 {
                     foreach (var pos in kv.Value)
                     {
-                        Vector2Int gloabPos = Block.WorldToGloab(agent.transform.position) + pos + offset;
-                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(gloabPos));
-                        Vector2Byte pixelPos = Block.GloabToPixel(gloabPos);
+                        Vector2Int gloabPos = Block.WorldToGlobal(agent.transform.position) + pos + offset;
+                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
+                        Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
                         Pixel pixel = Pixel.TakeOut("岩石", "岩石色0", pixelPos);
                         block.SetPixel(pixel);
                         block.DrawPixelAsync(pixelPos, BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
@@ -54,7 +54,7 @@ namespace PRO.SkillEditor
                 renderer = trans.GetComponent<SpriteRenderer>();
             }
             renderer.sprite = DrawTool.CreateSprite(texture);
-            renderer.transform.position = agent.transform.position + Block.GloabToWorld(offset);
+            renderer.transform.position = agent.transform.position + Block.GlobalToWorld(offset);
         }
     }
 }

@@ -81,7 +81,7 @@ case 24:
  return BlockBuffer24[Index];
     }
 }
-RWStructuredBuffer<int4> LightBufferTemp;
+RWStructuredBuffer<int4> LightResultBufferTemp;
 //点颜色属性
 StructuredBuffer<PixelColorInfo> AllPixelColorInfo;
 //光源
@@ -110,7 +110,7 @@ int2 ReceiveLightToPixel(int2 pos)
     return int2(pos.x % BlockSizeX, pos.y % BlockSizeY);
 }
 
-int2 GloabToPixel(int2 gloabPos)
+int2 GlobalToPixel(int2 gloabPos)
 {
     return int2(gloabPos.x - BlockPos.x * BlockSizeX, gloabPos.y - BlockPos.y * BlockSizeY);
 }

@@ -11,12 +11,16 @@ namespace PRO.Renderer
         public static Material ShareMaterial { get { return shareMaterial; } }
         private static Material shareMaterial;
 
-        private ComputeBuffer[] backgroundBuffer;
+        private ComputeBuffer[] backgroundBufferArray;
+        private MaterialPropertyBlock[] materialPropertyBlockArray;
         public void Init()
         {
-            backgroundBuffer = new ComputeBuffer[LightBufferLength];
-            for (int i = 0; i < LightBufferLength; i++)
-                backgroundBuffer[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int));
+            backgroundBufferArray = new ComputeBuffer[LightResultBufferLength];
+            materialPropertyBlockArray = new MaterialPropertyBlock[LightResultBufferLength];
+            for (int i = 0; i < LightResultBufferLength; i++)
+                backgroundBufferArray[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int));
+            for (int i = 0; i < LightResultBufferLength; i++)
+                materialPropertyBlockArray[i] = new MaterialPropertyBlock();
 
             LoadMaterial();
         }
@@ -31,21 +35,31 @@ namespace PRO.Renderer
 
             UpdateBind();
         }
-
+        public void ClearLastBind()
+        {
+            Vector2Int minLightBufferBlockPos = LastCameraCenterBlockPos - LightResultBufferBlockSize / 2;
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
+                {
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
+                    background.spriteRenderer.SetPropertyBlock(NullMaterialPropertyBlock);
+                }
+        }
         public void UpdateBind()
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
 
-            for (int y = 0; y < LightBufferBlockSize.y; y++)
-                for (int x = 0; x < LightBufferBlockSize.x; x++)
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int gloabBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    int lightIndex = x + y * LightBufferBlockSize.x;
-                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(gloabBlockPos);
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    int lightIndex = x + y * LightResultBufferBlockSize.x;
+                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
                     //Debug.Log($"±³¾°×ø±ê{background.BlockPos}  µÚÒ»´Î°ó¶¨  ±³¾°»º´æË÷Òý{lightIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
-                    background.materialPropertyBlock.SetBuffer("BackgroundBuffer", backgroundBuffer[lightIndex]);
-                    background.materialPropertyBlock.SetBuffer("LightBuffer", computeShaderManager.lightBufferCSArray[lightIndex].LightBuffer);
-                    background.spriteRenderer.SetPropertyBlock(background.materialPropertyBlock);
+                    materialPropertyBlockArray[lightIndex].SetBuffer("BackgroundBuffer", backgroundBufferArray[lightIndex]);
+                    materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
+                    background.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
 
                     SetBackgroundBlock(background);
                 }
@@ -53,7 +67,7 @@ namespace PRO.Renderer
 
         public void SetBufferData(int index, Array array)
         {
-            backgroundBuffer[index].SetData(array);
+            backgroundBufferArray[index].SetData(array);
         }
     }
 }

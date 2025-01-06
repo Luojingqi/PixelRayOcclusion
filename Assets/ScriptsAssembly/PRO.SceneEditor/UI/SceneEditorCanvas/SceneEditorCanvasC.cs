@@ -64,9 +64,9 @@ namespace PRO.SceneEditor
             m.z = 1;
             m = Camera.main.ScreenToWorldPoint(m);
             Vector2Int blockPos = Block.WorldToBlock(m);
-            Vector2Int gloabPos = Block.WorldToGloab(m);
+            Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
-            view.HoldIcon.transform.position = Block.GloabToWorld(gloabPos);
+            view.HoldIcon.transform.position = Block.GlobalToWorld(gloabPos);
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -77,8 +77,8 @@ namespace PRO.SceneEditor
                         string colorName = HoldEntity.pixels[y * HoldEntity.width + x].colorName;
                         if (typeName == "¿ÕÆø") continue;
                         Vector2Int nowGloab = gloabPos + new Vector2Int(x, y);
-                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(nowGloab));
-                        block.SetPixel(Pixel.TakeOut(typeName, colorName, Block.GloabToPixel(nowGloab)));
+                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
+                        block.SetPixel(Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab)));
                         block.DrawPixelAsync();
                     }
             }

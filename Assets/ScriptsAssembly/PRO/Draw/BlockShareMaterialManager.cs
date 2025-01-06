@@ -11,12 +11,17 @@ namespace PRO.Renderer
         public static Material ShareMaterial { get { return shareMaterial; } }
         private static Material shareMaterial;
 
-        private ComputeBuffer[] blockBuffer;
+        private ComputeBuffer[] blockBufferArray;
+        private MaterialPropertyBlock[] materialPropertyBlockArray;
         public void Init()
         {
-            blockBuffer = new ComputeBuffer[BlockBufferLength];
+            blockBufferArray = new ComputeBuffer[BlockBufferLength];
+            materialPropertyBlockArray = new MaterialPropertyBlock[LightResultBufferLength];
             for (int i = 0; i < BlockBufferLength; i++)
-                blockBuffer[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int));
+                blockBufferArray[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int));
+            for (int i = 0; i < LightResultBufferLength; i++)
+                materialPropertyBlockArray[i] = new MaterialPropertyBlock();
+
 
             LoadMaterial();
         }
@@ -32,32 +37,43 @@ namespace PRO.Renderer
             UpdateBind();
         }
 
+        public void ClearLastBind()
+        {
+            Vector2Int minLightBufferBlockPos = LastCameraCenterBlockPos - LightResultBufferBlockSize / 2;
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
+                {
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
+                    block.spriteRenderer.SetPropertyBlock(NullMaterialPropertyBlock);
+                }
+        }
+
         public void UpdateBind()
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
             Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
 
-            for (int y = 0; y < LightBufferBlockSize.y; y++)
-                for (int x = 0; x < LightBufferBlockSize.x; x++)
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int gloabBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    Vector2Int localBlockBufferPos = gloabBlockPos - minBlockBufferPos;
-                    int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightBufferBlockSize.x);
-                    int lightIndex = x + y * LightBufferBlockSize.x;
-                    Block block = SceneManager.Inst.NowScene.GetBlock(gloabBlockPos);
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
+                    int lightIndex = x + y * LightResultBufferBlockSize.x;
+                    Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
                     //Debug.Log($"块坐标{block.BlockPos}  第一次绑定 块缓存索引{blockIndex}  光照缓存索引{lightIndex}");
-                    block.materialPropertyBlock.SetBuffer("BlockBuffer", blockBuffer[blockIndex]);
-                    block.materialPropertyBlock.SetBuffer("LightBuffer", computeShaderManager.lightBufferCSArray[lightIndex].LightBuffer);
-                    block.spriteRenderer.SetPropertyBlock(block.materialPropertyBlock);
-
+                    materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", blockBufferArray[blockIndex]);
+                    materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
+                    block.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
                     SetBlock(block);
                 }
         }
 
         public void SetBufferData(int index, Array array)
         {
-            blockBuffer[index].SetData(array);
+            blockBufferArray[index].SetData(array);
         }
-        public ComputeBuffer GetBuffer(int index) => blockBuffer[index];
+        public ComputeBuffer GetBuffer(int index) => blockBufferArray[index];
     }
 }

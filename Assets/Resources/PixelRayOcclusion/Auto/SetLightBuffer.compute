@@ -18,13 +18,13 @@ void SetLightBuffer0(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line5 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -57,13 +57,13 @@ void SetLightBuffer1(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line15 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -96,13 +96,13 @@ void SetLightBuffer2(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line65 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -135,13 +135,13 @@ void SetLightBuffer3(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line66 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -174,13 +174,13 @@ void SetLightBuffer4(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line126 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -213,13 +213,13 @@ void SetLightBuffer5(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line150 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -252,13 +252,13 @@ void SetLightBuffer6(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line160 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -291,13 +291,13 @@ void SetLightBuffer7(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line170 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -330,13 +330,13 @@ void SetLightBuffer8(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line180 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)
@@ -369,13 +369,13 @@ void SetLightBuffer9(int3 id : SV_DispatchThreadID)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
-        int Index = PixelToIndex(GloabToPixel(lineArray[i]));
+        int Index = PixelToIndex(GlobalToPixel(lineArray[i]));
       float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line190 + 1), 0, 1), 2);
       int3 color = filterColor * 255 * weak * shadow;
-        InterlockedAdd(LightBufferTemp[Index].x, color.x);
-        InterlockedAdd(LightBufferTemp[Index].y, color.y);
-        InterlockedAdd(LightBufferTemp[Index].z, color.z);
-        InterlockedAdd(LightBufferTemp[Index].w, 1);
+        InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
+        InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
+        InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
+        InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
         PixelColorInfo info = GetPixel(lineArray[i]);
         if(info.affectsLightIntensity != -1)

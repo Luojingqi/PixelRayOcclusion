@@ -17,19 +17,17 @@ namespace PRO
         /// 点坐标（局部）to世界坐标点
         /// </summary>
         public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((BlockPos.x * Block.Size.x + pixelPos.x) * Pixel.Size, (BlockPos.y * Block.Size.y + pixelPos.y) * Pixel.Size);
-        public Vector2Int PixelToGloab(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
+        public Vector2Int PixelToGlobal(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
         #endregion
 
         public virtual void Init()
         {
-            materialPropertyBlock = new MaterialPropertyBlock();
             spriteRenderer = GetComponent<SpriteRenderer>();
             Texture2D texture = DrawTool.CreateTexture();
             spriteRenderer.sprite = DrawTool.CreateSprite(texture);
             textureData = new TextureData(spriteRenderer.sprite.texture);
         }
         public SpriteRenderer spriteRenderer;
-        public MaterialPropertyBlock materialPropertyBlock;
         /// <summary>
         /// 区块坐标，worldPos.x / Block.Size.x
         /// </summary>
@@ -50,7 +48,7 @@ namespace PRO
         {
             PixelTypeInfo removeInfo = RemovePixel(pixel.pos);
 
-            pixel.posG = this.PixelToGloab(pixel.pos);
+            pixel.posG = this.PixelToGlobal(pixel.pos);
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
             PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixelColorInfo.index;
@@ -94,7 +92,7 @@ namespace PRO
         public readonly Dictionary<Vector2Byte, LightSource> lightSourceDic = new Dictionary<Vector2Byte, LightSource>();
         private void AddLightSource(Pixel pixel, PixelColorInfo pixelColorInfo)
         {
-            Vector2Int gloabPos = Block.PixelToGloab(blockPos, pixel.pos);
+            Vector2Int gloabPos = Block.PixelToGlobal(blockPos, pixel.pos);
             var lightSourceInfo = BlockMaterial.GetLightSourceInfo(pixelColorInfo.lightSourceType);
             if (lightSourceInfo == null) return;
             if (lightSourceDic.ContainsKey(pixel.pos))

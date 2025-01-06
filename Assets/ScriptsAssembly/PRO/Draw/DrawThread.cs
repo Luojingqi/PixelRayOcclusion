@@ -55,9 +55,9 @@ namespace PRO
                 //        DrawGraphTaskInvoke(task);
                 //    }
                 SceneEntity scene = SceneManager.Inst.NowScene;
-                Vector2Int minLightBufferBlockPos = BlockMaterial.CameraCenterBlockPos - BlockMaterial.LightBufferBlockSize / 2;
-                for (int x = 0; x < BlockMaterial.LightBufferBlockSize.x; x++)
-                    for (int y = 0; y < BlockMaterial.LightBufferBlockSize.y; y++)
+                Vector2Int minLightBufferBlockPos = BlockMaterial.CameraCenterBlockPos - BlockMaterial.LightResultBufferBlockSize / 2;
+                for (int x = 0; x < BlockMaterial.LightResultBufferBlockSize.x; x++)
+                    for (int y = 0; y < BlockMaterial.LightResultBufferBlockSize.y; y++)
                     {
                         Vector2Int nowBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
 

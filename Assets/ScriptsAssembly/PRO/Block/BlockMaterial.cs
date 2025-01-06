@@ -14,16 +14,24 @@ namespace PRO
         /// </summary>
         public static Vector2Int CameraCenterBlockPos { get; private set; }
         /// <summary>
+        /// 上一帧相机中心所在的块坐标
+        /// </summary>
+        public static Vector2Int LastCameraCenterBlockPos { get; private set; }
+        /// <summary>
         /// 光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
         /// </summary>
-        public static Vector2Int LightBufferBlockSize { get; private set; }
+        public static Vector2Int LightResultBufferBlockSize { get; private set; }
         /// <summary>
         /// 每个区块接收多大范围内的光照,最小1,1,更改后需要去Shader中同步更改Block缓冲区数量
         /// </summary>
         public static Vector2Int EachBlockReceiveLightSize { get; private set; }
         public static int BlockBufferLength { get; private set; }
-        public static int LightBufferLength { get; private set; }
+        public static int LightResultBufferLength { get; private set; }
         private static PROconfig proConfig;
+        /// <summary>
+        /// 为空的材质区块
+        /// </summary>
+        public static MaterialPropertyBlock NullMaterialPropertyBlock;
         #region 公共材质
 
         public static BlockShareMaterialManager blockShareMaterialManager = new BlockShareMaterialManager();
@@ -40,13 +48,16 @@ namespace PRO
                 return;
             }
             proConfig = JsonTool.ToObject<PROconfig>(proConfigText);
-            LightBufferBlockSize = proConfig.LightBufferBlockSize;
+            LightResultBufferBlockSize = proConfig.LightResultBufferBlockSize;
             EachBlockReceiveLightSize = proConfig.EachBlockReceiveLightSize;
-            BlockBufferLength = (EachBlockReceiveLightSize.x - 1 + LightBufferBlockSize.x) * (EachBlockReceiveLightSize.y - 1 + LightBufferBlockSize.y);
-            LightBufferLength = LightBufferBlockSize.x * LightBufferBlockSize.y;
+            ComputeShaderManager.FrameUpdateBlockNum = proConfig.FrameUpdateBlockNum;
+            BlockBufferLength = (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x) * (EachBlockReceiveLightSize.y - 1 + LightResultBufferBlockSize.y);
+            LightResultBufferLength = LightResultBufferBlockSize.x * LightResultBufferBlockSize.y;
 
             LoadAllPixelColorInfo();
             LoadAllLightSourceInfo();
+
+            NullMaterialPropertyBlock = new MaterialPropertyBlock();
 
             blockShareMaterialManager.Init();
             backgroundShareMaterialManager.Init();
@@ -159,42 +170,44 @@ namespace PRO
         #region 将块数据传递到GPU
         public static void SetBlock(Block block)
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
             Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
+            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
 
             if (block.BlockPos.x < minBlockBufferPos.x || block.BlockPos.x > maxBlockBufferPos.x
                 && block.BlockPos.y < minBlockBufferPos.y || block.BlockPos.y > maxBlockBufferPos.y)
                 return;
 
             Vector2Int localBlockBufferPos = block.BlockPos - minBlockBufferPos;
-            int Info = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightBufferBlockSize.x);
-            if (Info < 0 || Info >= BlockBufferLength) return;
+            int index = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
+            if (index < 0 || index >= BlockBufferLength) return;
 
-            blockShareMaterialManager.SetBufferData(Info, block.textureData.PixelIDToShader);
-            //Debug.Log($"块坐标{block.BlockPos}  传递块数据  块缓存索引{Info}");
+            blockShareMaterialManager.SetBufferData(index, block.textureData.PixelIDToShader);
+            //Debug.Log($"块坐标{block.BlockPos}  传递块数据  块缓存索引{index}");
         }
         public static void SetBackgroundBlock(BackgroundBlock background)
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
-            Vector2Int maxLightBufferBlockPos = minLightBufferBlockPos + LightBufferBlockSize - new Vector2Int(1, 1);
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+            Vector2Int maxLightBufferBlockPos = minLightBufferBlockPos + LightResultBufferBlockSize - new Vector2Int(1, 1);
 
             if (background.BlockPos.x < minLightBufferBlockPos.x || background.BlockPos.x > maxLightBufferBlockPos.x
                 && background.BlockPos.y < minLightBufferBlockPos.y || background.BlockPos.y > maxLightBufferBlockPos.y)
                 return;
 
             Vector2Int blockPos = background.BlockPos - minLightBufferBlockPos;
-            int Info = blockPos.y * LightBufferBlockSize.x + blockPos.x;
+            int index = blockPos.y * LightResultBufferBlockSize.x + blockPos.x;
 
-            if (Info < 0 || Info >= LightBufferLength) return;
+            if (index < 0 || index >= LightResultBufferLength) return;
 
-            backgroundShareMaterialManager.SetBufferData(Info, background.textureData.PixelIDToShader);
-            //Debug.Log($"背景坐标{background.BlockPos}  传递背景数据   背景缓存索引{Info}");
+            backgroundShareMaterialManager.SetBufferData(index, background.textureData.PixelIDToShader);
+            //Debug.Log($"背景坐标{background.BlockPos}  传递背景数据   背景缓存索引{index}");
         }
         #endregion
 
         public static void FirstBind()
         {
+            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
+
             blockShareMaterialManager.FirstBind();
             backgroundShareMaterialManager.FirstBind();
             computeShaderManager.FirstBind();
@@ -203,7 +216,11 @@ namespace PRO
         }
         public static void UpdateBind()
         {
+            LastCameraCenterBlockPos = CameraCenterBlockPos;
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
+            blockShareMaterialManager.ClearLastBind();
+            backgroundShareMaterialManager.ClearLastBind();
+
             blockShareMaterialManager.UpdateBind();
             backgroundShareMaterialManager.UpdateBind();
             computeShaderManager.UpdateBind();

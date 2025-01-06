@@ -116,7 +116,7 @@ namespace PRO
             m.z = 1;
             m = Camera.main.ScreenToWorldPoint(m);
             Vector2Int blockPos = Block.WorldToBlock(m);
-            Vector2Int gloabPos = Block.WorldToGloab(m);
+            Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
 
 
@@ -142,7 +142,10 @@ namespace PRO
                 Log.Print("╪сть");
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
+                    {
+                        Block.PutIn(nowScene.GetBlock(new(x, y)));
                         nowScene.LoadBlockData(new(x, y));
+                    }
                 BlockMaterial.UpdateBind();
 
             }

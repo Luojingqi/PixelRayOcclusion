@@ -66,8 +66,8 @@ namespace PRO.Tool
         //{
         //    foreach (var v in list)
         //    {
-        //        var block = SceneManager.Inst.BlockCrossList[Block.GloabToBlock(v)];
-        //        block.DrawPixelSync(block.GloabToPixel(v), color);
+        //        var block = SceneManager.Inst.BlockCrossList[Block.GlobalToBlock(v)];
+        //        block.DrawPixelSync(block.GlobalToPixel(v), color);
         //    }
         //}
         //public static Color32 GetColor32Sync(this BlockBase block, Vector2Int pos)

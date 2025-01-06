@@ -5,7 +5,7 @@ namespace PRO.Renderer
 {
     public class ComputeShaderManager
     {
-        public LightBufferCS[] lightBufferCSArray;
+        public LightResultBufferCS[] lightResultBufferCSArray;
 
         public void Init()
         {
@@ -13,13 +13,13 @@ namespace PRO.Renderer
         }
         private void LoadComputeShader()
         {
-            lightBufferCSArray = new LightBufferCS[LightBufferLength];
+            lightResultBufferCSArray = new LightResultBufferCS[LightResultBufferLength];
             ComputeShader setLightBufferCS = Resources.Load<ComputeShader>("PixelRayOcclusion/Auto/SetLightBuffer");
             ComputeShader resetLightBufferCS = Resources.Load<ComputeShader>("PixelRayOcclusion/ResetLightBuffer");
-            lightBufferCSArray[0] = new LightBufferCS(setLightBufferCS, resetLightBufferCS);
-            for (int i = 1; i < LightBufferLength; i++)
+            lightResultBufferCSArray[0] = new LightResultBufferCS(setLightBufferCS, resetLightBufferCS);
+            for (int i = 1; i < LightResultBufferLength; i++)
             {
-                lightBufferCSArray[i] = new LightBufferCS(
+                lightResultBufferCSArray[i] = new LightResultBufferCS(
                         GameObject.Instantiate<ComputeShader>(setLightBufferCS),
                         GameObject.Instantiate<ComputeShader>(resetLightBufferCS));
             }
@@ -28,46 +28,49 @@ namespace PRO.Renderer
         public void FirstBind()
         {
             //光缓存块里左下角的坐标
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
             //所有提交到cpu的区块里左下角的
             Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
 
-            for (int y = 0; y < LightBufferBlockSize.y; y++)
-                for (int x = 0; x < LightBufferBlockSize.x; x++)
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int gloabBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
                     //指的是提交到cpu的区块里的本地坐标，总左下角开始算起
-                    Vector2Int localBlockBufferPos = gloabBlockPos - minBlockBufferPos;
-                    int lightIndex = x + y * LightBufferBlockSize.x;
+                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    int lightIndex = x + y * LightResultBufferBlockSize.x;
 
-                    lightBufferCSArray[lightIndex].FirstBind(gloabBlockPos, localBlockBufferPos);
+                    lightResultBufferCSArray[lightIndex].FirstBind(globalBlockPos, localBlockBufferPos);
                 }
         }
         public void UpdateBind()
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightBufferBlockSize / 2;
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
             Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
 
-            for (int y = 0; y < LightBufferBlockSize.y; y++)
-                for (int x = 0; x < LightBufferBlockSize.x; x++)
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int gloabBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    Vector2Int localBlockBufferPos = gloabBlockPos - minBlockBufferPos;
-                    int lightIndex = x + y * LightBufferBlockSize.x;
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    int lightIndex = x + y * LightResultBufferBlockSize.x;
 
-                    lightBufferCSArray[lightIndex].UpdateBind(gloabBlockPos, localBlockBufferPos);
+                    lightResultBufferCSArray[lightIndex].UpdateBind(globalBlockPos, localBlockBufferPos);
                 }
-            for (int i = 0; i < LightBufferLength; i++)
-                lightBufferCSArray[i].Update();
+            for (int i = 0; i < LightResultBufferLength; i++)
+                lightResultBufferCSArray[i].Update();
         }
-        public static int FrameUpdateNum = 5;
+        /// <summary>
+        /// 每帧更新的区块数量
+        /// </summary>
+        public static int FrameUpdateBlockNum = 5;
         private int nowRenderCS = 0;
         public void Update()
         {
-            for (int i = 0; i < FrameUpdateNum; i++)
+            for (int i = 0; i < FrameUpdateBlockNum; i++)
             {
-                lightBufferCSArray[nowRenderCS++].Update();
-                if (nowRenderCS >= LightBufferLength) nowRenderCS = 0;
+                lightResultBufferCSArray[nowRenderCS++].Update();
+                if (nowRenderCS >= LightResultBufferLength) nowRenderCS = 0;
             }
         }
 

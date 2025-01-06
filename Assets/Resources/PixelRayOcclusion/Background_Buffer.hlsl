@@ -4,7 +4,7 @@
 StructuredBuffer<int> BackgroundBuffer;
 
 //点的光照颜色缓存
-StructuredBuffer<int4> LightBuffer;
+StructuredBuffer<int4> LightResultBuffer;
 
 //点颜色属性
 StructuredBuffer<PixelColorInfo> AllPixelColorInfo;

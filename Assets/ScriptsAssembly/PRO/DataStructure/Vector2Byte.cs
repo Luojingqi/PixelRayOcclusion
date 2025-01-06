@@ -41,7 +41,11 @@ namespace PRO.DataStructure
 
         public static Vector2Byte operator -(Vector2Byte v) => new Vector2Byte(-v.x, -v.y);
         public static Vector2Byte operator +(Vector2Byte a, Vector2Byte b) => new Vector2Byte(a.x + b.x, a.y + b.y);
+        public static Vector2Int operator +(Vector2Byte a, Vector2Int b) => new Vector2Int(a.x + b.x, a.y + b.y);
+        public static Vector2Int operator +(Vector2Int b, Vector2Byte a) => new Vector2Int(a.x + b.x, a.y + b.y);
         public static Vector2Byte operator -(Vector2Byte a, Vector2Byte b) => new Vector2Byte(a.x - b.x, a.y - b.y);
+        public static Vector2Int operator -(Vector2Byte a, Vector2Int b) => new Vector2Int(a.x + b.x, a.y + b.y);
+        public static Vector2Int operator -(Vector2Int b, Vector2Byte a) => new Vector2Int(a.x + b.x, a.y + b.y);
         public static Vector2Byte operator *(Vector2Byte a, Vector2Byte b) => new Vector2Byte(a.x * b.x, a.y * b.y);
         public static Vector2Byte operator *(int a, Vector2Byte b) => new Vector2Byte(a * b.x, a * b.y);
         public static Vector2Byte operator *(Vector2Byte a, int b) => new Vector2Byte(a.x * b, a.y * b);

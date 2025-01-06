@@ -1,7 +1,7 @@
 {
   //光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
   //从相机所在的区块开始算起，超出的部分不会计算光照
-  "LightBufferBlockSize": {
+  "LightResultBufferBlockSize": {
     "x": 7,
     "y": 5
   },
@@ -11,5 +11,9 @@
   "EachBlockReceiveLightSize": {
     "x": 5,
     "y": 5
-  }
+  },
+  //每帧更新的区块数量，不能小于1，不能大于 EachBlockReceiveLightSize 的x*y
+  "FrameUpdateBlockNum": 5
+
+
 }

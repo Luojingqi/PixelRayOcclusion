@@ -22,10 +22,10 @@ namespace PRO.SkillEditor
         {
             if (Tools.current != UnityEditor.Tool.Move) return;
             EditorGUI.BeginChangeCheck();
-            Vector3 ret = Handles.PositionHandle(Block.GloabToWorld(diskData.offset) + agent.transform.position, Quaternion.identity);
+            Vector3 ret = Handles.PositionHandle(Block.GlobalToWorld(diskData.offset) + agent.transform.position, Quaternion.identity);
             if (EditorGUI.EndChangeCheck())
             {
-                diskData.offset = Block.WorldToGloab(ret - agent.transform.position);
+                diskData.offset = Block.WorldToGlobal(ret - agent.transform.position);
                 diskData.EditorShow(SkillEditorWindow.Inst.Config.Agent, Track.trackIndex);
             }
         }

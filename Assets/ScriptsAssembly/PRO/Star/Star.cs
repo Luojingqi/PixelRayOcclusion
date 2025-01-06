@@ -21,8 +21,8 @@ public class Star
         var list = DrawTool.GetOctagon(GloabPos, r);
         foreach (var pos_G in list)
         {
-            var block = SceneManager.Inst.NowScene.GetBlock(Block.GloabToBlock(pos_G));
-            Pixel pixel = Pixel.TakeOut(name, 0, Block.GloabToPixel(pos_G));
+            var block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(pos_G));
+            Pixel pixel = Pixel.TakeOut(name, 0, Block.GlobalToPixel(pos_G));
             block.SetPixel(pixel);
             block.DrawPixelAsync();
         }
