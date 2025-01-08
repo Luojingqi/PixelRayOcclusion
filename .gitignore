@@ -11,6 +11,7 @@
 /[Uu]ser[Ss]ettings/
 
 /Assets/ScriptsAssembly/GamePlay/
+/Assets/StreamingAssets/GameSaveFiles/testSave/
 ~$*.xlsx
 ~$*.xlsx.meta
 ~$*.xlsm
