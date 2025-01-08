@@ -20,11 +20,11 @@ namespace PRO
         /// <summary>
         /// 类型名称
         /// </summary>
-        public PixelTypeInfo info;
+        public PixelTypeInfo typeInfo;
         /// <summary>
         /// 使用的颜色名称
         /// </summary>
-        public string colorName;
+        public PixelColorInfo colorInfo;
         /// <summary>
         /// 所属的建筑
         /// </summary>
@@ -37,14 +37,16 @@ namespace PRO
 
         public Pixel Clone()
         {
-            return Pixel.TakeOut(info.typeName, colorName, pos);
+            Pixel pixel = pixelPool.TakeOut();
+            InitPixel(pixel, typeInfo, colorInfo, pos);
+            return pixel;
         }
 
-        private static void InitPixel(Pixel pixel, PixelTypeInfo info, string colorName, Vector2Byte pixelPos)
+        private static void InitPixel(Pixel pixel, PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos)
         {
             pixel.pos = pixelPos;
-            pixel.info = info;
-            pixel.colorName = colorName;
+            pixel.typeInfo = typeInfo;
+            pixel.colorInfo = colorInfo;
         }
 
 
@@ -61,31 +63,31 @@ namespace PRO
         public static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
         public static void PutIn(Pixel pixel)
         {
-            pixel.info = null;
-            pixel.colorName = null;
+            pixel.typeInfo = null;
+            pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
             pixelPool.PutIn(pixel);
         }
 
-        public static Pixel TakeOut(Pixel_Disk pixelToDisk, Vector2Byte pixelPos) => TakeOut(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
+        public static Pixel TakeOut(Pixel_Disk_Name pixelToDisk, Vector2Byte pixelPos) => TakeOut(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
         public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos)
         {
-            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo info))
+            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, info, colorName, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
                 return pixel;
             }
             else return null;
         }
         public static Pixel TakeOut(string typeName, int colorIndex, Vector2Byte pixelPos)
         {
-            if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo info, out string colorName))
+            if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, info, colorName, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
                 return pixel;
             }
             else return null;
@@ -110,33 +112,35 @@ namespace PRO
         /// <returns></returns>
         public static Pixel New(string typeName, string colorName, Vector2Byte pixelPos)
         {
-            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo info))
+            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = new Pixel();
-                InitPixel(pixel, info, colorName, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
                 return pixel;
             }
             else return null;
         }
         public static Pixel New(string typeName, int colorIndex, Vector2Byte pixelPos)
         {
-            if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo info, out string colorName))
+            if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = new Pixel();
-                InitPixel(pixel, info, colorName, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
                 return pixel;
             }
             else return null;
         }
-        public static Pixel New(Pixel_Disk pixelToDisk, Vector2Byte pixelPos) => New(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
+        public static Pixel New(Pixel_Disk_Name pixelToDisk, Vector2Byte pixelPos) => New(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
-        private static bool CheckNew(string typeName, string colorName, Vector2Byte pixelPos, out PixelTypeInfo info)
+        private static bool CheckNew(string typeName, string colorName, Vector2Byte pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo)
         {
-            info = null;
+            typeInfo = null;
+            colorInfo = null;
             if (Block.Check(pixelPos) == false) return false;
-            if (pixelTypeInfoDic.TryGetValue(typeName, out info))
+            if (pixelTypeInfoDic.TryGetValue(typeName, out typeInfo))
             {
-                if (BlockMaterial.GetPixelColorInfo(colorName) != null) return true;
+                colorInfo = BlockMaterial.GetPixelColorInfo(colorName);
+                if (colorInfo != null) return true;
                 else return false;
             }
             else
@@ -145,15 +149,16 @@ namespace PRO
                 return false;
             }
         }
-        private static bool CheckNew(string typeName, int colorIndex, Vector2Byte pixelPos, out PixelTypeInfo info, out string colorName)
+        private static bool CheckNew(string typeName, int colorIndex, Vector2Byte pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo)
         {
-            info = null;
-            colorName = null;
+            typeInfo = null;
+            colorInfo = null;
             if (Block.Check(pixelPos) == false) return false;
-            if (pixelTypeInfoDic.TryGetValue(typeName, out info))
+            if (pixelTypeInfoDic.TryGetValue(typeName, out typeInfo))
             {
-                colorName = info.availableColors[Mathf.Min(colorIndex, info.availableColors.Count - 1)];
-                if (BlockMaterial.GetPixelColorInfo(colorName) != null) return true;
+                string colorName = typeInfo.availableColors[Mathf.Min(colorIndex, typeInfo.availableColors.Count - 1)];
+                colorInfo = BlockMaterial.GetPixelColorInfo(colorName);
+                if (colorInfo != null) return true;
                 else return false;
             }
             else

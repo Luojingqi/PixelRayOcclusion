@@ -165,13 +165,13 @@ namespace PRO
                     {
                         Pixel pixel = Pixel.New("¿ÕÆø", 0, new(x, y));
                         block.SetPixel(pixel, false, false);
-                        block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                     }
                     else
                     {
                         Pixel pixel = Pixel.New("¿ÕÆø", 0, new(x, y));
                         block.SetPixel(pixel, false, false);
-                        block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                     }
                 }
         }
@@ -218,18 +218,18 @@ namespace PRO
                     {
                         Pixel pixel = Pixel.New("±³¾°", 2, new(x, y));
                         background.SetPixel(pixel);
-                        background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                         //if (x < Block.Size.x / 2 - 10)
                         //{
                         //    Pixel pixel = Pixel.New("±³¾°", 0, new(x, y));
                         //    background.SetPixel(pixel);
-                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorInfo).color);
                         //}
                         //else
                         //{
                         //    Pixel pixel = Pixel.New("±³¾°", 1, new(x, y));
                         //    background.SetPixel(pixel);
-                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorInfo).color);
                         //}
                     }
                 // SceneManager.Inst.En_Lock_DrawApplyQueue(background);

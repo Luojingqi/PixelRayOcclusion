@@ -111,10 +111,10 @@ namespace PRO
         private static List<PixelColorInfo> pixelColorInfoList = new List<PixelColorInfo>();
         //点颜色数据_字典索引
         private static Dictionary<string, PixelColorInfo> pixelColorInfoDic = new Dictionary<string, PixelColorInfo>();
-        public static PixelColorInfo GetPixelColorInfo(string pixelName)
+        public static PixelColorInfo GetPixelColorInfo(string colorName)
         {
-            if (pixelColorInfoDic.TryGetValue(pixelName, out PixelColorInfo value)) return value;
-            else Debug.Log($"没有像素颜色名称为{pixelName}");
+            if (pixelColorInfoDic.TryGetValue(colorName, out PixelColorInfo value)) return value;
+            else Debug.Log($"没有像素颜色名称为{colorName}");
             return null;
         }
         public static PixelColorInfo GetPixelColorInfo(int id)

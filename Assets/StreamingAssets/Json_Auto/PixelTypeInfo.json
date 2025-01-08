@@ -76,5 +76,12 @@
     "collider": true,
     "fluidType": 3,
     "fluidDensity": 20
+  },
+  {
+    "typeName": "测试",
+    "availableColors": [
+      "测试色0"
+    ],
+    "collider": false
   }
 ]

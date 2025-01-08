@@ -7,7 +7,7 @@ namespace PRO.Tool
     /// <summary>
     /// LitJson自定义扩展
     /// </summary>
-    internal class JsonToolWriteCustom : JsonConverter
+    internal class JsonToolWriteEx : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

@@ -131,15 +131,15 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
         InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
-        PixelColorInfo info = GetPixel(lineArray[i]);
-        if(info.affectsLightIntensity != -1)
+        PixelColorInfo typeInfo = GetPixel(lineArray[i]);
+        if(typeInfo.affectsLightIntensity != -1)
         {
-            float4 infoColor = info.color / 255.0;
+            float4 infoColor = typeInfo.color / 255.0;
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
-            if(info.affectsLightIntensity != lastAffects)
+            if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= info.affectsLightIntensity;
-                lastAffects = info.affectsLightIntensity;
+                shadow *= typeInfo.affectsLightIntensity;
+                lastAffects = typeInfo.affectsLightIntensity;
             }
         }
     }

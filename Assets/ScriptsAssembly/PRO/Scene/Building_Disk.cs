@@ -8,6 +8,6 @@ namespace PRO
     {
         public string GUID;
         public string Name;
-        public Dictionary<Vector2Int, Pixel_Disk> Pixel_Disk_List;
+        public Dictionary<Vector2Int, Pixel_Disk_Name> Pixel_Disk_List;
     }
 }

@@ -163,7 +163,9 @@ namespace PRO
             }
             colliderNode = new GameObject("ColliderNode").transform;
             colliderNode.parent = transform;
+            nav = new Nav() { block = this };
         }
+
 
         public static Pixel GetPixel(Vector2Int globalPos)
         {
@@ -208,7 +210,7 @@ namespace PRO
             if (block != null)
             {
                 Pixel pixel = block.GetPixel(Block.GlobalToPixel(pos_G));
-                switch (pixel.info.fluidType)
+                switch (pixel.typeInfo.fluidType)
                 {
                     case 1: AddHashSet(block.fluidUpdateHash1[pixel.pos.y], pixel.pos); break;
                     case 2: AddHashSet(block.fluidUpdateHash2[pixel.pos.y], pixel.pos); break;
@@ -235,7 +237,7 @@ namespace PRO
                     Pixel pixel = GetPixel(pos);
                     //标记位为false时，代表此点无法流动，移除更新队列
                     bool stopUpdate = true;
-                    if (pixel.info.fluidType != 1)
+                    if (pixel.typeInfo.fluidType != 1)
                         goto end;
                     //根据概率来看优先向哪个方向移动
                     AddQueueHash(pixel.posG + Vector2Int.down);
@@ -275,9 +277,9 @@ namespace PRO
 
                         Pixel nextPixel = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
 
-                        if ((nextPixel.info.typeName == "空气") ||    //下一个点为空气
-                            (nextPixel.info.fluidType == 1 && pixel.info.fluidDensity > nextPixel.info.fluidDensity) ||  //下个点为液体，且密度高于他
-                            (nextPixel.info.fluidType == 2))  //下个点为气体
+                        if ((nextPixel.typeInfo.typeName == "空气") ||    //下一个点为空气
+                            (nextPixel.typeInfo.fluidType == 1 && pixel.typeInfo.fluidDensity > nextPixel.typeInfo.fluidDensity) ||  //下个点为液体，且密度高于他
+                            (nextPixel.typeInfo.fluidType == 2))  //下个点为气体
                         {
                             if (Random.Range(0, 100) < updateProbability)
                             {
@@ -327,7 +329,7 @@ namespace PRO
                     Pixel pixel = GetPixel(pos);
                     //标记位为false时，代表此点无法流动，移除更新队列
                     bool stopUpdate = true;
-                    if (pixel.info.fluidType != 3)
+                    if (pixel.typeInfo.fluidType != 3)
                         goto end;
                     //根据概率来看优先向哪个方向移动
                     AddQueueHash(pixel.posG + Vector2Int.down);
@@ -363,10 +365,10 @@ namespace PRO
 
                         Pixel nextPixel = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
 
-                        if ((nextPixel.info.typeName == "空气") ||    //下一个点为空气
-                            (nextPixel.info.fluidType == 1) ||  //下个点为液体
-                            (nextPixel.info.fluidType == 2) ||  //下个点为气体
-                            (nextPixel.info.fluidType == 3 && pixel.info.fluidDensity > nextPixel.info.fluidDensity && Random.Range(0, 100) >= 50))//下个点为固体，当密度比他大的时候概率会沉入
+                        if ((nextPixel.typeInfo.typeName == "空气") ||    //下一个点为空气
+                            (nextPixel.typeInfo.fluidType == 1) ||  //下个点为液体
+                            (nextPixel.typeInfo.fluidType == 2) ||  //下个点为气体
+                            (nextPixel.typeInfo.fluidType == 3 && pixel.typeInfo.fluidDensity > nextPixel.typeInfo.fluidDensity && Random.Range(0, 100) >= 50))//下个点为固体，当密度比他大的时候概率会沉入
                         {
                             //将被交换点附近3x3的点都加入流体更新队列
                             for (int y = -1; y <= 1; y++)
@@ -415,8 +417,8 @@ namespace PRO
             var p1_Clone = p1.Clone();
             block1.SetPixel(p0_Clone, false, false);
             block0.SetPixel(p1_Clone, false, false);
-            block1.DrawPixelAsync(p0_Clone.pos, BlockMaterial.GetPixelColorInfo(p0_Clone.colorName).color);
-            block0.DrawPixelAsync(p1_Clone.pos, BlockMaterial.GetPixelColorInfo(p1_Clone.colorName).color);
+            block1.DrawPixelAsync(p0_Clone.pos,  p0_Clone.colorInfo.color);
+            block0.DrawPixelAsync(p1_Clone.pos,  p1_Clone.colorInfo.color);
         }
 
         #region 更新流体的临时变量
@@ -437,13 +439,25 @@ namespace PRO
         {
             bool oldCollider = (old == null || !old.collider) ? false : true;
             //原本无碰撞箱，现在有就创建，反之删除
-            if (oldCollider == false && nowPixel.info.collider) GreedyCollider.TryExpandCollider(this, nowPixel.pos);
-            else if (oldCollider && nowPixel.info.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
+            if (oldCollider == false && nowPixel.typeInfo.collider) GreedyCollider.TryExpandCollider(this, nowPixel.pos);
+            else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
         }
 
         #region 导航网格
         [ShowInInspector]
-        public Nav nav = new Nav();
+        public Nav nav;
+        public void NavBuildAll()
+        {
+            Vector2Int global = PixelToGlobal(new(0, 0));
+            nav.CanNavPointHash.Clear();
+            nav.Build(global, global + Block.Size);
+        }
+        public void NavBuildPoint(Vector2Byte pos)
+        {
+            Vector2Int global = PixelToGlobal(pos);
+            nav.CanNavPointHash.Remove(global);
+            nav.Build(global, global);
+        }
         #endregion
     }
 }

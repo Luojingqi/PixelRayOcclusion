@@ -9,16 +9,16 @@ namespace PRO.Disk.Scene
     {
 
         public Vector2Int blockPos;
-        public Pixel_Disk[,] allPixel;
+        public Pixel_Disk_Name[,] allPixel;
 
         public BlockToDisk() { }
         public BlockToDisk(Block block)
         {
             blockPos = block.BlockPos;
-            allPixel = new Pixel_Disk[Block.Size.x, Block.Size.y];
+            allPixel = new Pixel_Disk_Name[Block.Size.x, Block.Size.y];
             for (int y = 0; y < Block.Size.y; y++)
                 for (int x = 0; x < Block.Size.x; x++)
-                    allPixel[x, y] = new Pixel_Disk(block.GetPixel(new Vector2Byte(x, y)));
+                    allPixel[x, y] = new Pixel_Disk_Name(block.GetPixel(new Vector2Byte(x, y)));
         }
     }
 }

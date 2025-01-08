@@ -6,6 +6,8 @@ namespace PRO
 {
     public class Nav
     {
+        public Block block;
+
         public Vector2Int AgentSize = new Vector2Int(1, 1);
         public Vector2Int AgentOffset = new Vector2Int(0, 0);
 
@@ -25,8 +27,8 @@ namespace PRO
                         canNav = false;
                         goto to;
                     }
-                    for (int y = navDot.y - AgentOffset.y; y <= end.y; y++)
-                        for (int x = navDot.x - AgentOffset.y; x <= end.x; x++)
+                    for (int y = navDot.y - AgentOffset.y; y < end.y; y++)
+                        for (int x = navDot.x - AgentOffset.y; x < end.x; x++)
                         {
                             Vector2Int globalPos = new Vector2Int(x, y);
                             if (ChackCollider(globalPos) == true)
@@ -42,6 +44,11 @@ namespace PRO
                         CanNavPointHash.Add(navDot);
                     }
                 }
+            foreach (var n in CanNavPointHash)
+            {
+                block.SetPixel(Pixel.TakeOut("测试", 0, Block.GlobalToPixel(n)));
+            }
+            block.DrawPixelAsync();
         }
         /// <summary>
         /// 检查一个点是否有碰撞箱
@@ -51,7 +58,7 @@ namespace PRO
             Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(globalPos));
             if (block == null) return true;
             Pixel pixel = block.GetPixel(Block.GlobalToPixel(globalPos));
-            return pixel.info.collider;
+            return pixel.typeInfo.collider;
         }
 
 
@@ -76,10 +83,14 @@ namespace PRO
                 #region
                 ring.Add(now + new Vector2Int(1, 0));
                 ring.Add(now + new Vector2Int(1, 1));
+                ring.Add(now + new Vector2Int(1, 2));
                 ring.Add(now + new Vector2Int(1, -1));
+                ring.Add(now + new Vector2Int(1, -2));
                 ring.Add(now + new Vector2Int(-1, 0));
                 ring.Add(now + new Vector2Int(-1, 1));
+                ring.Add(now + new Vector2Int(-1, 2));
                 ring.Add(now + new Vector2Int(-1, -1));
+                ring.Add(now + new Vector2Int(-1, -2));
                 ring.Add(now + new Vector2Int(0, 1));
                 ring.Add(now + new Vector2Int(0, -1));
                 #endregion
@@ -122,8 +133,8 @@ namespace PRO
 
     }
 
-    public struct NavDot
-    {
+    //public struct NavDot
+    //{
 
-    }
+    //}
 }

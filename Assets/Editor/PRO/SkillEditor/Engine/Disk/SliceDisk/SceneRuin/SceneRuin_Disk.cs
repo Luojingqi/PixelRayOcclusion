@@ -27,7 +27,7 @@ namespace PRO.SkillEditor
                         Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
                         Pixel pixel = Pixel.TakeOut("岩石", "岩石色0", pixelPos);
                         block.SetPixel(pixel);
-                        block.DrawPixelAsync(pixelPos, BlockMaterial.GetPixelColorInfo(pixel.colorName).color);
+                        block.DrawPixelAsync(pixelPos, pixel.colorInfo.color);
                     }
                 }
             }

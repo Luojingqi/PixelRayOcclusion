@@ -23,10 +23,10 @@ public class BuildAssetBundle
     //        if (fileInfo.Extension == ".manifest")
     //        {
     //            Debug.Log(fullPath);
-    //            CRCInfo info = new CRCInfo();
-    //            info.Name = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf('.'));
-    //            info.SavePath = fileInfo.DirectoryName.Substring(BuildPath.Length, fileInfo.DirectoryName.Length - BuildPath.Length);
-    //            info.DownloadURL = DownloadURL + info.SavePath  + '/'+ info.Name;
+    //            CRCInfo typeInfo = new CRCInfo();
+    //            typeInfo.Name = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf('.'));
+    //            typeInfo.SavePath = fileInfo.DirectoryName.Substring(BuildPath.Length, fileInfo.DirectoryName.Length - BuildPath.Length);
+    //            typeInfo.DownloadURL = DownloadURL + typeInfo.SavePath  + '/'+ typeInfo.Name;
     //            using (StreamReader sr = File.OpenText(fullPath))
     //            {
     //                //数据保存
@@ -34,10 +34,10 @@ public class BuildAssetBundle
     //                //读第二行
     //                string str = sr.ReadLine();
     //                string head = "CRC: ";
-    //                info.CRC = Convert.ToUInt32(str.Substring(head.Length, str.Length - head.Length));
+    //                typeInfo.CRC = Convert.ToUInt32(str.Substring(head.Length, str.Length - head.Length));
     //                sr.Close();
     //            }
-    //            CRCInfos.Add(info);
+    //            CRCInfos.Add(typeInfo);
     //        }
     //    }
     //    JsonTool.StoreText(BuildPath + "/CRC.Json", JsonTool.ObjectToJson(CRCInfos));

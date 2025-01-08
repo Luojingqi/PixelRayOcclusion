@@ -41,7 +41,7 @@ namespace PRO.Disk.Scene
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
             info.buildingTypeDic = new Dictionary<string, Type>();
-           // info.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(Building));
+           // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(Building));
             JsonTool.StoreText(@$"{sceneDirectory.FullName}\SceneCatalog.json", JsonTool.ToJson(info));
             return info;
         }

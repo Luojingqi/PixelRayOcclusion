@@ -50,11 +50,11 @@ namespace PRO
 
             pixel.posG = this.PixelToGlobal(pixel.pos);
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
-            PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
-            textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixelColorInfo.index;
 
-            if (pixelColorInfo.lightSourceType != null )
-                AddLightSource(pixel, pixelColorInfo);
+            textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixel.colorInfo.index;
+
+            if (pixel.colorInfo.lightSourceType != null )
+                AddLightSource(pixel, pixel.colorInfo);
 
             if (this is Block)
             {
@@ -75,10 +75,9 @@ namespace PRO
             Pixel pixel = allPixel[pos.x, pos.y];
             if (pixel == null)
                 return ret;
-            PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(pixel.colorName);
-            if (pixelColorInfo.lightSourceType != null && pixelColorInfo.lightSourceType != "null")
+            if (pixel.colorInfo.lightSourceType != null && pixel.colorInfo.lightSourceType != "null")
                 RemoveLightSource(pixel);
-            ret = pixel.info;
+            ret = pixel.typeInfo;
             Pixel.PutIn(pixel);
             allPixel[pos.x, pos.y] = null;
             return ret;

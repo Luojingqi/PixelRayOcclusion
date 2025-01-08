@@ -2659,7 +2659,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9898acd76fde754408626caec1627791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  g: {fileID: 0}
   PoolNode: {fileID: 0}
 --- !u!4 &1283193037
 Transform:
@@ -2849,7 +2848,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.03692652}
+  m_AnchoredPosition: {x: 0, y: 0.0000073433266}
   m_SizeDelta: {x: 0, y: 863}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1419052782
@@ -3123,7 +3122,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 2.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3374,7 +3373,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 914709763}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99950254
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

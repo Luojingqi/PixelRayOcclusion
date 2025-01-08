@@ -33,8 +33,6 @@ namespace PRO
             //nowScene = toSceen;
             //BlockMaterial.UpdateBind();
         }
-
-        public GameObject g;
         public void Awake()
         {
             Inst = this;
@@ -164,6 +162,38 @@ namespace PRO
                     }
                 Log.Print("回收完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
             }
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                t = Time.realtimeSinceStartup;
+                Log.Print("buildNav开始");
+                t = Time.realtimeSinceStartup;
+                for (int x = -l; x <= l; x++)
+                    for (int y = -l; y <= l; y++)
+                    {
+                        nowScene.GetBlock(new(x, y)).NavBuildAll();
+                    }
+                Log.Print("buildNav结束" + (Time.realtimeSinceStartup - t));
+            }
+            if (Input.GetKey(KeyCode.N))
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    g = gloabPos;
+                }
+                if (Input.GetKeyDown(KeyCode.Mouse1))
+                {
+                    var list = Nav.TryNav(g, gloabPos);
+                    foreach (var l in list)
+                    {
+                        Block block = NowScene.GetBlock(Block.GlobalToBlock(l));
+                        if (block != null)
+                        {
+                            block.SetPixel(Pixel.TakeOut("木头", 0, Block.GlobalToPixel(l)));
+                        }
+                        block.DrawPixelAsync();
+                    }
+                }
+            }
             #region 光源
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 n = "光源0";
@@ -254,6 +284,7 @@ namespace PRO
             }
         }
         private float t;
+        private Vector2Int g;
         #region 任务队列与线程锁
         /// <summary>
         /// 绘制图形任务队列，主线程添加，渲染线程取出

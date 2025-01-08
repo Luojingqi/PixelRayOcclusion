@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 namespace PRO.Tool
@@ -11,18 +13,23 @@ namespace PRO.Tool
         private static void Init()
         {
             writeSetting = new JsonSerializerSettings();
-            writeSetting.Converters.Add(new JsonToolWriteCustom());
+            writeSetting.Converters.Add(new JsonToolWriteEx());
             readSetting = new JsonSerializerSettings();
-            readSetting.Converters.Add(new JsonToolReadCustom());
+            readSetting.Converters.Add(new JsonToolReadEx());
 
         }
 
-        public static string ToJson(object obj)
+        public static string ToJson(object obj, bool indented = true)
         {
             if (writeSetting == null) Init();
-            string jsonText = JsonConvert.SerializeObject(obj, Formatting.Indented, writeSetting);
+            string jsonText = JsonConvert.SerializeObject(obj, indented ? Formatting.Indented : Formatting.None, writeSetting);
             return jsonText;
+        }
 
+        public static byte[] ToByteArray(object obj)
+        {
+            byte[] jsonByteArray = Encoding.UTF8.GetBytes(ToJson(obj));
+            return jsonByteArray;
         }
 
         public static T ToObject<T>(string jsonText)
@@ -75,6 +82,23 @@ namespace PRO.Tool
                 return false;
             }
         }
+        public static async UniTask<string> LoadTextAsync(string path)
+        {
+            string text = null;
+            try
+            {
+                using (StreamReader sr = File.OpenText(path))
+                {
+                    text = await sr.ReadToEndAsync();
+                    sr.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log("加载磁盘中文本数据失败" + e);
+            }
+            return text;
+        }
 
 
         /// <summary>
@@ -87,7 +111,7 @@ namespace PRO.Tool
         {
             try
             {
-                using (StreamWriter sw = new StreamWriter(path, false))
+                using (StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8))
                 {
 
                     sw.Write(text);
@@ -104,7 +128,8 @@ namespace PRO.Tool
 
         public static bool StoreObject(string path, object obj)
         {
-            return StoreText(path, ToJson(obj));
+            File.WriteAllBytes(path, Encoding.UTF8.GetBytes(ToJson(obj, false)));
+            return true;
         }
     }
 }

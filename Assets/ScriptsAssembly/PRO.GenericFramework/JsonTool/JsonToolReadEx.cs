@@ -3,7 +3,7 @@ using System;
 
 namespace PRO.Tool
 {
-    internal class JsonToolReadCustom : JsonConverter
+    internal class JsonToolReadEx : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

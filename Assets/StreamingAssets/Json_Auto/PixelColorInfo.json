@@ -10,6 +10,16 @@
     "affectsLightIntensity": -1.0
   },
   {
+    "colorName": "测试色0",
+    "color": {
+      "r": 200,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0
+  },
+  {
     "colorName": "木头色0",
     "color": {
       "r": 128,
