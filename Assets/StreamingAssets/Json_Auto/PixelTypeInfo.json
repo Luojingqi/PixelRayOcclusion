@@ -83,5 +83,17 @@
       "测试色0"
     ],
     "collider": false
+  },
+  {
+    "typeName": "玉",
+    "availableColors": [
+      "白玉色0",
+      "白玉色1",
+      "白玉色2",
+      "黑玉色0",
+      "黑玉色1",
+      "黑玉色2"
+    ],
+    "collider": true
   }
 ]

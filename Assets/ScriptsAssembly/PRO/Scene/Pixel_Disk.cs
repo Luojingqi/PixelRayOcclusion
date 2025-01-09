@@ -9,9 +9,7 @@ namespace PRO.Disk.Scene
     {
         public string typeName;
         public string colorName;
-        public Pixel_Disk_Name()
-        {
-        }
+        public Pixel_Disk_Name() { }
 
         public Pixel_Disk_Name(Pixel pixel)
         {

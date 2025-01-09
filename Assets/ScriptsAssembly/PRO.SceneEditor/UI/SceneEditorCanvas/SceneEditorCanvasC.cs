@@ -30,19 +30,12 @@ namespace PRO.SceneEditor
         {
             view.HoldIcon.gameObject.SetActive(true);
             if (view.HoldIcon.sprite != null) GameObject.Destroy(view.HoldIcon.sprite);
-
             view.HoldIcon.sprite = DrawTool.CreateSprite((Texture2D)elementC.icon.texture);
-            // Graphics.CopyTexture(, view.HoldIcon.sprite.texture);
-            //view.HoldIcon.sprite.texture.LoadImage(elementC.icon.texture.GetNativeTexturePtr()) = elementC.icon.texture;
             HoldEntity = elementC.entity;
-            //Sprite sprite;
-            //sprite.texture.Load
-            // view.HoldIcon.rectTransform.sizeDelta = new Vector2(HoldEntity.width, HoldEntity.height) * Camera.main.orthographicSize * 2 / Screen.height * Pixel.Size * 100;
         }
         private void ClearHold()
         {
             view.HoldIcon.gameObject.SetActive(false);
-            //view.HoldIcon.texture = null;
             HoldEntity = null;
         }
         void Update()
@@ -77,7 +70,11 @@ namespace PRO.SceneEditor
                         string colorName = HoldEntity.pixels[y * HoldEntity.width + x].colorName;
                         if (typeName == "¿ÕÆø") continue;
                         Vector2Int nowGloab = gloabPos + new Vector2Int(x, y);
-                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
+                        BlockBase block = null;
+                        if (view.Toggle.isOn)
+                            block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(nowGloab));
+                        else
+                            block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
                         block.SetPixel(Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab)));
                         block.DrawPixelAsync();
                     }

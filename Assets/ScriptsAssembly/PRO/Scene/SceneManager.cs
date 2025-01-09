@@ -65,10 +65,11 @@ namespace PRO
                Block block = NowScene.GetBlock(new Vector2Int(0, 0));
                block.SetPixel(Pixel.TakeOut("光源", "光源3", new Vector2Byte()));
                block.DrawPixelAsync();
+               source = FreelyLightSource.New(new Vector3Int(100, 200, 100), "2");
            });
 
         }
-
+        public FreelyLightSource source;
         public Transform PoolNode;
         #region 弃用
         //[NonSerialized]
@@ -118,7 +119,8 @@ namespace PRO
             Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
 
-
+            if (source != null)
+                source.GloabPos = gloabPos;
             time += Time.deltaTime;
             while (time > 0.1f)
             {
@@ -162,7 +164,7 @@ namespace PRO
                     }
                 Log.Print("回收完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
             }
-            if(Input.GetKeyDown(KeyCode.J))
+            if (Input.GetKeyDown(KeyCode.J))
             {
                 t = Time.realtimeSinceStartup;
                 Log.Print("buildNav开始");

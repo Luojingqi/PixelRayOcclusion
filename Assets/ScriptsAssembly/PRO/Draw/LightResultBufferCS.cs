@@ -12,6 +12,7 @@ namespace PRO.Renderer
 
         public ComputeBuffer LightResultBuffer;
         private ComputeBuffer LightResultBufferTemp;
+        private ComputeBuffer FreelyLightResultBuffer;
 
         private ComputeBuffer LightSourceBuffer;
         private LightSourceToShader[] lightSourceArray = new LightSourceToShader[1];
@@ -31,6 +32,7 @@ namespace PRO.Renderer
         {
             LightResultBuffer = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int) * 4);
             LightResultBufferTemp = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int) * 4);
+            FreelyLightResultBuffer = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int) * 4);
             unsafe { LightSourceBuffer = new ComputeBuffer(1, sizeof(LightSourceToShader)); }
         }
 
@@ -39,8 +41,15 @@ namespace PRO.Renderer
             this.globalBlockPos = globalBlockPos;
             this.localBlockBufferPos = localBlockBufferPos;
             ResetLightBufferCS.SetBuffer(0, "LightResultBuffer", LightResultBuffer);
-            ResetLightBufferCS.SetBuffer(1, "LightResultBuffer", LightResultBuffer); ;
+            ResetLightBufferCS.SetBuffer(1, "LightResultBuffer", LightResultBuffer);
             ResetLightBufferCS.SetBuffer(1, "LightResultBufferTemp", LightResultBufferTemp);
+            ResetLightBufferCS.SetBuffer(2, "LightResultBuffer", LightResultBuffer);
+            ResetLightBufferCS.SetBuffer(2, "LightResultBufferTemp", LightResultBufferTemp);
+            ResetLightBufferCS.SetBuffer(2, "FreelyLightResultBuffer", FreelyLightResultBuffer);
+            ResetLightBufferCS.SetBuffer(3, "LightResultBuffer", LightResultBuffer);
+            ResetLightBufferCS.SetBuffer(3, "FreelyLightResultBuffer", FreelyLightResultBuffer);
+            ResetLightBufferCS.SetBuffer(4, "FreelyLightResultBuffer", FreelyLightResultBuffer);
+
 
             SetLightBufferCS.SetInts("EachBlockReceiveLightSize", EachBlockReceiveLightSize.x, EachBlockReceiveLightSize.y);
             for (int i = 0; i < BlockMaterial.LightSourceInfoListCount; i++)
@@ -78,7 +87,7 @@ namespace PRO.Renderer
             SetLightBufferCS.SetInts("BlockPos", globalBlockPos.x, globalBlockPos.y);
         }
 
-        public void Update()
+        public void UpdateStaticLightSource()
         {
             ResetLightBufferCS.Dispatch(0, Block.Size.x / 8, Block.Size.y / 8, 1);
             Vector2Int blockMinPos = Block.PixelToGlobal(globalBlockPos, new(0, 0));
@@ -93,6 +102,49 @@ namespace PRO.Renderer
                     foreach (var value in block.lightSourceDic.Values) DrawLightSource(value.info, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                     foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.info, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                 }
+        }
+        public void UpdateFreelyLightSource()
+        {
+            ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
+            Vector2Int blockMinPos = Block.PixelToGlobal(globalBlockPos, new(0, 0));
+            Vector2Int blockMaxPos = blockMinPos + (Vector2Int)Block.Size - new Vector2Int(1, 1);
+            for (int ey = 0; ey < EachBlockReceiveLightSize.y; ey++)
+                for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
+                {
+                    Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
+                    Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
+                    foreach (var value in block.FreelyLightSourceHash)
+                    {
+                        LightSourceToShader lightSource = new LightSourceToShader() { gloabPos = value.GloabPos.Value, color = value.color };
+                        int r = value.Info.radius;
+                        Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(r, r);
+                        Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(r, r);
+
+                        Vector2Int beMixed_Min = new Vector2Int(Mathf.Max(blockMinPos.x, lightMinRadius.x), Mathf.Max(blockMinPos.y, lightMinRadius.y));
+                        Vector2Int beMixed_Max = new Vector2Int(Mathf.Min(blockMaxPos.x, lightMaxRadius.x), Mathf.Min(blockMaxPos.y, lightMaxRadius.y));
+                        if (beMixed_Min.x <= beMixed_Max.x && beMixed_Min.y <= beMixed_Max.y)
+                        {
+                            lightSourceArray[0] = lightSource;
+                            LightSourceBuffer.SetData(lightSourceArray);
+                            SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
+                            SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
+
+                            SetLightBufferCS.Dispatch(value.Info.index, 1, 1, 1);
+
+                            ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
+                        }
+                    }
+                }
+        }
+
+        public void Reset()
+        {
+            ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
+        }
+
+        public void SubtractionFreelyLightResultBuffer()
+        {
+            ResetLightBufferCS.Dispatch(3, Block.Size.x / 8, Block.Size.y / 8, 1);
         }
 
         private void DrawLightSource(LightSourceInfo info, LightSourceToShader lightSource, Vector2Int blockMinPos, Vector2Int blockMaxPos)

@@ -443,6 +443,8 @@ namespace PRO
             else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
         }
 
+        public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
+
         #region µ¼º½Íø¸ñ
         [ShowInInspector]
         public Nav nav;

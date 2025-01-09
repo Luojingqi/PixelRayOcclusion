@@ -60,7 +60,7 @@ namespace PRO.Tool
             block.textureData.nativeArray[index++] = color.r;
             block.textureData.nativeArray[index++] = color.g;
             block.textureData.nativeArray[index++] = color.b;
-            block.textureData.nativeArray[index++] = color.a;
+            block.textureData.nativeArray[index] = color.a;
         }
         //public static void DrawPixelSync(List<Vector2Int> list, Color32 color)
         //{

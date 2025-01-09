@@ -25,3 +25,35 @@ void BlendLightResultBuffer(int3 id : SV_DispatchThreadID)
     LightResultBufferTemp[index] = int4(0, 0, 0, 0);
 }
 
+RWStructuredBuffer<int4> FreelyLightResultBuffer;
+#pragma kernel BlendFreelyLightResultBuffer
+[numthreads(8, 8, 1)]
+void BlendFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
+{
+    int index = PixelToIndex(id.xy);
+    int4 color = LightResultBufferTemp[index];
+    if (color.w > 0)
+    {
+        int4 value = int4(color.xyz / color.w, 0);
+        LightResultBuffer[index] += value;
+        FreelyLightResultBuffer[index] += value;
+    }
+    LightResultBufferTemp[index] = int4(0, 0, 0, 0);
+}
+
+#pragma kernel SubtractionFreelyLightResultBuffer
+[numthreads(8, 8, 1)]
+void SubtractionFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
+{
+    int index = PixelToIndex(id.xy);
+    LightResultBuffer[index] -= FreelyLightResultBuffer[index];
+}
+
+#pragma kernel ResetFreelyLightResultBuffer
+[numthreads(8, 8, 1)]
+void ResetFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
+{
+    FreelyLightResultBuffer[PixelToIndex(id.xy)] = int4(0, 0, 0, 0);
+}
+
+

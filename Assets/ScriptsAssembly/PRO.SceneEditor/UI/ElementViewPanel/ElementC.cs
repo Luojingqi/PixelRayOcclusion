@@ -24,7 +24,7 @@ internal class ElementC : MonoBehaviour
     {
         name_Text.text = "已回收";
         entity = null;
-        texture2DPool.PutIn((Texture2D)icon.texture);
+        Destroy(icon.texture);
         icon.texture = null;
     }
 
@@ -32,21 +32,9 @@ internal class ElementC : MonoBehaviour
     {
         name_Text.text = entity.name;
         this.entity = entity;
-        Texture2D texture2D = texture2DPool.TakeOut();
+        Texture2D texture2D = new Texture2D(0, 0);
+        texture2D.filterMode = FilterMode.Point;
         texture2D.LoadImage(entity.pngBytes);
         icon.texture = texture2D;
     }
-
-    #region 纹理池
-    private static Texture2DPool texture2DPool = new Texture2DPool();
-    private class Texture2DPool : ObjectPoolBase<Texture2D>
-    {
-        protected override Texture2D NewObject()
-        {
-            var ret = new Texture2D(0, 0);
-            ret.filterMode = FilterMode.Point;
-            return ret;
-        }
-    }
-    #endregion
 }

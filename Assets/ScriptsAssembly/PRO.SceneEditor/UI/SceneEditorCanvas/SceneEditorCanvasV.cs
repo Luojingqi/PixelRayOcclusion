@@ -10,6 +10,7 @@ namespace PRO.SceneEditor
         public ElementViewPanelC ElementViewPanel { get; private set; }
 
         public SpriteRenderer HoldIcon { get; private set; }
+        public Toggle Toggle { get; private set; }
         public override void Init(Transform transform)
         {
             base.Init(transform);
@@ -24,6 +25,7 @@ namespace PRO.SceneEditor
             HoldIcon.gameObject.SetActive(false);
             HoldIcon.sprite = DrawTool.CreateSprite(DrawTool.CreateTexture());
 
+            Toggle = transform.Find("Toggle").GetComponent<Toggle>();
         }
     }
 }

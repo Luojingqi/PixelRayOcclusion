@@ -58,20 +58,30 @@ namespace PRO.Renderer
                     lightResultBufferCSArray[lightIndex].UpdateBind(globalBlockPos, localBlockBufferPos);
                 }
             for (int i = 0; i < LightResultBufferLength; i++)
-                lightResultBufferCSArray[i].Update();
+                lightResultBufferCSArray[i].UpdateStaticLightSource();
         }
         /// <summary>
         /// 每帧更新的区块数量
         /// </summary>
         public static int FrameUpdateBlockNum = 5;
-        private int nowRenderCS = 0;
+        private int offset = 0;
         public void Update()
         {
-            for (int i = 0; i < FrameUpdateBlockNum; i++)
+            for (int i = 0; i < LightResultBufferLength; i++)
             {
-                lightResultBufferCSArray[nowRenderCS++].Update();
-                if (nowRenderCS >= LightResultBufferLength) nowRenderCS = 0;
+                int index = (offset + i) % LightResultBufferLength;
+                if (i < FrameUpdateBlockNum)
+                {
+                    lightResultBufferCSArray[index].UpdateStaticLightSource();
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                }
+                else
+                {
+                    lightResultBufferCSArray[index].SubtractionFreelyLightResultBuffer();
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                }
             }
+            offset = (offset + FrameUpdateBlockNum) % LightResultBufferLength;
         }
 
         public struct LightSourceToShader
