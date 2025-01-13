@@ -25,7 +25,7 @@ namespace PRO
         /// <summary>
         /// key£ºguid  value£ºbuilding
         /// </summary>
-        private Dictionary<string, Building> BuildingInRAM = new Dictionary<string, Building>();
+        private Dictionary<string, BuildingBase> BuildingInRAM = new Dictionary<string, BuildingBase>();
 
         public Block GetBlock(Vector2Int blockPos)
         {
@@ -35,7 +35,7 @@ namespace PRO
         {
             return BackgroundInRAM[blockPos];
         }
-        public Building GetBuilding(string guid)
+        public BuildingBase GetBuilding(string guid)
         {
             return BuildingInRAM[guid];
         }
@@ -72,9 +72,9 @@ namespace PRO
 
         public void LoadBuilding(string guid)
         {
-            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.json", out string buildingText))
+            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\BuildingBase\{guid}.json", out string buildingText))
             {
-                Building building = JsonTool.ToObject<Building>(buildingText);
+                BuildingBase building = JsonTool.ToObject<BuildingBase>(buildingText);
                 BuildingInRAM.Add(guid, building);
             }
             else

@@ -97,13 +97,13 @@ namespace PRO.Renderer
         public struct LightSource
         {
             public Vector2Int gloabPos;
-            public LightSourceInfo info;
+            public int radius;
             public Vector3Int color;
 
-            public LightSource(Vector2Int gloabPos, Color32 color, LightSourceInfo info)
+            public LightSource(Vector2Int gloabPos, Color32 color, int radius)
             {
                 this.gloabPos = gloabPos;
-                this.info = info;
+                this.radius = radius;
                 this.color = new Vector3Int(color.r, color.g, color.b);
             }
         }

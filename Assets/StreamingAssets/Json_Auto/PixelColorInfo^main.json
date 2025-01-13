@@ -10,6 +10,17 @@
     "affectsLightIntensity": -1.0
   },
   {
+    "colorName": "鼠标光源0",
+    "color": {
+      "r": 255,
+      "g": 217,
+      "b": 102,
+      "a": 255
+    },
+    "affectsLightIntensity": -1.0,
+    "lightRadius": 20
+  },
+  {
     "colorName": "测试色0",
     "color": {
       "r": 200,

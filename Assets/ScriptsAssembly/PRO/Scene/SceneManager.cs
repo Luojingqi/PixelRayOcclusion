@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
+using PRO.Disk;
 using PRO.Disk.Scene;
 using PRO.Tool;
 using Sirenix.Utilities;
@@ -62,10 +63,8 @@ namespace PRO
             DrawThread.Init(() =>
            {
                BlockMaterial.FirstBind();
-               Block block = NowScene.GetBlock(new Vector2Int(0, 0));
-               block.SetPixel(Pixel.TakeOut("光源", "光源3", new Vector2Byte()));
-               block.DrawPixelAsync();
-               source = FreelyLightSource.New(new Vector3Int(100, 200, 100), "2");
+
+               source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0"));
            });
 
         }
@@ -109,6 +108,7 @@ namespace PRO
         float time = 0;
         string n = "光源2";
         int l = 3;
+        int k = 20;
         public async void Update()
         {
 
@@ -119,12 +119,21 @@ namespace PRO
             Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
 
+            
+
             if (source != null)
                 source.GloabPos = gloabPos;
             time += Time.deltaTime;
-            while (time > 0.1f)
+            while (time > 0.1f &&Input.GetKey(KeyCode.Space))
             {
                 time -= 0.1f;
+                source.Radius++;
+                k++;
+                if (k > BlockMaterial.LightRadiusMax)
+                {
+                    source.Radius = 1;
+                    k = 1;
+                }
                 for (int y = -l; y <= l; y++)
                     for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid1();
@@ -140,7 +149,6 @@ namespace PRO
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
-                t = Time.realtimeSinceStartup;
                 Log.Print("加载开始，池内数量" + Pixel.pixelPool.notUsedObject.Count);
                 t = Time.realtimeSinceStartup;
                 for (int x = -l; x <= l; x++)
@@ -271,7 +279,7 @@ namespace PRO
                 block.DrawPixelAsync();
             }
             #endregion
-            BlockMaterial.Update();
+            
             if (Monitor.TryEnter(mainThreadEventLock))
             {
                 try
@@ -285,6 +293,11 @@ namespace PRO
                 }
             }
         }
+        private void LateUpdate()
+        {
+            BlockMaterial.Update();
+        }
+
         private float t;
         private Vector2Int g;
         #region 任务队列与线程锁

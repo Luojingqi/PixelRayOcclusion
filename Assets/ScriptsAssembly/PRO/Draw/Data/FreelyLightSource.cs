@@ -6,7 +6,7 @@ namespace PRO
     public class FreelyLightSource
     {
         private Vector2Int? gloabPos;
-        private LightSourceInfo info;
+        private int radius = 1;
         public Vector3Int color;
 
 
@@ -39,24 +39,39 @@ namespace PRO
 
             }
         }
-        public LightSourceInfo Info
+        public int Radius
         {
-            get { return info; }
+            get { return radius; }
             set
             {
-                if (value == null) return;
-                info = value;
+                if (value <= 0 || value > BlockMaterial.LightRadiusMax) return;
+                radius = value;
             }
         }
 
         private FreelyLightSource() { }
-        public static FreelyLightSource New(Vector3Int color, string lightSourceName)
+        public static FreelyLightSource New(Vector3Int color, int radius)
         {
-            LightSourceInfo info = BlockMaterial.GetLightSourceInfo(lightSourceName);
+            if (radius <= 0 || radius > BlockMaterial.LightRadiusMax) return null;
+            FreelyLightSource fls = new FreelyLightSource();
+            fls.radius = radius;
+            fls.color = color;
+            return fls;
+        }
+        public static FreelyLightSource New(PixelColorInfo info)
+        {
             if (info == null) return null;
             FreelyLightSource fls = new FreelyLightSource();
-            fls.info = info;
-            fls.color = color;
+            fls.radius = info.lightRadius;
+            fls.color = new Vector3Int(info.color.r, info.color.g, info.color.b);
+            return fls;
+        }
+        public static FreelyLightSource New(Color32 color, int radius)
+        {
+            if (radius <= 0 || radius > BlockMaterial.LightRadiusMax) return null;
+            FreelyLightSource fls = new FreelyLightSource();
+            fls.radius = radius;
+            fls.color = new Vector3Int(color.r, color.g, color.b);
             return fls;
         }
     }

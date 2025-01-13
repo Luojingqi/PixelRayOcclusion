@@ -1,19 +1,6 @@
 {
-  //光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
-  //从相机所在的区块开始算起，超出的部分不会计算光照
-  "LightResultBufferBlockSize": {
-    "x": 7,
-    "y": 5
-  },
-  //每个区块接收多大范围内的光照,最小1,1,更改后需要去Shader中同步更改Block缓冲区数量
-  //Bffer_LightBuffer.hlsl 中StructuredBuffer<int> BlockBuffer0;
-  //需要与hlsl中区块数量与此属性的x*y的数量应当一致
-  "EachBlockReceiveLightSize": {
-    "x": 5,
-    "y": 5
-  },
   //每帧更新的区块数量，不能小于1，不能大于 EachBlockReceiveLightSize 的x*y
-  "FrameUpdateBlockNum": 5
-
-
+  "FrameUpdateBlockNum": 5,
+  //是否提前编译着色器，提前编译后游戏内出现新的光源将不会再卡顿，但提前编译需要时间，并且产生的内存较大于动态编译(未实装)
+  "IsCompileShadersInAdvance" : false
 }

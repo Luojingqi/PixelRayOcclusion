@@ -18,13 +18,22 @@ namespace PRO
         /// </summary>
         public static Vector2Int LastCameraCenterBlockPos { get; private set; }
         /// <summary>
-        /// 光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
+        /// 最大光源半径，修改完后需要调用编辑器扩展PRO>2.创建hlsl
+        /// 将生成LightRadiusMax个计算着色器函数  每个代表一个不同半径的光源函数
         /// </summary>
-        public static Vector2Int LightResultBufferBlockSize { get; private set; }
+        public static readonly int LightRadiusMax = 128;
         /// <summary>
-        /// 每个区块接收多大范围内的光照,最小1,1,更改后需要去Shader中同步更改Block缓冲区数量
+        /// 光缓存的大小，(宽与高，最小为1,1)，只有在此范围内的才会被渲染线程提交给gpu
+        /// 从相机所在的区块开始算起，超出的部分不会显示光照效果
+        /// 更改后需要 调用编辑器扩展PRO>2.创建hlsl
         /// </summary>
-        public static Vector2Int EachBlockReceiveLightSize { get; private set; }
+        public static readonly Vector2Int LightResultBufferBlockSize = new Vector2Int(7, 5);
+        /// <summary>
+        /// 每个区块接收多大范围内的光照,最小1,1
+        /// Buffer_LightBuffer.hlsl 中StructuredBuffer<int> BlockBuffer0;
+        /// 更改后需要 调用编辑器扩展PRO>2.创建hlsl
+        /// </summary>
+        public static readonly Vector2Int EachBlockReceiveLightSize = new Vector2Int(5, 5);
         public static int BlockBufferLength { get; private set; }
         public static int LightResultBufferLength { get; private set; }
         private static PROconfig proConfig;
@@ -48,14 +57,11 @@ namespace PRO
                 return;
             }
             proConfig = JsonTool.ToObject<PROconfig>(proConfigText);
-            LightResultBufferBlockSize = proConfig.LightResultBufferBlockSize;
-            EachBlockReceiveLightSize = proConfig.EachBlockReceiveLightSize;
             ComputeShaderManager.FrameUpdateBlockNum = proConfig.FrameUpdateBlockNum;
             BlockBufferLength = (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x) * (EachBlockReceiveLightSize.y - 1 + LightResultBufferBlockSize.y);
             LightResultBufferLength = LightResultBufferBlockSize.x * LightResultBufferBlockSize.y;
 
             LoadAllPixelColorInfo();
-            LoadAllLightSourceInfo();
 
             NullMaterialPropertyBlock = new MaterialPropertyBlock();
 
@@ -124,49 +130,6 @@ namespace PRO
         }
         #endregion
 
-        #region 光源信息
-        private static void LoadAllLightSourceInfo()
-        {
-            #region 加载路径下的所有LightSourceInfo.json文件，并存储到LightSourceInfoDic与List
-            string rootPath = AssetManager.ExcelToolSaveJsonPath;
-            DirectoryInfo root = new DirectoryInfo(rootPath);
-            foreach (var fileInfo in root.GetFiles())
-            {
-                if (fileInfo.Extension != ".json") continue;
-                string[] strArray = fileInfo.Name.Split('^');
-                if (strArray.Length <= 1 || strArray[0] != "LightSourceInfo") continue;
-                JsonTool.LoadText(fileInfo.FullName, out string infoText);
-                Log.Print(fileInfo.FullName, Color.green);
-                int lightSourceCount = 0;
-                //加载到的像素数组
-                var InfoArray = JsonTool.ToObject<LightSourceInfo[]>(infoText);
-                for (int i = 0; i < InfoArray.Length; i++)
-                    if (lightSourceInfoDic.ContainsKey(InfoArray[i].name) == false)
-                    {
-                        InfoArray[i].index = lightSourceCount++;
-                        lightSourceInfoDic.Add(InfoArray[i].name, InfoArray[i]);
-                        lightSourceInfoList.Add(InfoArray[i]);
-                    }
-            }
-            #endregion
-        }
-        ///光源信息的顺序索引
-        private static List<LightSourceInfo> lightSourceInfoList = new List<LightSourceInfo>();
-        //光源信息的字典索引
-        private static Dictionary<string, LightSourceInfo> lightSourceInfoDic = new Dictionary<string, LightSourceInfo>();
-        public static LightSourceInfo GetLightSourceInfo(string lightSourceName)
-        {
-            if (lightSourceInfoDic.TryGetValue(lightSourceName, out LightSourceInfo value)) return value;
-            else if (lightSourceName.StartsWith(PixelColorInfoToShader.sign_SL) == false) Debug.Log($"没有光源名称为{lightSourceName}");
-            return null;
-        }
-        public static LightSourceInfo GetLightSourceInfo(int id)
-        {
-            if (id >= lightSourceInfoList.Count) return null;
-            else return lightSourceInfoList[id];
-        }
-        public static int LightSourceInfoListCount => lightSourceInfoList.Count;
-        #endregion
         #region 将块数据传递到GPU
         public static void SetBlock(Block block)
         {
@@ -229,15 +192,6 @@ namespace PRO
 
         public static void Update()
         {
-            Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
-            if (nowCameraPos != CameraCenterBlockPos)
-            {
-                UpdateBind();
-                return;
-            }
-            computeShaderManager.Update();
-
-
             if (Monitor.TryEnter(DrawApplyQueue))
             {
                 try
@@ -258,6 +212,14 @@ namespace PRO
                     Monitor.Exit(DrawApplyQueue);
                 }
             }
+
+            Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
+            if (nowCameraPos != CameraCenterBlockPos)
+            {
+                UpdateBind();
+                return;
+            }
+            computeShaderManager.Update();
         }
 
         /// <summary>

@@ -18,38 +18,11 @@ public static class PROEditorTool
     [MenuItem("PRO/2.创建HLSL文件")]
     public static void AutoCreateHLSL()
     {
-        Dictionary<string, LightSourceInfo> lightSourceInfoDic = new Dictionary<string, LightSourceInfo>();
-        List<LightSourceInfo> lightSourceInfoList = new List<LightSourceInfo>();
-        #region 加载路径下的所有LightSourceInfo.json文件，并存储到字典LightSourceInfoDic
-        string rootPath = Application.streamingAssetsPath + @"\Json_Auto";
-        DirectoryInfo root = new DirectoryInfo(rootPath);
-        //int pixelCount = 0;
-        foreach (var fileInfo in root.GetFiles())
-        {
-            if (fileInfo.Extension != ".json") continue;
-            string[] strArray = fileInfo.Name.Split('^');
-            if (strArray.Length <= 1 || strArray[0] != "LightSourceInfo") continue;
-            JsonTool.LoadText(fileInfo.FullName, out string infoText);
-            //加载到的像素数组
-            var indexArray = JsonTool.ToObject<LightSourceInfo[]>(infoText);
-            for (int i = 0; i < indexArray.Length; i++)
-                if (lightSourceInfoDic.ContainsKey(indexArray[i].name) == false)
-                {
-                    lightSourceInfoDic.Add(indexArray[i].name, indexArray[i]);
-                    //indexArray[i].Index = pixelCount++;
-                    lightSourceInfoList.Add(indexArray[i]);
-                }
-        }
-        #endregion
-        Log.Print("加载到光源文件");
-        //现在我们有了所有的光照
-
         #region 创建GetLine.hlsl
         string autoGetLine = "";
         HashSet<int> radiusHash = new HashSet<int>();
-        for (int i = 0; i < lightSourceInfoList.Count; i++)
+        for (int r = 1; r <= BlockMaterial.LightRadiusMax; r++)
         {
-            int r = lightSourceInfoList[i].radius;
             if (radiusHash.Contains(r) == false)
             {
                 radiusHash.Add(r);
@@ -99,16 +72,15 @@ return Index;
 #include ""GetLine.hlsl""
 #include ""SetLightBuffer_Buffer.hlsl""" + "\n";
         int maxBlcok = Math.Max(Block.Size.x, Block.Size.y);
-        for (int i = 0; i < lightSourceInfoList.Count; i++)
+        for (int r = 1; r <= BlockMaterial.LightRadiusMax; r++)
         {
-            int r = lightSourceInfoList[i].radius;
             int threadX = r * 2 + 1;
             threadX = threadX > maxBlcok ? maxBlcok : threadX;
             autoSetLightbuffer +=
             #region 创建SetLightResultBuffer.hlsl
-$"#pragma kernel SetLightResultBuffer{i}\n" +
+$"#pragma kernel SetLightResultBuffer{r}\n" +
 $"[numthreads({threadX}, 4, 1)]\n" +
-$"void SetLightResultBuffer{i}(int3 id : SV_DispatchThreadID)\n" +
+$"void SetLightResultBuffer{r}(int3 id : SV_DispatchThreadID)\n" +
 @"{
     LightSource source = LightSourceBuffer[0];
 
@@ -149,10 +121,8 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         JsonTool.StoreText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "SetLightBuffer.compute", autoSetLightbuffer);
 
         #region 创建SetLightBuffer_Buffer.hlsl文件
-        JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText);
-        PROconfig proConfig = JsonTool.ToObject<PROconfig>(proConfigText);
         string autoSetLightBuffer_Buffer = "#include \"../StructData.hlsl\"\n";
-        int BlockLength = proConfig.EachBlockReceiveLightSize.x * proConfig.EachBlockReceiveLightSize.y;
+        int BlockLength = BlockMaterial.EachBlockReceiveLightSize.x * BlockMaterial.EachBlockReceiveLightSize. y;
         for (int i = 0; i < BlockLength; i++)
             autoSetLightBuffer_Buffer += $"StructuredBuffer<int> BlockBuffer{i};\n";
         autoSetLightBuffer_Buffer +=
@@ -269,5 +239,7 @@ int2 IDToGloabPos(int2 id)
         #endregion
         JsonTool.StoreText(Application.dataPath + @"/Resources/PixelRayOcclusion/Auto/SetLightBuffer_Buffer.hlsl", autoSetLightBuffer_Buffer);
         #endregion
+
+        Debug.Log("生成HLSL完成");
     }
 }

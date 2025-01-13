@@ -1,5 +1,9 @@
 using PRO.DataStructure;
 using PRO.Tool;
+using PROTool;
+using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +16,17 @@ namespace PRO.SceneEditor
 
         public static SceneEditorCanvasC Inst;
 
+        private List<Type> DerivedBuildingBaseList = ReflectionTool.GetDerivedClasses(typeof(BuildingBase));
         public override void Init(string uiName)
         {
             base.Init(uiName);
 
             Inst = this;
+
+
+            for (int i = 1; i < DerivedBuildingBaseList.Count; i++)
+                view.Dropdown.options.Add(new TMP_Dropdown.OptionData(DerivedBuildingBaseList[i].Name));
+
             //Scene
         }
 
@@ -63,6 +73,11 @@ namespace PRO.SceneEditor
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
+                BuildingBase building = null;
+                if (view.Dropdown.value != 0)
+                    building = (BuildingBase)Activator.CreateInstance(DerivedBuildingBaseList[view.Dropdown.value]);
+
+
                 for (int y = 0; y < HoldEntity.height; y++)
                     for (int x = 0; x < HoldEntity.width; x++)
                     {
@@ -75,7 +90,10 @@ namespace PRO.SceneEditor
                             block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(nowGloab));
                         else
                             block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
-                        block.SetPixel(Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab)));
+
+                        Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
+                        building?.PixelDic.Add(nowGloab, new Building_Pixel(pixel));
+                        block.SetPixel(pixel);
                         block.DrawPixelAsync();
                     }
             }

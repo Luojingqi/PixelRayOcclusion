@@ -1,4 +1,3 @@
-using PRO.Disk;
 using UnityEngine;
 using static PRO.BlockMaterial;
 using static PRO.Renderer.ComputeShaderManager;
@@ -6,7 +5,7 @@ namespace PRO.Renderer
 {
     public class LightResultBufferCS
     {
-        private ComputeShader SetLightBufferCS;
+        public ComputeShader SetLightBufferCS;
         private ComputeShader ResetLightBufferCS;
 
 
@@ -52,7 +51,7 @@ namespace PRO.Renderer
 
 
             SetLightBufferCS.SetInts("EachBlockReceiveLightSize", EachBlockReceiveLightSize.x, EachBlockReceiveLightSize.y);
-            for (int i = 0; i < BlockMaterial.LightSourceInfoListCount; i++)
+            for (int i = 0; i < BlockMaterial.LightRadiusMax; i++)
             {
                 SetLightBufferCS.SetBuffer(i, "AllPixelColorInfo", pixelColorInfoToShaderBufffer);
                 SetLightBufferCS.SetBuffer(i, "LightSourceBuffer", LightSourceBuffer);
@@ -64,12 +63,15 @@ namespace PRO.Renderer
                     int index = ex + ey * EachBlockReceiveLightSize.x;
                     Vector2Int nowLocalBlockBufferPos = localBlockBufferPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
                     int eBlcokIndex = nowLocalBlockBufferPos.x + nowLocalBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
-                    for (int i = 0; i < BlockMaterial.LightSourceInfoListCount; i++)
+                    for (int i = 0; i < BlockMaterial.LightRadiusMax; i++)
                         SetLightBufferCS.SetBuffer(i, $"BlockBuffer{index}", blockShareMaterialManager.GetBuffer(eBlcokIndex));
                     //Debug.Log($"¹âÕÕ¼ÆËã{globalBlockPos}  °ó¶¨¿é»º´æ{index}   {eBlcokIndex}");
                 }
 
             SetLightBufferCS.SetInts("BlockPos", globalBlockPos.x, globalBlockPos.y);
+            
+            //for (int i = 0; i < BlockMaterial.LightRadiusMax; i++)
+            //    SetLightBufferCS.Dispatch(i, 1, 1, 1);
         }
 
         public void UpdateBind(Vector2Int globalBlockPos, Vector2Int localBlockBufferPos)
@@ -99,8 +101,8 @@ namespace PRO.Renderer
                     Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
                     BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(nowGloabBlockBufferPos);
 
-                    foreach (var value in block.lightSourceDic.Values) DrawLightSource(value.info, new LightSourceToShader(value), blockMinPos, blockMaxPos);
-                    foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.info, new LightSourceToShader(value), blockMinPos, blockMaxPos);
+                    foreach (var value in block.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
+                    foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                 }
         }
         public void UpdateFreelyLightSource()
@@ -116,7 +118,7 @@ namespace PRO.Renderer
                     foreach (var value in block.FreelyLightSourceHash)
                     {
                         LightSourceToShader lightSource = new LightSourceToShader() { gloabPos = value.GloabPos.Value, color = value.color };
-                        int r = value.Info.radius;
+                        int r = value.Radius;
                         Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(r, r);
                         Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(r, r);
 
@@ -129,13 +131,14 @@ namespace PRO.Renderer
                             SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
                             SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
 
-                            SetLightBufferCS.Dispatch(value.Info.index, 1, 1, 1);
+                            SetLightBufferCS.Dispatch(value.Radius - 1, 1, 1, 1);
 
                             ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
                         }
                     }
                 }
         }
+
 
         public void Reset()
         {
@@ -147,11 +150,10 @@ namespace PRO.Renderer
             ResetLightBufferCS.Dispatch(3, Block.Size.x / 8, Block.Size.y / 8, 1);
         }
 
-        private void DrawLightSource(LightSourceInfo info, LightSourceToShader lightSource, Vector2Int blockMinPos, Vector2Int blockMaxPos)
+        private void DrawLightSource(int radius, LightSourceToShader lightSource, Vector2Int blockMinPos, Vector2Int blockMaxPos)
         {
-            int r = info.radius;
-            Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(r, r);
-            Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(r, r);
+            Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(radius, radius);
+            Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(radius, radius);
 
             Vector2Int beMixed_Min = new Vector2Int(Mathf.Max(blockMinPos.x, lightMinRadius.x), Mathf.Max(blockMinPos.y, lightMinRadius.y));
             Vector2Int beMixed_Max = new Vector2Int(Mathf.Min(blockMaxPos.x, lightMaxRadius.x), Mathf.Min(blockMaxPos.y, lightMaxRadius.y));
@@ -162,7 +164,7 @@ namespace PRO.Renderer
                 SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
                 SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
 
-                SetLightBufferCS.Dispatch(info.index, 1, 1, 1);
+                SetLightBufferCS.Dispatch(radius - 1, 1, 1, 1);
                 ResetLightBufferCS.Dispatch(1, Block.Size.x / 8, Block.Size.y / 8, 1);
             }
 

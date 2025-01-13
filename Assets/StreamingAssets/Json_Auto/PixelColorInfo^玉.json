@@ -7,8 +7,7 @@
       "b": 242,
       "a": 255
     },
-    "affectsLightIntensity": 0.9,
-    "lightSourceType": "self-0.1"
+    "affectsLightIntensity": 0.9
   },
   {
     "colorName": "白玉色0",
@@ -18,8 +17,7 @@
       "b": 232,
       "a": 255
     },
-    "affectsLightIntensity": 0.9,
-    "lightSourceType": "self-0.1"
+    "affectsLightIntensity": 0.9
   },
   {
     "colorName": "白玉色2",

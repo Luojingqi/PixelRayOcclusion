@@ -8,7 +8,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "0"
+    "lightRadius": 10
   },
   {
     "colorName": "光源1",
@@ -19,7 +19,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "1"
+    "lightRadius": 15
   },
   {
     "colorName": "光源2",
@@ -30,7 +30,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "2"
+    "lightRadius": 20
   },
   {
     "colorName": "光源3",
@@ -41,7 +41,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "3"
+    "lightRadius": 30
   },
   {
     "colorName": "光源4",
@@ -52,7 +52,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "4"
+    "lightRadius": 50
   },
   {
     "colorName": "光源5",
@@ -63,7 +63,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "5"
+    "lightRadius": 50
   },
   {
     "colorName": "光源6",
@@ -74,7 +74,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "6"
+    "lightRadius": 60
   },
   {
     "colorName": "光源7",
@@ -85,7 +85,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "7"
+    "lightRadius": 70
   },
   {
     "colorName": "光源8",
@@ -96,7 +96,7 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "8"
+    "lightRadius": 80
   },
   {
     "colorName": "光源9",
@@ -107,6 +107,6 @@
       "a": 255
     },
     "affectsLightIntensity": -1.0,
-    "lightSourceType": "9"
+    "lightRadius": 100
   }
 ]

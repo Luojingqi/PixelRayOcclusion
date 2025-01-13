@@ -13,13 +13,14 @@ namespace PRO
         private static Vector2Int x = new Vector2Int(-a, a);
         private static Vector2Int y = new Vector2Int(-a, a);
         private static int endNum = (a * 2 + 1) * (a * 2 + 1) * 2;
+        private static int time = 30000;
         public static void Init(Action endAction)
         {
             InitScene(SceneManager.Inst.NowScene);
             Thread thread = new Thread(LoopDraw);
             thread.Start();
-            while (true) if (endNum <= 0) break;
-
+            while (time >= 0) { if (endNum <= 0) break; Thread.Sleep(10); time -= 10; }
+            if (time <= 0) Debug.Log("³õÊ¼»¯Ê§°Ü");
             endAction();
         }
         public static void InitScene(SceneEntity scene)

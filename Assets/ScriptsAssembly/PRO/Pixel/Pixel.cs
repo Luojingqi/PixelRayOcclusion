@@ -28,7 +28,7 @@ namespace PRO
         /// <summary>
         /// 所属的建筑
         /// </summary>
-        public Building building;
+        public BuildingBase building;
 
         /// <summary>
         /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查

@@ -1,4 +1,4 @@
-#include "../StructData.hlsl"
+﻿#include "../StructData.hlsl"
 StructuredBuffer<int> BlockBuffer0;
 StructuredBuffer<int> BlockBuffer1;
 StructuredBuffer<int> BlockBuffer2;

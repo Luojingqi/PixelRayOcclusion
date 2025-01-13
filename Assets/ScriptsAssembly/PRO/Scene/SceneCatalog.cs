@@ -37,11 +37,11 @@ namespace PRO.Disk.Scene
             //创建块文件夹
             Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Block");
             //创建建筑文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
+            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\BuildingBase");
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
             info.buildingTypeDic = new Dictionary<string, Type>();
-           // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(Building));
+           // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(BuildingBase));
             JsonTool.StoreText(@$"{sceneDirectory.FullName}\SceneCatalog.json", JsonTool.ToJson(info));
             return info;
         }

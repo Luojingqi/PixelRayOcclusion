@@ -46,15 +46,37 @@ namespace PRO
         /// </summary>
         public void SetPixel(Pixel pixel, bool updateCollider = true, bool updateLiquidOrGas = true)
         {
-            PixelTypeInfo removeInfo = RemovePixel(pixel.pos);
-
             pixel.posG = this.PixelToGlobal(pixel.pos);
+
+            PixelTypeInfo removeInfo = null;
+            Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
+            //旧点所属于一个建筑且建筑不可被破坏
+            if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken) return;
+            if (removePixel != null)
+            {
+                if (removePixel.colorInfo.lightRadius > 0 && removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
+                    RemoveLightSource(removePixel);
+
+                removeInfo = removePixel.typeInfo;
+
+
+                if (removePixel.building != null)
+                {
+                    pixel.building = removePixel.building;
+                    pixel.building.PixelDic[pixel.posG].Pixel = pixel;
+                }
+
+
+                Pixel.PutIn(removePixel);
+            }
+
+
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
 
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixel.colorInfo.index;
 
-            if (pixel.colorInfo.lightSourceType != null )
-                AddLightSource(pixel, pixel.colorInfo);
+            if (pixel.colorInfo.lightRadius > 0 && pixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
+                AddLightSource(pixel);
 
             if (this is Block)
             {
@@ -68,39 +90,21 @@ namespace PRO
             }
         }
 
-
-        private PixelTypeInfo RemovePixel(Vector2Byte pos)
-        {
-            PixelTypeInfo ret = null;
-            Pixel pixel = allPixel[pos.x, pos.y];
-            if (pixel == null)
-                return ret;
-            if (pixel.colorInfo.lightSourceType != null && pixel.colorInfo.lightSourceType != "null")
-                RemoveLightSource(pixel);
-            ret = pixel.typeInfo;
-            Pixel.PutIn(pixel);
-            allPixel[pos.x, pos.y] = null;
-            return ret;
-        }
-
-
         #endregion
 
         #region 光源集合
 
         public readonly Dictionary<Vector2Byte, LightSource> lightSourceDic = new Dictionary<Vector2Byte, LightSource>();
-        private void AddLightSource(Pixel pixel, PixelColorInfo pixelColorInfo)
+        private void AddLightSource(Pixel pixel)
         {
             Vector2Int gloabPos = Block.PixelToGlobal(blockPos, pixel.pos);
-            var lightSourceInfo = BlockMaterial.GetLightSourceInfo(pixelColorInfo.lightSourceType);
-            if (lightSourceInfo == null) return;
             if (lightSourceDic.ContainsKey(pixel.pos))
             {
-                lightSourceDic[pixel.pos] = new LightSource(gloabPos, pixelColorInfo.color, lightSourceInfo);
+                lightSourceDic[pixel.pos] = new LightSource(gloabPos, pixel.colorInfo.color, pixel.colorInfo.lightRadius);
             }
             else
             {
-                lightSourceDic.Add(pixel.pos, new LightSource(gloabPos, pixelColorInfo.color, lightSourceInfo));
+                lightSourceDic.Add(pixel.pos, new LightSource(gloabPos, pixel.colorInfo.color, pixel.colorInfo.lightRadius));
             }
         }
 

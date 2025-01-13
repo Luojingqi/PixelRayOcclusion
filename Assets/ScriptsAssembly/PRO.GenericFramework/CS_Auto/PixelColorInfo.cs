@@ -21,7 +21,9 @@ namespace PRO.Disk
         
         private float affectslightintensity;
         
-        private string lightsourcetype;
+        private int lightradius;
+        
+        private float selfluminous;
         
         private int _index;
         
@@ -64,16 +66,29 @@ namespace PRO.Disk
             }
         }
         
-        // 光源类型
-        public string lightSourceType
+        // 发光半径
+        public int lightRadius
         {
             get
             {
-                return this.lightsourcetype;
+                return this.lightradius;
             }
             set
             {
-                this.lightsourcetype = value;
+                this.lightradius = value;
+            }
+        }
+        
+        // 自发光强度
+        public float selfLuminous
+        {
+            get
+            {
+                return this.selfluminous;
+            }
+            set
+            {
+                this.selfluminous = value;
             }
         }
         

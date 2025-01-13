@@ -1,4 +1,5 @@
 using PRO.Tool;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ namespace PRO.SceneEditor
 
         public SpriteRenderer HoldIcon { get; private set; }
         public Toggle Toggle { get; private set; }
+        public TMP_Dropdown Dropdown { get; private set; }
         public override void Init(Transform transform)
         {
             base.Init(transform);
@@ -26,6 +28,7 @@ namespace PRO.SceneEditor
             HoldIcon.sprite = DrawTool.CreateSprite(DrawTool.CreateTexture());
 
             Toggle = transform.Find("Toggle").GetComponent<Toggle>();
+            Dropdown = transform.Find("Dropdown").GetComponent<TMP_Dropdown>();
         }
     }
 }
