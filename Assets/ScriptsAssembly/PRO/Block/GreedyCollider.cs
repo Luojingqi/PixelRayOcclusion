@@ -18,12 +18,22 @@ namespace PRO
             boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
             BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
             boxCollider.gameObject.SetActive(false);
-            boxCollider.gameObject.layer = 9;
             boxCollider.transform.parent = boxCollider2DPoolGo.transform;
             BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform);
+
         }
-        private static BoxCollider2D TakeOut() => BoxCollider2DPool.TakeOutT();
-        public static void PutIn(BoxCollider2D box) => BoxCollider2DPool.PutIn(box.gameObject);
+        public static BoxCollider2D TakeOut()
+        {
+            BoxCollider2D box = BoxCollider2DPool.TakeOutT();
+
+            return box;
+        }
+        public static void PutIn(BoxCollider2D box)
+        {
+            box.gameObject.layer = 0;
+            box.isTrigger = false;
+            BoxCollider2DPool.PutIn(box.gameObject);
+        }
         #endregion
         public struct ColliderData
         {
@@ -110,7 +120,7 @@ namespace PRO
                 box.size = data.size;
                 box.transform.position = data.position;
 
-                box.offset = box.size / 2;
+                box.offset = box.size / 2f;
                 box.transform.parent = block.colliderNode;
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
@@ -136,14 +146,14 @@ namespace PRO
                     if (i < 2 && box.size.y == Pixel.Size)
                     {
                         box.size += new Vector2(Pixel.Size, 0);
-                        box.offset += new Vector2(Pixel.Size / 2 * Math.Sign(span[i].x), 0);
+                        box.offset = box.size / 2f;
                         block.allCollider[pos.x, pos.y] = box;
                         break;
                     }
                     else if (i >= 2 && box.size.x == Pixel.Size)
                     {
                         box.size += new Vector2(0, Pixel.Size);
-                        box.offset += new Vector2(0, Pixel.Size / 2 * Math.Sign(span[i].x));
+                        box.offset = box.size / 2f;
                         block.allCollider[pos.x, pos.y] = box;
                         break;
                     }

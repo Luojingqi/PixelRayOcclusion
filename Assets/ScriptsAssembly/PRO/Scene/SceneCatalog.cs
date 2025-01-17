@@ -22,6 +22,11 @@ namespace PRO.Disk.Scene
         private SceneCatalog() { }
 
 
+        public void Save()
+        {
+            JsonTool.StoreText(@$"{directoryInfo.FullName}\SceneCatalog.json", JsonTool.ToJson(this));
+        }
+
 
         /// <summary>
         /// 为当前存档创建一个新的场景目录
@@ -37,12 +42,12 @@ namespace PRO.Disk.Scene
             //创建块文件夹
             Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Block");
             //创建建筑文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\BuildingBase");
+            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
             info.buildingTypeDic = new Dictionary<string, Type>();
-           // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(BuildingBase));
-            JsonTool.StoreText(@$"{sceneDirectory.FullName}\SceneCatalog.json", JsonTool.ToJson(info));
+            // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(BuildingBase));
+            info.Save();
             return info;
         }
 

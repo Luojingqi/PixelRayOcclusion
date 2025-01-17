@@ -1,52 +1,12 @@
+using PRO.DataStructure;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
-using PRO.DataStructure;
 using Unity.Collections;
 using UnityEngine;
 namespace PRO.Tool
 {
     public static class DrawTool
     {
-        /// <summary>
-        /// 加载本地磁盘图片文件
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        public static Texture2D LoadTexture2D(string filePath)
-        {
-            byte[] byteArray = null;
-            if (File.Exists(filePath))
-                byteArray = File.ReadAllBytes(filePath);
-            if (byteArray == null) return null;
-            Texture2D texture = new Texture2D(0, 0);
-            texture.LoadImage(byteArray);
-            return texture;
-        }
-        /// <summary>
-        /// 异步加载本地磁盘图片文件
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        public static async Task<Texture2D> LoadTexture2DAsync(string filePath)
-        {
-            byte[] byteArray = null;
-            if (File.Exists(filePath))
-                byteArray = await File.ReadAllBytesAsync(filePath);
-            if (byteArray == null) return null;
-            Texture2D texture = new Texture2D(0, 0);
-            texture.LoadImage(byteArray);
-            return texture;
-        }
-
-        public static Texture2D CreateTexture()
-        {
-            Texture2D texture = new Texture2D(Block.Size.x, Block.Size.y, TextureFormat.RGBAFloat, false, true);
-            texture.filterMode = FilterMode.Point;
-            return texture;
-        }
         public static Sprite CreateSprite(Texture2D texture)
         {
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0f, 0f), 1 / Pixel.Size);
@@ -62,6 +22,15 @@ namespace PRO.Tool
             block.textureData.nativeArray[index++] = color.b;
             block.textureData.nativeArray[index] = color.a;
         }
+        public static void DrawPixel(this NativeArray<float> nativeArray, int width, Vector2Int pos, Color color)
+        {
+            int index = (width * pos.y + pos.x) * 4;
+            nativeArray[index++] = color.r;
+            nativeArray[index++] = color.g;
+            nativeArray[index++] = color.b;
+            nativeArray[index] = color.a;
+        }
+        #region 弃用
         //public static void DrawPixelSync(List<Vector2Int> list, Color32 color)
         //{
         //    foreach (var v in list)
@@ -89,6 +58,7 @@ namespace PRO.Tool
         //        else return newBlock.GetColor32Sync((Vector2Int)rightPos);
         //    }
         //}
+        #endregion
         public static Color32 GetColor32Sync(NativeArray<byte> png, int width, Vector2Int pos)
         {
             Color32 ret = new Color32(0, 0, 0, 0);

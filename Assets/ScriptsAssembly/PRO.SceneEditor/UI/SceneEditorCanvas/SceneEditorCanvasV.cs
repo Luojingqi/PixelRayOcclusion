@@ -25,7 +25,6 @@ namespace PRO.SceneEditor
 
             HoldIcon = new GameObject("HoldIcon").AddComponent<SpriteRenderer>();
             HoldIcon.gameObject.SetActive(false);
-            HoldIcon.sprite = DrawTool.CreateSprite(DrawTool.CreateTexture());
 
             Toggle = transform.Find("Toggle").GetComponent<Toggle>();
             Dropdown = transform.Find("Dropdown").GetComponent<TMP_Dropdown>();

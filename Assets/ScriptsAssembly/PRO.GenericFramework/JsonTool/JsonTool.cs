@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Cysharp.Threading.Tasks;
@@ -126,10 +127,57 @@ namespace PRO.Tool
             }
         }
 
-        public static bool StoreObject(string path, object obj)
+        public static int StackToInt(Stack<char> stack)
         {
-            File.WriteAllBytes(path, Encoding.UTF8.GetBytes(ToJson(obj, false)));
-            return true;
+            int ret = 0;
+            int symbol = 1;
+            if (stack.Peek() == '-') { symbol = -1; stack.Pop(); }
+            while (stack.Count > 0)
+                ret += (stack.Pop() - '0') * (int)Mathf.Pow(10, stack.Count);
+            return ret * symbol;
+        }
+        public static string StackToString(Stack<char> stack, ref StringBuilder sb)
+        {
+            sb.Clear();
+            while (stack.Count > 0)
+                sb.Append(stack.Pop());
+            return sb.ToString();
+        }
+        /// <summary>
+        /// 通用反序列化数据
+        /// 从lastDelimiter-1开始向前找
+        /// 遇到‘:’代表可以读取一个字段了，数据被存入stack中
+        /// 遇到‘,’代表可以将读到的字典写入对象了，开始读取下一个对象
+        /// 遇到‘|’代表当前类型的对象全部读取完毕
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="readDataAction"></param>
+        /// <param name="writeDataAction"></param>
+        /// <param name="lastDelimiter"></param>
+        /// <param name="stack"></param>
+        public static void Deserialize_Data(string text, Action<int> readDataAction, Action writeDataAction, ref int lastDelimiter, ref Stack<char> stack)
+        {
+            stack.Clear();
+            int valueNum = 0;
+            for (int i = lastDelimiter - 1; i >= 0; i--)
+            {
+                char c = text[i];
+                if (c == '|' || c == ',' || c == ':')
+                {
+                    readDataAction?.Invoke(valueNum++);
+                    if (c == '|' || c == ',')
+                    {
+                        writeDataAction?.Invoke();
+                        stack.Clear();
+                        valueNum = 0;
+                        if (c == '|')
+                        {
+                            lastDelimiter = i; return;
+                        }
+                    }
+                }
+                else stack.Push(c);
+            }
         }
     }
 }

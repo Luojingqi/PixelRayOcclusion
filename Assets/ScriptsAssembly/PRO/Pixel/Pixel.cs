@@ -55,7 +55,7 @@ namespace PRO
         /// <summary>
         /// 每个像素点占世界空间的大小
         /// </summary>
-        public static float Size = 0.05f;
+        public static readonly float Size = 0.05f;
 
         private static List<PixelTypeInfo> pixelTypeInfoList = new List<PixelTypeInfo>();
         private static Dictionary<string, PixelTypeInfo> pixelTypeInfoDic = new Dictionary<string, PixelTypeInfo>();
@@ -67,6 +67,7 @@ namespace PRO
             pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
+            pixel.building = null;
             pixelPool.PutIn(pixel);
         }
 

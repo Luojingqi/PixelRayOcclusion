@@ -16,7 +16,7 @@
 //    public void Init()
 //    {
 //        Inst= this;
-//        LanguageDic.Clear();
+//        LanguageDic.FillTransparentColor();
 
 //        NowUseLanguage = (LanguageEnum)ConfigManager.Inst.ConstConfig.NowUseLanguage;
 //    }

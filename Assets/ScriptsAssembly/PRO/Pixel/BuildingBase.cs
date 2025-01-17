@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using PRO.Disk;
+using PRO.Tool;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
+using static PRO.Tool.JsonTool;
 
 namespace PRO
 {
@@ -10,35 +14,220 @@ namespace PRO
     {
         public string GUID;
         public string Name;
-        public Dictionary<Vector2Int, Building_Pixel> PixelDic = new Dictionary<Vector2Int, Building_Pixel>();
+        public Dictionary<Vector2Int, Building_Pixel> AllPixel = new Dictionary<Vector2Int, Building_Pixel>();
+        private Dictionary<Vector2Int, Building_Pixel> AllSurvivalPixel = new Dictionary<Vector2Int, Building_Pixel>();
+        private Dictionary<Vector2Int, Building_Pixel> AllDeathPixel = new Dictionary<Vector2Int, Building_Pixel>();
         public Vector2Int global;
-        public BoxCollider2D collider;
+        public Vector2Int Size;
+
+        public BoxCollider2D TriggerCollider;
+
+        /// <summary>
+        /// Prospect or Background 在前景还是在背景  true为前景
+        /// </summary>
+        public bool PorB = true;
         /// <summary>
         /// 这个建筑是否可以被破坏
         /// </summary>
         public bool CanByBroken = true;
+
+        public void AddBuilding_Pixel(Building_Pixel building_Pixel)
+        {
+            AllPixel.Add(building_Pixel.Offset, building_Pixel);
+            if (building_Pixel.GetState() == Building_Pixel.State.Survival)
+                AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
+            else
+                AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
+        }
+        public void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel) => AllPixel.Add(building_Pixel.Offset, building_Pixel);
+        public virtual void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        {
+            Building_Pixel.State oldState = building_Pixel.GetState();
+            building_Pixel.Pixel = pixel;
+            Building_Pixel.State newState = building_Pixel.GetState();
+            if (oldState == newState) return;
+            if (newState == Building_Pixel.State.Death)
+            {
+                AllSurvivalPixel.Remove(building_Pixel.Offset);
+                AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
+            }
+            else
+            {
+                AllDeathPixel.Remove(building_Pixel.Offset);
+                AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
+            }
+        }
+        public void Deserialize_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        {
+            Building_Pixel.State newState = building_Pixel.GetState();
+            if (newState == Building_Pixel.State.Death)
+                AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
+            else
+                AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
+        }
+        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel[globalPos - this.global];
+
+        public BuildingBase(string guid)
+        {
+            GUID = guid;
+            TriggerCollider = GreedyCollider.TakeOut();
+            TriggerCollider.isTrigger = true;
+        }
+        #region 序列化与反序列化
+        public virtual string Serialize()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"|{Name}|{global.x}:{global.y}|{Size.x}:{Size.y}");
+            sb.Append($"|{(PorB ? 'T' : 'F')}|{(CanByBroken ? 'T' : 'F')}|");
+            Dictionary<string, int> typeNameDic = new Dictionary<string, int>();
+            Dictionary<string, int> colorNameDic = new Dictionary<string, int>();
+            // |类型索引:颜色索引,类型索引:颜色索引| 
+            foreach (var building_Pixel in AllPixel.Values)
+            {
+                if (typeNameDic.TryGetValue(building_Pixel.TypeInfo.typeName, out int typeNameIndex) == false)
+                {
+                    typeNameIndex = typeNameDic.Count;
+                    typeNameDic.Add(building_Pixel.TypeInfo.typeName, typeNameIndex);
+                }
+                if (colorNameDic.TryGetValue(building_Pixel.ColorInfo.colorName, out int colorNameIndex) == false)
+                {
+                    colorNameIndex = colorNameDic.Count;
+                    colorNameDic.Add(building_Pixel.ColorInfo.colorName, colorNameIndex);
+                }
+                sb.Append($"{typeNameIndex}:{colorNameIndex}:{building_Pixel.Offset.x}:{building_Pixel.Offset.y},");
+            }
+            if (sb[sb.Length - 1] == '|') sb.Append('|');
+            else sb[sb.Length - 1] = '|';
+            // |类型索引,类型|
+            foreach (var kv in typeNameDic)
+            {
+                sb.Append($"{kv.Value}:{kv.Key},");
+            }
+            if (sb[sb.Length - 1] == '|') sb.Append('|');
+            else sb[sb.Length - 1] = '|';
+            // |颜色索引,颜色|
+            foreach (var kv in colorNameDic)
+            {
+                sb.Append($"{kv.Value}:{kv.Key},");
+            }
+            //sb[sb.Length - 1] = '|';
+            sb.Remove(sb.Length - 1, 1);
+            return sb.ToString();
+        }
+        public virtual void Deserialize(string text, int lastDelimiter)
+        {
+            Stack<char> stack = new Stack<char>();
+            StringBuilder sb = new StringBuilder();
+            Dictionary<int, string> colorNameDic = new Dictionary<int, string>();
+            Dictionary<int, string> typeNameDic = new Dictionary<int, string>();
+            int index = -1;
+            string typeName = null;
+            string colorName = null;
+            #region 使用的颜色和类型
+            Deserialize_Data(text, (num) =>
+            {
+                if (num == 0) colorName = StackToString(stack, ref sb);
+                else if (num == 1) index = StackToInt(stack);
+            },
+            () => { colorNameDic.Add(index, colorName); },
+                ref lastDelimiter, ref stack);
+            Deserialize_Data(text, (num) =>
+            {
+                if (num == 0) typeName = StackToString(stack, ref sb);
+                else if (num == 1) index = StackToInt(stack);
+            },
+            () => { typeNameDic.Add(index, typeName); },
+            ref lastDelimiter, ref stack);
+            #endregion
+            #region AllPixel
+            Vector2Int offset = new Vector2Int();
+            Deserialize_Data(text, (num) =>
+            {
+                if (num == 0) offset.y = StackToInt(stack);
+                else if (num == 1) offset.x = StackToInt(stack);
+                else if (num == 2) colorName = colorNameDic[StackToInt(stack)];
+                else if (num == 3) typeName = typeNameDic[StackToInt(stack)];
+            },
+            () => { Deserialize_AddBuilding_Pixel(new Building_Pixel(Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), offset)); },
+            ref lastDelimiter, ref stack);
+            #endregion
+            #region CanByBroken  PorB
+            Deserialize_Data(text, (num) => { CanByBroken = stack.Peek() == 'T' ? true : false; }, null, ref lastDelimiter, ref stack);
+            Deserialize_Data(text, (num) => { PorB = stack.Peek() == 'T' ? true : false; }, null, ref lastDelimiter, ref stack);
+            #endregion
+            #region Size  global  Name
+            Vector2Int vector2Int = new Vector2Int();
+            Deserialize_Data(text, (num) =>
+            {
+                if (num == 0) vector2Int.y = StackToInt(stack);
+                else if (num == 1) vector2Int.x = StackToInt(stack);
+            },
+            () => { Size = vector2Int; }, ref lastDelimiter, ref stack);
+
+            Deserialize_Data(text, (num) =>
+            {
+                if (num == 0) vector2Int.y = StackToInt(stack);
+                else if (num == 1) vector2Int.x = StackToInt(stack);
+            },
+            () => { global = vector2Int; }, ref lastDelimiter, ref stack);
+
+            Deserialize_Data(text, (num) => { Name = StackToString(stack, ref sb); }, null, ref lastDelimiter, ref stack);
+            TriggerCollider.size = (Vector2)Size * Pixel.Size;
+            TriggerCollider.offset = TriggerCollider.size / 2f;
+            TriggerCollider.transform.position = Block.GlobalToWorld(global);
+            #endregion
+        }
+        #endregion
     }
     public class Building_Pixel
     {
-        private string typeName;
-        private string colorName;
-
+        private PixelTypeInfo typeInfo;
+        private PixelColorInfo colorInfo;
+        /// <summary>
+        /// 偏移
+        /// </summary>
+        private Vector2Int offset;
 
         public Pixel Pixel;
-        public string TypeName => typeName;
-        public string ColorName => colorName;
+        public PixelTypeInfo TypeInfo => typeInfo;
+        public PixelColorInfo ColorInfo => colorInfo;
+        /// <summary>
+        /// 偏移
+        /// </summary>
+        public Vector2Int Offset => offset;
 
-        public Building_Pixel(string typeName, string colorName)
+
+        /// <summary>
+        /// 创建一个死亡点
+        /// </summary>
+        public Building_Pixel(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Int offset)
         {
-            this.typeName = typeName;
-            this.colorName = colorName;
+            this.typeInfo = typeInfo;
+            this.colorInfo = colorInfo;
+            this.offset = offset;
             this.Pixel = null;
         }
-        public Building_Pixel(Pixel pixel)
+        /// <summary>
+        /// 为当前点创建一个存活点
+        /// </summary>
+        public Building_Pixel(Pixel pixel, Vector2Int offset)
         {
-            this.typeName = pixel.typeInfo.typeName;
-            this.colorName = pixel.colorInfo.colorName;
+            this.typeInfo = pixel.typeInfo;
+            this.colorInfo = pixel.colorInfo;
             this.Pixel = pixel;
+            this.offset = offset;
+        }
+
+        public enum State
+        {
+            Survival,
+            Death
+        }
+        public State GetState()
+        {
+            if (Pixel == null) return State.Death;
+            if (Pixel.typeInfo == typeInfo && Pixel.colorInfo == colorInfo) return State.Survival;
+            return State.Death;
         }
     }
 }

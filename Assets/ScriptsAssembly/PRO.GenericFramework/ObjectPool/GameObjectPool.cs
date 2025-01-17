@@ -18,7 +18,7 @@ namespace PRO.Tool
             base.TakeOutEvent += TakeOutAction;
             Type type = typeof(T);
             if (type.IsClass)
-                canGet = type.IsSubclassOf(typeof(Behaviour));
+                canGet = type.IsSubclassOf(typeof(Component));
             else if (type.IsInterface)
                 canGet = true;
             else

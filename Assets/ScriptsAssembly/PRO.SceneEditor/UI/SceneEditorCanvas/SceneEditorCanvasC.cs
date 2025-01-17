@@ -24,10 +24,8 @@ namespace PRO.SceneEditor
             Inst = this;
 
 
-            for (int i = 1; i < DerivedBuildingBaseList.Count; i++)
+            for (int i = 0; i < DerivedBuildingBaseList.Count; i++)
                 view.Dropdown.options.Add(new TMP_Dropdown.OptionData(DerivedBuildingBaseList[i].Name));
-
-            //Scene
         }
 
         public void Start()
@@ -40,7 +38,7 @@ namespace PRO.SceneEditor
         {
             view.HoldIcon.gameObject.SetActive(true);
             if (view.HoldIcon.sprite != null) GameObject.Destroy(view.HoldIcon.sprite);
-            view.HoldIcon.sprite = DrawTool.CreateSprite((Texture2D)elementC.icon.texture);
+            view.HoldIcon.sprite = Texture2DPool.CreateSprite((Texture2D)elementC.icon.texture);
             HoldEntity = elementC.entity;
         }
         private void ClearHold()
@@ -67,16 +65,26 @@ namespace PRO.SceneEditor
             m.z = 1;
             m = Camera.main.ScreenToWorldPoint(m);
             Vector2Int blockPos = Block.WorldToBlock(m);
-            Vector2Int gloabPos = Block.WorldToGlobal(m);
+            Vector2Int global = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
-            view.HoldIcon.transform.position = Block.GlobalToWorld(gloabPos);
+            view.HoldIcon.transform.position = Block.GlobalToWorld(global);
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 BuildingBase building = null;
                 if (view.Dropdown.value != 0)
-                    building = (BuildingBase)Activator.CreateInstance(DerivedBuildingBaseList[view.Dropdown.value]);
+                {
+                    building = (BuildingBase)Activator.CreateInstance(DerivedBuildingBaseList[view.Dropdown.value - 1], Guid.NewGuid().ToString());
+                    building.TriggerCollider.size = new Vector2(HoldEntity.width, HoldEntity.height) * Pixel.Size;
+                    building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
+                    building.TriggerCollider.transform.position = Block.GlobalToWorld(global);
+                    building.global = global;
+                    building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
+                    building.PorB = !view.Toggle.isOn;
 
+                    SceneManager.Inst.NowScene.BuildingInRAM.Add(building.GUID, building);
+                    SceneManager.Inst.NowScene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
+                }
 
                 for (int y = 0; y < HoldEntity.height; y++)
                     for (int x = 0; x < HoldEntity.width; x++)
@@ -84,7 +92,7 @@ namespace PRO.SceneEditor
                         string typeName = HoldEntity.pixels[y * HoldEntity.width + x].typeName;
                         string colorName = HoldEntity.pixels[y * HoldEntity.width + x].colorName;
                         if (typeName == "¿ÕÆø") continue;
-                        Vector2Int nowGloab = gloabPos + new Vector2Int(x, y);
+                        Vector2Int nowGloab = global + new Vector2Int(x, y);
                         BlockBase block = null;
                         if (view.Toggle.isOn)
                             block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(nowGloab));
@@ -92,7 +100,11 @@ namespace PRO.SceneEditor
                             block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
 
                         Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
-                        building?.PixelDic.Add(nowGloab, new Building_Pixel(pixel));
+                        if (building != null)
+                        {
+                            building.AddBuilding_Pixel(new Building_Pixel(pixel, new(x, y)));
+                            pixel.building = building;
+                        }
                         block.SetPixel(pixel);
                         block.DrawPixelAsync();
                     }

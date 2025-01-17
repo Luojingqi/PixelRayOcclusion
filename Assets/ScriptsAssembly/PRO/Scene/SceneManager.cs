@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Disk.Scene;
+using PRO.SkillEditor;
 using PRO.Tool;
 using Sirenix.Utilities;
 using System;
@@ -45,7 +46,8 @@ namespace PRO
             Block.InitPool();
             BackgroundBlock.InitPool();
             Pixel.LoadPixelTypeInfo();
-            // GameSaveManager.Inst.CreateGameSaveFile("testSave");
+            Texture2DPool.InitPool();
+            //GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
             var catalogList = GameSaveManager.Inst.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
@@ -63,8 +65,10 @@ namespace PRO
             DrawThread.Init(() =>
            {
                BlockMaterial.FirstBind();
-
+               FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
                source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0"));
+
+
            });
 
         }
@@ -109,6 +113,8 @@ namespace PRO
         string n = "光源2";
         int l = 3;
         int k = 20;
+
+
         public async void Update()
         {
 
@@ -119,12 +125,12 @@ namespace PRO
             Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
 
-            
+
 
             if (source != null)
                 source.GloabPos = gloabPos;
             time += Time.deltaTime;
-            while (time > 0.1f &&Input.GetKey(KeyCode.Space))
+            while (time > 0.1f && Input.GetKey(KeyCode.Space))
             {
                 time -= 0.1f;
                 source.Radius++;
@@ -140,12 +146,13 @@ namespace PRO
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                //Span<int> aaa = stackalloc[] { 123 };
-                // SwitchScene("123");
                 Log.Print("保存");
                 for (int x = -l; x <= l; x++)
                     for (int y = -l; y <= l; y++)
                         nowScene.SaveBlockData(new(x, y));
+                foreach (var kv in nowScene.BuildingInRAM)
+                    nowScene.SaveBuilding(kv.Key);
+                nowScene.sceneCatalog.Save();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
@@ -279,7 +286,7 @@ namespace PRO
                 block.DrawPixelAsync();
             }
             #endregion
-            
+
             if (Monitor.TryEnter(mainThreadEventLock))
             {
                 try

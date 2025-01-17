@@ -19,13 +19,13 @@ namespace PRO
         {
             this.sceneCatalog = sceneCatalog;
         }
-        #region 区块存储于获取
+        #region 获取已经实例化的对象
         private CrossList<Block> BlockInRAM = new CrossList<Block>();
         private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
         /// <summary>
         /// key：guid  value：building
         /// </summary>
-        private Dictionary<string, BuildingBase> BuildingInRAM = new Dictionary<string, BuildingBase>();
+        public Dictionary<string, BuildingBase> BuildingInRAM = new Dictionary<string, BuildingBase>();
 
         public Block GetBlock(Vector2Int blockPos)
         {
@@ -41,7 +41,7 @@ namespace PRO
         }
         #endregion
 
-        #region 从磁盘中加载与保存区块
+        #region 从磁盘中加载与保存
         public void LoadBlockData(Vector2Int blockPos)
         {
             if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
@@ -49,8 +49,8 @@ namespace PRO
             {
                 Block block = CreateBlock(blockPos);
                 BackgroundBlock background = CreateBackground(blockPos);
-                BlockToDiskEx.ToRAM(blockText, block);
-                BlockToDiskEx.ToRAM(backgroundText, background);
+                BlockToDiskEx.ToRAM(blockText, block, this);
+                BlockToDiskEx.ToRAM(backgroundText, background, this);
                 block.DrawPixelAsync();
                 background.DrawPixelAsync();
                 var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1)); //此行其实可以交由多线程处理
@@ -66,21 +66,28 @@ namespace PRO
         {
             string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
-            JsonTool.StoreText($@"{path}\block.txt", BlockToDiskEx.ToDisk(GetBlock(blockPos)));
-            JsonTool.StoreText($@"{path}\background.txt", BlockToDiskEx.ToDisk(GetBackground(blockPos)));
+            JsonTool.StoreText($@"{path}\block.txt", BlockToDiskEx.ToDisk(GetBlock(blockPos), this));
+            JsonTool.StoreText($@"{path}\background.txt", BlockToDiskEx.ToDisk(GetBackground(blockPos), this));
         }
 
         public void LoadBuilding(string guid)
         {
-            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\BuildingBase\{guid}.json", out string buildingText))
+            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", out string buildingText) &&
+                sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type))
             {
-                BuildingBase building = JsonTool.ToObject<BuildingBase>(buildingText);
+
+                BuildingBase building = (BuildingBase)Activator.CreateInstance(type, guid);
+                building.Deserialize(buildingText, buildingText.Length);
                 BuildingInRAM.Add(guid, building);
             }
             else
             {
                 Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
             }
+        }
+        public void SaveBuilding(string guid)
+        {
+            JsonTool.StoreText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", GetBuilding(guid).Serialize());
         }
         #endregion
 

@@ -23,8 +23,8 @@ namespace PRO
         public virtual void Init()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            Texture2D texture = DrawTool.CreateTexture();
-            spriteRenderer.sprite = DrawTool.CreateSprite(texture);
+            Texture2D texture = Texture2DPool.TakeOut(Block.Size.x, Block.Size.y);
+            spriteRenderer.sprite = Texture2DPool.CreateSprite(texture);
             textureData = new TextureData(spriteRenderer.sprite.texture);
         }
         public SpriteRenderer spriteRenderer;
@@ -46,7 +46,7 @@ namespace PRO
         /// </summary>
         public void SetPixel(Pixel pixel, bool updateCollider = true, bool updateLiquidOrGas = true)
         {
-            pixel.posG = this.PixelToGlobal(pixel.pos);
+            pixel.posG = PixelToGlobal(pixel.pos);
 
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
@@ -63,7 +63,7 @@ namespace PRO
                 if (removePixel.building != null)
                 {
                     pixel.building = removePixel.building;
-                    pixel.building.PixelDic[pixel.posG].Pixel = pixel;
+                    pixel.building.PixelSwitch(pixel.building.GetBuilding_Pixel(pixel.posG), pixel);
                 }
 
 

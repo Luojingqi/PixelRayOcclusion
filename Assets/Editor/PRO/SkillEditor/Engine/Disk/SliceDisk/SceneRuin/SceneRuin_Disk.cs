@@ -53,7 +53,7 @@ namespace PRO.SkillEditor
             {
                 renderer = trans.GetComponent<SpriteRenderer>();
             }
-            renderer.sprite = DrawTool.CreateSprite(texture);
+            renderer.sprite = Texture2DPool.CreateSprite(texture);
             renderer.transform.position = agent.transform.position + Block.GlobalToWorld(offset);
         }
     }
