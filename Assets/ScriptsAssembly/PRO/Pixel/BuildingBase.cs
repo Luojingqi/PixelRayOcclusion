@@ -1,5 +1,6 @@
 ﻿using PRO.Disk;
 using PRO.Tool;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -10,16 +11,16 @@ namespace PRO
     /// <summary>
     /// 建筑的基类，一个建筑是由一堆点组合的合集
     /// </summary>
-    public class BuildingBase
+    public abstract class BuildingBase : MonoBehaviour
     {
         public string GUID;
         public string Name;
         public Dictionary<Vector2Int, Building_Pixel> AllPixel = new Dictionary<Vector2Int, Building_Pixel>();
         private Dictionary<Vector2Int, Building_Pixel> AllSurvivalPixel = new Dictionary<Vector2Int, Building_Pixel>();
         private Dictionary<Vector2Int, Building_Pixel> AllDeathPixel = new Dictionary<Vector2Int, Building_Pixel>();
+        private Dictionary<Vector2Int, Building_Pixel> AllUnloadPixel = new Dictionary<Vector2Int, Building_Pixel>();
         public Vector2Int global;
         public Vector2Int Size;
-
         public BoxCollider2D TriggerCollider;
 
         /// <summary>
@@ -30,20 +31,16 @@ namespace PRO
         /// 这个建筑是否可以被破坏
         /// </summary>
         public bool CanByBroken = true;
-
-        public void AddBuilding_Pixel(Building_Pixel building_Pixel)
-        {
-            AllPixel.Add(building_Pixel.Offset, building_Pixel);
-            if (building_Pixel.GetState() == Building_Pixel.State.Survival)
-                AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
-            else
-                AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
-        }
-        public void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel) => AllPixel.Add(building_Pixel.Offset, building_Pixel);
+        /// <summary>
+        /// 将这个点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）
+        /// </summary>
+        /// <param name="building_Pixel"></param>
+        /// <param name="pixel"></param>
         public virtual void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
             Building_Pixel.State oldState = building_Pixel.GetState();
             building_Pixel.Pixel = pixel;
+            pixel.building = this;
             Building_Pixel.State newState = building_Pixel.GetState();
             if (oldState == newState) return;
             if (newState == Building_Pixel.State.Death)
@@ -57,23 +54,57 @@ namespace PRO
                 AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
             }
         }
+        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel[globalPos - this.global];
+        public abstract void Init();
+        public static BuildingBase New(Type type, string guid)
+        {
+            if (typeof(BuildingBase).IsAssignableFrom(type) == false) return null;
+            GameObject go = new GameObject(type.Name);
+            BuildingBase building = (BuildingBase)go.AddComponent(type);
+            building.GUID = guid;
+            building.TriggerCollider = go.AddComponent<BoxCollider2D>();
+            building.TriggerCollider.isTrigger = true;
+            go.layer = 9;
+            building.Init();
+            return building;
+        }
+        #region 序列化与反序列化
+        /// <summary>
+        /// 反序列化过程：添加一个蓝图点到建筑中
+        /// </summary>
+        public void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel)
+        {
+            AllPixel.Add(building_Pixel.Offset, building_Pixel);
+            AllUnloadPixel.Add(building_Pixel.Offset, building_Pixel);
+        }
+        /// <summary>
+        /// 反序列化过程：将一个蓝图点由未加载状态改为已加载状态
+        /// </summary>
         public void Deserialize_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
+            AllUnloadPixel.Remove(building_Pixel.Offset);
+            building_Pixel.Pixel = pixel;
+            pixel.building = this;
             Building_Pixel.State newState = building_Pixel.GetState();
             if (newState == Building_Pixel.State.Death)
                 AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
             else
                 AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
         }
-        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel[globalPos - this.global];
-
-        public BuildingBase(string guid)
+        /// <summary>
+        /// 卸载一个点，当所有点都被卸载将触发回调
+        /// </summary>
+        public void UnloadPixel(Pixel pixel, Action<BuildingBase> byUnloadAllPixelAction)
         {
-            GUID = guid;
-            TriggerCollider = GreedyCollider.TakeOut();
-            TriggerCollider.isTrigger = true;
+            Building_Pixel building_Pixel = GetBuilding_Pixel(pixel.posG);
+            if (building_Pixel.GetState() == Building_Pixel.State.Survival) AllSurvivalPixel.Remove(building_Pixel.Offset);
+            else AllDeathPixel.Remove(building_Pixel.Offset);
+
+            building_Pixel.Pixel = null;
+            AllUnloadPixel.Add(building_Pixel.Offset, building_Pixel);
+            if (AllUnloadPixel.Count == AllPixel.Count)
+                byUnloadAllPixelAction?.Invoke(this);
         }
-        #region 序列化与反序列化
         public virtual string Serialize()
         {
             StringBuilder sb = new StringBuilder();
@@ -178,56 +209,33 @@ namespace PRO
             #endregion
         }
         #endregion
-    }
-    public class Building_Pixel
-    {
-        private PixelTypeInfo typeInfo;
-        private PixelColorInfo colorInfo;
-        /// <summary>
-        /// 偏移
-        /// </summary>
-        private Vector2Int offset;
 
-        public Pixel Pixel;
-        public PixelTypeInfo TypeInfo => typeInfo;
-        public PixelColorInfo ColorInfo => colorInfo;
-        /// <summary>
-        /// 偏移
-        /// </summary>
-        public Vector2Int Offset => offset;
-
-
-        /// <summary>
-        /// 创建一个死亡点
-        /// </summary>
-        public Building_Pixel(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Int offset)
+        public SpriteRenderer CreateSelectionBox(Color color)
         {
-            this.typeInfo = typeInfo;
-            this.colorInfo = colorInfo;
-            this.offset = offset;
-            this.Pixel = null;
-        }
-        /// <summary>
-        /// 为当前点创建一个存活点
-        /// </summary>
-        public Building_Pixel(Pixel pixel, Vector2Int offset)
-        {
-            this.typeInfo = pixel.typeInfo;
-            this.colorInfo = pixel.colorInfo;
-            this.Pixel = pixel;
-            this.offset = offset;
+            Vector2Int wh = Size;
+            Texture2D texture = Texture2DPool.TakeOut(Size.x + 2, Size.y + 2);
+            texture.GetRawTextureData<float>().DrawLine(texture.width, new(0, 0), new(Size.x + 1, 0), color);
+            texture.GetRawTextureData<float>().DrawLine(texture.width, new(0, 0), new(0, Size.y + 1), color);
+            texture.GetRawTextureData<float>().DrawLine(texture.width, new(Size.x + 1, 0), new(Size.x + 1, Size.y + 1), color);
+            texture.GetRawTextureData<float>().DrawLine(texture.width, new(0, Size.y + 1), new(Size.x + 1, Size.y + 1), color);
+            texture.Apply();
+            SpriteRenderer spriteRenderer = Texture2DPool.TakeOutSpriteRenderer();
+            spriteRenderer.sprite = Texture2DPool.GetOnlySprite(texture);
+            spriteRenderer.transform.position = Block.GlobalToWorld(global - Vector2Int.one);
+            return spriteRenderer;
         }
 
-        public enum State
+        public SpriteRenderer DrawSprite()
         {
-            Survival,
-            Death
-        }
-        public State GetState()
-        {
-            if (Pixel == null) return State.Death;
-            if (Pixel.typeInfo == typeInfo && Pixel.colorInfo == colorInfo) return State.Survival;
-            return State.Death;
+            Texture2D texture = Texture2DPool.TakeOut(Size.x, Size.y);
+            SpriteRenderer spriteRenderer = Texture2DPool.TakeOutSpriteRenderer();
+            spriteRenderer.sprite = Texture2DPool.GetOnlySprite(texture);
+            var data = texture.GetRawTextureData<float>();
+            foreach (var building in AllSurvivalPixel.Values)
+                data.DrawPixel(texture.width, building.Offset, building.ColorInfo.color);
+            texture.Apply();
+            spriteRenderer.transform.position = Block.GlobalToWorld(global);
+            return spriteRenderer;
         }
     }
 }

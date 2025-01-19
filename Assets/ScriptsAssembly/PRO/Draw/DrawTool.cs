@@ -7,10 +7,6 @@ namespace PRO.Tool
 {
     public static class DrawTool
     {
-        public static Sprite CreateSprite(Texture2D texture)
-        {
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0f, 0f), 1 / Pixel.Size);
-        }
         #region ªÊ÷∆µ„
         public static void DrawPixelSync(this BlockBase block, Vector2Byte pos, Color color)
         {
@@ -29,6 +25,36 @@ namespace PRO.Tool
             nativeArray[index++] = color.g;
             nativeArray[index++] = color.b;
             nativeArray[index] = color.a;
+        }
+
+        public static void DrawLine(this NativeArray<float> nativeArray, int width, Vector2Int start, Vector2Int end, Color color)
+        {
+            int dx = Math.Abs(end.x - start.x);
+            int dy = Math.Abs(end.y - start.y);
+
+            int sx = start.x < end.x ? 1 : -1;
+            int sy = start.y < end.y ? 1 : -1;
+            int err = dx - dy;
+
+            while (true)
+            {
+
+                DrawPixel(nativeArray, width, start, color);
+                if (start.x == end.x && start.y == end.y)
+                    break;
+
+                int e2 = 2 * err;
+                if (e2 > -dy)
+                {
+                    err -= dy;
+                    start.x += sx;
+                }
+                if (e2 < dx)
+                {
+                    err += dx;
+                    start.y += sy;
+                }
+            }
         }
         #region ∆˙”√
         //public static void DrawPixelSync(List<Vector2Int> list, Color32 color)

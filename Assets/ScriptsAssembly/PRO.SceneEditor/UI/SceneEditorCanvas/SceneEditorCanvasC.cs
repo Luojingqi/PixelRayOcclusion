@@ -74,7 +74,7 @@ namespace PRO.SceneEditor
                 BuildingBase building = null;
                 if (view.Dropdown.value != 0)
                 {
-                    building = (BuildingBase)Activator.CreateInstance(DerivedBuildingBaseList[view.Dropdown.value - 1], Guid.NewGuid().ToString());
+                    building = BuildingBase.New(DerivedBuildingBaseList[view.Dropdown.value - 1], Guid.NewGuid().ToString());
                     building.TriggerCollider.size = new Vector2(HoldEntity.width, HoldEntity.height) * Pixel.Size;
                     building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
                     building.TriggerCollider.transform.position = Block.GlobalToWorld(global);
@@ -102,8 +102,9 @@ namespace PRO.SceneEditor
                         Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
                         if (building != null)
                         {
-                            building.AddBuilding_Pixel(new Building_Pixel(pixel, new(x, y)));
-                            pixel.building = building;
+                            Building_Pixel building_Pixel = new Building_Pixel(pixel, new(x, y));
+                            building.Deserialize_AddBuilding_Pixel(building_Pixel);
+                            building.Deserialize_PixelSwitch(building_Pixel, pixel);
                         }
                         block.SetPixel(pixel);
                         block.DrawPixelAsync();

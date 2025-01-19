@@ -34,6 +34,7 @@ namespace PRO
                     //创建背景并填充
                     scene.CreateBackground(new Vector2Int(i, j));
                     ThreadPool.QueueUserWorkItem(StartFillBackground, scene.GetBackground(new(i, j)));
+                    scene.BlockBaseInRAM.Add(new Vector2Int(i, j));
                 }
             }
         }
@@ -62,7 +63,7 @@ namespace PRO
                         Vector2Int nowBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
 
                         Block block = scene.GetBlock(nowBlockPos);
-                        if (block.DrawPixelTaskQueue.Count > 0)
+                        if (block != null && block.DrawPixelTaskQueue.Count > 0)
                         {
                             lock (block.DrawPixelTaskQueue)
                             {
@@ -77,7 +78,7 @@ namespace PRO
 
                         //更新背景
                         BackgroundBlock background = scene.GetBackground(nowBlockPos);
-                        if (background.DrawPixelTaskQueue.Count > 0)
+                        if (background != null && background.DrawPixelTaskQueue.Count > 0)
                         {
                             lock (background.DrawPixelTaskQueue)
                             {

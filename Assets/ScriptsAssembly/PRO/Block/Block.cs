@@ -126,7 +126,7 @@ namespace PRO
             return block;
         }
 
-        public static void PutIn(Block block)
+        public static void PutIn(Block block, System.Action<BuildingBase> byUnloadAllPixelAction)
         {
             block.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
@@ -136,7 +136,7 @@ namespace PRO
                     Pixel pixel = block.allPixel[x, y];
                     block.allPixel[x, y] = null;
 
-                    Pixel.PutIn(pixel);
+                    Pixel.PutIn(pixel, byUnloadAllPixelAction);
 
                     BoxCollider2D box = block.allCollider[x, y];
                     if (box != null)
@@ -145,7 +145,6 @@ namespace PRO
                         GreedyCollider.PutIn(box);
                     }
                 }
-                //await UniTask.Yield();
             }
             block.name = "Block(Clone)";
             block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
@@ -417,8 +416,8 @@ namespace PRO
             var p1_Clone = p1.Clone();
             block1.SetPixel(p0_Clone, false, false);
             block0.SetPixel(p1_Clone, false, false);
-            block1.DrawPixelAsync(p0_Clone.pos,  p0_Clone.colorInfo.color);
-            block0.DrawPixelAsync(p1_Clone.pos,  p1_Clone.colorInfo.color);
+            block1.DrawPixelAsync(p0_Clone.pos, p0_Clone.colorInfo.color);
+            block0.DrawPixelAsync(p1_Clone.pos, p1_Clone.colorInfo.color);
         }
 
         #region 更新流体的临时变量

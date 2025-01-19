@@ -4,6 +4,7 @@ using PRO.Tool;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ namespace PRO
             this.sceneCatalog = sceneCatalog;
         }
         #region 获取已经实例化的对象
+        public HashSet<Vector2Int> BlockBaseInRAM = new HashSet<Vector2Int>();
         private CrossList<Block> BlockInRAM = new CrossList<Block>();
         private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
         /// <summary>
@@ -37,7 +39,8 @@ namespace PRO
         }
         public BuildingBase GetBuilding(string guid)
         {
-            return BuildingInRAM[guid];
+            BuildingInRAM.TryGetValue(guid, out var building);
+            return building;
         }
         #endregion
 
@@ -53,6 +56,7 @@ namespace PRO
                 BlockToDiskEx.ToRAM(backgroundText, background, this);
                 block.DrawPixelAsync();
                 background.DrawPixelAsync();
+                BlockBaseInRAM.Add(blockPos);
                 var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1)); //此行其实可以交由多线程处理
                 GreedyCollider.CreateColliderAction(block, colliderDataList);
             }
@@ -61,7 +65,46 @@ namespace PRO
                 Log.Print($"无法加载区块{blockPos}，可能区块文件不存在", Color.red);
             }
         }
-
+        /// <summary>
+        /// 卸载一个区块，上方的建筑也会被一并卸载
+        /// </summary>
+        /// <param name="blockPos"></param>
+        public void UnloadBlockData(Vector2Int blockPos)
+        {
+            Action<BuildingBase> action = (building) =>
+            {
+                BuildingInRAM.Remove(building.GUID);
+                GameObject.Destroy(building.gameObject);
+            };
+            Block.PutIn(GetBlock(blockPos), action);
+            BackgroundBlock.PutIn(GetBackground(blockPos), action);
+            BlockInRAM[blockPos] = null;
+            BackgroundInRAM[blockPos] = null;
+            BlockBaseInRAM.Remove(blockPos);
+        }
+        /// <summary>
+        /// 卸载并且保存一个区块，上方的建筑也会被一并保存
+        /// </summary>
+        /// <param name="blockPos"></param>
+        public void UnloadAndSaveBlockData(Vector2Int blockPos)
+        {
+            Action<BuildingBase> action = (building) =>
+            {
+                SaveBuilding(building.GUID);
+                BuildingInRAM.Remove(building.GUID);
+                GameObject.Destroy(building.gameObject);
+            };
+            SaveBlockData(blockPos);
+            Block.PutIn(GetBlock(blockPos), action);
+            BackgroundBlock.PutIn(GetBackground(blockPos), action);
+            BlockInRAM[blockPos] = null;
+            BackgroundInRAM[blockPos] = null;
+            BlockBaseInRAM.Remove(blockPos);
+        }
+        /// <summary>
+        /// 只保存一个区块，上方的建筑不会被保存
+        /// </summary>
+        /// <param name="blockPos"></param>
         public void SaveBlockData(Vector2Int blockPos)
         {
             string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
@@ -76,7 +119,7 @@ namespace PRO
                 sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type))
             {
 
-                BuildingBase building = (BuildingBase)Activator.CreateInstance(type, guid);
+                BuildingBase building = BuildingBase.New(type, guid);
                 building.Deserialize(buildingText, buildingText.Length);
                 BuildingInRAM.Add(guid, building);
             }
@@ -94,7 +137,8 @@ namespace PRO
 
         public void Unload()
         {
-
+            foreach(var blockPos in BlockBaseInRAM.ToList())
+                UnloadBlockData(blockPos);
         }
         #region 创建区块的空游戏物体
         /// <summary>

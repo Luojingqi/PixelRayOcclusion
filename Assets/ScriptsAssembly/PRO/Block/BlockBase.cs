@@ -62,8 +62,8 @@ namespace PRO
 
                 if (removePixel.building != null)
                 {
-                    pixel.building = removePixel.building;
-                    pixel.building.PixelSwitch(pixel.building.GetBuilding_Pixel(pixel.posG), pixel);
+                    removePixel.building.PixelSwitch(removePixel.building.GetBuilding_Pixel(pixel.posG), pixel);
+                    removePixel.building = null;
                 }
 
 

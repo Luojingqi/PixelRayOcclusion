@@ -125,7 +125,15 @@ namespace PRO
             Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
 
-
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                var hit = Physics2D.Raycast(m, Vector2.zero, 0, 1 << 9);
+                if (hit.collider != null)
+                {
+                   // Debug.Log(hit.transform.name + "|" + hit.collider.name);
+                     hit.transform.GetComponent<BuildingBase>().CreateSelectionBox(Color.red);
+                }
+            }
 
             if (source != null)
                 source.GloabPos = gloabPos;
@@ -171,12 +179,7 @@ namespace PRO
                 t = Time.realtimeSinceStartup;
                 Log.Print("回收开始，池内数量" + Pixel.pixelPool.notUsedObject.Count);
                 t = Time.realtimeSinceStartup;
-                for (int x = -l; x <= l; x++)
-                    for (int y = -l; y <= l; y++)
-                    {
-                        Block.PutIn(nowScene.GetBlock(new(x, y)));
-                        BackgroundBlock.PutIn(nowScene.GetBackground(new(x, y)));
-                    }
+                nowScene.Unload();
                 Log.Print("回收完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
             }
             if (Input.GetKeyDown(KeyCode.J))

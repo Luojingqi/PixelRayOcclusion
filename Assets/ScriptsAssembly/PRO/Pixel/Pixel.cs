@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using PRO.Disk.Scene;
+using System;
 namespace PRO
 {
     public class Pixel
@@ -61,13 +62,18 @@ namespace PRO
         private static Dictionary<string, PixelTypeInfo> pixelTypeInfoDic = new Dictionary<string, PixelTypeInfo>();
         #region ∂‘œÛ≥ÿ
         public static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
-        public static void PutIn(Pixel pixel)
+        public static void PutIn(Pixel pixel, Action<BuildingBase> byUnloadAllPixelAction = null)
         {
             pixel.typeInfo = null;
             pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
-            pixel.building = null;
+            if (pixel.building != null)
+            {
+                pixel.building.UnloadPixel(pixel, byUnloadAllPixelAction);
+                pixel.building = null;
+            }
+
             pixelPool.PutIn(pixel);
         }
 

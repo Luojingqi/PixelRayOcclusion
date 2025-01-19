@@ -76,7 +76,7 @@ namespace PRO.Disk.Scene
             },
             () =>
             {
-                if (buildingGuid != null && buildingGuid.Length > 0)
+                if (buildingGuid != null && buildingGuid.Length > 0 && sceneEntity.GetBuilding(buildingGuid) == null)
                 {
                     buildingGuidDic.Add(index, buildingGuid); sceneEntity.LoadBuilding(buildingGuid);
                 }
