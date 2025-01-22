@@ -59,6 +59,13 @@ namespace PRO
                 BlockBaseInRAM.Add(blockPos);
                 var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1)); //此行其实可以交由多线程处理
                 GreedyCollider.CreateColliderAction(block, colliderDataList);
+                //for (int y = -1; y <= 1; y++)
+                //    for (int x = -1; x <= 1; x++)
+                //    {
+                //        GetBlock(blockPos + new Vector2Int(x, y))?.NavBuildAll();
+                //    }
+
+
             }
             else
             {
@@ -137,7 +144,7 @@ namespace PRO
 
         public void Unload()
         {
-            foreach(var blockPos in BlockBaseInRAM.ToList())
+            foreach (var blockPos in BlockBaseInRAM.ToList())
                 UnloadBlockData(blockPos);
         }
         #region 创建区块的空游戏物体

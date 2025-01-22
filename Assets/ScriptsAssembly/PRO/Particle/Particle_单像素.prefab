@@ -96,7 +96,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6352315385668635298}
   m_BodyType: 0
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -146,7 +146,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.025, y: 0.025}
   serializedVersion: 2
   m_Radius: 0.025
 --- !u!114 &258844807222603299
@@ -161,4 +161,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269f2b904029b1248a1fb18de2b3c3b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remainTime: 2147483647

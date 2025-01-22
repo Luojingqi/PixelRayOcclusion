@@ -51,6 +51,7 @@ namespace PRO
         }
         public void PutIn()
         {
+            transform.rotation = Quaternion.identity;
             Rigidbody.velocity = Vector2.zero;
             Rigidbody.angularVelocity = 0;
             Renderer.color = Color.white;
@@ -58,6 +59,9 @@ namespace PRO
             CollisionExitEvent = null;
             RemainTimeIsZeroEvent = null;
             remainTime = int.MaxValue;
+            Rigidbody.simulated = false;
+            Collider.enabled = true;
+            gameObject.layer = 10;
             ParticleManager.Inst.ActiveParticleHash.Remove(this);
         }
 

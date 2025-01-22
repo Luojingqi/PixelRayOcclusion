@@ -57,9 +57,9 @@ namespace PRO.Tool
             }
         }
         #region ÆúÓÃ
-        //public static void DrawPixelSync(List<Vector2Int> list, Color32 color)
+        //public static void DrawPixelSync(List<Vector2Int> chackBox, Color32 color)
         //{
-        //    foreach (var v in list)
+        //    foreach (var v in chackBox)
         //    {
         //        var block = SceneManager.Inst.BlockCrossList[Block.GlobalToBlock(v)];
         //        block.DrawPixelSync(block.GlobalToPixel(v), color);

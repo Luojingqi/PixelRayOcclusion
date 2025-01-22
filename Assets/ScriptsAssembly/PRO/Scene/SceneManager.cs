@@ -66,7 +66,7 @@ namespace PRO
            {
                BlockMaterial.FirstBind();
                FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
-               source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0"));
+               source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
 
 
            });
@@ -125,15 +125,15 @@ namespace PRO
             Vector2Int gloabPos = Block.WorldToGlobal(m);
             Vector2Byte pixelPos = Block.WorldToPixel(m);
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                var hit = Physics2D.Raycast(m, Vector2.zero, 0, 1 << 9);
-                if (hit.collider != null)
-                {
-                   // Debug.Log(hit.transform.name + "|" + hit.collider.name);
-                     hit.transform.GetComponent<BuildingBase>().CreateSelectionBox(Color.red);
-                }
-            }
+            //if (Input.GetKeyDown(KeyCode.Mouse0))
+            //{
+            //    var hit = Physics2D.Raycast(m, Vector2.zero, 0, 1 << 9);
+            //    if (hit.collider != null)
+            //    {
+            //        // Debug.Log(hit.transform.name + "|" + hit.collider.name);
+            //        hit.transform.GetComponent<BuildingBase>().CreateSelectionBox(Color.red);
+            //    }
+            //}
 
             if (source != null)
                 source.GloabPos = gloabPos;
@@ -181,38 +181,6 @@ namespace PRO
                 t = Time.realtimeSinceStartup;
                 nowScene.Unload();
                 Log.Print("回收完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
-            }
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                t = Time.realtimeSinceStartup;
-                Log.Print("buildNav开始");
-                t = Time.realtimeSinceStartup;
-                for (int x = -l; x <= l; x++)
-                    for (int y = -l; y <= l; y++)
-                    {
-                        nowScene.GetBlock(new(x, y)).NavBuildAll();
-                    }
-                Log.Print("buildNav结束" + (Time.realtimeSinceStartup - t));
-            }
-            if (Input.GetKey(KeyCode.N))
-            {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
-                {
-                    g = gloabPos;
-                }
-                if (Input.GetKeyDown(KeyCode.Mouse1))
-                {
-                    var list = Nav.TryNav(g, gloabPos);
-                    foreach (var l in list)
-                    {
-                        Block block = NowScene.GetBlock(Block.GlobalToBlock(l));
-                        if (block != null)
-                        {
-                            block.SetPixel(Pixel.TakeOut("木头", 0, Block.GlobalToPixel(l)));
-                        }
-                        block.DrawPixelAsync();
-                    }
-                }
             }
             #region 光源
             if (Input.GetKeyDown(KeyCode.Alpha1))

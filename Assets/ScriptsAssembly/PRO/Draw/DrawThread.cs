@@ -104,32 +104,32 @@ namespace PRO
         //    {
         //        case DrawGraph_Line data:
         //            {
-        //                var list = GetLine(data.pos_G0, data.pos_G1);
-        //                DrawPixelSync(list, data.color);
+        //                var chackBox = GetLine(data.pos_G0, data.pos_G1);
+        //                DrawPixelSync(chackBox, data.color);
         //                break;
         //            }
         //        case DrawGraph_Ring data:
         //            {
-        //                var list = GetRing(data.pos_G, data.r);
-        //                DrawPixelSync(list, data.color);
+        //                var chackBox = GetRing(data.pos_G, data.r);
+        //                DrawPixelSync(chackBox, data.color);
         //                break;
         //            }
         //        case DrawGraph_Circle data:
         //            {
-        //                var list = GetCircle(data.pos_G, data.r);
-        //                DrawPixelSync(list, data.color);
+        //                var chackBox = GetCircle(data.pos_G, data.r);
+        //                DrawPixelSync(chackBox, data.color);
         //                break;
         //            }
         //        case DrawGraph_Polygon data:
         //            {
-        //                var list = GetPolygon(data.pos_G, data.r, data.n, data.rotate);
-        //                DrawPixelSync(list, data.color);
+        //                var chackBox = GetPolygon(data.pos_G, data.r, data.n, data.rotate);
+        //                DrawPixelSync(chackBox, data.color);
         //                break;
         //            }
         //        case DrawGraph_Octagon data:
         //            {
-        //                var list = GetOctagon(data.pos_G, data.r);
-        //                DrawPixelSync(list, data.color);
+        //                var chackBox = GetOctagon(data.pos_G, data.r);
+        //                DrawPixelSync(chackBox, data.color);
         //                break;
         //            }
         //    }

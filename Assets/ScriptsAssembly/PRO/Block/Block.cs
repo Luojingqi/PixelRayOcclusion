@@ -148,6 +148,7 @@ namespace PRO
             }
             block.name = "Block(Clone)";
             block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+            
             BlockPool.PutIn(block.gameObject);
         }
         #endregion 
@@ -162,7 +163,6 @@ namespace PRO
             }
             colliderNode = new GameObject("ColliderNode").transform;
             colliderNode.parent = transform;
-            nav = new Nav() { block = this };
         }
 
 
@@ -444,21 +444,6 @@ namespace PRO
 
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
 
-        #region µ¼º½Íø¸ñ
-        [ShowInInspector]
-        public Nav nav;
-        public void NavBuildAll()
-        {
-            Vector2Int global = PixelToGlobal(new(0, 0));
-            nav.CanNavPointHash.Clear();
-            nav.Build(global, global + Block.Size);
-        }
-        public void NavBuildPoint(Vector2Byte pos)
-        {
-            Vector2Int global = PixelToGlobal(pos);
-            nav.CanNavPointHash.Remove(global);
-            nav.Build(global, global);
-        }
-        #endregion
+        public static Nav nav = new Nav();
     }
 }
