@@ -32,10 +32,8 @@ namespace PRO
         /// </summary>
         public bool CanByBroken = true;
         /// <summary>
-        /// 将这个点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）
+        /// 将这个点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
         /// </summary>
-        /// <param name="building_Pixel"></param>
-        /// <param name="pixel"></param>
         public virtual void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
             Building_Pixel.State oldState = building_Pixel.GetState();
@@ -52,6 +50,10 @@ namespace PRO
             {
                 AllDeathPixel.Remove(building_Pixel.Offset);
                 AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
+            }
+            if (AllSurvivalPixel.Count <= 0)
+            {
+                SceneManager.Inst.NowScene.DeleteBuilding(GUID);
             }
         }
         public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel[globalPos - this.global];

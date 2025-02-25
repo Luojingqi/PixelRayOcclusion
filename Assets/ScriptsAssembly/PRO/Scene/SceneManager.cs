@@ -63,13 +63,13 @@ namespace PRO
             // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.Value.ToString()));
             //填充
             DrawThread.Init(() =>
-           {
-               BlockMaterial.FirstBind();
-               FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
-               source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
+            {
+                BlockMaterial.FirstBind();
+                //  FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
+                source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
 
 
-           });
+            });
 
         }
         public FreelyLightSource source;
@@ -91,14 +91,14 @@ namespace PRO
         //    while (l <= r)
         //    {
         //        b = (l + r) / 2;
-        //        if (block.BlockPos.y < BlockUpdateList[b].BlockPos.y)
+        //        if (block.blockPos.y < BlockUpdateList[b].blockPos.y)
         //            r = b - 1;
-        //        else if (block.BlockPos.y > BlockUpdateList[b].BlockPos.y)
+        //        else if (block.blockPos.y > BlockUpdateList[b].blockPos.y)
         //            l = b + 1;
         //        else break;
         //    }
         //    BlockUpdateList.Add(block);
-        //    if (block.BlockPos.y > BlockUpdateList[b].BlockPos.y) b++;
+        //    if (block.blockPos.y > BlockUpdateList[b].blockPos.y) b++;
 
 
         //    for (int i = b; i < BlockUpdateList.Count - 1; i++)
@@ -109,45 +109,43 @@ namespace PRO
         //    }
         //}
         #endregion
-        float time = 0;
-        string n = "光源2";
+        float time0 = 0;
+        float time1 = 0;
+        int n = 2;
         int l = 3;
         int k = 20;
 
 
         public async void Update()
         {
-
-            Vector3 m = Input.mousePosition;
-            m.z = 1;
-            m = Camera.main.ScreenToWorldPoint(m);
-            Vector2Int blockPos = Block.WorldToBlock(m);
-            Vector2Int gloabPos = Block.WorldToGlobal(m);
-            Vector2Byte pixelPos = Block.WorldToPixel(m);
-
-            //if (Input.GetKeyDown(KeyCode.Mouse0))
-            //{
-            //    var hit = Physics2D.Raycast(m, Vector2.zero, 0, 1 << 9);
-            //    if (hit.collider != null)
-            //    {
-            //        // Debug.Log(hit.transform.name + "|" + hit.collider.name);
-            //        hit.transform.GetComponent<BuildingBase>().CreateSelectionBox(Color.red);
-            //    }
-            //}
-
+            #region 
+            //Vector2Int a = new Vector2Int(0, -4);
+            //Debug.Log(Block.GlobalToWorld(a) + "|" + Block.WorldToGlobal(Block.GlobalToWorld(a)));
+            ////if (Input.GetKeyDown(KeyCode.Mouse0))
+            ////{
+            ////    var hit = Physics2D.Raycast(m, Vector2.zero, 0, 1 << 9);
+            ////    if (hit.collider != null)
+            ////    {
+            ////        // Debug.Log(hit.transform.name + "|" + hit.collider.name);
+            ////        hit.transform.GetComponent<BuildingBase>().CreateSelectionBox(Color.red);
+            ////    }
+            ////}
+            #endregion
             if (source != null)
-                source.GloabPos = gloabPos;
-            time += Time.deltaTime;
-            while (time > 0.1f && Input.GetKey(KeyCode.Space))
+                source.GloabPos = MousePoint.gloabPos;
+            // if (Input.GetKey(KeyCode.Space))
+            time0 += Time.deltaTime;
+            while (time0 > 0.02f)
             {
-                time -= 0.1f;
-                source.Radius++;
-                k++;
-                if (k > BlockMaterial.LightRadiusMax)
-                {
-                    source.Radius = 1;
-                    k = 1;
-                }
+                time0 -= 0.02f;
+                for (int y = -l; y <= l; y++)
+                    for (int x = -l; x <= l; x++)
+                        NowScene.GetBlock(new(x, y)).RandomUpdatePixelList();
+            }
+            time1 += Time.deltaTime;
+            while (time1 > 0.25f)
+            {
+                time1 -= 0.25f;
                 for (int y = -l; y <= l; y++)
                     for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid1();
@@ -184,77 +182,73 @@ namespace PRO
             }
             #region 光源
             if (Input.GetKeyDown(KeyCode.Alpha1))
-                n = "光源0";
+                n = 0;
             if (Input.GetKeyDown(KeyCode.Alpha2))
-                n = "光源1";
+                n = 1;
             if (Input.GetKeyDown(KeyCode.Alpha3))
-                n = "光源2";
+                n = 2;
             if (Input.GetKeyDown(KeyCode.Alpha4))
-                n = "光源4";
+                n = 3;
             if (Input.GetKeyDown(KeyCode.Alpha5))
-                n = "光源5";
+                n = 4;
             if (Input.GetKeyDown(KeyCode.Alpha6))
-                n = "光源6";
+                n = 5;
             if (Input.GetKeyDown(KeyCode.Alpha7))
-                n = "光源7";
+                n = 6;
             if (Input.GetKeyDown(KeyCode.Alpha8))
-                n = "光源8";
+                n = 7;
             if (Input.GetKeyDown(KeyCode.Alpha9))
-                n = "光源9";
+                n = 8;
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Block block = NowScene.GetBlock(blockPos);
-                block.SetPixel(Pixel.TakeOut("光源", n, pixelPos));
-                block.DrawPixelAsync();
+                //MousePoint.block.SetPixel(Pixel.TakeOut("火焰", n, MousePoint.pixelPos));
+                MousePoint.block.SetPixel(Pixel.TakeOut("光源", n, MousePoint.pixelPos));
+                MousePoint.block.DrawPixelAsync();
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Block block = NowScene.GetBlock(blockPos);
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("水", 0, pixelPos + new Vector2Byte(x, y));
+                        var pixel = Pixel.TakeOut("水", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
                         if (pixel != null)
-                            block.SetPixel(pixel);
+                            MousePoint.block.SetPixel(pixel);
                     }
 
-                block.DrawPixelAsync();
+                MousePoint.block.DrawPixelAsync();
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Block block = NowScene.GetBlock(blockPos);
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("油", 0, pixelPos + new Vector2Byte(x, y));
+                        var pixel = Pixel.TakeOut("油", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
                         if (pixel != null)
-                            block.SetPixel(pixel);
+                            MousePoint.block.SetPixel(pixel);
                     }
-                block.DrawPixelAsync();
+                MousePoint.block.DrawPixelAsync();
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse3))
             {
-                Block block = NowScene.GetBlock(blockPos);
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("沙子", 0, pixelPos + new Vector2Byte(0, 0));
+                        var pixel = Pixel.TakeOut("沙子", 0, MousePoint.pixelPos + new Vector2Byte(0, 0));
                         if (pixel != null)
-                            block.SetPixel(pixel);
+                            MousePoint.block.SetPixel(pixel);
                     }
-                block.DrawPixelAsync();
+                MousePoint.block.DrawPixelAsync();
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse4))
             {
-                Block block = NowScene.GetBlock(blockPos);
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("砂砾", 0, pixelPos + new Vector2Byte(x, y));
+                        var pixel = Pixel.TakeOut("砂砾", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
                         if (pixel != null)
-                            block.SetPixel(pixel);
+                            MousePoint.block.SetPixel(pixel);
                     }
-                block.DrawPixelAsync();
+                MousePoint.block.DrawPixelAsync();
             }
             #endregion
 

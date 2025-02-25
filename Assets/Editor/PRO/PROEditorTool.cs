@@ -90,7 +90,7 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
 @"  float3 sourceColor = float3(source.color.xyz / 255.0);  
     float3 filterColor = sourceColor;
     float shadow = 1;
-    float lastAffects = shadow;
+    float lastAffects = -1;
     for (int i = sourceIndex; i >= 0; i--)
     {
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
@@ -103,16 +103,13 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
         InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
-        PixelColorInfo typeInfo = GetPixel(lineArray[i]);
-        if(typeInfo.affectsLightIntensity != -1)
+       PixelColorInfo typeInfo = GetPixel(lineArray[i]);
+        if(typeInfo.affectsLightIntensity != lastAffects)
         {
             float4 infoColor = typeInfo.color / 255.0;
-            filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
-            if(typeInfo.affectsLightIntensity != lastAffects)
-            {
-                shadow *=(1- typeInfo.affectsLightIntensity);
-                lastAffects = typeInfo.affectsLightIntensity;
-            }
+            filterColor.xyz = min(filterColor.xyz * (1 - typeInfo.lightPathColorMixing) + infoColor.xyz * typeInfo.lightPathColorMixing , filterColor.xyz);
+            shadow *= (1 - typeInfo.affectsLightIntensity);
+            lastAffects = typeInfo.affectsLightIntensity;
         }
     }
 }" + "\n\n";

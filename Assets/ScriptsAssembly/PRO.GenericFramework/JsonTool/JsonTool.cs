@@ -78,7 +78,7 @@ namespace PRO.Tool
             }
             catch (Exception e)
             {
-                Debug.Log("加载磁盘中文本数据失败" + e);
+                //Debug.Log("加载磁盘中文本数据失败" + e);
                 text = null;
                 return false;
             }
@@ -96,7 +96,7 @@ namespace PRO.Tool
             }
             catch (Exception e)
             {
-                Debug.Log("加载磁盘中文本数据失败" + e);
+                //Debug.Log("加载磁盘中文本数据失败" + e);
             }
             return text;
         }

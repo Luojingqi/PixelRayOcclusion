@@ -1,8 +1,10 @@
 using PRO.DataStructure;
+using PRO.Disk.Scene;
 using PRO.Tool;
 using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static PRO.Tool.DrawTool;
 namespace PRO
 {
@@ -16,10 +18,10 @@ namespace PRO
         public static void Init(Action endAction)
         {
             InitScene(SceneManager.Inst.NowScene);
-            Thread thread = new Thread(LoopDraw);
-            thread.Start();
             while (time >= 0) { if (endNum <= 0) break; Thread.Sleep(10); time -= 10; }
             if (time <= 0) Debug.Log("初始化失败");
+            Thread thread = new Thread(LoopDraw);
+            thread.Start();
             endAction();
         }
         public static void InitScene(SceneEntity scene)
@@ -28,12 +30,33 @@ namespace PRO
             {
                 for (int j = y.x; j <= y.y; j++)
                 {
-                    //创建区块并填充
-                    scene.CreateBlock(new Vector2Int(i, j));
-                    ThreadPool.QueueUserWorkItem(StartFillBlock, scene.GetBlock(new(i, j)));
-                    //创建背景并填充
-                    scene.CreateBackground(new Vector2Int(i, j));
-                    ThreadPool.QueueUserWorkItem(StartFillBackground, scene.GetBackground(new(i, j)));
+                    var block = scene.CreateBlock(new Vector2Int(i, j));
+                    var background = scene.CreateBackground(new Vector2Int(i, j));
+                    if (JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{new Vector2Int(i, j)}\block.txt", out string blockText)
+                        && JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{new Vector2Int(i, j)}\background.txt", out string backgroundText))
+                    {
+                        ThreadPool.QueueUserWorkItem((obj) =>
+                        {
+                            BlockToDiskEx.ToRAM(blockText, block, scene);
+                            Interlocked.Add(ref endNum, -1);
+                            block.DrawPixelAsync();
+                            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
+                            SceneManager.Inst.mainThreadEvent += () => GreedyCollider.CreateColliderAction(block, colliderDataList);
+                        });
+                        ThreadPool.QueueUserWorkItem((obj) =>
+                        {
+                            BlockToDiskEx.ToRAM(backgroundText, background, scene);
+                            Interlocked.Add(ref endNum, -1);
+                            background.DrawPixelAsync();
+                        });
+                    }
+                    else
+                    {
+                        // StartFillBlock(block);
+                        // StartFillBackground(background);
+                        ThreadPool.QueueUserWorkItem(StartFillBlock, block);
+                        ThreadPool.QueueUserWorkItem(StartFillBackground, background);
+                    }
                     scene.BlockBaseInRAM.Add(new Vector2Int(i, j));
                 }
             }

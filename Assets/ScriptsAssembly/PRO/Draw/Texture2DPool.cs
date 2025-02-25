@@ -11,7 +11,7 @@ namespace PRO.Tool
         private static List<Texture2D> texture2DList = new List<Texture2D>();
         private static Dictionary<Texture2D, Sprite> texture_Sprite_Dic = new Dictionary<Texture2D, Sprite>();
         /// <summary>
-        /// 取出一个宽高大于等于输入宽高的纹理，反复复用
+        /// 取出一个宽高大于等于输入宽高的纹理
         /// </summary>
         public static Texture2D TakeOut(int width, int hight)
         {
