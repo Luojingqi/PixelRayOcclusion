@@ -4,7 +4,8 @@
     "availableColors": [
       "空气色"
     ],
-    "collider": false
+    "hardness": 0,
+    "durability": 0
   },
   {
     "typeName": "背景",
@@ -13,7 +14,8 @@
       "背景色1",
       "背景色2"
     ],
-    "collider": false
+    "hardness": 0,
+    "durability": 0
   },
   {
     "typeName": "光源",
@@ -21,8 +23,16 @@
       "光源0",
       "光源1",
       "光源2",
-      "光源3"
+      "光源3",
+      "光源4",
+      "光源5",
+      "光源6",
+      "光源7",
+      "光源8",
+      "光源9"
     ],
+    "hardness": 0,
+    "durability": 0,
     "collider": true
   },
   {
@@ -31,6 +41,8 @@
       "木头色0",
       "木头色1"
     ],
+    "hardness": 0,
+    "durability": 0,
     "collider": true
   },
   {
@@ -39,14 +51,18 @@
       "岩石色0",
       "岩石色1"
     ],
-    "collider": true
+    "hardness": 0,
+    "durability": 0,
+    "collider": true,
+    "burnOdds": 70
   },
   {
     "typeName": "水",
     "availableColors": [
       "水色0"
     ],
-    "collider": false,
+    "hardness": 0,
+    "durability": 0,
     "fluidType": 1,
     "fluidDensity": 10
   },
@@ -55,7 +71,8 @@
     "availableColors": [
       "油色0"
     ],
-    "collider": false,
+    "hardness": 0,
+    "durability": 0,
     "fluidType": 1,
     "fluidDensity": 6
   },
@@ -64,6 +81,8 @@
     "availableColors": [
       "沙子色0"
     ],
+    "hardness": 0,
+    "durability": 0,
     "collider": true,
     "fluidType": 3,
     "fluidDensity": 10
@@ -73,16 +92,11 @@
     "availableColors": [
       "砂砾色0"
     ],
+    "hardness": 0,
+    "durability": 0,
     "collider": true,
     "fluidType": 3,
     "fluidDensity": 20
-  },
-  {
-    "typeName": "测试",
-    "availableColors": [
-      "测试色0"
-    ],
-    "collider": false
   },
   {
     "typeName": "玉",
@@ -94,6 +108,18 @@
       "黑玉色1",
       "黑玉色2"
     ],
+    "hardness": 0,
+    "durability": 0,
     "collider": true
+  },
+  {
+    "typeName": "火焰",
+    "availableColors": [
+      "火焰色0",
+      "火焰色1",
+      "火焰色2"
+    ],
+    "hardness": 0,
+    "durability": 0
   }
 ]

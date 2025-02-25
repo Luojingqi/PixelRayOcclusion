@@ -59,13 +59,6 @@ namespace PRO
                 BlockBaseInRAM.Add(blockPos);
                 var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1)); //此行其实可以交由多线程处理
                 GreedyCollider.CreateColliderAction(block, colliderDataList);
-                //for (int y = -1; y <= 1; y++)
-                //    for (int x = -1; x <= 1; x++)
-                //    {
-                //        GetBlock(blockPos + new Vector2Int(x, y))?.NavBuildAll();
-                //    }
-
-
             }
             else
             {
@@ -122,8 +115,8 @@ namespace PRO
 
         public void LoadBuilding(string guid)
         {
-            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", out string buildingText) &&
-                sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type))
+            if (sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type) &&
+                JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", out string buildingText))
             {
 
                 BuildingBase building = BuildingBase.New(type, guid);
@@ -146,6 +139,23 @@ namespace PRO
         {
             foreach (var blockPos in BlockBaseInRAM.ToList())
                 UnloadBlockData(blockPos);
+        }
+
+
+        public void DeleteBuilding(string guid)
+        {
+            if (BuildingInRAM.TryGetValue(guid, out var building))
+            {
+                BuildingInRAM.Remove(guid);
+                sceneCatalog.buildingTypeDic.Remove(guid);
+                File.Delete(@$"{sceneCatalog.directoryInfo.FullName}/Building/{guid}.txt");
+                foreach (var item in building.AllPixel.Values)
+                {
+                    item.Pixel.building = null;
+                    item.Pixel = null;
+                }
+                GameObject.Destroy(building);
+            }
         }
         #region 创建区块的空游戏物体
         /// <summary>

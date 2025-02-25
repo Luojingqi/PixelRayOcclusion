@@ -19,9 +19,13 @@ namespace PRO.Disk
         
         private UnityEngine.Color32 _color;
         
+        private float lightpathcolormixing;
+        
         private float affectslightintensity;
         
-        private int lightradius;
+        private int luminousradius;
+        
+        private UnityEngine.Color32 luminouscolor;
         
         private float selfluminous;
         
@@ -53,6 +57,19 @@ namespace PRO.Disk
             }
         }
         
+        // 光路混色
+        public float lightPathColorMixing
+        {
+            get
+            {
+                return this.lightpathcolormixing;
+            }
+            set
+            {
+                this.lightpathcolormixing = value;
+            }
+        }
+        
         // 光强影响的系数
         public float affectsLightIntensity
         {
@@ -67,15 +84,28 @@ namespace PRO.Disk
         }
         
         // 发光半径
-        public int lightRadius
+        public int luminousRadius
         {
             get
             {
-                return this.lightradius;
+                return this.luminousradius;
             }
             set
             {
-                this.lightradius = value;
+                this.luminousradius = value;
+            }
+        }
+        
+        // 发光颜色
+        public UnityEngine.Color32 luminousColor
+        {
+            get
+            {
+                return this.luminouscolor;
+            }
+            set
+            {
+                this.luminouscolor = value;
             }
         }
         

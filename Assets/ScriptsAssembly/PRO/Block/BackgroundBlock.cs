@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using PRO.Renderer;
 using PRO.Tool;
 using System;
@@ -31,20 +30,20 @@ namespace PRO
         }
         public static BackgroundBlock TakeOut() => BackgroundPool.TakeOutT();
 
-        public static void PutIn(BackgroundBlock block, Action<BuildingBase> byUnloadAllPixelAction)
+        public static void PutIn(BackgroundBlock background, Action<BuildingBase> byUnloadAllPixelAction)
         {
-            block.gameObject.SetActive(false);
+            background.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
             {
                 for (int x = 0; x < Block.Size.x; x++)
                 {
-                    Pixel pixel = block.allPixel[x, y];
-                    block.allPixel[x, y] = null;
+                    Pixel pixel = background.allPixel[x, y];
+                    background.allPixel[x, y] = null;
                     Pixel.PutIn(pixel, byUnloadAllPixelAction);
                 }
             }
-            block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-            BackgroundPool.PutIn(block.gameObject);
+            background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+            BackgroundPool.PutIn(background.gameObject);
         }
         #endregion
 

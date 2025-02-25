@@ -1,11 +1,10 @@
-using PRO.Disk;
 using PRO.DataStructure;
+using PRO.Disk;
 using PRO.Tool;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using PRO.Disk.Scene;
-using System;
 namespace PRO
 {
     public class Pixel
@@ -30,6 +29,10 @@ namespace PRO
         /// 所属的建筑
         /// </summary>
         public BuildingBase building;
+        /// <summary>
+        /// 耐久度
+        /// </summary>
+        public int durability = -1;
 
         /// <summary>
         /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查
@@ -39,15 +42,17 @@ namespace PRO
         public Pixel Clone()
         {
             Pixel pixel = pixelPool.TakeOut();
-            InitPixel(pixel, typeInfo, colorInfo, pos);
+            InitPixel(pixel, typeInfo, colorInfo, pos, durability);
             return pixel;
         }
 
-        private static void InitPixel(Pixel pixel, PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos)
+        private static void InitPixel(Pixel pixel, PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability)
         {
             pixel.pos = pixelPos;
             pixel.typeInfo = typeInfo;
             pixel.colorInfo = colorInfo;
+            if (durability <= -1) pixel.durability = typeInfo.durability;
+            else pixel.durability = durability;
         }
 
 
@@ -68,6 +73,7 @@ namespace PRO
             pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
+            pixel.durability = -1;
             if (pixel.building != null)
             {
                 pixel.building.UnloadPixel(pixel, byUnloadAllPixelAction);
@@ -76,25 +82,32 @@ namespace PRO
 
             pixelPool.PutIn(pixel);
         }
-
-        public static Pixel TakeOut(Pixel_Disk_Name pixelToDisk, Vector2Byte pixelPos) => TakeOut(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
-
-        public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos)
+        public static Pixel TakeOut(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability = -1)
         {
-            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
+            if (Block.Check(pixelPos))
             {
                 Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
                 return pixel;
             }
             else return null;
         }
-        public static Pixel TakeOut(string typeName, int colorIndex, Vector2Byte pixelPos)
+        public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos, int durability = -1)
+        {
+            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
+            {
+                Pixel pixel = pixelPool.TakeOut();
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
+                return pixel;
+            }
+            else return null;
+        }
+        public static Pixel TakeOut(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = -1)
         {
             if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
                 return pixel;
             }
             else return null;
@@ -111,33 +124,33 @@ namespace PRO
             if (pixelTypeInfoDic.TryGetValue(typeName, out PixelTypeInfo info)) return info;
             else return null;
         }
+        public static PixelTypeInfo 空气;
 
         #region 构造函数
         /// <summary>
         /// 请不要使用构造函数，使用此方法与重载，因为要对构造合法性进行检查
         /// </summary>
         /// <returns></returns>
-        public static Pixel New(string typeName, string colorName, Vector2Byte pixelPos)
+        public static Pixel New(string typeName, string colorName, Vector2Byte pixelPos, int durability = -1)
         {
             if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = new Pixel();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
                 return pixel;
             }
             else return null;
         }
-        public static Pixel New(string typeName, int colorIndex, Vector2Byte pixelPos)
+        public static Pixel New(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = -1)
         {
             if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
                 Pixel pixel = new Pixel();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos);
+                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
                 return pixel;
             }
             else return null;
         }
-        public static Pixel New(Pixel_Disk_Name pixelToDisk, Vector2Byte pixelPos) => New(pixelToDisk.typeName, pixelToDisk.colorName, pixelPos);
 
         private static bool CheckNew(string typeName, string colorName, Vector2Byte pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo)
         {
@@ -196,6 +209,7 @@ namespace PRO
                         pixelTypeInfoList.Add(InfoArray[i]);
                     }
             }
+            空气 = GetPixelTypeInfo("空气");
         }
         #endregion
     }

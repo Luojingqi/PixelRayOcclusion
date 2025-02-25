@@ -46,15 +46,16 @@ namespace PRO
         /// </summary>
         public void SetPixel(Pixel pixel, bool updateCollider = true, bool updateLiquidOrGas = true)
         {
+            if (pixel == null) return;
             pixel.posG = PixelToGlobal(pixel.pos);
 
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
             //旧点所属于一个建筑且建筑不可被破坏
-            if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken) return;
+            if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false) return;
             if (removePixel != null)
             {
-                if (removePixel.colorInfo.lightRadius > 0 && removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
+                if (removePixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius == 0)//&& removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
                     RemoveLightSource(removePixel);
 
                 removeInfo = removePixel.typeInfo;
@@ -75,7 +76,7 @@ namespace PRO
 
             textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixel.colorInfo.index;
 
-            if (pixel.colorInfo.lightRadius > 0 && pixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
+            if (pixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
                 AddLightSource(pixel);
 
             if (this is Block)
@@ -99,13 +100,9 @@ namespace PRO
         {
             Vector2Int gloabPos = Block.PixelToGlobal(blockPos, pixel.pos);
             if (lightSourceDic.ContainsKey(pixel.pos))
-            {
-                lightSourceDic[pixel.pos] = new LightSource(gloabPos, pixel.colorInfo.color, pixel.colorInfo.lightRadius);
-            }
+                lightSourceDic[pixel.pos] = new LightSource(gloabPos, pixel.colorInfo.luminousColor, pixel.colorInfo.luminousRadius);
             else
-            {
-                lightSourceDic.Add(pixel.pos, new LightSource(gloabPos, pixel.colorInfo.color, pixel.colorInfo.lightRadius));
-            }
+                lightSourceDic.Add(pixel.pos, new LightSource(gloabPos, pixel.colorInfo.luminousColor, pixel.colorInfo.luminousRadius));
         }
 
         private void RemoveLightSource(Pixel pixel)
@@ -205,6 +202,69 @@ namespace PRO
                 }
             }
         }
+        #endregion
+
+        #region 燃烧
+
+        public void RandomUpdatePixelList()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Vector2Byte pos = new Vector2Byte(UnityEngine.Random.Range(0, Block.Size.x), UnityEngine.Random.Range(0, Block.Size.y));
+                RandomUpdatePixel(pos);
+            }
+        }
+
+        private void RandomUpdatePixel(Vector2Byte pixelPos)
+        {
+            Span<Vector2Byte> span = stackalloc Vector2Byte[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1), new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
+
+            Pixel pixel = GetPixel(pixelPos);
+            if (pixel.typeInfo.typeName == "火焰")
+            {
+                int num = 0;
+                for (int k = 0; k < span.Length; k++)
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 62)
+                    {
+                        Vector2Byte nextPos = pixel.pos + span[k];
+                        if (Block.Check(nextPos) == false) continue;
+                        Pixel nextPixel = GetPixel(nextPos);
+                        if (nextPixel.typeInfo.typeName != "空气")
+                        {
+                            num++;
+                            if (nextPixel.typeInfo.typeName != "火焰")
+                                SetPixel(Pixel.TakeOut(pixel.typeInfo, pixel.colorInfo, nextPos));
+                        }
+                        DrawPixelAsync();
+                    }
+                }
+                if (UnityEngine.Random.Range(0, 100) < 37)
+                {
+                    SetPixel(Pixel.TakeOut("空气", 0, pixel.pos));
+                    DrawPixelAsync();
+                }
+                else
+                {
+                    if (num >= 6)
+                    {
+                        //不发光
+                        SetPixel(Pixel.TakeOut("火焰", 2, pixel.pos));
+                    }
+                    else if (num >= 4)
+                        SetPixel(Pixel.TakeOut("火焰", 1, pixel.pos));
+                    else
+                    {
+                        SetPixel(Pixel.TakeOut("火焰", 0, pixel.pos));
+                    }
+
+                    DrawPixelAsync();
+                }
+            }
+        }
+
+
+
         #endregion
     }
 }

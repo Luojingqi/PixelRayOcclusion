@@ -6,29 +6,40 @@
       "g": 0,
       "b": 0,
       "a": 0
-    },
-    "affectsLightIntensity": -1.0
+    }
   },
   {
-    "colorName": "鼠标光源0",
+    "colorName": "火焰色0",
     "color": {
       "r": 255,
-      "g": 217,
-      "b": 102,
+      "g": 224,
+      "b": 91,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 20
+    "luminousRadius": 5,
+    "luminousColor": {
+      "r": 255,
+      "g": 224,
+      "b": 91
+    }
   },
   {
-    "colorName": "测试色0",
+    "colorName": "火焰色1",
     "color": {
-      "r": 200,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 127,
+      "b": 81,
       "a": 255
-    },
-    "affectsLightIntensity": -1.0
+    }
+  },
+  {
+    "colorName": "火焰色2",
+    "color": {
+      "r": 255,
+      "g": 127,
+      "b": 81,
+      "a": 255
+    }
   },
   {
     "colorName": "木头色0",
@@ -37,8 +48,7 @@
       "g": 96,
       "b": 0,
       "a": 255
-    },
-    "affectsLightIntensity": 0.3
+    }
   },
   {
     "colorName": "木头色1",
@@ -47,8 +57,7 @@
       "g": 143,
       "b": 0,
       "a": 255
-    },
-    "affectsLightIntensity": 0.7
+    }
   },
   {
     "colorName": "岩石色0",
@@ -58,7 +67,7 @@
       "b": 149,
       "a": 255
     },
-    "affectsLightIntensity": 0.0
+    "affectsLightIntensity": 1.0
   },
   {
     "colorName": "岩石色1",
@@ -68,7 +77,44 @@
       "b": 166,
       "a": 255
     },
-    "affectsLightIntensity": 0.0
+    "affectsLightIntensity": 1.0
+  },
+  {
+    "colorName": "水色0",
+    "color": {
+      "r": 155,
+      "g": 194,
+      "b": 230,
+      "a": 225
+    },
+    "lightPathColorMixing": 0.02,
+    "affectsLightIntensity": 0.05
+  },
+  {
+    "colorName": "油色0",
+    "color": {
+      "r": 242,
+      "g": 184,
+      "b": 0,
+      "a": 235
+    },
+    "lightPathColorMixing": 0.1,
+    "affectsLightIntensity": 0.1
+  },
+  {
+    "colorName": "鼠标光源0",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "luminousRadius": 20,
+    "luminousColor": {
+      "r": 100,
+      "g": 255,
+      "b": 255
+    }
   },
   {
     "colorName": "光源0",
@@ -78,8 +124,12 @@
       "b": 50,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 10
+    "luminousRadius": 10,
+    "luminousColor": {
+      "r": 123,
+      "g": 100,
+      "b": 20
+    }
   },
   {
     "colorName": "光源1",
@@ -89,8 +139,12 @@
       "b": 80,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 15
+    "luminousRadius": 15,
+    "luminousColor": {
+      "r": 146,
+      "g": 208,
+      "b": 80
+    }
   },
   {
     "colorName": "光源2",
@@ -100,8 +154,12 @@
       "b": 200,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 20
+    "luminousRadius": 20,
+    "luminousColor": {
+      "r": 200,
+      "g": 200,
+      "b": 200
+    }
   },
   {
     "colorName": "光源3",
@@ -111,8 +169,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 30
+    "luminousRadius": 30,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "光源4",
@@ -122,8 +184,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 50
+    "luminousRadius": 50,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "光源5",
@@ -133,8 +199,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 50
+    "luminousRadius": 50,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "光源6",
@@ -144,8 +214,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 60
+    "luminousRadius": 60,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "光源7",
@@ -155,8 +229,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 70
+    "luminousRadius": 70,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "光源8",
@@ -166,8 +244,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 80
+    "luminousRadius": 80,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "光源9",
@@ -177,8 +259,12 @@
       "b": 30,
       "a": 255
     },
-    "affectsLightIntensity": -1.0,
-    "lightRadius": 100
+    "luminousRadius": 100,
+    "luminousColor": {
+      "r": 200,
+      "g": 100,
+      "b": 30
+    }
   },
   {
     "colorName": "背景色0",
@@ -187,8 +273,7 @@
       "g": 48,
       "b": 160,
       "a": 255
-    },
-    "affectsLightIntensity": 0.0
+    }
   },
   {
     "colorName": "背景色1",
@@ -197,8 +282,7 @@
       "g": 176,
       "b": 240,
       "a": 255
-    },
-    "affectsLightIntensity": 0.0
+    }
   },
   {
     "colorName": "背景色2",
@@ -207,28 +291,7 @@
       "g": 255,
       "b": 255,
       "a": 255
-    },
-    "affectsLightIntensity": 0.0
-  },
-  {
-    "colorName": "水色0",
-    "color": {
-      "r": 155,
-      "g": 194,
-      "b": 230,
-      "a": 120
-    },
-    "affectsLightIntensity": 1.0
-  },
-  {
-    "colorName": "油色0",
-    "color": {
-      "r": 242,
-      "g": 184,
-      "b": 0,
-      "a": 135
-    },
-    "affectsLightIntensity": 0.9
+    }
   },
   {
     "colorName": "沙子色0",
@@ -237,8 +300,7 @@
       "g": 207,
       "b": 55,
       "a": 255
-    },
-    "affectsLightIntensity": -1.0
+    }
   },
   {
     "colorName": "砂砾色0",
@@ -247,8 +309,7 @@
       "g": 220,
       "b": 228,
       "a": 255
-    },
-    "affectsLightIntensity": -1.0
+    }
   },
   {
     "colorName": "白玉色1",
@@ -257,8 +318,7 @@
       "g": 242,
       "b": 242,
       "a": 255
-    },
-    "affectsLightIntensity": 0.9
+    }
   },
   {
     "colorName": "白玉色0",
@@ -267,8 +327,7 @@
       "g": 232,
       "b": 232,
       "a": 255
-    },
-    "affectsLightIntensity": 0.9
+    }
   },
   {
     "colorName": "白玉色2",
@@ -277,8 +336,7 @@
       "g": 255,
       "b": 255,
       "a": 255
-    },
-    "affectsLightIntensity": 0.0
+    }
   },
   {
     "colorName": "黑玉色0",
@@ -287,8 +345,7 @@
       "g": 89,
       "b": 89,
       "a": 255
-    },
-    "affectsLightIntensity": -1.0
+    }
   },
   {
     "colorName": "黑玉色1",
@@ -297,8 +354,7 @@
       "g": 64,
       "b": 64,
       "a": 255
-    },
-    "affectsLightIntensity": -1.0
+    }
   },
   {
     "colorName": "黑玉色2",
@@ -307,7 +363,6 @@
       "g": 0,
       "b": 0,
       "a": 255
-    },
-    "affectsLightIntensity": 0.0
+    }
   }
 ]

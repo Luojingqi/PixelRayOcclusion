@@ -110,7 +110,7 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -122,7 +122,7 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
 
         #region 创建SetLightBuffer_Buffer.hlsl文件
         string autoSetLightBuffer_Buffer = "#include \"../StructData.hlsl\"\n";
-        int BlockLength = BlockMaterial.EachBlockReceiveLightSize.x * BlockMaterial.EachBlockReceiveLightSize. y;
+        int BlockLength = BlockMaterial.EachBlockReceiveLightSize.x * BlockMaterial.EachBlockReceiveLightSize.y;
         for (int i = 0; i < BlockLength; i++)
             autoSetLightBuffer_Buffer += $"StructuredBuffer<int> BlockBuffer{i};\n";
         autoSetLightBuffer_Buffer +=

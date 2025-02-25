@@ -3,6 +3,8 @@ struct PixelColorInfo
 {
     //颜色
     int4 color;
+    //光路混色
+    float lightPathColorMixing;
     //光强影响的系数
     float affectsLightIntensity;
     //自发光强度
@@ -10,7 +12,7 @@ struct PixelColorInfo
 };
 
 struct LightSource
-{   
+{
     //全局坐标
     int2 gloabPos;
     //光的颜色

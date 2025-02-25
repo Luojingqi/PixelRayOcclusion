@@ -62,7 +62,7 @@ namespace PRO
         {
             if (info == null) return null;
             FreelyLightSource fls = new FreelyLightSource();
-            fls.radius = info.lightRadius;
+            fls.radius = info.luminousRadius;
             fls.color = new Vector3Int(info.color.r, info.color.g, info.color.b);
             return fls;
         }

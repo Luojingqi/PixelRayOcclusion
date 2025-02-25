@@ -33,7 +33,7 @@ void SetLightResultBuffer1(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -72,7 +72,7 @@ void SetLightResultBuffer2(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -111,7 +111,7 @@ void SetLightResultBuffer3(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -150,7 +150,7 @@ void SetLightResultBuffer4(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -189,7 +189,7 @@ void SetLightResultBuffer5(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -228,7 +228,7 @@ void SetLightResultBuffer6(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -267,7 +267,7 @@ void SetLightResultBuffer7(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -306,7 +306,7 @@ void SetLightResultBuffer8(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -345,7 +345,7 @@ void SetLightResultBuffer9(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -384,7 +384,7 @@ void SetLightResultBuffer10(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -423,7 +423,7 @@ void SetLightResultBuffer11(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -462,7 +462,7 @@ void SetLightResultBuffer12(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -501,7 +501,7 @@ void SetLightResultBuffer13(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -540,7 +540,7 @@ void SetLightResultBuffer14(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -579,7 +579,7 @@ void SetLightResultBuffer15(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -618,7 +618,7 @@ void SetLightResultBuffer16(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -657,7 +657,7 @@ void SetLightResultBuffer17(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -696,7 +696,7 @@ void SetLightResultBuffer18(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -735,7 +735,7 @@ void SetLightResultBuffer19(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -774,7 +774,7 @@ void SetLightResultBuffer20(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -813,7 +813,7 @@ void SetLightResultBuffer21(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -852,7 +852,7 @@ void SetLightResultBuffer22(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -891,7 +891,7 @@ void SetLightResultBuffer23(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -930,7 +930,7 @@ void SetLightResultBuffer24(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -969,7 +969,7 @@ void SetLightResultBuffer25(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1008,7 +1008,7 @@ void SetLightResultBuffer26(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1047,7 +1047,7 @@ void SetLightResultBuffer27(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1086,7 +1086,7 @@ void SetLightResultBuffer28(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1125,7 +1125,7 @@ void SetLightResultBuffer29(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1164,7 +1164,7 @@ void SetLightResultBuffer30(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1203,7 +1203,7 @@ void SetLightResultBuffer31(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1242,7 +1242,7 @@ void SetLightResultBuffer32(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1281,7 +1281,7 @@ void SetLightResultBuffer33(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1320,7 +1320,7 @@ void SetLightResultBuffer34(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1359,7 +1359,7 @@ void SetLightResultBuffer35(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1398,7 +1398,7 @@ void SetLightResultBuffer36(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1437,7 +1437,7 @@ void SetLightResultBuffer37(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1476,7 +1476,7 @@ void SetLightResultBuffer38(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1515,7 +1515,7 @@ void SetLightResultBuffer39(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1554,7 +1554,7 @@ void SetLightResultBuffer40(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1593,7 +1593,7 @@ void SetLightResultBuffer41(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1632,7 +1632,7 @@ void SetLightResultBuffer42(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1671,7 +1671,7 @@ void SetLightResultBuffer43(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1710,7 +1710,7 @@ void SetLightResultBuffer44(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1749,7 +1749,7 @@ void SetLightResultBuffer45(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1788,7 +1788,7 @@ void SetLightResultBuffer46(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1827,7 +1827,7 @@ void SetLightResultBuffer47(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1866,7 +1866,7 @@ void SetLightResultBuffer48(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1905,7 +1905,7 @@ void SetLightResultBuffer49(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1944,7 +1944,7 @@ void SetLightResultBuffer50(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -1983,7 +1983,7 @@ void SetLightResultBuffer51(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2022,7 +2022,7 @@ void SetLightResultBuffer52(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2061,7 +2061,7 @@ void SetLightResultBuffer53(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2100,7 +2100,7 @@ void SetLightResultBuffer54(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2139,7 +2139,7 @@ void SetLightResultBuffer55(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2178,7 +2178,7 @@ void SetLightResultBuffer56(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2217,7 +2217,7 @@ void SetLightResultBuffer57(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2256,7 +2256,7 @@ void SetLightResultBuffer58(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2295,7 +2295,7 @@ void SetLightResultBuffer59(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2334,7 +2334,7 @@ void SetLightResultBuffer60(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2373,7 +2373,7 @@ void SetLightResultBuffer61(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2412,7 +2412,7 @@ void SetLightResultBuffer62(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2451,7 +2451,7 @@ void SetLightResultBuffer63(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2490,7 +2490,7 @@ void SetLightResultBuffer64(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2529,7 +2529,7 @@ void SetLightResultBuffer65(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2568,7 +2568,7 @@ void SetLightResultBuffer66(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2607,7 +2607,7 @@ void SetLightResultBuffer67(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2646,7 +2646,7 @@ void SetLightResultBuffer68(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2685,7 +2685,7 @@ void SetLightResultBuffer69(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2724,7 +2724,7 @@ void SetLightResultBuffer70(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2763,7 +2763,7 @@ void SetLightResultBuffer71(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2802,7 +2802,7 @@ void SetLightResultBuffer72(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2841,7 +2841,7 @@ void SetLightResultBuffer73(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2880,7 +2880,7 @@ void SetLightResultBuffer74(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2919,7 +2919,7 @@ void SetLightResultBuffer75(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2958,7 +2958,7 @@ void SetLightResultBuffer76(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -2997,7 +2997,7 @@ void SetLightResultBuffer77(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3036,7 +3036,7 @@ void SetLightResultBuffer78(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3075,7 +3075,7 @@ void SetLightResultBuffer79(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3114,7 +3114,7 @@ void SetLightResultBuffer80(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3153,7 +3153,7 @@ void SetLightResultBuffer81(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3192,7 +3192,7 @@ void SetLightResultBuffer82(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3231,7 +3231,7 @@ void SetLightResultBuffer83(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3270,7 +3270,7 @@ void SetLightResultBuffer84(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3309,7 +3309,7 @@ void SetLightResultBuffer85(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3348,7 +3348,7 @@ void SetLightResultBuffer86(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3387,7 +3387,7 @@ void SetLightResultBuffer87(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3426,7 +3426,7 @@ void SetLightResultBuffer88(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3465,7 +3465,7 @@ void SetLightResultBuffer89(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3504,7 +3504,7 @@ void SetLightResultBuffer90(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3543,7 +3543,7 @@ void SetLightResultBuffer91(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3582,7 +3582,7 @@ void SetLightResultBuffer92(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3621,7 +3621,7 @@ void SetLightResultBuffer93(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3660,7 +3660,7 @@ void SetLightResultBuffer94(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3699,7 +3699,7 @@ void SetLightResultBuffer95(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3738,7 +3738,7 @@ void SetLightResultBuffer96(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3777,7 +3777,7 @@ void SetLightResultBuffer97(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3816,7 +3816,7 @@ void SetLightResultBuffer98(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3855,7 +3855,7 @@ void SetLightResultBuffer99(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3894,7 +3894,7 @@ void SetLightResultBuffer100(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3933,7 +3933,7 @@ void SetLightResultBuffer101(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -3972,7 +3972,7 @@ void SetLightResultBuffer102(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4011,7 +4011,7 @@ void SetLightResultBuffer103(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4050,7 +4050,7 @@ void SetLightResultBuffer104(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4089,7 +4089,7 @@ void SetLightResultBuffer105(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4128,7 +4128,7 @@ void SetLightResultBuffer106(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4167,7 +4167,7 @@ void SetLightResultBuffer107(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4206,7 +4206,7 @@ void SetLightResultBuffer108(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4245,7 +4245,7 @@ void SetLightResultBuffer109(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4284,7 +4284,7 @@ void SetLightResultBuffer110(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4323,7 +4323,7 @@ void SetLightResultBuffer111(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4362,7 +4362,7 @@ void SetLightResultBuffer112(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4401,7 +4401,7 @@ void SetLightResultBuffer113(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4440,7 +4440,7 @@ void SetLightResultBuffer114(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4479,7 +4479,7 @@ void SetLightResultBuffer115(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4518,7 +4518,7 @@ void SetLightResultBuffer116(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4557,7 +4557,7 @@ void SetLightResultBuffer117(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4596,7 +4596,7 @@ void SetLightResultBuffer118(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4635,7 +4635,7 @@ void SetLightResultBuffer119(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4674,7 +4674,7 @@ void SetLightResultBuffer120(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4713,7 +4713,7 @@ void SetLightResultBuffer121(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4752,7 +4752,7 @@ void SetLightResultBuffer122(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4791,7 +4791,7 @@ void SetLightResultBuffer123(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4830,7 +4830,7 @@ void SetLightResultBuffer124(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4869,7 +4869,7 @@ void SetLightResultBuffer125(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4908,7 +4908,7 @@ void SetLightResultBuffer126(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4947,7 +4947,7 @@ void SetLightResultBuffer127(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }
@@ -4986,7 +4986,7 @@ void SetLightResultBuffer128(int3 id : SV_DispatchThreadID)
             filterColor.xyz = min(filterColor.xyz * (1 - infoColor.w) + infoColor.xyz * infoColor.w , filterColor.xyz);
             if(typeInfo.affectsLightIntensity != lastAffects)
             {
-                shadow *= typeInfo.affectsLightIntensity;
+                shadow *=(1- typeInfo.affectsLightIntensity);
                 lastAffects = typeInfo.affectsLightIntensity;
             }
         }

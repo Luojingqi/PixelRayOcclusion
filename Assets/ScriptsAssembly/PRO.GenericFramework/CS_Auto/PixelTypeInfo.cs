@@ -19,11 +19,17 @@ namespace PRO.Disk
         
         private System.Collections.Generic.List<System.String> availablecolors;
         
+        private int _hardness;
+        
+        private int _durability;
+        
         private bool _collider;
         
         private int fluidtype;
         
         private int fluiddensity;
+        
+        private int burnodds;
         
         // 类型名称
         public string typeName
@@ -48,6 +54,32 @@ namespace PRO.Disk
             set
             {
                 this.availablecolors = value;
+            }
+        }
+        
+        // 坚硬度
+        public int hardness
+        {
+            get
+            {
+                return this._hardness;
+            }
+            set
+            {
+                this._hardness = value;
+            }
+        }
+        
+        // 耐久度
+        public int durability
+        {
+            get
+            {
+                return this._durability;
+            }
+            set
+            {
+                this._durability = value;
             }
         }
         
@@ -87,6 +119,19 @@ namespace PRO.Disk
             set
             {
                 this.fluiddensity = value;
+            }
+        }
+        
+        // 燃烧概率
+        public int burnOdds
+        {
+            get
+            {
+                return this.burnodds;
+            }
+            set
+            {
+                this.burnodds = value;
             }
         }
     }
