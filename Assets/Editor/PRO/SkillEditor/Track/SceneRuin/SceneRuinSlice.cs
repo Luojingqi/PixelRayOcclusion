@@ -9,8 +9,8 @@ namespace PRO.SkillEditor
     {
         public SceneRuinSlice(SceneRuin_Disk sliceDisk) : base(sliceDisk)
         {
-            if (diskData.texture != null)
-                Background = new StyleBackground(diskData.texture);
+            if (diskData.sprite != null)
+                Background = new StyleBackground(diskData.sprite);
         }
 
         public override void DrawGizmo(SkillPlayAgent agent)
@@ -44,18 +44,18 @@ namespace PRO.SkillEditor
         }
 
         private SceneRuin_Disk diskData => DiskData as SceneRuin_Disk;
-        public Texture2D Texture
+        public Sprite sprite
         {
-            get { return diskData.texture; }
+            get { return diskData.sprite; }
             set
             {
                 diskData.RuinPixelDic.Clear();
-                diskData.texture = value;
-                Background = new StyleBackground(diskData.texture);
-                for (int y = 0; y < diskData.texture.height; y++)
-                    for (int x = 0; x < diskData.texture.width; x++)
+                diskData.sprite = value;
+                Background = new StyleBackground(diskData.sprite);
+                for (int y = 0; y < diskData.sprite.rect.height; y++)
+                    for (int x = 0; x < diskData.sprite.rect.width; x++)
                     {
-                        Color color = diskData.texture.GetPixel(x, y);
+                        Color color = diskData.sprite.texture.GetPixel(x + (int)diskData.sprite.rect.x, y + (int)diskData.sprite.rect.y);
                         if (color.a != 1) continue;
                         Color32 color32 = new Color32((byte)(color.r * 255), (byte)(color.g * 255), (byte)(color.b * 255), 255);
                         if (diskData.RuinPixelDic.TryGetValue(color32.ToString(), out List<Vector2Int> pixelList) == false)

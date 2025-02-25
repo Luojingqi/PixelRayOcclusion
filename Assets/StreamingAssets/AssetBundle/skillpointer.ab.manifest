@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3403879753
+CRC: 3405922403
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: af5640fa3e5fdc763ed90129a0dd01ff
+    Hash: ef89d476114dbef82302da561127d207
   TypeTreeHash:
     serializedVersion: 2
-    Hash: bd7c2de23d46283164cd0f020182095c
+    Hash: 1b9374e8ada75e732689d9a475c068e1
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: af5640fa3e5fdc763ed90129a0dd01ff
+    Hash: ef89d476114dbef82302da561127d207
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,6 +23,8 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 6cdd5ce2322d9294cb8551633e0f1100, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 22d2bd009e42d864cbaa7a787b881bca, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -30,7 +32,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Sirenix.Serialization
+  ClassName: Sirenix.Serialization.SerializationData
 Assets:
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u7BAD\u5934\u7C7B/SkillPointer_\u7BAD\u5934\u7C7B.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r15.prefab"
 Dependencies: []

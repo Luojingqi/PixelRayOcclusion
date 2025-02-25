@@ -1,5 +1,6 @@
 using PRO.Tool;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 namespace PRO.SkillEditor
@@ -24,10 +25,10 @@ namespace PRO.SkillEditor
             }
         }
         #endregion
-
-        public void Start()
+        public void Init()
         {
-            AgentSprice = transform.GetComponent<SpriteRenderer>();
+            if (AgentSprice == null)
+                AgentSprice = transform.GetComponent<SpriteRenderer>();
             Skill = idle;
             Play = true;
         }
@@ -52,8 +53,7 @@ namespace PRO.SkillEditor
             set
             {
                 skill = value;
-                nowFrame = 0;
-                time = 0;
+                ClearTime();
                 if (value != null)
                 {
                     Skill.UpdateFrame(this, 0);
@@ -75,6 +75,9 @@ namespace PRO.SkillEditor
             set
             {
                 play = value;
+                if (play == true && skill == null)
+                    Skill = idle;
+
             }
         }
         private bool play = false;
@@ -84,7 +87,8 @@ namespace PRO.SkillEditor
             get { return nowFrame; }
             set
             {
-                if (value < 0 || value >= Skill.MaxFrame) return;
+                if (value < 0) return;
+                if (Skill != null && value >= Skill.MaxFrame) return;
                 nowFrame = value;
             }
         }
@@ -92,7 +96,7 @@ namespace PRO.SkillEditor
         private int nowFrame;
 
 
-        public void Update()
+        private void Update()
         {
             UpdateFrame();
         }
@@ -111,6 +115,47 @@ namespace PRO.SkillEditor
                     return;
                 }
             }
+        }
+        ///// <summary>
+        ///// 不自动播放，使用手动api播放
+        ///// </summary>
+        //public void UpdateFrameScript(int playTrack)
+        //{
+        //    time0 += Time.deltaTime * 1000;
+        //    while (time0 >= Skill.FrameTime)
+        //    {
+        //        time0 -= Skill.FrameTime;
+        //        Skill.UpdateFrame(this, ++nowFrame, playTrack);
+        //        if (nowFrame >= Skill.MaxFrame)
+        //        {
+        //            Skill = idle;
+        //            return;
+        //        }
+        //    }
+        //}
+        /// <summary>
+        /// 不自动播放，使用手动api播放
+        /// </summary>
+        public bool UpdateFrameScript(Skill_Disk playSkill, int playTrack, Action action = null)
+        {
+            time += Time.deltaTime * 1000;
+            while (time >= playSkill.FrameTime)
+            {
+                time -= playSkill.FrameTime;
+                playSkill.UpdateFrame(this, nowFrame++, playTrack, action);
+                if (nowFrame >= playSkill.MaxFrame)
+                {
+                    ClearTime();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ClearTime()
+        {
+            nowFrame = 0;
+            time = 0;
         }
     }
 }

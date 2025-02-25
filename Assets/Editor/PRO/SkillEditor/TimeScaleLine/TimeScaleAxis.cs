@@ -1,12 +1,7 @@
-using PRO.Tool;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static PlasticPipe.Server.MonitorStats;
 namespace PRO.SkillEditor
 {
     /// <summary>
@@ -70,18 +65,25 @@ namespace PRO.SkillEditor
             }
         }
 
+        private int nowFrame = 0;
         public int NowFrame
         {
             get
             {
-                return SkillEditorWindow.Inst.Config.Agent.NowFrame;
+                if (SkillEditorWindow.Inst.Config.Agent != null)
+                    return SkillEditorWindow.Inst.Config.Agent.NowFrame;
+                else
+                    return nowFrame;
             }
             set
             {
-                if (value == NowFrame) return;
-                SkillEditorWindow.Inst.Config.Agent.NowFrame = Math.Clamp(value, 0, MaxFrame - 1);
+                if (value == nowFrame) return;
+                nowFrame = value;
+                if (SkillEditorWindow.Inst.Config.Agent != null)
+                    SkillEditorWindow.Inst.Config.Agent.NowFrame = value;
                 SkillEditorWindow.Inst.Console.FrameUpdate();
                 SkillEditorWindow.Inst.UpdateFrame();
+                SkillEditorWindow.Inst.Console.SetNowFrameText(NowFrame);
             }
         }
         /// <summary>
@@ -146,7 +148,7 @@ namespace PRO.SkillEditor
         /// <summary>
         /// 鼠标双击，指针指到当前帧的开始
         /// </summary>
-        /// <param name="evt"></param>
+        /// <param name="evt">123</param>
         private void MouseTwoDown(PointerDownEvent evt)
         {
             //设置指针偏移
@@ -154,7 +156,6 @@ namespace PRO.SkillEditor
             //根据指针偏移得到帧
             NowFrame = (int)(SkillEditorWindow.Inst.TimeLine.Offset / Spacing);
             Align();
-            SkillEditorWindow.Inst.Console.SetNowFrameText(NowFrame);
         }
 
         private void InitMouseEvent()
@@ -198,7 +199,6 @@ namespace PRO.SkillEditor
             xOffset = NewMouseDownPosition.x;
 
             NowFrame = (int)(SkillEditorWindow.Inst.TimeLine.Offset / Spacing);
-            SkillEditorWindow.Inst.Console.SetNowFrameText(NowFrame);
         }
         private void MouseLeave_Root(PointerLeaveEvent evt)
         {

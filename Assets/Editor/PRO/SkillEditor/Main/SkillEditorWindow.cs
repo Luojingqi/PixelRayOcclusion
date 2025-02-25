@@ -130,7 +130,7 @@ namespace PRO.SkillEditor
         {
             set
             {
-                if (Config.Agent == null){ Debug.Log("请添加执行人");return; }
+                if (Config.Agent == null) { Debug.Log("请添加执行人"); return; }
                 nowFrameTime = TimeLine.Offset % TimeScaleAxis.Spacing / TimeScaleAxis.Spacing * Config.Skill_Disk.FrameTime;
                 lastTime = DateTime.Now;
                 isPlay = value;
@@ -151,11 +151,12 @@ namespace PRO.SkillEditor
                 if (TimeScaleAxis.NowFrame + 1 >= TimeScaleAxis.MaxFrame)
                 {
                     isPlay = false;
+                    TimeScaleAxis.NowFrame = 0;
+                    TimeScaleAxis.Align();
                     return;
                 }
                 nowFrameTime -= Config.Skill_Disk.FrameTime;
                 TimeScaleAxis.NowFrame++;
-                Console.SetNowFrameText(TimeScaleAxis.NowFrame);
             }
             TimeScaleAxis.Align();
             TimeLine.Offset += (float)(nowFrameTime / Config.Skill_Disk.FrameTime * TimeScaleAxis.Spacing);
@@ -200,6 +201,7 @@ namespace PRO.SkillEditor
             Config.Skill_Disk.ParticleTrackList.ForEach(disk => AddTrack(new ParticleTrack(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.AttackTestTrack2DList.ForEach(disk => AddTrack(new AttackTestTrack2D(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.SceneRuinTrackList.ForEach(disk => AddTrack(new SceneRuinTrack(disk) { trackIndex = index++ })); index = 0;
+            Config.Skill_Disk.SceneCreateTrackList.ForEach(disk => AddTrack(new SceneCreateTrack(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.EventTrackList.ForEach(disk => AddTrack(new EventTrack(disk) { trackIndex = index++ })); index = 0;
         }
         #endregion

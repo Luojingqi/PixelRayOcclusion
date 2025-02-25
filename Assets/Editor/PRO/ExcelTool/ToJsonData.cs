@@ -64,11 +64,12 @@ namespace ExcelTool
                     break;
                 case "color32":
                     string[] strsColor32 = value.Split(',');
+                    if (strsColor32.Length < 3) break;
                     JObject jsonDataColor32 = new JObject();
                     jsonDataColor32["r"] = Convert.ToUInt32(strsColor32[0]);
                     jsonDataColor32["g"] = Convert.ToUInt32(strsColor32[1]);
                     jsonDataColor32["b"] = Convert.ToUInt32(strsColor32[2]);
-                    jsonDataColor32["a"] = Convert.ToUInt32(strsColor32[3]);
+                    if (strsColor32.Length >= 4) jsonDataColor32["a"] = Convert.ToUInt32(strsColor32[3]);
                     jsonData[key] = jsonDataColor32;
                     break;
             }
@@ -77,7 +78,7 @@ namespace ExcelTool
         public static void RunArray(string tpye, string key, string value, ref JArray array)
         {
             JObject jObject = new JObject();
-            RunObject(tpye, key, value,ref jObject);
+            RunObject(tpye, key, value, ref jObject);
             array.Add(jObject[key]);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using PRO.DataStructure;
 using PRO.Tool;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -76,9 +77,10 @@ namespace PRO.Disk.Scene
             },
             () =>
             {
-                if (buildingGuid != null && buildingGuid.Length > 0 && sceneEntity.GetBuilding(buildingGuid) == null)
+                if (buildingGuid != null && buildingGuid.Length > 0)
                 {
-                    buildingGuidDic.Add(index, buildingGuid); sceneEntity.LoadBuilding(buildingGuid);
+                    buildingGuidDic.Add(index, buildingGuid);
+                    if (sceneEntity.GetBuilding(buildingGuid) == null) sceneEntity.LoadBuilding(buildingGuid);
                 }
             },
             ref lastDelimiter, ref stack);

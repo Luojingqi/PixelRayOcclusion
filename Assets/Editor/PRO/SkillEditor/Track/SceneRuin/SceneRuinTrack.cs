@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using PRO.Tool;
+using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,21 +18,20 @@ namespace PRO.SkillEditor
             switch (sliceDisk)
             {
                 case SceneRuin_Disk disk: { AddSlice(new SceneRuinSlice(disk)); break; }
-            }   
+            }
         }
 
         protected override bool DragAssetTypeCheck(Type type)
         {
-            return type == typeof(DefaultAsset) || type == typeof(Texture2D);
+            return type == typeof(DefaultAsset) || type == typeof(Sprite);
         }
 
         protected override void DragAssetExit(DragExitedEvent evt, object[] objects)
         {
             for (int i = 0; i < objects.Length; i++)
             {
-                if (objects[i] is DefaultAsset)
+                if (objects[i] is DefaultAsset da)
                 {
-                    DefaultAsset da = objects[i] as DefaultAsset;
                     string path = Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length) + AssetDatabase.GetAssetPath(da);
                     FileInfo fileInfo = new FileInfo(path);
                     if (fileInfo.Extension == ".png")
@@ -44,22 +42,18 @@ namespace PRO.SkillEditor
                         texture.filterMode = FilterMode.Point;
                         var disk = new SceneRuin_Disk();
                         var slice = new SceneRuinSlice(disk);
-                        slice.Texture = texture;
+                        slice.sprite = Texture2DPool.CreateSprite(texture);
                         AddSlice(slice);
                     }
                 }
-                else if (objects[i] is Texture2D)
+                else if (objects[i] is Sprite sprite)
                 {
-                    Texture2D texture = objects[i] as Texture2D;
-                    texture.filterMode = FilterMode.Point;
                     var disk = new SceneRuin_Disk();
                     var slice = new SceneRuinSlice(disk);
-                    slice.Texture = texture;
+                    slice.sprite = sprite;
                     AddSlice(slice);
                 }
             }
         }
-
-
     }
 }

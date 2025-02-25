@@ -21,10 +21,8 @@ namespace PRO
         public static Vector2Int WorldToBlock(Vector2 worldPos) => new Vector2Int((int)Mathf.Round(worldPos.x / Block.Size.x / Pixel.Size - 0.5f), (int)Mathf.Round(worldPos.y / Block.Size.y / Pixel.Size - 0.5f));
         public static Vector2Int WorldToGlobal(Vector2 worldPos)
         {
-            int x = (int)(worldPos.x / Pixel.Size);
-            int y = (int)(worldPos.y / Pixel.Size);
-            if (worldPos.x < 0) x -= 1;
-            if (worldPos.y < 0) y -= 1;
+            int x = (int)Mathf.Floor(worldPos.x / Pixel.Size);
+            int y = (int)Mathf.Floor(worldPos.y / Pixel.Size);
             return new Vector2Int(x, y);
         }
         /// <summary>
@@ -148,7 +146,7 @@ namespace PRO
             }
             block.name = "Block(Clone)";
             block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-            
+
             BlockPool.PutIn(block.gameObject);
         }
         #endregion 
@@ -443,7 +441,5 @@ namespace PRO
         }
 
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
-
-        public static Nav nav = new Nav();
     }
 }

@@ -1,4 +1,3 @@
-using PRO.Tool;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -24,7 +23,7 @@ namespace PRO.SkillEditor
         /// <summary>
         /// 发射的力
         /// </summary>
-        public float force = 1;
+        public Vector2 forceRange = new Vector2(1, 1);
         /// <summary>
         /// 发射的数量
         /// </summary>
@@ -33,6 +32,8 @@ namespace PRO.SkillEditor
         /// 存活时间范围（单位ms）
         /// </summary>
         public Vector2Int surviveTimeRange = new Vector2Int(int.MaxValue, int.MaxValue);
+
+        public Color color = Color.white;
 
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
@@ -43,9 +44,10 @@ namespace PRO.SkillEditor
                 for (int i = 0; i < num; i++)
                 {
                     Particle particle = pool.TakeOutT();
+                    particle.Renderer.color = color;
                     particle.SurviveTimeRange = surviveTimeRange;
                     particle.transform.position = agent.transform.rotation * position + agent.transform.position;
-                    particle.Rigidbody.AddForce(agent.transform.rotation * Vector3.Lerp(directionMin, directionMax, Random.Range(0f, 1f)) * force, ForceMode2D.Impulse);
+                    particle.Rig2D.AddForce(agent.transform.rotation * Vector3.Lerp(directionMin, directionMax, Random.Range(0f, 1f)) * Random.Range(forceRange.x, forceRange.y), ForceMode2D.Impulse);
                 }
             }
             catch

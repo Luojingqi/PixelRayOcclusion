@@ -9,7 +9,7 @@ namespace PRO.SkillEditor
     {
         public Vector2Int offset;
 
-        public Texture2D texture;
+        public Sprite sprite;
 
         public Dictionary<string, List<Vector2Int>> RuinPixelDic = new Dictionary<string, List<Vector2Int>>();
 
@@ -25,7 +25,7 @@ namespace PRO.SkillEditor
                         Vector2Int gloabPos = Block.WorldToGlobal(agent.transform.position) + pos + offset;
                         Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
                         Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                        Pixel pixel = Pixel.TakeOut("岩石", "岩石色0", pixelPos);
+                        Pixel pixel = Pixel.TakeOut("空气", 0, pixelPos);
                         block.SetPixel(pixel);
                         block.DrawPixelAsync(pixelPos, pixel.colorInfo.color);
                     }
@@ -53,7 +53,7 @@ namespace PRO.SkillEditor
             {
                 renderer = trans.GetComponent<SpriteRenderer>();
             }
-            renderer.sprite = Texture2DPool.CreateSprite(texture);
+            renderer.sprite = sprite;
             renderer.transform.position = agent.transform.position + Block.GlobalToWorld(offset);
         }
     }

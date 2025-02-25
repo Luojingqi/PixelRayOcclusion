@@ -18,6 +18,7 @@ namespace PRO
             boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
             BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
             boxCollider.gameObject.SetActive(false);
+            boxCollider.gameObject.layer = 11;
             boxCollider.transform.parent = boxCollider2DPoolGo.transform;
             BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform);
 
@@ -30,7 +31,6 @@ namespace PRO
         }
         public static void PutIn(BoxCollider2D box)
         {
-            box.gameObject.layer = 0;
             box.isTrigger = false;
             BoxCollider2DPool.PutIn(box.gameObject);
         }
@@ -148,6 +148,8 @@ namespace PRO
                         box.size += new Vector2(Pixel.Size, 0);
                         box.offset = box.size / 2f;
                         block.allCollider[pos.x, pos.y] = box;
+                        if (i == 0)
+                            box.transform.position += new Vector3(-Pixel.Size, 0);
                         break;
                     }
                     else if (i >= 2 && box.size.x == Pixel.Size)
@@ -155,6 +157,8 @@ namespace PRO
                         box.size += new Vector2(0, Pixel.Size);
                         box.offset = box.size / 2f;
                         block.allCollider[pos.x, pos.y] = box;
+                        if (i == 2)
+                            box.transform.position += new Vector3(0, -Pixel.Size);
                         break;
                     }
                 }

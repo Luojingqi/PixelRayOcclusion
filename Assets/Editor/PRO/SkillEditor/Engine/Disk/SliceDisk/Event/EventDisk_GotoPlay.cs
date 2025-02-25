@@ -6,7 +6,7 @@ namespace PRO.SkillEditor
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
             agent.NowFrame = goToFrame;
-            agent.Skill.UpdateFrame(agent, agent.NowFrame);
+            agent.Skill?.UpdateFrame(agent, agent.NowFrame);
         }
     }
 }

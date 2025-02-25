@@ -10,8 +10,6 @@ namespace PRO.SkillEditor
             set
             {
                 agent = value;
-                if (agent != null)
-                    agent.Skill = skill_Disk;
             }
         }
         private SkillPlayAgent agent;
@@ -21,8 +19,6 @@ namespace PRO.SkillEditor
             set
             {
                 skill_Disk = value;
-                if (agent != null)
-                    agent.Skill = skill_Disk;
             }
         }
         private Skill_Disk skill_Disk;

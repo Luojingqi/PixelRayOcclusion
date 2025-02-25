@@ -65,6 +65,54 @@ namespace PRO.SkillEditor
                 LabelView.text = strs[strs.Length - 1];
             }
         }
-
+        [LabelText("粒子创建位置（相对）")]
+        [ShowInInspector]
+        public Vector3 Position
+        {
+            get { return slice_Disk.position; }
+            set { slice_Disk.position = value; }
+        }
+        [LabelText("发射方向min")]
+        [ShowInInspector]
+        public Vector3 DirectionMin
+        {
+            get { return slice_Disk.directionMin; }
+            set { slice_Disk.directionMin = value; }
+        }
+        [LabelText("发射方向max")]
+        [ShowInInspector]
+        public Vector3 DirectionMax
+        {
+            get { return slice_Disk.directionMax; }
+            set { slice_Disk.directionMax = value; }
+        }
+        [LabelText("发射的力")]
+        [ShowInInspector]
+        public Vector2 forceRange
+        {
+            get { return slice_Disk.forceRange; }
+            set { slice_Disk.forceRange = value; }
+        }
+        [LabelText("发射的数量")]
+        [ShowInInspector]
+        public Vector2Int numRange
+        {
+            get { return slice_Disk.numRange; }
+            set { slice_Disk.numRange = value; }
+        }
+        [LabelText("存活时间范围（单位ms）")]
+        [ShowInInspector]
+        public Vector2Int surviveTimeRange
+        {
+            get { return slice_Disk.surviveTimeRange; }
+            set { slice_Disk.surviveTimeRange = value; }
+        }
+        [LabelText("颜色")]
+        [ShowInInspector]
+        public Color color
+        {
+            get { return slice_Disk.color; }
+            set { slice_Disk.color = value; }
+        }
     }
 }

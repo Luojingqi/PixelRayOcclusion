@@ -29,19 +29,16 @@ namespace PRO.SkillEditor
                 int value = Math.Abs(NowFrameField.value);
                 SkillEditorWindow.Inst.TimeScaleAxis.NowFrame = value;
                 SkillEditorWindow.Inst.TimeScaleAxis.Align();
-                SetNowFrameText(SkillEditorWindow.Inst.TimeScaleAxis.NowFrame);
             });
 
             LeftFrameButton.clicked += () =>
             {
-                SkillEditorWindow.Inst.TimeScaleAxis.NowFrame--;
-                SetNowFrameText(SkillEditorWindow.Inst.TimeScaleAxis.NowFrame);
+                SkillEditorWindow.Inst.TimeScaleAxis.NowFrame--;                
                 SkillEditorWindow.Inst.TimeScaleAxis.Align();
             };
             RightFrameButton.clicked += () =>
             {
                 SkillEditorWindow.Inst.TimeScaleAxis.NowFrame++;
-                SetNowFrameText(SkillEditorWindow.Inst.TimeScaleAxis.NowFrame);
                 SkillEditorWindow.Inst.TimeScaleAxis.Align();
             };
 
