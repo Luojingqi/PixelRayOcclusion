@@ -1,4 +1,6 @@
+using Codice.Client.BaseCommands.BranchExplorer;
 using Sirenix.OdinInspector;
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -41,7 +43,13 @@ namespace PRO.SkillEditor
             View.RegisterCallback<PointerDownEvent>(evt =>
             {
                 if (evt.button == 0)
-                    SkillEditorWindow.Inst.SelectSlice = this;
+                {
+                    if (!evt.ctrlKey)
+                    {
+                        SkillEditorWindow.Inst.ClearSelectSlices();
+                    }
+                    SkillEditorWindow.Inst.SwitchSelectSlice(this);
+                }
             });
             View.RegisterCallback<MouseLeaveEvent>(evt =>
             {
@@ -206,7 +214,6 @@ namespace PRO.SkillEditor
         #region 选择与取消选择
         public virtual void Select()
         {
-            Selection.activeObject = this;
             var color = new StyleColor(Color.yellow);
             try
             {
@@ -221,7 +228,6 @@ namespace PRO.SkillEditor
         }
         public virtual void UnSelect()
         {
-            Selection.activeObject = null;
             var color = new StyleColor(Color.clear);
             try
             {
@@ -239,8 +245,9 @@ namespace PRO.SkillEditor
         [Button("删除")]
         public void Delete()
         {
+            SkillEditorWindow.Inst.SwitchSelectSlice(Track.sliceList[StartFrame]);
             Track.RemoveSlice(StartFrame);
-            SkillEditorWindow.Inst.SelectSlice = null;
+
         }
         [GUIColor(0, 0, 0, 0)]
         [ShowInInspector]

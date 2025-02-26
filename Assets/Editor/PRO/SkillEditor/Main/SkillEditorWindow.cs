@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -54,7 +55,7 @@ namespace PRO.SkillEditor
             Gizmos.color = Color.white;
             root.RegisterCallback<PointerDownEvent>(evt =>
             {
-                if (evt.button == 1) SkillEditorWindow.Inst.SelectSlice = null;
+                if (evt.button == 1) ClearSelectSlices();
             });
 
             configField.value = Config.Skill_Disk;
@@ -64,13 +65,13 @@ namespace PRO.SkillEditor
         [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected | GizmoType.InSelectionHierarchy | GizmoType.InSelectionHierarchy)]
         private static void DrawGizmo(GameObject obj, GizmoType gizmoType)
         {
-            try { if (Inst != null && Inst.Config.Agent != null) Inst.SelectSlice?.DrawGizmo(Inst.Config.Agent); }
-            catch { if (Inst != null) Inst.selectSlice = null; }
+            try { if (Inst != null && Inst.Config.Agent != null) foreach(var slice in Inst.SelectSliceHash) slice.DrawGizmo(Inst.Config.Agent); }
+            catch { if (Inst != null) Selection.objects = null; }
         }
         private void DrawHandle(SceneView sceneView)
         {
-            try { if (Inst != null && Inst.Config.Agent != null) Inst.SelectSlice?.DrawHandle(Inst.Config.Agent); }
-            catch { if (Inst != null) Inst.selectSlice = null; }
+            try { if (Inst != null && Inst.Config.Agent != null) foreach (var slice in Inst.SelectSliceHash) slice.DrawHandle(Inst.Config.Agent); }
+            catch { if (Inst != null) Selection.objects = null; }
         }
         private void OnEnable() => SceneView.duringSceneGui += DrawHandle;
         private void OnDestroy() => SceneView.duringSceneGui -= DrawHandle;
@@ -101,23 +102,29 @@ namespace PRO.SkillEditor
 
 
 
-
-        /// <summary>
-        /// 选择的切片，触发切片的选择事件（Inspector显示数据等）
-        /// </summary>
-        public SliceBase SelectSlice
+        private HashSet<SliceBase> SelectSliceHash = new HashSet<SliceBase>();
+        public void SwitchSelectSlice(SliceBase slice)
         {
-            get { return selectSlice; }
-            set
+            if (SelectSliceHash.Contains(slice))
             {
-                selectSlice?.UnSelect();
-                selectSlice = value;
-                selectSlice?.Select();
+                SelectSliceHash.Remove(slice);
+                slice.UnSelect();
             }
+            else
+            {
+                SelectSliceHash.Add(slice);
+                slice.Select();
+            }
+            Selection.objects = SelectSliceHash.ToArray();
         }
-        private SliceBase selectSlice;
 
-
+        public void ClearSelectSlices()
+        {
+            foreach (var slice in SelectSliceHash)
+                slice.UnSelect();
+            SelectSliceHash.Clear();
+            Selection.objects = null;
+        }
 
         public void Update()
         {

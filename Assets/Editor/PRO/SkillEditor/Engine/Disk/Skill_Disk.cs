@@ -78,7 +78,7 @@ namespace PRO.SkillEditor
             end
         }
 
-        public void UpdateFrame(SkillPlayAgent agent, int frame, int playTrack = ~0, Action action = null)
+        public void UpdateFrame(SkillPlayAgent agent, int frame, int playTrack = ~0, Action callback = null)
         {
             if (agent == null) return;
             int filter = 1;
@@ -98,7 +98,7 @@ namespace PRO.SkillEditor
                     case (int)PlayTrack.EventTrack: foreach (var track in EventTrackList) UpdateFrame(track, agent, frame, i++); break;
                 }
             }
-            action?.Invoke();
+            callback?.Invoke();
             foreach (var kv in agent.AttackTestTrack2DDic) SkillPlayAgent.ListPool.PutIn(kv.Value);
             agent.AttackTestTrack2DDic.Clear();
         }

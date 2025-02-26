@@ -1,4 +1,3 @@
-using PRO.Disk;
 using UnityEngine;
 using static PRO.BlockMaterial;
 namespace PRO.Renderer
@@ -57,8 +56,12 @@ namespace PRO.Renderer
 
                     lightResultBufferCSArray[lightIndex].UpdateBind(globalBlockPos, localBlockBufferPos);
                 }
+
             for (int i = 0; i < LightResultBufferLength; i++)
+            {
                 lightResultBufferCSArray[i].UpdateStaticLightSource();
+                lightResultBufferCSArray[i].UpdateFreelyLightSource();
+            }
         }
         /// <summary>
         /// 每帧更新的区块数量

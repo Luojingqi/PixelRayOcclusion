@@ -60,7 +60,7 @@ namespace PRO
             if (RemainTime <= 0) RemainTimeIsZeroEvent?.Invoke(this);
         }
 
-        public void Init(string loadPath)
+        public virtual void Init(string loadPath)
         {
             this.loadPath = loadPath;
             Renderer = GetComponent<SpriteRenderer>();
@@ -70,14 +70,14 @@ namespace PRO
             SkillPlayAgent?.Init();
         }
 
-        public void TakeOut()
+        public virtual void TakeOut()
         {
             ParticleManager.Inst.ActiveParticleHash.Add(this);
             RemainTime = UnityEngine.Random.Range(SurviveTimeRange.x, SurviveTimeRange.y);
             Active = true;
             RecyleState = false;
         }
-        public void PutIn()
+        public virtual void PutIn()
         {
             transform.rotation = Quaternion.identity;
             if (Rig2D != null)
