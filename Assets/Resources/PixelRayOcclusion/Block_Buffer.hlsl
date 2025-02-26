@@ -1,7 +1,7 @@
 #include "StructData.hlsl"
 
 //块数据
-StructuredBuffer<int> BlockBuffer;
+StructuredBuffer<BlockPixelInfo> BlockBuffer;
 
 //点的光照颜色缓存
 StructuredBuffer<int4> LightResultBuffer;
@@ -20,7 +20,12 @@ int PixelToIndex(int2 pos)
     return pos.y * BlockSizeX + pos.x;
 }
 
-PixelColorInfo GetPixel(int2 pixelPos)
+PixelColorInfo GetPixelColorInfo(int colorInfoId)
 {
-    return AllPixelColorInfo[BlockBuffer[PixelToIndex(pixelPos)]];
+    return AllPixelColorInfo[colorInfoId];
+}
+
+BlockPixelInfo GetBlockPixelInfo(int index)
+{
+    return BlockBuffer[index];
 }

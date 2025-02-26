@@ -1,30 +1,30 @@
 ﻿#include "../StructData.hlsl"
-StructuredBuffer<int> BlockBuffer0;
-StructuredBuffer<int> BlockBuffer1;
-StructuredBuffer<int> BlockBuffer2;
-StructuredBuffer<int> BlockBuffer3;
-StructuredBuffer<int> BlockBuffer4;
-StructuredBuffer<int> BlockBuffer5;
-StructuredBuffer<int> BlockBuffer6;
-StructuredBuffer<int> BlockBuffer7;
-StructuredBuffer<int> BlockBuffer8;
-StructuredBuffer<int> BlockBuffer9;
-StructuredBuffer<int> BlockBuffer10;
-StructuredBuffer<int> BlockBuffer11;
-StructuredBuffer<int> BlockBuffer12;
-StructuredBuffer<int> BlockBuffer13;
-StructuredBuffer<int> BlockBuffer14;
-StructuredBuffer<int> BlockBuffer15;
-StructuredBuffer<int> BlockBuffer16;
-StructuredBuffer<int> BlockBuffer17;
-StructuredBuffer<int> BlockBuffer18;
-StructuredBuffer<int> BlockBuffer19;
-StructuredBuffer<int> BlockBuffer20;
-StructuredBuffer<int> BlockBuffer21;
-StructuredBuffer<int> BlockBuffer22;
-StructuredBuffer<int> BlockBuffer23;
-StructuredBuffer<int> BlockBuffer24;
-int GetBlockBuffer(int buffer, int Index)
+StructuredBuffer<BlockPixelInfo> BlockBuffer0;
+StructuredBuffer<BlockPixelInfo> BlockBuffer1;
+StructuredBuffer<BlockPixelInfo> BlockBuffer2;
+StructuredBuffer<BlockPixelInfo> BlockBuffer3;
+StructuredBuffer<BlockPixelInfo> BlockBuffer4;
+StructuredBuffer<BlockPixelInfo> BlockBuffer5;
+StructuredBuffer<BlockPixelInfo> BlockBuffer6;
+StructuredBuffer<BlockPixelInfo> BlockBuffer7;
+StructuredBuffer<BlockPixelInfo> BlockBuffer8;
+StructuredBuffer<BlockPixelInfo> BlockBuffer9;
+StructuredBuffer<BlockPixelInfo> BlockBuffer10;
+StructuredBuffer<BlockPixelInfo> BlockBuffer11;
+StructuredBuffer<BlockPixelInfo> BlockBuffer12;
+StructuredBuffer<BlockPixelInfo> BlockBuffer13;
+StructuredBuffer<BlockPixelInfo> BlockBuffer14;
+StructuredBuffer<BlockPixelInfo> BlockBuffer15;
+StructuredBuffer<BlockPixelInfo> BlockBuffer16;
+StructuredBuffer<BlockPixelInfo> BlockBuffer17;
+StructuredBuffer<BlockPixelInfo> BlockBuffer18;
+StructuredBuffer<BlockPixelInfo> BlockBuffer19;
+StructuredBuffer<BlockPixelInfo> BlockBuffer20;
+StructuredBuffer<BlockPixelInfo> BlockBuffer21;
+StructuredBuffer<BlockPixelInfo> BlockBuffer22;
+StructuredBuffer<BlockPixelInfo> BlockBuffer23;
+StructuredBuffer<BlockPixelInfo> BlockBuffer24;
+BlockPixelInfo GetBlockBuffer(int buffer, int Index)
 {
     switch (buffer)
     {
@@ -144,12 +144,17 @@ bool Equalsi2(int2 i0, int2 i1)
     return i0.x == i1.x && i0.y == i1.y;
 }
 
-//根据本地坐标返回点信息
-PixelColorInfo GetPixel(int2 gloabPos)
+
+PixelColorInfo GetPixelColorInfo(int colorInfoId)
+{
+    return AllPixelColorInfo[colorInfoId];
+}
+//根据全局坐标返回点信息
+BlockPixelInfo GetBlockPixelInfo(int2 gloabPos)
 {
     int2 rlPos = GloabToReceiveLight(gloabPos);
     int Index = ReceiveLightToBlockIndex(rlPos);
-    return AllPixelColorInfo[GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)))];
+    return GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)));
 }
 
 int2 beMixed_Min;

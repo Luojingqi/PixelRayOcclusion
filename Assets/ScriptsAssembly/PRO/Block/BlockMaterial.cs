@@ -74,6 +74,7 @@ namespace PRO
         //所有点的颜色数据_存储到数组，然后传递给GPU缓冲区，shader与计算着色器中使用
         public static PixelColorInfoToShader[] pixelColorInfoToShaderArray;
         public static ComputeBuffer pixelColorInfoToShaderBufffer;
+        public static PixelColorInfo 空气色 { get; private set; }
         private static void LoadAllPixelColorInfo()
         {
             #region 加载路径下的所有PixelColorInfo.json文件，并存储到PixelColorInfoDic与List
@@ -112,6 +113,8 @@ namespace PRO
                 pixelColorInfoToShaderBufffer.SetData(pixelColorInfoToShaderArray);
             }
             #endregion
+
+            空气色 = GetPixelColorInfo("空气色");
         }
         //所有点的颜色数据_顺序索引
         private static List<PixelColorInfo> pixelColorInfoList = new List<PixelColorInfo>();
@@ -145,7 +148,7 @@ namespace PRO
             int index = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
             if (index < 0 || index >= BlockBufferLength) return;
 
-            blockShareMaterialManager.SetBufferData(index, block.textureData.PixelIDToShader);
+            blockShareMaterialManager.SetBufferData(index, block.textureData.PixelInfoToShaderArray);
             //Debug.Log($"块坐标{block.BlockPos}  传递块数据  块缓存索引{index}");
         }
         public static void SetBackgroundBlock(BackgroundBlock background)
@@ -162,7 +165,7 @@ namespace PRO
 
             if (index < 0 || index >= LightResultBufferLength) return;
 
-            backgroundShareMaterialManager.SetBufferData(index, background.textureData.PixelIDToShader);
+            backgroundShareMaterialManager.SetBufferData(index, background.textureData.PixelInfoToShaderArray);
             //Debug.Log($"背景坐标{background.BlockPos}  传递背景数据   背景缓存索引{index}");
         }
         #endregion

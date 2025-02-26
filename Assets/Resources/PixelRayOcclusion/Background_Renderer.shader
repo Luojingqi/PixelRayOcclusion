@@ -19,7 +19,7 @@ Shader "PixelRayOcclusion/Background_Renderer"
             #pragma fragment frag  // 指定片段着色器
 
             #pragma target 5.0
-            #include "Background_Buffer.hlsl"
+            #include "Block_Buffer.hlsl"
 
 
             sampler2D _MainTex;
@@ -49,12 +49,14 @@ Shader "PixelRayOcclusion/Background_Renderer"
             // 片段着色器
             fixed4 frag (v2f i) : SV_Target
             {
-                int2 pixelPos = UVToPixel(i.uv);         
-                PixelColorInfo pixel = GetPixel(pixelPos);
-                float3 pixelColor = pow(pixel.color.xyz / 255.0, 2.2);
-                float3 lightColor = pow(LightResultBuffer[PixelToIndex(pixelPos)].xyz / 255.0 , 1.6);
-                return float4(lightColor * pixelColor.xyz + pixelColor.xyz * pixel.selfLuminous , pixel.color.w / 255.0);
-                //return float4(lightColor,1);
+                int2 pixelPos = UVToPixel(i.uv);
+                int index = PixelToIndex(pixelPos);
+                BlockPixelInfo pixelInfo = GetBlockPixelInfo(index);
+                PixelColorInfo colorInfo = GetPixelColorInfo(pixelInfo.colorInfoId);
+                
+                float3 pixelColor = pow(colorInfo.color.xyz / 255.0, 2.2) * pow(pixelInfo.durability , 0.75);
+                float3 lightColor = pow(LightResultBuffer[PixelToIndex(pixelPos)] / 255.0 , 1.6);
+                return float4((lightColor *  pixelColor.xyz + pixelColor.xyz * colorInfo.selfLuminous)  , colorInfo.color.w / 255.0);
             }
 
             ENDCG

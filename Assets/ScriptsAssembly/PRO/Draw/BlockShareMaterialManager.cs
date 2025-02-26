@@ -17,8 +17,11 @@ namespace PRO.Renderer
         {
             blockBufferArray = new ComputeBuffer[BlockBufferLength];
             materialPropertyBlockArray = new MaterialPropertyBlock[LightResultBufferLength];
-            for (int i = 0; i < BlockBufferLength; i++)
-                blockBufferArray[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int));
+            unsafe
+            {
+                for (int i = 0; i < BlockBufferLength; i++)
+                    blockBufferArray[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(BlockBase.TextureData.BlockPixelInfo));
+            }
             for (int i = 0; i < LightResultBufferLength; i++)
                 materialPropertyBlockArray[i] = new MaterialPropertyBlock();
 

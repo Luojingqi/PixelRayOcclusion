@@ -17,8 +17,11 @@ namespace PRO.Renderer
         {
             backgroundBufferArray = new ComputeBuffer[LightResultBufferLength];
             materialPropertyBlockArray = new MaterialPropertyBlock[LightResultBufferLength];
-            for (int i = 0; i < LightResultBufferLength; i++)
-                backgroundBufferArray[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(int));
+            unsafe
+            {
+                for (int i = 0; i < LightResultBufferLength; i++)
+                    backgroundBufferArray[i] = new ComputeBuffer(Block.Size.x * Block.Size.y, sizeof(BlockBase.TextureData.BlockPixelInfo));
+            }
             for (int i = 0; i < LightResultBufferLength; i++)
                 materialPropertyBlockArray[i] = new MaterialPropertyBlock();
 
@@ -57,7 +60,7 @@ namespace PRO.Renderer
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
                     BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
                     //Debug.Log($"±³¾°×ø±ê{background.BlockPos}  µÚÒ»´Î°ó¶¨  ±³¾°»º´æË÷Òý{lightIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
-                    materialPropertyBlockArray[lightIndex].SetBuffer("BackgroundBuffer", backgroundBufferArray[lightIndex]);
+                    materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", backgroundBufferArray[lightIndex]);
                     materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
                     background.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
 

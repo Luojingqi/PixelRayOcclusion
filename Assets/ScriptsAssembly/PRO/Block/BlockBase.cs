@@ -8,6 +8,7 @@ using System.Threading;
 using Unity.Collections;
 using UnityEngine;
 using static PRO.Renderer.ComputeShaderManager;
+using System.Runtime.InteropServices;
 namespace PRO
 {
     public class BlockBase : MonoBehaviour
@@ -74,7 +75,7 @@ namespace PRO
 
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
 
-            textureData.PixelIDToShader[pixel.pos.y * Block.Size.x + pixel.pos.x] = pixel.colorInfo.index;
+            textureData.SetPixelInfoToShader(pixel);
 
             if (pixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
                 AddLightSource(pixel);
@@ -126,12 +127,32 @@ namespace PRO
             /// <summary>
             /// 纹理中每个点的id，用于shader计算光照
             /// </summary>
-            public int[] PixelIDToShader;
+            public BlockPixelInfo[] PixelInfoToShaderArray;
 
             public TextureData(Texture2D texture)
             {
                 this.nativeArray = texture.GetRawTextureData<float>();
-                PixelIDToShader = new int[texture.width * texture.height];
+                PixelInfoToShaderArray = new BlockPixelInfo[texture.width * texture.height];
+            }
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BlockPixelInfo
+            {
+                /// <summary>
+                /// 使用的颜色id
+                /// </summary>
+                public int colorInfoId;
+                /// <summary>
+                /// 耐久度
+                /// </summary>
+                public float durability;
+            };
+            public void SetPixelInfoToShader(Pixel pixel)
+            {
+                PixelInfoToShaderArray[pixel.pos.y * Block.Size.x + pixel.pos.x] = new BlockPixelInfo()
+                {
+                    colorInfoId = pixel.colorInfo.index,
+                    durability = Mathf.Clamp((float)pixel.durability / pixel.typeInfo.durability, 0, 1),
+                };
             }
         }
 
@@ -266,5 +287,26 @@ namespace PRO
 
 
         #endregion
+
+
+        /// <summary>
+        /// 尝试破坏像素
+        /// </summary>
+        /// <param name="hardness">坚硬度，-1代表无视坚硬度直接破坏</param>
+        /// <param name="durability">破坏的耐久度</param>
+        public void TryDestroyPixel(Vector2Byte pos, int hardness = -1, int durability = int.MaxValue)
+        {
+            Pixel pixel = GetPixel(pos);
+            if (pixel.typeInfo.typeName == "空气") return;
+            if (hardness == -1) SetPixel(Pixel.TakeOut(Pixel.空气, BlockMaterial.空气色, pos));
+            else if (hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
+            {
+                pixel.durability -= durability;
+                if (pixel.durability <= 0)
+                    SetPixel(Pixel.TakeOut(Pixel.空气, BlockMaterial.空气色, pos));
+                else
+                    textureData.SetPixelInfoToShader(pixel);
+            }
+        }
     }
 }

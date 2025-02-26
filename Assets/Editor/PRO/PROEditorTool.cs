@@ -96,20 +96,22 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
         int Index = PixelToIndex(GlobalToPixel(lineArray[i]));" + "\n" +
-$"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} + 1), 0, 1), 2);\n" +
+$"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} - 1), 0, 1), 2);\n" +
 @"      int3 color = filterColor * 255 * weak * shadow;
         InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
         InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
         InterlockedAdd(LightResultBufferTemp[Index].z, color.z);
         InterlockedAdd(LightResultBufferTemp[Index].w, 1);
         }
-       PixelColorInfo typeInfo = GetPixel(lineArray[i]);
-        if(typeInfo.affectsLightIntensity != lastAffects)
+        BlockPixelInfo pixelInfo = GetBlockPixelInfo(lineArray[i]);
+        PixelColorInfo colorInfo = GetPixelColorInfo(pixelInfo.colorInfoId);
+        if(colorInfo.affectsLightIntensity != lastAffects)
         {
-            float4 infoColor = typeInfo.color / 255.0;
-            filterColor.xyz = min(filterColor.xyz * (1 - typeInfo.lightPathColorMixing) + infoColor.xyz * typeInfo.lightPathColorMixing , filterColor.xyz);
-            shadow *= (1 - typeInfo.affectsLightIntensity);
-            lastAffects = typeInfo.affectsLightIntensity;
+            float4 infoColor = colorInfo.color / 255.0;
+            filterColor.xyz = min(filterColor.xyz * (1 - colorInfo.lightPathColorMixing) + infoColor.xyz * colorInfo.lightPathColorMixing , filterColor.xyz);
+            float affectsLightIntensity = colorInfo.affectsLightIntensity * pow(pixelInfo.durability , 0.75);
+            shadow *= (1 - affectsLightIntensity);
+            lastAffects = affectsLightIntensity;
         }
     }
 }" + "\n\n";
@@ -121,9 +123,9 @@ $"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]
         string autoSetLightBuffer_Buffer = "#include \"../StructData.hlsl\"\n";
         int BlockLength = BlockMaterial.EachBlockReceiveLightSize.x * BlockMaterial.EachBlockReceiveLightSize.y;
         for (int i = 0; i < BlockLength; i++)
-            autoSetLightBuffer_Buffer += $"StructuredBuffer<int> BlockBuffer{i};\n";
+            autoSetLightBuffer_Buffer += $"StructuredBuffer<BlockPixelInfo> BlockBuffer{i};\n";
         autoSetLightBuffer_Buffer +=
-@"int GetBlockBuffer(int buffer, int Index)
+@"BlockPixelInfo GetBlockBuffer(int buffer, int Index)
 {
     switch (buffer)
     {
@@ -197,12 +199,17 @@ bool Equalsi2(int2 i0, int2 i1)
     return i0.x == i1.x && i0.y == i1.y;
 }
 
-//根据本地坐标返回点信息
-PixelColorInfo GetPixel(int2 gloabPos)
+
+PixelColorInfo GetPixelColorInfo(int colorInfoId)
+{
+    return AllPixelColorInfo[colorInfoId];
+}
+//根据全局坐标返回点信息
+BlockPixelInfo GetBlockPixelInfo(int2 gloabPos)
 {
     int2 rlPos = GloabToReceiveLight(gloabPos);
     int Index = ReceiveLightToBlockIndex(rlPos);
-    return AllPixelColorInfo[GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)))];
+    return GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)));
 }
 
 int2 beMixed_Min;

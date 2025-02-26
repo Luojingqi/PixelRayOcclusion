@@ -19,6 +19,14 @@ struct LightSource
     int3 color;
 };
 
+struct BlockPixelInfo
+{
+    //使用的颜色id
+    int colorInfoId;
+    //耐久度
+    float durability;
+};
+
 #define BlockSizeX 64
 #define BlockSizeY 64
 
