@@ -25,9 +25,8 @@ namespace PRO.SkillEditor
                         Vector2Int gloabPos = Block.WorldToGlobal(agent.transform.position) + pos + offset;
                         Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
                         Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                        Pixel pixel = Pixel.TakeOut("空气", 0, pixelPos);
+                        Pixel pixel = Pixel.空气.Clone(pixelPos);
                         block.SetPixel(pixel);
-                        block.DrawPixelAsync(pixelPos, pixel.colorInfo.color);
                     }
                 }
             }

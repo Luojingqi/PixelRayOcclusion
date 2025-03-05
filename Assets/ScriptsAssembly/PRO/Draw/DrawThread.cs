@@ -37,17 +37,29 @@ namespace PRO
                     {
                         ThreadPool.QueueUserWorkItem((obj) =>
                         {
-                            BlockToDiskEx.ToRAM(blockText, block, scene);
-                            Interlocked.Add(ref endNum, -1);
-                            block.DrawPixelAsync();
-                            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-                            SceneManager.Inst.mainThreadEvent += () => GreedyCollider.CreateColliderAction(block, colliderDataList);
+                            try
+                            {
+                                BlockToDiskEx.ToRAM(blockText, block, scene);
+                                Interlocked.Add(ref endNum, -1);
+                                var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
+                                SceneManager.Inst.mainThreadEvent += () => GreedyCollider.CreateColliderAction(block, colliderDataList);
+                            }
+                            catch (Exception ex) 
+                            {
+                                SceneManager.Inst.mainThreadEvent += () => Debug.Log(ex);
+                            }
                         });
                         ThreadPool.QueueUserWorkItem((obj) =>
                         {
-                            BlockToDiskEx.ToRAM(backgroundText, background, scene);
-                            Interlocked.Add(ref endNum, -1);
-                            background.DrawPixelAsync();
+                            try
+                            {
+                                BlockToDiskEx.ToRAM(backgroundText, background, scene);
+                                Interlocked.Add(ref endNum, -1);
+                            }
+                            catch (Exception ex)
+                            {
+                                SceneManager.Inst.mainThreadEvent += () => Debug.Log(ex);
+                            }
                         });
                     }
                     else
@@ -172,6 +184,7 @@ namespace PRO
                 //lock (SceneManager.Inst.mainThreadEventLock)
                 //    SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); };
                 //SceneManager.Inst.En_Lock_DrawApplyQueue(block);
+                block.DrawPixelAsync();
                 Interlocked.Add(ref endNum, -1);
             }
             catch (Exception e)
@@ -188,13 +201,13 @@ namespace PRO
                     if (r > 10)//>= 2)
                     {
                         Pixel pixel = Pixel.New("¿ÕÆø", 0, new(x, y));
-                        block.SetPixel(pixel, false, false);
+                        block.SetPixel(pixel, false, false, false);
                         block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                     }
                     else
                     {
                         Pixel pixel = Pixel.New("¿ÕÆø", 0, new(x, y));
-                        block.SetPixel(pixel, false, false);
+                        block.SetPixel(pixel, false, false, false);
                         block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                     }
                 }
@@ -241,7 +254,7 @@ namespace PRO
                     for (int y = 0; y < Block.Size.y; y++)
                     {
                         Pixel pixel = Pixel.New("±³¾°", 2, new(x, y));
-                        background.SetPixel(pixel);
+                        background.SetPixel(pixel, false, false, false);
                         background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                         //if (x < Block.Size.x / 2 - 10)
                         //{
@@ -255,8 +268,8 @@ namespace PRO
                         //    background.SetPixel(pixel);
                         //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorInfo).color);
                         //}
-                    }
-                // SceneManager.Inst.En_Lock_DrawApplyQueue(background);
+                    }                 
+                background.DrawPixelAsync();
                 Interlocked.Add(ref endNum, -1);
             }
             catch (Exception e)

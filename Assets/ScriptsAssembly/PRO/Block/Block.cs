@@ -338,13 +338,6 @@ namespace PRO
                     if (pixel.typeInfo.fluidType != 2)
                         goto end;
 
-                    pixel.affectsTransparency -= 0.05f;
-                    if (pixel.affectsTransparency < 0)
-                    {
-                        SetPixel(Pixel.空气.Clone(pixel.pos));
-                        goto end;
-                    }
-
                     #region 添加遍历队列
                     int sign = (int)Mathf.Sign(pixel.typeInfo.fluidDensity);
                     System.Span<Vector2Int> nextPosSpan = stackalloc Vector2Int[] { new(0, sign), new(1, 0), new(-1, 0), new(1, sign), new(-1, sign) };
@@ -374,11 +367,7 @@ namespace PRO
                     {
                         Vector2Int nextPosG = _queue.Dequeue();
                         Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nextPosG));
-                        if (nextBlock == null)
-                        {
-                            updateProbability -= updateProbabilityDecay2;
-                            continue;
-                        }
+                        if (nextBlock == null) { updateProbability -= updateProbabilityDecay2; continue; }
 
                         Pixel nextPixel = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
 
@@ -403,14 +392,31 @@ namespace PRO
                                         AddFluidUpdateHash(tempBlock.GetPixel(Block.GlobalToPixel(tempG)));
                                     }
                                 #endregion
+
+                                #region 处理特殊像素
+                                {
+                                    Pixel pixel_next = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
+                                    if (pixel_next.typeInfo.typeName == "水蒸气")
+                                    {
+                                        pixel_next.affectsTransparency -= Random.Range(0, 0.05f);
+                                        if (pixel_next.affectsTransparency < 0.07f)
+                                        {
+                                            SetPixel(Pixel.空气.Clone(pixel_next.pos));
+                                            stopUpdate = true;
+                                            if (Random.Range(0, 100) < 25)
+                                            {
+                                                Particle particle = ParticleManager.Inst.GetPool("特殊粒子/水").TakeOutT();
+                                                particle.SetGlobal(nextPosG);
+                                            }
+                                        }
+                                    }
+                                }
+                                #endregion
+
                                 break;
                             }
                         }
-                        else
-                        {
-                            updateProbability -= updateProbabilityDecay2;
-                            continue;
-                        }
+                        else { updateProbability -= updateProbabilityDecay2; continue; }
                     }
                 end:
                     if (stopUpdate == true)
@@ -520,10 +526,8 @@ namespace PRO
             p1.pos = temp;
             var p0_Clone = p0.Clone();
             var p1_Clone = p1.Clone();
-            block1.SetPixel(p0_Clone, false, false);
-            block0.SetPixel(p1_Clone, false, false);
-            block1.DrawPixelAsync(p0_Clone.pos, p0_Clone.colorInfo.color);
-            block0.DrawPixelAsync(p1_Clone.pos, p1_Clone.colorInfo.color);
+            block1.SetPixel(p0_Clone, true, false, false);
+            block0.SetPixel(p1_Clone, true, false, false);
         }
 
         #region 更新流体的临时变量

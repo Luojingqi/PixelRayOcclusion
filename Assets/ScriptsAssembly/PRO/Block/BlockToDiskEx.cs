@@ -117,7 +117,7 @@ namespace PRO.Disk.Scene
                 int x = pixelNum % Block.Size.x;
                 int y = pixelNum / Block.Size.y;
                 Pixel pixel = Pixel.TakeOut(typeName, colorName, new(x, y));
-                block.SetPixel(pixel, false, false);
+                block.SetPixel(pixel, true, false, false);
                 if (buildingGuid != null)
                 {
                     pixel.building = sceneEntity.GetBuilding(buildingGuid);

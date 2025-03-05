@@ -20,7 +20,6 @@ namespace PRO.SkillEditor
                     Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
                     Pixel pixel = Pixel.TakeOut(data.typeName, data.colorName, pixelPos);
                     block.SetPixel(pixel);
-                    block.DrawPixelAsync(pixelPos, pixel.colorInfo.color);
                 }
             }
             catch

@@ -209,6 +209,8 @@ namespace PRO
                 n = 7;
             if (Input.GetKeyDown(KeyCode.Alpha9))
                 n = 8;
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+                n = 9;
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
                 //MousePoint.block.SetPixel(Pixel.TakeOut("»ðÑæ", n, MousePoint.pixelPos));

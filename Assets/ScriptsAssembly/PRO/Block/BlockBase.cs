@@ -45,7 +45,7 @@ namespace PRO
         /// <summary>
         /// 设置某个点（坐标为Pixel.pos），切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
         /// </summary>
-        public void SetPixel(Pixel pixel, bool updateCollider = true, bool updateLiquidOrGas = true)
+        public void SetPixel(Pixel pixel, bool drawPixelSync = true, bool updateCollider = true, bool updateLiquidOrGas = true)
         {
             if (pixel == null) return;
             pixel.posG = PixelToGlobal(pixel.pos);
@@ -69,7 +69,6 @@ namespace PRO
                     removePixel.building = null;
                 }
 
-
                 Pixel.PutIn(removePixel);
             }
 
@@ -91,6 +90,8 @@ namespace PRO
                         for (int x = -1; x <= 1; x++)
                             Block.AddFluidUpdateHash(pixel.posG + new Vector2Int(x, y));
             }
+
+            if (drawPixelSync) DrawPixelAsync(pixel.pos, pixel.colorInfo.color);
         }
 
         #endregion

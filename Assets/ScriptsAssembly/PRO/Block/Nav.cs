@@ -50,7 +50,7 @@ namespace PRO
             dic.Add(start_G, start_G);
             bool success = false;
             int depth = 0;
-            while (queue.Count > 0 && depth++ < 50)
+            while (queue.Count > 0 && depth++ < 200)
             {
                 Vector2Int now = queue.Dequeue();
                 if (now == end_G)

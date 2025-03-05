@@ -124,10 +124,8 @@ namespace PRO
                 box.transform.parent = block.colliderNode;
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
-                    {
                         block.allCollider[x, y] = box;
-                        block.DrawPixelAsync(new Vector2Byte(x, y), color);
-                    }
+                    
             }
         }
         /// <summary>
@@ -186,10 +184,7 @@ namespace PRO
             Color32 color = new Color32((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255), 255);
             for (byte x = colliderPos.x; x < colliderPos.x + colliderSize.x; x++)
                 for (byte y = colliderPos.y; y < colliderPos.y + colliderSize.y; y++)
-                {
                     block.allCollider[x, y] = null;
-                    block.DrawPixelAsync(new Vector2Byte(x, y), color);
-                }
             PutIn(box);
             var list = CreateColliderDataList(block, colliderPos, colliderPos + colliderSize - new Vector2Byte(1, 1));
             CreateColliderAction(block, list);
