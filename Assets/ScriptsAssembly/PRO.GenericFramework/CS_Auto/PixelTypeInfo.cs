@@ -31,7 +31,9 @@ namespace PRO.Disk
         
         private int burnodds;
         
-        // 类型名称
+        /// <summary>
+        ///类型名称
+        ///</summary>
         public string typeName
         {
             get
@@ -44,7 +46,9 @@ namespace PRO.Disk
             }
         }
         
-        // 可用颜色
+        /// <summary>
+        ///可用颜色
+        ///</summary>
         public System.Collections.Generic.List<System.String> availableColors
         {
             get
@@ -57,7 +61,9 @@ namespace PRO.Disk
             }
         }
         
-        // 坚硬度
+        /// <summary>
+        ///坚硬度
+        ///</summary>
         public int hardness
         {
             get
@@ -70,7 +76,9 @@ namespace PRO.Disk
             }
         }
         
-        // 耐久度
+        /// <summary>
+        ///耐久度
+        ///</summary>
         public int durability
         {
             get
@@ -83,7 +91,9 @@ namespace PRO.Disk
             }
         }
         
-        // 需要碰撞
+        /// <summary>
+        ///需要碰撞
+        ///</summary>
         public bool collider
         {
             get
@@ -96,7 +106,9 @@ namespace PRO.Disk
             }
         }
         
-        // 流体类型
+        /// <summary>
+        ///流体类型
+        ///</summary>
         public int fluidType
         {
             get
@@ -109,7 +121,9 @@ namespace PRO.Disk
             }
         }
         
-        // 流体密度
+        /// <summary>
+        ///流体密度
+        ///</summary>
         public int fluidDensity
         {
             get
@@ -122,7 +136,9 @@ namespace PRO.Disk
             }
         }
         
-        // 燃烧概率
+        /// <summary>
+        ///燃烧概率
+        ///</summary>
         public int burnOdds
         {
             get

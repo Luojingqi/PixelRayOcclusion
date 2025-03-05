@@ -26,6 +26,10 @@ namespace PRO
         /// </summary>
         public PixelColorInfo colorInfo;
         /// <summary>
+        /// 所在的区块
+        /// </summary>
+        public BlockBase block;
+        /// <summary>
         /// 所属的建筑
         /// </summary>
         public BuildingBase building;
@@ -33,6 +37,10 @@ namespace PRO
         /// 耐久度
         /// </summary>
         public int durability = -1;
+        /// <summary>
+        /// 透明度影响系数
+        /// </summary>
+        public float affectsTransparency = 1;
 
         /// <summary>
         /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查
@@ -43,6 +51,14 @@ namespace PRO
         {
             Pixel pixel = pixelPool.TakeOut();
             InitPixel(pixel, typeInfo, colorInfo, pos, durability);
+            pixel.affectsTransparency = affectsTransparency;
+            return pixel;
+        }
+        public Pixel Clone(Vector2Byte pos)
+        {
+            Pixel pixel = pixelPool.TakeOut();
+            InitPixel(pixel, typeInfo, colorInfo, pos, durability);
+            pixel.affectsTransparency = affectsTransparency;
             return pixel;
         }
 
@@ -73,7 +89,9 @@ namespace PRO
             pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
+            pixel.block = null;
             pixel.durability = -1;
+            pixel.affectsTransparency = 1;
             if (pixel.building != null)
             {
                 pixel.building.UnloadPixel(pixel, byUnloadAllPixelAction);
@@ -124,7 +142,7 @@ namespace PRO
             if (pixelTypeInfoDic.TryGetValue(typeName, out PixelTypeInfo info)) return info;
             else return null;
         }
-        public static PixelTypeInfo 空气;
+        public static Pixel 空气;
 
         #region 构造函数
         /// <summary>
@@ -209,7 +227,6 @@ namespace PRO
                         pixelTypeInfoList.Add(InfoArray[i]);
                     }
             }
-            空气 = GetPixelTypeInfo("空气");
         }
         #endregion
     }

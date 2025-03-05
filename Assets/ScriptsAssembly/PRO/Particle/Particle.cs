@@ -53,6 +53,11 @@ namespace PRO
         public bool RecyleState { get; private set; }
         public void UpdateRemainTime(int cutDown)
         {
+            if (SceneManager.Inst.NowScene.GetBlock(Block.WorldToBlock(transform.position)) == null)
+            {
+                ParticleManager.Inst.GetPool(loadPath).PutIn(this.gameObject);
+                return;
+            }
             // transform.rotation = Quaternion.FromToRotation(Vector3.up, Rig2D.velocity);
             remainTime -= cutDown;
             elapsedTime += cutDown;

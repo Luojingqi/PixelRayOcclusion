@@ -23,7 +23,9 @@ namespace PRO.Disk
         
         private string path;
         
-        // UI名称
+        /// <summary>
+        ///UI名称
+        ///</summary>
         public string Name
         {
             get
@@ -36,7 +38,9 @@ namespace PRO.Disk
             }
         }
         
-        // 是否自动反切
+        /// <summary>
+        ///是否自动反切
+        ///</summary>
         public bool ShowMode
         {
             get
@@ -49,7 +53,9 @@ namespace PRO.Disk
             }
         }
         
-        // 加载模式
+        /// <summary>
+        ///加载模式
+        ///</summary>
         public string LoadMode
         {
             get
@@ -62,7 +68,9 @@ namespace PRO.Disk
             }
         }
         
-        // UI路径
+        /// <summary>
+        ///UI路径
+        ///</summary>
         public string Path
         {
             get

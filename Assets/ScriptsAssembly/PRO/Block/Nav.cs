@@ -6,8 +6,17 @@ namespace PRO
 {
     public class Nav
     {
+        /// <summary>
+        /// 角色模型大小与偏移
+        /// </summary>
         public NavAgentMould AgentMould { get; private set; }
+        /// <summary>
+        /// 检查盒子，角色模型的边框
+        /// </summary>
         public Vector2Int[] chackBox { get; private set; }
+        /// <summary>
+        /// 角色每次可以移动的下一个点的集合
+        /// </summary>
         public Vector2Int[] walkRing { get; private set; }
         public Nav(NavAgentMould NavAgentMould)
         {

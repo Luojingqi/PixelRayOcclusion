@@ -54,7 +54,7 @@ Shader "PixelRayOcclusion/Block_Renderer"
                 
                 float3 pixelColor = pow(colorInfo.color.xyz / 255.0, 2.2) * pow(pixelInfo.durability , 0.75);
                 float3 lightColor = pow(LightResultBuffer[PixelToIndex(pixelPos)] / 255.0 , 1.6);
-                return float4((lightColor *  pixelColor.xyz + pixelColor.xyz * colorInfo.selfLuminous)  , colorInfo.color.w / 255.0);
+                return float4((lightColor *  pixelColor.xyz + pixelColor.xyz * colorInfo.selfLuminous)  , colorInfo.color.w / 255.0 * pixelInfo.affectsTransparency);
             }
 
             ENDCG

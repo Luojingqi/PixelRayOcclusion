@@ -49,6 +49,7 @@ namespace PRO
         {
             if (pixel == null) return;
             pixel.posG = PixelToGlobal(pixel.pos);
+            pixel.block = this;
 
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
@@ -145,6 +146,10 @@ namespace PRO
                 /// 耐久度
                 /// </summary>
                 public float durability;
+                /// <summary>
+                /// 透明度影响系数
+                /// </summary>
+                public float affectsTransparency;
             };
             public void SetPixelInfoToShader(Pixel pixel)
             {
@@ -152,6 +157,7 @@ namespace PRO
                 {
                     colorInfoId = pixel.colorInfo.index,
                     durability = Mathf.Clamp((float)pixel.durability / pixel.typeInfo.durability, 0, 1),
+                    affectsTransparency = pixel.affectsTransparency,
                 };
             }
         }
@@ -298,12 +304,12 @@ namespace PRO
         {
             Pixel pixel = GetPixel(pos);
             if (pixel.typeInfo.typeName == "空气") return;
-            if (hardness == -1) SetPixel(Pixel.TakeOut(Pixel.空气, BlockMaterial.空气色, pos));
+            if (hardness == -1) SetPixel(Pixel.空气.Clone(pos));
             else if (hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
             {
                 pixel.durability -= durability;
                 if (pixel.durability <= 0)
-                    SetPixel(Pixel.TakeOut(Pixel.空气, BlockMaterial.空气色, pos));
+                    SetPixel(Pixel.空气.Clone(pos));
                 else
                     textureData.SetPixelInfoToShader(pixel);
             }

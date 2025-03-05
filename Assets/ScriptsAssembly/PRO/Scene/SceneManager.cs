@@ -39,13 +39,13 @@ namespace PRO
         {
             Inst = this;
             DontDestroyOnLoad(this);
-            BlockMaterial.Init();
             PoolNode = new GameObject("PoolNode").transform;
-
+            BlockMaterial.Init();
+            Pixel.LoadPixelTypeInfo();
+            Pixel.空气 = Pixel.TakeOut("空气", 0, new());
             GreedyCollider.InitBoxCollider2DPool();
             Block.InitPool();
             BackgroundBlock.InitPool();
-            Pixel.LoadPixelTypeInfo();
             Texture2DPool.InitPool();
             //GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
@@ -111,6 +111,7 @@ namespace PRO
         #endregion
         float time0 = 0;
         float time1 = 0;
+        float time2 = 0;
         int n = 2;
         int l = 3;
         int k = 20;
@@ -150,6 +151,15 @@ namespace PRO
                     for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid1();
             }
+            time2 += Time.deltaTime;
+            while (time2 > 0.125f)
+            {
+                time2 -= 0.125f;
+                for (int y = l; y >= -l; y--)
+                    for (int x = -l; x <= l; x++)
+                        NowScene.GetBlock(new(x, y)).UpdateFluid2();
+            }
+
             if (Input.GetKeyDown(KeyCode.S))
             {
                 Log.Print("保存");
@@ -210,7 +220,7 @@ namespace PRO
                 for (int x = -1; x <= 1; x++)
                     for (int y = -1; y <= 1; y++)
                     {
-                        var pixel = Pixel.TakeOut("水", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
+                        var pixel = Pixel.TakeOut("水蒸气", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
                         if (pixel != null)
                             MousePoint.block.SetPixel(pixel);
                     }

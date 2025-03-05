@@ -1,9 +1,7 @@
-using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Renderer;
 using PRO.Tool;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 namespace PRO
@@ -194,12 +192,18 @@ namespace PRO
         /// <summary>
         /// 流体1的更新概率衰减
         /// </summary>
-        private static int updateProbabilityDecay1 = 3;
-
+        private static readonly int updateProbabilityDecay1 = 3;
+        /// <summary>
+        /// 流体2的更新概率衰减
+        /// </summary>
+        private static readonly int updateProbabilityDecay2 = 3;
 
         //流体更新队列
+        //液体
         private HashSet<Vector2Byte>[] fluidUpdateHash1 = new HashSet<Vector2Byte>[Block.Size.y];
+        //气体
         private HashSet<Vector2Byte>[] fluidUpdateHash2 = new HashSet<Vector2Byte>[Block.Size.y];
+        //固体
         private HashSet<Vector2Byte>[] fluidUpdateHash3 = new HashSet<Vector2Byte>[Block.Size.y];
         public static void AddFluidUpdateHash(Vector2Int pos_G)
         {
@@ -215,6 +219,16 @@ namespace PRO
                 }
             }
         }
+        public static void AddFluidUpdateHash(Pixel pixel)
+        {
+            Block block = pixel.block as Block;
+            switch (pixel.typeInfo.fluidType)
+            {
+                case 1: AddHashSet(block.fluidUpdateHash1[pixel.pos.y], pixel.pos); break;
+                case 2: AddHashSet(block.fluidUpdateHash2[pixel.pos.y], pixel.pos); break;
+                case 3: AddHashSet(block.fluidUpdateHash3[pixel.pos.y], pixel.pos); break;
+            }
+        }
         private static void AddHashSet(HashSet<Vector2Byte> hash, Vector2Byte pos)
         {
             if (hash.Contains(pos) == false)
@@ -222,6 +236,7 @@ namespace PRO
         }
         public void UpdateFluid1()
         {
+            Random.InitState((int)(Time.deltaTime * 1000000));
             for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
                 _posList.Clear();
@@ -236,30 +251,25 @@ namespace PRO
                     bool stopUpdate = true;
                     if (pixel.typeInfo.fluidType != 1)
                         goto end;
-                    //根据概率来看优先向哪个方向移动
-                    AddQueueHash(pixel.posG + Vector2Int.down);
-                    Random.InitState((int)(Time.deltaTime * 1000000));
-                    if (Random.Range(0, 100) >= 50)
-                    {
-                        AddQueueHash(pixel.posG + Vector2Int.right);
-                        AddQueueHash(pixel.posG + Vector2Int.left);
-                    }
-                    else
-                    {
-                        AddQueueHash(pixel.posG + Vector2Int.left);
-                        AddQueueHash(pixel.posG + Vector2Int.right);
-                    }
 
-                    if (Random.Range(0, 100) >= 50)
+                    #region 添加遍历队列
+                    System.Span<Vector2Int> nextPosSpan = stackalloc Vector2Int[] { new(0, -1), new(1, 0), new(-1, 0), new(1, -1), new(-1, -1) };
+                    //根据概率来看优先向哪个方向移动
+                    if (Random.Range(0, 100) < 50)
                     {
-                        AddQueueHash(pixel.posG + Vector2Int.right + Vector2Int.down);
-                        AddQueueHash(pixel.posG + Vector2Int.left + Vector2Int.down);
+                        Vector2Int temp = nextPosSpan[1];
+                        nextPosSpan[1] = nextPosSpan[2];
+                        nextPosSpan[2] = temp;
                     }
-                    else
+                    if (Random.Range(0, 100) < 50)
                     {
-                        AddQueueHash(pixel.posG + Vector2Int.left + Vector2Int.down);
-                        AddQueueHash(pixel.posG + Vector2Int.right + Vector2Int.down);
+                        Vector2Int temp = nextPosSpan[3];
+                        nextPosSpan[3] = nextPosSpan[4];
+                        nextPosSpan[4] = temp;
                     }
+                    foreach (var spanPos in nextPosSpan)
+                        AddQueueHash(pixel.posG + spanPos);
+                    #endregion
 
                     int updateProbability = 100;
                     while (_queue.Count > 0)
@@ -280,26 +290,125 @@ namespace PRO
                         {
                             if (Random.Range(0, 100) < updateProbability)
                             {
-                                //将被交换点附近3x3的点都加入流体更新队列
+                                SwapFluid(nextPosG, pixel.posG);
+                                stopUpdate = false;
+                                #region 将被交换点附近3x3的点都加入流体更新队列
                                 for (int y = -2; y <= 2; y++)
                                     for (int x = -2; x <= 2; x++)
                                     {
-                                        //  var tempG = nextPosG + new Vector2Int(0, 0);
                                         var tempG = nextPosG + new Vector2Int(x, y);
-                                        Block timpBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(tempG));
-                                        if (timpBlock == null) continue;
-                                        var tempP = Block.GlobalToPixel(tempG);
-                                        AddHashSet(timpBlock.fluidUpdateHash1[tempP.y], tempP);
+                                        Block tempBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(tempG));
+                                        if (tempBlock == null) continue;
+                                        AddFluidUpdateHash(tempBlock.GetPixel(Block.GlobalToPixel(tempG)));
                                     }
-                                SwapFluid(nextPosG, pixel.posG);
-                                stopUpdate = false;
-
+                                #endregion
                                 break;
                             }
                         }
                         else
                         {
                             updateProbability -= updateProbabilityDecay1;
+                            continue;
+                        }
+                    }
+                end:
+                    if (stopUpdate == true)
+                    {
+                        RemoveFluidUpdateHash(pos);
+                    }
+                }
+
+            }
+        }
+        public void UpdateFluid2()
+        {
+            Random.InitState((int)(Time.deltaTime * 1000000));
+            for (int i = fluidUpdateHash2.Length - 1; i >= 0; i--)
+            {
+                _posList.Clear();
+                foreach (var pos in fluidUpdateHash2[i])
+                    _posList.Add(pos);
+                foreach (var pos in _posList)
+                {
+                    _queue.Clear();
+                    _hash.Clear();
+                    Pixel pixel = GetPixel(pos);
+                    //标记位为false时，代表此点无法流动，移除更新队列
+                    bool stopUpdate = true;
+                    if (pixel.typeInfo.fluidType != 2)
+                        goto end;
+
+                    pixel.affectsTransparency -= 0.05f;
+                    if (pixel.affectsTransparency < 0)
+                    {
+                        SetPixel(Pixel.空气.Clone(pixel.pos));
+                        goto end;
+                    }
+
+                    #region 添加遍历队列
+                    int sign = (int)Mathf.Sign(pixel.typeInfo.fluidDensity);
+                    System.Span<Vector2Int> nextPosSpan = stackalloc Vector2Int[] { new(0, sign), new(1, 0), new(-1, 0), new(1, sign), new(-1, sign) };
+                    //根据概率来看优先向哪个方向移动
+                    for (int s = 0; s < nextPosSpan.Length; s++)
+                        if (s < 3)
+                        {
+                            int tempIndex = Random.Range(0, 3);
+                            Vector2Int temp = nextPosSpan[tempIndex];
+                            nextPosSpan[tempIndex] = nextPosSpan[s];
+                            nextPosSpan[s] = temp;
+                        }
+                        //百分之10的概率优先斜向扩散
+                        else if (Random.Range(0, 100) < 10)
+                        {
+                            int tempIndex = Random.Range(0, nextPosSpan.Length);
+                            Vector2Int temp = nextPosSpan[tempIndex];
+                            nextPosSpan[tempIndex] = nextPosSpan[s];
+                            nextPosSpan[s] = temp;
+                        }
+                    foreach (var spanPos in nextPosSpan)
+                        AddQueueHash(pixel.posG + spanPos);
+                    #endregion
+
+                    int updateProbability = 100;
+                    while (_queue.Count > 0)
+                    {
+                        Vector2Int nextPosG = _queue.Dequeue();
+                        Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nextPosG));
+                        if (nextBlock == null)
+                        {
+                            updateProbability -= updateProbabilityDecay2;
+                            continue;
+                        }
+
+                        Pixel nextPixel = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
+
+                        if ((nextPixel.typeInfo.typeName == "空气") ||    //下一个点为空气
+                            (nextPixel.typeInfo.fluidType == 2 &&
+                            sign == (int)Mathf.Sign(nextPixel.typeInfo.fluidDensity) &&
+                            Mathf.Abs(pixel.typeInfo.fluidDensity) > Mathf.Abs(nextPixel.typeInfo.fluidDensity) ||//下个点为气体，且密度高于他
+                            (nextPixel.typeInfo.fluidType == 1 && sign == 1))   //下个点为液体，且自身是向上飘的
+                            )
+                        {
+                            if (Random.Range(0, 100) < updateProbability)
+                            {
+                                SwapFluid(nextPosG, pixel.posG);
+                                stopUpdate = false;
+                                #region 将被交换点附近3x3的点都加入流体更新队列
+                                for (int y = -2; y <= 2; y++)
+                                    for (int x = -2; x <= 2; x++)
+                                    {
+                                        var tempG = nextPosG + new Vector2Int(x, y);
+                                        Block tempBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(tempG));
+                                        if (tempBlock == null) continue;
+                                        AddFluidUpdateHash(tempBlock.GetPixel(Block.GlobalToPixel(tempG)));
+                                    }
+                                #endregion
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            updateProbability -= updateProbabilityDecay2;
                             continue;
                         }
                     }
@@ -400,7 +509,6 @@ namespace PRO
             fluidUpdateHash2[pos.y].Remove(pos);
             fluidUpdateHash3[pos.y].Remove(pos);
         }
-
         private void SwapFluid(Vector2Int p0_G, Vector2Int p1_G)
         {
             var block0 = SceneManager.Inst.NowScene.GetBlock(GlobalToBlock(p0_G));

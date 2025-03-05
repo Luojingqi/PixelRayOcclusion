@@ -31,7 +31,9 @@ namespace PRO.Disk
         
         private int _index;
         
-        // 颜色的名称
+        /// <summary>
+        ///颜色的名称
+        ///</summary>
         public string colorName
         {
             get
@@ -44,7 +46,9 @@ namespace PRO.Disk
             }
         }
         
-        // 颜色
+        /// <summary>
+        ///颜色
+        ///</summary>
         public UnityEngine.Color32 color
         {
             get
@@ -57,7 +61,9 @@ namespace PRO.Disk
             }
         }
         
-        // 光路混色
+        /// <summary>
+        ///光路混色
+        ///</summary>
         public float lightPathColorMixing
         {
             get
@@ -70,7 +76,9 @@ namespace PRO.Disk
             }
         }
         
-        // 光强影响的系数
+        /// <summary>
+        ///光强影响的系数
+        ///</summary>
         public float affectsLightIntensity
         {
             get
@@ -83,7 +91,9 @@ namespace PRO.Disk
             }
         }
         
-        // 发光半径
+        /// <summary>
+        ///发光半径
+        ///</summary>
         public int luminousRadius
         {
             get
@@ -96,7 +106,9 @@ namespace PRO.Disk
             }
         }
         
-        // 发光颜色
+        /// <summary>
+        ///发光颜色
+        ///</summary>
         public UnityEngine.Color32 luminousColor
         {
             get
@@ -109,7 +121,9 @@ namespace PRO.Disk
             }
         }
         
-        // 自发光强度
+        /// <summary>
+        ///自发光强度
+        ///</summary>
         public float selfLuminous
         {
             get
@@ -122,7 +136,9 @@ namespace PRO.Disk
             }
         }
         
-        // 不填
+        /// <summary>
+        ///不填
+        ///</summary>
         public int index
         {
             get

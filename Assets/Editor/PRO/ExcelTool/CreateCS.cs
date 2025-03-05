@@ -58,7 +58,7 @@ namespace ExcelTool
                 string note = null;
                 if (Name_Note_Dic.TryGetValue(Name_Type.Key, out note))
                 {
-                    property.Comments.Add(new CodeCommentStatement(note));
+                    property.Comments.Add(new CodeCommentStatement($"<summary>\n{note}\n</summary>", true));
                 }
                 //get
                 property.GetStatements.Add(new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), NameToLower)));

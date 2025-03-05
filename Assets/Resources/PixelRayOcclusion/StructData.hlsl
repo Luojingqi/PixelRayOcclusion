@@ -25,6 +25,8 @@ struct BlockPixelInfo
     int colorInfoId;
     //耐久度
     float durability;
+    //透明影响系数
+    float affectsTransparency;
 };
 
 #define BlockSizeX 64
