@@ -3,6 +3,7 @@ using PRO.Disk.Scene;
 using PRO.Tool;
 using System;
 using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static PRO.Tool.DrawTool;
@@ -30,6 +31,36 @@ namespace PRO
             {
                 for (int j = y.x; j <= y.y; j++)
                 {
+                    #region .
+                    //if (i == 0 && j == 0)
+                    //{
+                    //    var b0 = scene.CreateBlock(new Vector2Int(i, j));
+                    //    var b1 = scene.CreateBackground(new Vector2Int(i, j));
+                    //    ThreadPool.QueueUserWorkItem((obj) =>
+                    //    {
+                    //        try
+                    //        {
+                    //            for (int x = 0; x < Block.Size.x; x++)
+                    //                for (int y = 0; y < Block.Size.y; y++)
+                    //                {
+                    //                    Pixel pixel = Pixel.New("¿ÕÆø", 0, new(x, y));
+                    //                    b0.SetPixel(pixel, false, false, false);
+                    //                    b0.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                    //                    Pixel pixel1 = Pixel.New("¿ÕÆø", 0, new(x, y));
+                    //                    b1.SetPixel(pixel1, false, false, false);
+                    //                    b1.DrawPixelSync(new Vector2Byte(x, y), pixel1.colorInfo.color);
+                    //                }
+                    //            Interlocked.Add(ref endNum, -2);
+                    //            scene.BlockBaseInRAM.Add(new Vector2Int(i, j));
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //            SceneManager.Inst.mainThreadEvent += () => Debug.Log(ex);
+                    //        }
+                    //    });
+                    //    continue;
+                    //}
+                    #endregion
                     var block = scene.CreateBlock(new Vector2Int(i, j));
                     var background = scene.CreateBackground(new Vector2Int(i, j));
                     if (JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{new Vector2Int(i, j)}\block.txt", out string blockText)
@@ -44,7 +75,7 @@ namespace PRO
                                 var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
                                 SceneManager.Inst.mainThreadEvent += () => GreedyCollider.CreateColliderAction(block, colliderDataList);
                             }
-                            catch (Exception ex) 
+                            catch (Exception ex)
                             {
                                 SceneManager.Inst.mainThreadEvent += () => Debug.Log(ex);
                             }
@@ -253,7 +284,8 @@ namespace PRO
                 for (int x = 0; x < Block.Size.x; x++)
                     for (int y = 0; y < Block.Size.y; y++)
                     {
-                        Pixel pixel = Pixel.New("±³¾°", 2, new(x, y));
+                        Pixel pixel = Pixel.New("¿ÕÆø", 0, new(x, y));
+                        //Pixel pixel = Pixel.New("±³¾°", 2, new(x, y));
                         background.SetPixel(pixel, false, false, false);
                         background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                         //if (x < Block.Size.x / 2 - 10)
@@ -268,7 +300,7 @@ namespace PRO
                         //    background.SetPixel(pixel);
                         //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorInfo).color);
                         //}
-                    }                 
+                    }
                 background.DrawPixelAsync();
                 Interlocked.Add(ref endNum, -1);
             }

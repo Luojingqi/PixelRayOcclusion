@@ -302,6 +302,26 @@ namespace PRO
                                         AddFluidUpdateHash(tempBlock.GetPixel(Block.GlobalToPixel(tempG)));
                                     }
                                 #endregion
+
+                                #region 处理特殊像素
+                                {
+                                    //Pixel pixel_next = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
+                                    //if (pixel_next.typeInfo.typeName == "毒液")
+                                    //{
+                                    //    pixel_next.affectsTransparency -= Random.Range(0, 0.05f);
+                                    //    if (pixel_next.affectsTransparency < 0.07f)
+                                    //    {
+                                    //        SetPixel(Pixel.空气.Clone(pixel_next.pos));
+                                    //        stopUpdate = true;
+                                    //        if (Random.Range(0, 100) < 25)
+                                    //        {
+                                    //            Particle particle = ParticleManager.Inst.GetPool("特殊粒子/水").TakeOutT();
+                                    //            particle.SetGlobal(nextPosG);
+                                    //        }
+                                    //    }
+                                    //}
+                                }
+                                #endregion
                                 break;
                             }
                         }

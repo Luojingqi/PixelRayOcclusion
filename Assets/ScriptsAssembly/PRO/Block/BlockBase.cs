@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using PRO.Disk;
 using PRO.DataStructure;
 using PRO.Tool;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.Collections;
@@ -91,6 +90,8 @@ namespace PRO
                             Block.AddFluidUpdateHash(pixel.posG + new Vector2Int(x, y));
             }
 
+            if (pixel.typeInfo.typeName == "»ðÑæ") queue_»ðÑæ.Enqueue(pixel.pos);
+
             if (drawPixelSync) DrawPixelAsync(pixel.pos, pixel.colorInfo.color);
         }
 
@@ -157,7 +158,7 @@ namespace PRO
                 PixelInfoToShaderArray[pixel.pos.y * Block.Size.x + pixel.pos.x] = new BlockPixelInfo()
                 {
                     colorInfoId = pixel.colorInfo.index,
-                    durability = Mathf.Clamp((float)pixel.durability / pixel.typeInfo.durability, 0, 1),
+                    durability = Mathf.Clamp(Mathf.Abs((float)pixel.durability / pixel.typeInfo.durability), 0, 1),
                     affectsTransparency = pixel.affectsTransparency,
                 };
             }
@@ -199,7 +200,7 @@ namespace PRO
         public void DrawPixelAsync(Vector2Byte pos, Color32 color) => Enqueue(new DrawPixelTask(pos, color));
         public async void DrawPixelAsync(Vector2Byte[] pos, Color32[] color)
         {
-            int length = Math.Min(pos.Length, color.Length);
+            int length = Mathf.Min(pos.Length, color.Length);
             while (true)
             {
                 bool queueLock = false;
@@ -233,65 +234,56 @@ namespace PRO
         #endregion
 
         #region È¼ÉÕ
+        int kk = 0;
 
-        public void RandomUpdatePixelList()
+        public void RandomUpdatePixelList(int time)
         {
-            for (int i = 0; i < 10; i++)
+            int num = queue_»ðÑæ.Count;
+            while (num-- > 0)
             {
-                Vector2Byte pos = new Vector2Byte(UnityEngine.Random.Range(0, Block.Size.x), UnityEngine.Random.Range(0, Block.Size.y));
-                RandomUpdatePixel(pos);
+                var v = queue_»ðÑæ.Dequeue();
+                //Debug.Log(kk + "|" + v);
+
+                UpdatePixel_È¼ÉÕ(GetPixel(v), time);
             }
+            kk++;
         }
-
-        private void RandomUpdatePixel(Vector2Byte pixelPos)
+        private static Vector2Int[] ring = new Vector2Int[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1), new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
+        private Queue<Vector2Byte> queue_»ðÑæ = new Queue<Vector2Byte>();
+        public void UpdatePixel_È¼ÉÕ(Pixel pixel, int time)
         {
-            Span<Vector2Byte> span = stackalloc Vector2Byte[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1), new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
+            if (pixel.typeInfo.typeName != "»ðÑæ") return;
 
-            Pixel pixel = GetPixel(pixelPos);
-            if (pixel.typeInfo.typeName == "»ðÑæ")
+            int num = 0;
+            for (int i = 0; i < 1; i++)
             {
-                int num = 0;
-                for (int k = 0; k < span.Length; k++)
+                Vector2Int posG = pixel.posG + ring[Random.Range(0, ring.Length)];
+                BlockBase block = null;
+                if (this is Block) block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(posG));
+                else block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(posG));
+                if (block == null) continue;
+                Pixel nextPixel = block.GetPixel(Block.GlobalToPixel(posG));
+                if (nextPixel.typeInfo.typeName == "»ðÑæ") num++;
+                if (nextPixel.typeInfo.burnOdds == 0) continue;
+                if (UnityEngine.Random.Range(0, 100) < 10)
                 {
-                    if (UnityEngine.Random.Range(0, 100) < 62)
-                    {
-                        Vector2Byte nextPos = pixel.pos + span[k];
-                        if (Block.Check(nextPos) == false) continue;
-                        Pixel nextPixel = GetPixel(nextPos);
-                        if (nextPixel.typeInfo.typeName != "¿ÕÆø")
-                        {
-                            num++;
-                            if (nextPixel.typeInfo.typeName != "»ðÑæ")
-                                SetPixel(Pixel.TakeOut(pixel.typeInfo, pixel.colorInfo, nextPos));
-                        }
-                        DrawPixelAsync();
-                    }
-                }
-                if (UnityEngine.Random.Range(0, 100) < 37)
-                {
-                    SetPixel(Pixel.TakeOut("¿ÕÆø", 0, pixel.pos));
-                    DrawPixelAsync();
-                }
-                else
-                {
-                    if (num >= 6)
-                    {
-                        //²»·¢¹â
-                        SetPixel(Pixel.TakeOut("»ðÑæ", 2, pixel.pos));
-                    }
-                    else if (num >= 4)
-                        SetPixel(Pixel.TakeOut("»ðÑæ", 1, pixel.pos));
-                    else
-                    {
-                        SetPixel(Pixel.TakeOut("»ðÑæ", 0, pixel.pos));
-                    }
-
-                    DrawPixelAsync();
+                    Pixel pixel_È¼ÉÕÀ©É¢ = Pixel.TakeOut(pixel.typeInfo, pixel.colorInfo, nextPixel.pos);
+                    pixel_È¼ÉÕÀ©É¢.durability = -Random.Range(nextPixel.typeInfo.burnTimeRange.x, nextPixel.typeInfo.burnTimeRange.y);
+                    //È¼ÉÕÀ©É¢
+                    block.SetPixel(pixel_È¼ÉÕÀ©É¢);
                 }
             }
+            pixel.durability += time;
+            if (pixel.durability >= 0)
+            {
+                SetPixel(Pixel.¿ÕÆø.Clone(pixel.pos));
+                return;
+            }
+
+            Pixel newPixel = Pixel.TakeOut("»ðÑæ", num, pixel.pos);
+            newPixel.durability = pixel.durability;
+            SetPixel(newPixel);
         }
-
-
 
         #endregion
 
@@ -299,20 +291,18 @@ namespace PRO
         /// <summary>
         /// ³¢ÊÔÆÆ»µÏñËØ
         /// </summary>
-        /// <param name="hardness">¼áÓ²¶È£¬-1´ú±íÎÞÊÓ¼áÓ²¶ÈÖ±½ÓÆÆ»µ</param>
+        /// <param name="hardness">¼áÓ²¶È£¬-1´ú±íÎÞÊÓ¼áÓ²¶ÈÖ±½Ó¶ÔÄÍ¾Ã¶ÈÆÆ»µ</param>
         /// <param name="durability">ÆÆ»µµÄÄÍ¾Ã¶È</param>
-        public void TryDestroyPixel(Vector2Byte pos, int hardness = -1, int durability = int.MaxValue)
+        public static void TryDestroyPixel(Pixel pixel, int hardness = -1, int durability = int.MaxValue)
         {
-            Pixel pixel = GetPixel(pos);
             if (pixel.typeInfo.typeName == "¿ÕÆø") return;
-            if (hardness == -1) SetPixel(Pixel.¿ÕÆø.Clone(pos));
-            else if (hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
+            if (hardness == -1 && pixel.typeInfo.hardness != -1 || hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
             {
                 pixel.durability -= durability;
                 if (pixel.durability <= 0)
-                    SetPixel(Pixel.¿ÕÆø.Clone(pos));
+                    pixel.block.SetPixel(Pixel.¿ÕÆø.Clone(pixel.pos));
                 else
-                    textureData.SetPixelInfoToShader(pixel);
+                    pixel.block.textureData.SetPixelInfoToShader(pixel);
             }
         }
     }

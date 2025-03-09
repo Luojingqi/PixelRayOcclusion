@@ -31,6 +31,8 @@ namespace PRO.Disk
         
         private int burnodds;
         
+        private UnityEngine.Vector2Int burntimerange;
+        
         /// <summary>
         ///类型名称
         ///</summary>
@@ -148,6 +150,21 @@ namespace PRO.Disk
             set
             {
                 this.burnodds = value;
+            }
+        }
+        
+        /// <summary>
+        ///燃烧时间范围ms
+        ///</summary>
+        public UnityEngine.Vector2Int burnTimeRange
+        {
+            get
+            {
+                return this.burntimerange;
+            }
+            set
+            {
+                this.burntimerange = value;
             }
         }
     }

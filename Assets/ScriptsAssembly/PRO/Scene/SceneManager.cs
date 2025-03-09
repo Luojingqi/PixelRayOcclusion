@@ -116,6 +116,7 @@ namespace PRO
         int l = 3;
         int k = 20;
 
+        public static float updatetime = 0.2f;
 
         public async void Update()
         {
@@ -136,12 +137,15 @@ namespace PRO
                 source.GloabPos = MousePoint.gloabPos;
             // if (Input.GetKey(KeyCode.Space))
             time0 += Time.deltaTime;
-            while (time0 > 0.02f)
+            while (time0 > updatetime)
             {
-                time0 -= 0.02f;
+                time0 -= updatetime;
                 for (int y = -l; y <= l; y++)
                     for (int x = -l; x <= l; x++)
-                        NowScene.GetBlock(new(x, y)).RandomUpdatePixelList();
+                    {
+                        NowScene.GetBlock(new(x, y)).RandomUpdatePixelList((int)(updatetime * 1000));
+                        NowScene.GetBackground(new(x, y)).RandomUpdatePixelList((int)(updatetime * 1000));
+                    }
             }
             time1 += Time.deltaTime;
             while (time1 > 0.25f)
@@ -213,9 +217,9 @@ namespace PRO
                 n = 9;
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                //MousePoint.block.SetPixel(Pixel.TakeOut("火焰", n, MousePoint.pixelPos));
-                MousePoint.block.SetPixel(Pixel.TakeOut("光源", n, MousePoint.pixelPos));
-                MousePoint.block.DrawPixelAsync();
+               // MousePoint.block.SetPixel(Pixel.TakeOut("火焰", n, MousePoint.pixelPos, -2000));
+                MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("火焰", 0, MousePoint.pixelPos));
+                //MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("光源", n, MousePoint.pixelPos));
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse0))
             {

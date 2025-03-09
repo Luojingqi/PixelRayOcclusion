@@ -67,8 +67,10 @@ namespace PRO
             pixel.pos = pixelPos;
             pixel.typeInfo = typeInfo;
             pixel.colorInfo = colorInfo;
-            if (durability <= -1) pixel.durability = typeInfo.durability;
-            else pixel.durability = durability;
+            if (durability == 0)
+                pixel.durability = typeInfo.durability;
+            else
+                pixel.durability = durability;
         }
 
 
@@ -90,7 +92,7 @@ namespace PRO
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
             pixel.block = null;
-            pixel.durability = -1;
+            pixel.durability = 0;
             pixel.affectsTransparency = 1;
             if (pixel.building != null)
             {
@@ -100,7 +102,7 @@ namespace PRO
 
             pixelPool.PutIn(pixel);
         }
-        public static Pixel TakeOut(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability = -1)
+        public static Pixel TakeOut(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability = 0)
         {
             if (Block.Check(pixelPos))
             {
@@ -110,7 +112,7 @@ namespace PRO
             }
             else return null;
         }
-        public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos, int durability = -1)
+        public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos, int durability = 0)
         {
             if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
@@ -120,7 +122,7 @@ namespace PRO
             }
             else return null;
         }
-        public static Pixel TakeOut(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = -1)
+        public static Pixel TakeOut(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = 0)
         {
             if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
@@ -221,11 +223,18 @@ namespace PRO
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelTypeInfo[]>(infoText);
                 for (int i = 0; i < InfoArray.Length; i++)
-                    if (pixelTypeInfoDic.ContainsKey(InfoArray[i].typeName) == false)
+                {
+                    PixelTypeInfo info = InfoArray[i];
+                    if (pixelTypeInfoDic.ContainsKey(info.typeName) == false)
                     {
-                        pixelTypeInfoDic.Add(InfoArray[i].typeName, InfoArray[i]);
-                        pixelTypeInfoList.Add(InfoArray[i]);
+                        if (info.durability == 0)
+                        {
+                            info.durability = int.MaxValue;
+                        }
+                        pixelTypeInfoDic.Add(info.typeName, info);
+                        pixelTypeInfoList.Add(info);
                     }
+                }
             }
         }
         #endregion

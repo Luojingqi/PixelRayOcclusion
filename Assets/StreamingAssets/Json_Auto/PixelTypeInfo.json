@@ -4,8 +4,7 @@
     "availableColors": [
       "空气色"
     ],
-    "hardness": 0,
-    "durability": 0
+    "hardness": -1
   },
   {
     "typeName": "背景",
@@ -15,7 +14,12 @@
       "背景色2"
     ],
     "hardness": 0,
-    "durability": 0
+    "durability": 10,
+    "burnOdds": 10,
+    "burnTimeRange": {
+      "x": 3000,
+      "y": 5000
+    }
   },
   {
     "typeName": "光源",
@@ -32,7 +36,7 @@
       "光源9"
     ],
     "hardness": 0,
-    "durability": 0,
+    "durability": 10,
     "collider": true
   },
   {
@@ -42,7 +46,7 @@
       "木头色1"
     ],
     "hardness": 0,
-    "durability": 0,
+    "durability": 10,
     "collider": true
   },
   {
@@ -52,29 +56,51 @@
       "岩石色1"
     ],
     "hardness": 0,
-    "durability": 0,
+    "durability": 10,
     "collider": true,
-    "burnOdds": 70
+    "burnOdds": 10,
+    "burnTimeRange": {
+      "x": 3000,
+      "y": 5000
+    }
   },
   {
     "typeName": "水",
     "availableColors": [
       "水色0"
     ],
-    "hardness": 0,
-    "durability": 0,
+    "hardness": -1,
     "fluidType": 1,
     "fluidDensity": 10
+  },
+  {
+    "typeName": "水蒸气",
+    "availableColors": [
+      "水蒸气色0"
+    ],
+    "hardness": -1,
+    "fluidType": 2,
+    "fluidDensity": 10
+  },
+  {
+    "typeName": "毒液",
+    "availableColors": [
+      "毒液色0"
+    ],
+    "hardness": -1,
+    "fluidType": 1,
+    "fluidDensity": 20,
+    "burnOdds": 60
   },
   {
     "typeName": "油",
     "availableColors": [
       "油色0"
     ],
-    "hardness": 0,
-    "durability": 0,
+    "hardness": -1,
     "fluidType": 1,
-    "fluidDensity": 6
+    "fluidDensity": 6,
+    "burnOdds": 90
   },
   {
     "typeName": "沙子",
@@ -82,7 +108,7 @@
       "沙子色0"
     ],
     "hardness": 0,
-    "durability": 0,
+    "durability": 10,
     "collider": true,
     "fluidType": 3,
     "fluidDensity": 10
@@ -93,7 +119,7 @@
       "砂砾色0"
     ],
     "hardness": 0,
-    "durability": 0,
+    "durability": 10,
     "collider": true,
     "fluidType": 3,
     "fluidDensity": 20
@@ -109,7 +135,7 @@
       "黑玉色2"
     ],
     "hardness": 0,
-    "durability": 0,
+    "durability": 10,
     "collider": true
   },
   {
@@ -117,9 +143,15 @@
     "availableColors": [
       "火焰色0",
       "火焰色1",
-      "火焰色2"
+      "火焰色2",
+      "火焰色3",
+      "火焰色4",
+      "火焰色5",
+      "火焰色6",
+      "火焰色7",
+      "火焰色8"
     ],
     "hardness": 0,
-    "durability": 0
+    "durability": -2000
   }
 ]

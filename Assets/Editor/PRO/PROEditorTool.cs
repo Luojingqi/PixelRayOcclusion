@@ -96,7 +96,7 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
         int Index = PixelToIndex(GlobalToPixel(lineArray[i]));" + "\n" +
-$"      float weak = pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} - 1), 0, 1), 2);\n" +
+$"      float weak =  pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} - 1), 0, 1), 1);\n" +
 @"      int3 color = filterColor * 255 * weak * shadow;
         InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
         InterlockedAdd(LightResultBufferTemp[Index].y, color.y);

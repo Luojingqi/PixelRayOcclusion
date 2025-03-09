@@ -16,7 +16,7 @@
       "b": 91,
       "a": 255
     },
-    "luminousRadius": 5,
+    "luminousRadius": 8,
     "luminousColor": {
       "r": 255,
       "g": 224,
@@ -30,6 +30,12 @@
       "g": 127,
       "b": 81,
       "a": 255
+    },
+    "luminousRadius": 5,
+    "luminousColor": {
+      "r": 255,
+      "g": 127,
+      "b": 81
     }
   },
   {
@@ -39,6 +45,102 @@
       "g": 127,
       "b": 81,
       "a": 255
+    },
+    "luminousRadius": 3,
+    "luminousColor": {
+      "r": 255,
+      "g": 127,
+      "b": 81
+    }
+  },
+  {
+    "colorName": "火焰色3",
+    "color": {
+      "r": 255,
+      "g": 163,
+      "b": 62,
+      "a": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 163,
+      "b": 62
+    }
+  },
+  {
+    "colorName": "火焰色4",
+    "color": {
+      "r": 255,
+      "g": 148,
+      "b": 55,
+      "a": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 148,
+      "b": 55
+    }
+  },
+  {
+    "colorName": "火焰色5",
+    "color": {
+      "r": 255,
+      "g": 133,
+      "b": 48,
+      "a": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 133,
+      "b": 48
+    }
+  },
+  {
+    "colorName": "火焰色6",
+    "color": {
+      "r": 255,
+      "g": 117,
+      "b": 40,
+      "a": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 117,
+      "b": 40
+    }
+  },
+  {
+    "colorName": "火焰色7",
+    "color": {
+      "r": 255,
+      "g": 102,
+      "b": 33,
+      "a": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 102,
+      "b": 33
+    }
+  },
+  {
+    "colorName": "火焰色8",
+    "color": {
+      "r": 255,
+      "g": 87,
+      "b": 26,
+      "a": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 87,
+      "b": 26
     }
   },
   {
@@ -91,6 +193,28 @@
     "affectsLightIntensity": 0.05
   },
   {
+    "colorName": "水蒸气色0",
+    "color": {
+      "r": 189,
+      "g": 215,
+      "b": 238,
+      "a": 225
+    },
+    "lightPathColorMixing": 0.01,
+    "affectsLightIntensity": 0.025
+  },
+  {
+    "colorName": "毒液色0",
+    "color": {
+      "r": 55,
+      "g": 86,
+      "b": 35,
+      "a": 255
+    },
+    "lightPathColorMixing": 0.1,
+    "affectsLightIntensity": 0.1
+  },
+  {
     "colorName": "油色0",
     "color": {
       "r": 242,
@@ -104,9 +228,9 @@
   {
     "colorName": "鼠标光源0",
     "color": {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 200,
+      "g": 200,
+      "b": 200,
       "a": 255
     },
     "luminousRadius": 20,
@@ -199,6 +323,7 @@
       "b": 30,
       "a": 255
     },
+    "affectsLightIntensity": 1.0,
     "luminousRadius": 50,
     "luminousColor": {
       "r": 200,
@@ -255,15 +380,15 @@
     "colorName": "光源9",
     "color": {
       "r": 200,
-      "g": 100,
-      "b": 30,
+      "g": 200,
+      "b": 200,
       "a": 255
     },
     "luminousRadius": 100,
     "luminousColor": {
       "r": 200,
-      "g": 100,
-      "b": 30
+      "g": 200,
+      "b": 200
     }
   },
   {

@@ -1,4 +1,6 @@
-﻿namespace ExcelTool
+﻿using UnityEngine;
+
+namespace ExcelTool
 {
     internal static class TypeNameStandardizing
     {
@@ -28,6 +30,8 @@
                 case "float": typeName = _System + "Single"; break;
                 case "vector3": typeName = _UnityEngine + "Vector3"; break;
                 case "vector4": typeName = _UnityEngine + "Vector4"; break;
+                case "vector2int": typeName = _UnityEngine + "Vector2Int"; break;
+                case "vector3int": typeName = _UnityEngine + "Vector3Int"; break;
                 case "int4": typeName = _UnityMathematics + "int4"; break;
                 case "uint4": typeName = _UnityMathematics + "uint4"; break;
                 case "color32": typeName = _UnityEngine + "Color32"; break;
@@ -35,7 +39,7 @@
                 case "fixvector3": typeName = _Fix64PhysicsData + "FixVector3"; break;
                 case "fixvector2": typeName = _Fix64PhysicsData + "FixVector2"; break;
                 case "fixquaternion": typeName = _Fix64PhysicsData + "FixQuaternion"; break;
-                default: typeName = "未定义"; break;
+                default: typeName = "未定义"; Debug.Log(typeString.ToLower()); break;
             }
             if (IsList)
             {
