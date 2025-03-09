@@ -104,16 +104,16 @@ namespace PRO.Renderer
                     if (block != null) foreach (var value in block.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                     if (background != null) foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                 }
-            for (int ey = 0; ey < EachBlockReceiveLightSize.y; ey++)
-                for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
-                {
-                    Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
-                    Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
-                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(nowGloabBlockBufferPos);
+            //for (int ey = 0; ey < EachBlockReceiveLightSize.y; ey++)
+            //    for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
+            //    {
+            //        Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
+            //        Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
+            //        BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(nowGloabBlockBufferPos);
 
-                    if (block != null) ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
-                   // if (background != null) foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
-                }
+            //        if (block != null) ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
+            //       // if (background != null) foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
+            //    }
         }
             public void UpdateFreelyLightSource()
             {
@@ -144,7 +144,7 @@ namespace PRO.Renderer
 
                                     SetLightBufferCS.Dispatch(value.Radius - 1, 1, 1, 1);
 
-                                    //ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
+                                    ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
                                 }
                             }
                     }

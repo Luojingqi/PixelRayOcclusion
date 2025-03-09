@@ -96,8 +96,13 @@ $"  int sourceIndex = GetLine_{r}(gloabPos, source.gloabPos, lineArray);\n" +
         if (Equalsi2(GlockToBlock(lineArray[i]), BlockPos))
         {
         int Index = PixelToIndex(GlobalToPixel(lineArray[i]));" + "\n" +
-$"      float weak =  pow(clamp(1 - distance(lineArray[i], lineArray[sourceIndex]) / (Line{r} - 1), 0, 1), 1);\n" +
-@"      int3 color = filterColor * 255 * weak * shadow;
+@$"     float d = distance(lineArray[i], lineArray[sourceIndex]);
+        if(d > {r}) return;
+        float k = 0.1;
+        float attenuation = pow(({r} - d) / {r} , 1.5) ;" + "\n"+
+$"      float weak =  pow(clamp(1 - d / (Line{r} - 1), 0, 1), 1);\n" +
+@"      
+        int3 color = filterColor * 255 * attenuation * shadow;
         InterlockedAdd(LightResultBufferTemp[Index].x, color.x);
         InterlockedAdd(LightResultBufferTemp[Index].y, color.y);
         InterlockedAdd(LightResultBufferTemp[Index].z, color.z);

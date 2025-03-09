@@ -218,8 +218,8 @@ namespace PRO
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
             {
                // MousePoint.block.SetPixel(Pixel.TakeOut("火焰", n, MousePoint.pixelPos, -2000));
-                MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("火焰", 0, MousePoint.pixelPos));
-                //MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("光源", n, MousePoint.pixelPos));
+                //MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("火焰", 0, MousePoint.pixelPos));
+                MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("光源", n, MousePoint.pixelPos));
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse0))
             {

@@ -5,7 +5,7 @@ int PixelToIndex(int2 pos)
 {
     return pos.y * BlockSizeX + pos.x;
 }
-
+//0
 #pragma kernel ResetLightResultBuffer
 [numthreads(8, 8, 1)]
 void ResetLightResultBuffer(int3 id : SV_DispatchThreadID)
@@ -14,33 +14,36 @@ void ResetLightResultBuffer(int3 id : SV_DispatchThreadID)
 }
 
 RWStructuredBuffer<int4> LightResultBufferTemp;
+//1
 #pragma kernel BlendLightResultBuffer
 [numthreads(8, 8, 1)]
 void BlendLightResultBuffer(int3 id : SV_DispatchThreadID)
 {
     int index = PixelToIndex(id.xy);
-    int4 color = LightResultBufferTemp[index];
-    if (color.w > 0)
-        LightResultBuffer[index] += int4(color.xyz / color.w, 0);
+    int4 temp = LightResultBufferTemp[index];
+    if (temp.w > 0)
+        LightResultBuffer[index] += int4(temp.xyz / (temp.w * 1.5), 1);
     LightResultBufferTemp[index] = int4(0, 0, 0, 0);
 }
 
 RWStructuredBuffer<int4> FreelyLightResultBuffer;
+//2
 #pragma kernel BlendFreelyLightResultBuffer
 [numthreads(8, 8, 1)]
 void BlendFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
 {
     int index = PixelToIndex(id.xy);
-    int4 color = LightResultBufferTemp[index];
-    if (color.w > 0)
+    int4 temp = LightResultBufferTemp[index];
+    if (temp.w > 0)
     {
-        int4 value = int4(color.xyz / color.w, 0);
+        int4 value = int4(temp.xyz / (temp.w * 1.5), 1);
         LightResultBuffer[index] += value;
         FreelyLightResultBuffer[index] += value;
     }
     LightResultBufferTemp[index] = int4(0, 0, 0, 0);
 }
 
+//3
 #pragma kernel SubtractionFreelyLightResultBuffer
 [numthreads(8, 8, 1)]
 void SubtractionFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
@@ -49,6 +52,7 @@ void SubtractionFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
     LightResultBuffer[index] -= FreelyLightResultBuffer[index];
 }
 
+//4
 #pragma kernel ResetFreelyLightResultBuffer
 [numthreads(8, 8, 1)]
 void ResetFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
