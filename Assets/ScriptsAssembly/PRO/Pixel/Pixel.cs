@@ -18,11 +18,11 @@ namespace PRO
         /// </summary>
         public Vector2Int posG;
         /// <summary>
-        /// 类型名称
+        /// 像素类型
         /// </summary>
         public PixelTypeInfo typeInfo;
         /// <summary>
-        /// 使用的颜色名称
+        /// 像素颜色
         /// </summary>
         public PixelColorInfo colorInfo;
         /// <summary>
