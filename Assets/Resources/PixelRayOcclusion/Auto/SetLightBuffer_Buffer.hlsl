@@ -94,10 +94,10 @@ int2 BlockPos;
 
 
 //接收光照坐标，在当前区块的接收光照的范围内，最左下角为原点
-int2 GloabToReceiveLight(int2 gloabPos)
+int2 GloabToReceiveLight(int2 globalPos)
 {
     int2 minReceiveLightBlockPos = BlockPos - (EachBlockReceiveLightSize / 2);
-    return int2(gloabPos.x - minReceiveLightBlockPos.x * BlockSizeX, gloabPos.y - minReceiveLightBlockPos.y * BlockSizeY);
+    return int2(globalPos.x - minReceiveLightBlockPos.x * BlockSizeX, globalPos.y - minReceiveLightBlockPos.y * BlockSizeY);
 }
 
 int2 IDToReceiveLight(int2 id)
@@ -110,9 +110,9 @@ int2 ReceiveLightToPixel(int2 pos)
     return int2(pos.x % BlockSizeX, pos.y % BlockSizeY);
 }
 
-int2 GlobalToPixel(int2 gloabPos)
+int2 GlobalToPixel(int2 globalPos)
 {
-    return int2(gloabPos.x - BlockPos.x * BlockSizeX, gloabPos.y - BlockPos.y * BlockSizeY);
+    return int2(globalPos.x - BlockPos.x * BlockSizeX, globalPos.y - BlockPos.y * BlockSizeY);
 }
 
 //本地坐标转区块的索引
@@ -126,13 +126,13 @@ int PixelToIndex(int2 pos)
     return pos.y * BlockSizeX + pos.x;
 }
 
-int2 GlockToBlock(int2 gloabPos)
+int2 GlockToBlock(int2 globalPos)
 {
-    if (gloabPos.x < 0)
-        gloabPos.x -= BlockSizeX - 1;
-    if (gloabPos.y < 0)
-        gloabPos.y -= BlockSizeY - 1;
-    return int2(gloabPos.x / BlockSizeX, gloabPos.y / BlockSizeY);
+    if (globalPos.x < 0)
+        globalPos.x -= BlockSizeX - 1;
+    if (globalPos.y < 0)
+        globalPos.y -= BlockSizeY - 1;
+    return int2(globalPos.x / BlockSizeX, globalPos.y / BlockSizeY);
 }
 
 bool Equalsf4(float4 f0, float4 f1)
@@ -150,9 +150,9 @@ PixelColorInfo GetPixelColorInfo(int colorInfoId)
     return AllPixelColorInfo[colorInfoId];
 }
 //根据全局坐标返回点信息
-BlockPixelInfo GetBlockPixelInfo(int2 gloabPos)
+BlockPixelInfo GetBlockPixelInfo(int2 globalPos)
 {
-    int2 rlPos = GloabToReceiveLight(gloabPos);
+    int2 rlPos = GloabToReceiveLight(globalPos);
     int Index = ReceiveLightToBlockIndex(rlPos);
     return GetBlockBuffer(Index, PixelToIndex(ReceiveLightToPixel(rlPos)));
 }

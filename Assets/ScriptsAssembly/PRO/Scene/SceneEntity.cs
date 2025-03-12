@@ -134,7 +134,9 @@ namespace PRO
         }
         #endregion
 
-
+        /// <summary>
+        /// 卸载所有已加载区块，上方的建筑也会被一并卸载
+        /// </summary>
         public void Unload()
         {
             foreach (var blockPos in BlockBaseInRAM.ToList())

@@ -14,7 +14,7 @@ struct PixelColorInfo
 struct LightSource
 {
     //全局坐标
-    int2 gloabPos;
+    int2 globalPos;
     //光的颜色
     int3 color;
 };

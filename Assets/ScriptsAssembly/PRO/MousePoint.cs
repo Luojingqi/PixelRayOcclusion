@@ -6,7 +6,7 @@ namespace PRO
     {
         public static Vector2 worldPos;
         public static Vector2Int blockPos;
-        public static Vector2Int gloabPos;
+        public static Vector2Int globalPos;
         public static Vector2Byte pixelPos;
         public static Block block;
         public static BackgroundBlock backgroundBlock;
@@ -15,9 +15,9 @@ namespace PRO
             Vector3 m = Input.mousePosition;
             m.z = 1;
             worldPos = Camera.main.ScreenToWorldPoint(m);
-            gloabPos = Block.WorldToGlobal(worldPos);
-            blockPos = Block.GlobalToBlock(gloabPos);
-            pixelPos = Block.GlobalToPixel(gloabPos);
+            globalPos = Block.WorldToGlobal(worldPos);
+            blockPos = Block.GlobalToBlock(globalPos);
+            pixelPos = Block.GlobalToPixel(globalPos);
             block = SceneManager.Inst.NowScene.GetBlock(blockPos);
             backgroundBlock = SceneManager.Inst.NowScene.GetBackground(blockPos);
         }

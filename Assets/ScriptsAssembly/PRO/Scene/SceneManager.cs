@@ -134,7 +134,7 @@ namespace PRO
             ////}
             #endregion
             if (source != null)
-                source.GloabPos = MousePoint.gloabPos;
+                source.GloabPos = MousePoint.globalPos;
             // if (Input.GetKey(KeyCode.Space))
             time0 += Time.deltaTime;
             while (time0 > updatetime)
@@ -163,110 +163,6 @@ namespace PRO
                     for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid2();
             }
-
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                Log.Print("保存");
-                for (int x = -l; x <= l; x++)
-                    for (int y = -l; y <= l; y++)
-                        nowScene.SaveBlockData(new(x, y));
-                foreach (var kv in nowScene.BuildingInRAM)
-                    nowScene.SaveBuilding(kv.Key);
-                nowScene.sceneCatalog.Save();
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                Log.Print("加载开始，池内数量" + Pixel.pixelPool.notUsedObject.Count);
-                t = Time.realtimeSinceStartup;
-                for (int x = -l; x <= l; x++)
-                    for (int y = -l; y <= l; y++)
-                    {
-                        nowScene.LoadBlockData(new(x, y));
-                    }
-                BlockMaterial.UpdateBind();
-                Log.Print("加载完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
-            }
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                t = Time.realtimeSinceStartup;
-                Log.Print("回收开始，池内数量" + Pixel.pixelPool.notUsedObject.Count);
-                t = Time.realtimeSinceStartup;
-                nowScene.Unload();
-                Log.Print("回收完成" + (Time.realtimeSinceStartup - t) + "，池内数量" + Pixel.pixelPool.notUsedObject.Count);
-            }
-            #region 光源
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                n = 0;
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                n = 1;
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-                n = 2;
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-                n = 3;
-            if (Input.GetKeyDown(KeyCode.Alpha5))
-                n = 4;
-            if (Input.GetKeyDown(KeyCode.Alpha6))
-                n = 5;
-            if (Input.GetKeyDown(KeyCode.Alpha7))
-                n = 6;
-            if (Input.GetKeyDown(KeyCode.Alpha8))
-                n = 7;
-            if (Input.GetKeyDown(KeyCode.Alpha9))
-                n = 8;
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-                n = 9;
-            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Mouse0))
-            {
-               // MousePoint.block.SetPixel(Pixel.TakeOut("火焰", n, MousePoint.pixelPos, -2000));
-                MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("火焰", 0, MousePoint.pixelPos));
-                //MousePoint.backgroundBlock.SetPixel(Pixel.TakeOut("光源", n, MousePoint.pixelPos));
-            }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
-                    {
-                        var pixel = Pixel.TakeOut("水蒸气", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
-                        if (pixel != null)
-                            MousePoint.block.SetPixel(pixel);
-                    }
-
-                MousePoint.block.DrawPixelAsync();
-            }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse1))
-            {
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
-                    {
-                        var pixel = Pixel.TakeOut("油", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
-                        if (pixel != null)
-                            MousePoint.block.SetPixel(pixel);
-                    }
-                MousePoint.block.DrawPixelAsync();
-            }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse3))
-            {
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
-                    {
-                        var pixel = Pixel.TakeOut("沙子", 0, MousePoint.pixelPos + new Vector2Byte(0, 0));
-                        if (pixel != null)
-                            MousePoint.block.SetPixel(pixel);
-                    }
-                MousePoint.block.DrawPixelAsync();
-            }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Mouse4))
-            {
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
-                    {
-                        var pixel = Pixel.TakeOut("砂砾", 0, MousePoint.pixelPos + new Vector2Byte(x, y));
-                        if (pixel != null)
-                            MousePoint.block.SetPixel(pixel);
-                    }
-                MousePoint.block.DrawPixelAsync();
-            }
-            #endregion
 
             if (Monitor.TryEnter(mainThreadEventLock))
             {
