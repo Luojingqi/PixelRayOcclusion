@@ -71,34 +71,58 @@ namespace PRO
                             try
                             {
                                 BlockToDiskEx.ToRAM(blockText, block, scene);
-                                Interlocked.Add(ref endNum, -1);
                                 var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
                                 SceneManager.Inst.mainThreadEvent += () => GreedyCollider.CreateColliderAction(block, colliderDataList);
                             }
-                            catch (Exception ex)
-                            {
-                                SceneManager.Inst.mainThreadEvent += () => Debug.Log(ex);
-                            }
+                            catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                            Interlocked.Add(ref endNum, -1);
                         });
                         ThreadPool.QueueUserWorkItem((obj) =>
                         {
                             try
                             {
                                 BlockToDiskEx.ToRAM(backgroundText, background, scene);
-                                Interlocked.Add(ref endNum, -1);
                             }
-                            catch (Exception ex)
-                            {
-                                SceneManager.Inst.mainThreadEvent += () => Debug.Log(ex);
-                            }
+                            catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                            Interlocked.Add(ref endNum, -1);
                         });
                     }
                     else
                     {
-                        // StartFillBlock(block);
-                        // StartFillBackground(background);
-                        ThreadPool.QueueUserWorkItem(StartFillBlock, block);
-                        ThreadPool.QueueUserWorkItem(StartFillBackground, background);
+                        ThreadPool.QueueUserWorkItem((obj) =>
+                        {
+                            BlockBase blockBase = obj as BlockBase;
+                            try
+                            {
+                                for (int x = 0; x < Block.Size.x; x++)
+                                    for (int y = 0; y < Block.Size.y; y++)
+                                    {
+                                        Pixel pixel = Pixel.空气.Clone(new(x, y));
+                                        blockBase.SetPixel(pixel, false, false, false);
+                                        blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                    }
+                                blockBase.DrawPixelAsync();
+                            }
+                            catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                            Interlocked.Add(ref endNum, -1);
+                        }, block);
+                        ThreadPool.QueueUserWorkItem((obj) =>
+                        {
+                            BlockBase blockBase = obj as BlockBase;
+                            try
+                            {
+                                for (int x = 0; x < Block.Size.x; x++)
+                                    for (int y = 0; y < Block.Size.y; y++)
+                                    {
+                                        Pixel pixel = Pixel.New("背景", "背景色2", new(x, y));
+                                        blockBase.SetPixel(pixel, false, false, false);
+                                        blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                    }
+                                blockBase.DrawPixelAsync();
+                            }
+                            catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                            Interlocked.Add(ref endNum, -1);
+                        }, background);
                     }
                     scene.BlockBaseInRAM.Add(new Vector2Int(i, j));
                 }
@@ -201,113 +225,5 @@ namespace PRO
         //    }
         //}
         #endregion
-        /// <summary>
-        /// 开始填充一个区块
-        /// </summary>
-        private static void StartFillBlock(object obj)
-        {
-            try
-            {
-                var block = (Block)obj;
-                RandomFill(block, new System.Random());
-                //Iteration(block);
-                //var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-                //lock (SceneManager.Inst.mainThreadEventLock)
-                //    SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); };
-                //SceneManager.Inst.En_Lock_DrawApplyQueue(block);
-                block.DrawPixelAsync();
-                Interlocked.Add(ref endNum, -1);
-            }
-            catch (Exception e)
-            {
-                Log.Print($"线程报错：{e}", Color.red);
-            }
-        }
-        private static void RandomFill(Block block, System.Random random)
-        {
-            for (int x = 0; x < Block.Size.x; x++)
-                for (int y = 0; y < Block.Size.y; y++)
-                {
-                    int r = random.Next(0, 4);
-                    if (r > 10)//>= 2)
-                    {
-                        Pixel pixel = Pixel.New("空气", 0, new(x, y));
-                        block.SetPixel(pixel, false, false, false);
-                        block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                    }
-                    else
-                    {
-                        Pixel pixel = Pixel.New("空气", 0, new(x, y));
-                        block.SetPixel(pixel, false, false, false);
-                        block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                    }
-                }
-        }
-        private static void Iteration(Block block)
-        {
-            for (int i = 0; i < 3; i++)
-                for (int x = 0; x < Block.Size.x; x++)
-                {
-                    for (int y = 0; y < Block.Size.y; y++)
-                    {
-                        //int k = 0;
-                        //if (block.GetPixelRelocation(x + 1, y)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x - 1, y)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x, y + 1)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x, y - 1)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x + 1, y + 1)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x - 1, y - 1)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x - 1, y + 1)?.id == 1) k++;
-                        //if (block.GetPixelRelocation(x + 1, y - 1)?.id == 1) k++;
-                        //if (k > 4)
-                        //{
-                        //    block.GetPixelRelocation(x, y).id = 1;
-                        //    block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(1).color);
-                        //}
-                        //else if (k < 4)
-                        //{
-                        //    block.GetPixelRelocation(x, y).id = 0;
-                        //    block.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(0).color);
-                        //}
-                    }
-                }
-        }
-
-        /// <summary>
-        /// 开始填充背景
-        /// </summary>
-        private static void StartFillBackground(object obj)
-        {
-            try
-            {
-                var background = (BackgroundBlock)obj;
-                for (int x = 0; x < Block.Size.x; x++)
-                    for (int y = 0; y < Block.Size.y; y++)
-                    {
-                        Pixel pixel = Pixel.New("空气", 0, new(x, y));
-                        //Pixel pixel = Pixel.New("背景", 2, new(x, y));
-                        background.SetPixel(pixel, false, false, false);
-                        background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                        //if (x < Block.Size.x / 2 - 10)
-                        //{
-                        //    Pixel pixel = Pixel.New("背景", 0, new(x, y));
-                        //    background.SetPixel(pixel);
-                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorInfo).color);
-                        //}
-                        //else
-                        //{
-                        //    Pixel pixel = Pixel.New("背景", 1, new(x, y));
-                        //    background.SetPixel(pixel);
-                        //    background.DrawPixelSync(new Vector2Byte(x, y), BlockMaterial.GetPixelColorInfo(pixel.colorInfo).color);
-                        //}
-                    }
-                background.DrawPixelAsync();
-                Interlocked.Add(ref endNum, -1);
-            }
-            catch (Exception e)
-            {
-                Log.Print($"线程报错：{e}", Color.red);
-            }
-        }
     }
 }

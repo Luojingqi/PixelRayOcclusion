@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace PRO.SceneEditor
 {
-    internal class SceneEditorCanvasC : UIControllerBase
+    public class SceneEditorCanvasC : UIControllerBase
     {
         public override UIViewBase View => view;
         private SceneEditorCanvasV view = new SceneEditorCanvasV();
@@ -31,6 +30,7 @@ namespace PRO.SceneEditor
         public void Start()
         {
             Init("123");
+            gameObject.SetActive(false);
         }
 
         private Element_Disk HoldEntity;
@@ -48,17 +48,6 @@ namespace PRO.SceneEditor
         }
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                for (int x = -1; x <= 1; x++)
-                    for (int y = -1; y <= 1; y++)
-                    {
-                        Block block = SceneManager.Inst.NowScene.GetBlock(new(x, y));
-                        Debug.Log(block.BlockPos + "||" + block.lightSourceDic.Count);
-                    }
-
-            }
-
             if (HoldEntity == null) return;
             if (Input.GetKeyDown(KeyCode.Mouse1)) { ClearHold(); return; }
             Vector3 m = Input.mousePosition;

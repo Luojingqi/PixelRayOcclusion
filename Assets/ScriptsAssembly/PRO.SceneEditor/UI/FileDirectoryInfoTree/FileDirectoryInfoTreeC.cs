@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PRO.SceneEditor
 {
-    internal class FileDirectoryInfoTreeC : UIChildControllerBase
+    public class FileDirectoryInfoTreeC : UIChildControllerBase
     {
         public override UIChildViewBase View => view;
         private FileDirectoryInfoTreeV view = new FileDirectoryInfoTreeV();

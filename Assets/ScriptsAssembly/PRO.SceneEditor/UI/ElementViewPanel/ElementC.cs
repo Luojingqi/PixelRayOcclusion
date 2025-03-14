@@ -1,11 +1,10 @@
 using PRO.SceneEditor;
-using PRO.Tool;
 using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-internal class ElementC : MonoBehaviour
+public class ElementC : MonoBehaviour
 {
     public RawImage icon;
     private TMP_Text name_Text;

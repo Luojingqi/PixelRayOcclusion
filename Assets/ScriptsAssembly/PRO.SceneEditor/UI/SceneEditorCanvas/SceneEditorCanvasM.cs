@@ -1,6 +1,6 @@
 namespace PRO.SceneEditor
 {
-    internal class SceneEditorCanvasM
+    public class SceneEditorCanvasM
     {
 
     }

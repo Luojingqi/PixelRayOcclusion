@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace PRO.SceneEditor
 {
-    internal class SceneEditorCanvasV : UIViewBase
+    public class SceneEditorCanvasV : UIViewBase
     {
         public FileDirectoryInfoTreeC FileDirectoryInfoTree { get; private set; }
         public ElementViewPanelC ElementViewPanel { get; private set; }

@@ -44,7 +44,7 @@ namespace PRO
         /// <summary>
         /// 设置某个点（坐标为Pixel.pos），切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
         /// </summary>
-        public void SetPixel(Pixel pixel, bool drawPixelSync = true, bool updateCollider = true, bool updateLiquidOrGas = true)
+        public void SetPixel(Pixel pixel, bool drawPixelAsync = true, bool updateCollider = true, bool updateLiquidOrGas = true)
         {
             if (pixel == null) return;
             pixel.posG = PixelToGlobal(pixel.pos);
@@ -92,7 +92,7 @@ namespace PRO
 
             if (pixel.typeInfo.typeName == "火焰") queue_火焰.Enqueue(pixel.pos);
 
-            if (drawPixelSync) DrawPixelAsync(pixel.pos, pixel.colorInfo.color);
+            if (drawPixelAsync) DrawPixelAsync(pixel.pos, pixel.colorInfo.color);
         }
 
         #endregion

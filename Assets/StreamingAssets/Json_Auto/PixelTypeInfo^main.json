@@ -14,12 +14,7 @@
       "背景色2"
     ],
     "hardness": 0,
-    "durability": 10,
-    "burnOdds": 10,
-    "burnTimeRange": {
-      "x": 3000,
-      "y": 5000
-    }
+    "durability": 10
   },
   {
     "typeName": "光源",

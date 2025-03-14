@@ -13,7 +13,7 @@ namespace PRO
 
         private Vector2Int surviveTimeRange = new Vector2Int(int.MaxValue, int.MaxValue);
         /// <summary>
-        /// 存活的时间区间，设置时会随机指定remainTime（剩余存活时间）
+        /// 存活的时间区间，设置时会随机指定remainTime（剩余存活时间）ms
         /// </summary>
         public Vector2Int SurviveTimeRange
         {
@@ -25,7 +25,7 @@ namespace PRO
             }
         }
         /// <summary>
-        /// 粒子剩余的存活时间
+        /// 粒子剩余的存活时间 ms
         /// </summary>
         public int RemainTime
         {
@@ -41,15 +41,20 @@ namespace PRO
 
         private int elapsedTime;
         /// <summary>
-        /// 粒子已经存活的时间
+        /// 粒子已经存活的时间 ms
         /// </summary>
         public int ElapsedTime => elapsedTime;
         /// <summary>
         /// 粒子池的加载路径
         /// </summary>
         public string loadPath { get; private set; }
-
+        /// <summary>
+        /// 是否在场景中活跃
+        /// </summary>
         public bool Active { get; set; }
+        /// <summary>
+        /// 当前是否已被回收
+        /// </summary>
         public bool RecyleState { get; private set; }
         public void UpdateRemainTime(int cutDown)
         {

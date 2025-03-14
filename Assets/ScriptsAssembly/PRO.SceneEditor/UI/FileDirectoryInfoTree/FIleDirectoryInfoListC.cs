@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 namespace PRO.SceneEditor
 {
-    internal class FileDirectoryInfoListC : MonoBehaviour
+    public class FileDirectoryInfoListC : MonoBehaviour
     {
         public void Init()
         {

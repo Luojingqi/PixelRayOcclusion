@@ -22,7 +22,7 @@ void BlendLightResultBuffer(int3 id : SV_DispatchThreadID)
     int index = PixelToIndex(id.xy);
     int4 temp = LightResultBufferTemp[index];
     if (temp.w > 0)
-        LightResultBuffer[index] += int4(temp.xyz / (temp.w * 1.5), 1);
+        LightResultBuffer[index] += int4(temp.xyz / temp.w * 0.55, 1);
     LightResultBufferTemp[index] = int4(0, 0, 0, 0);
 }
 
@@ -36,7 +36,7 @@ void BlendFreelyLightResultBuffer(int3 id : SV_DispatchThreadID)
     int4 temp = LightResultBufferTemp[index];
     if (temp.w > 0)
     {
-        int4 value = int4(temp.xyz / (temp.w * 1.5), 1);
+        int4 value = int4(temp.xyz / temp.w * 0.55, 1);
         LightResultBuffer[index] += value;
         FreelyLightResultBuffer[index] += value;
     }

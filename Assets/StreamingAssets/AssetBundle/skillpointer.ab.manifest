@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3405922403
+CRC: 2015372607
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ef89d476114dbef82302da561127d207
+    Hash: 87bf42fac83d063a70130db6c20a0190
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1b9374e8ada75e732689d9a475c068e1
+    Hash: 950e743f111ddafd2b0c51d31cee68c2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ef89d476114dbef82302da561127d207
+    Hash: 87bf42fac83d063a70130db6c20a0190
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,8 +25,12 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 6cdd5ce2322d9294cb8551633e0f1100, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: bb84dba0702b6354489b57d0bafb15ca, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 22d2bd009e42d864cbaa7a787b881bca, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 120
   Script: {instanceID: 0}
 - Class: 212
   Script: {instanceID: 0}
@@ -38,4 +42,8 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u7BAD\u5934\u7C7B/SkillPointer_\u7BAD\u5934\u7C7B.prefab"
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r15.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u5C04\u7EBF\u7C7B/r50_\u767D\u8272\u865A\u7EBF.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r30.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r50.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r5.prefab"
 Dependencies: []

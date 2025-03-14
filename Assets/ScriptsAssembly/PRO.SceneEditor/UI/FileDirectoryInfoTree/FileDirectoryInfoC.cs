@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace PRO.SceneEditor
 {
-    internal class FileDirectoryInfoC : MonoBehaviour
+    public class FileDirectoryInfoC : MonoBehaviour
     {
         private TMP_Text fileName_Text;
         private Button button;

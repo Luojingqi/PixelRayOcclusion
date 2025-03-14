@@ -212,7 +212,8 @@
       "a": 255
     },
     "lightPathColorMixing": 0.1,
-    "affectsLightIntensity": 0.1
+    "affectsLightIntensity": 0.1,
+    "selfLuminous": 0.175
   },
   {
     "colorName": "油色0",

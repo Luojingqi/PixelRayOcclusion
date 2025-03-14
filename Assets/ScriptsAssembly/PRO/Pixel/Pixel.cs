@@ -151,7 +151,7 @@ namespace PRO
         /// 请不要使用构造函数，使用此方法与重载，因为要对构造合法性进行检查
         /// </summary>
         /// <returns></returns>
-        public static Pixel New(string typeName, string colorName, Vector2Byte pixelPos, int durability = -1)
+        public static Pixel New(string typeName, string colorName, Vector2Byte pixelPos, int durability = 0)
         {
             if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {
@@ -161,7 +161,7 @@ namespace PRO
             }
             else return null;
         }
-        public static Pixel New(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = -1)
+        public static Pixel New(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = 0)
         {
             if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
             {

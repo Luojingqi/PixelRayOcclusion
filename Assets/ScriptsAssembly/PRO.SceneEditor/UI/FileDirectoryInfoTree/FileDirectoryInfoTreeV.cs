@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PRO.SceneEditor
 {
-    internal class FileDirectoryInfoTreeV : UIChildViewBase
+    public class FileDirectoryInfoTreeV : UIChildViewBase
     {
         public FileDirectoryInfoListC FileDirectoryInfoList { get; private set; }
         public FileDirectoryInfoC FileDirectoryInfo { get; private set; }
