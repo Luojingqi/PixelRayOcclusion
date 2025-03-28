@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +9,9 @@ public class BuildAssetBundle
     [MenuItem("PRO/打ab包")]
     public static void Build()
     {
+        DirectoryInfo directoryInfo = new DirectoryInfo(BuildPath);
+        foreach (var file in directoryInfo.GetFiles())
+            file.Delete();
         AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(BuildPath, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows64);
     }
     #region 生成ab包的CRC，暂时弃用

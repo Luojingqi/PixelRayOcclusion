@@ -42,47 +42,44 @@ namespace PRO.SkillEditor
             SceneRuinTrackList.Clear();
             EventTrackList.Clear();
         }
-        /// <summary>
-        /// 改变枚举内部顺序，调用顺序也将改变
-        /// </summary>
-        public enum PlayTrack
+
+        public enum PlayTrack : ulong
         {
             /// <summary>
             /// 2D动画轨道
             /// </summary>
-            AnimationTrack2D,
+            AnimationTrack2D = 1<<0,
             /// <summary>
             /// 2D特效轨道
             /// </summary>
-            SpecialEffectTrack2D,
+            SpecialEffectTrack2D= 1<<1,
             /// <summary>
             /// 粒子特效轨道
             /// </summary>
-            ParticleTrack,
+            ParticleTrack = 1<<2,
             /// <summary>
             /// 2D攻击检测轨道
             /// </summary>
-            AttackTestTrack2D,
+            AttackTestTrack2D = 1<<3,
             /// <summary>
             /// 场景破坏轨道
             /// </summary>
-            SceneRuinTrack,
+            SceneRuinTrack = 1<<4,
             /// <summary>
             /// 场景创建轨道
             /// </summary>
-            SceneCreateTrack,
+            SceneCreateTrack = 1<<5,
             /// <summary>
             /// 事件轨道
             /// </summary>
-            EventTrack,
-            end
+            EventTrack = 1<<6,
         }
 
         public void UpdateFrame(SkillPlayAgent agent, int frame, int playTrack = ~0, Action callback = null)
         {
             if (agent == null) return;
             int filter = 1;
-            for (int i = 0; i < (int)PlayTrack.end; i++)
+            for (int i = 0; i < 7; i++)
             {
                 int trackIndex = (playTrack & (filter << i)) >> i;
                 if (trackIndex != 1) continue;
@@ -90,17 +87,15 @@ namespace PRO.SkillEditor
                 switch (i)
                 {
                     case (int)PlayTrack.AnimationTrack2D: foreach (var track in AnimationTrack2DList) UpdateFrame(track, agent, frame, index++); break;
-                    case (int)PlayTrack.SpecialEffectTrack2D: foreach (var track in SpecialEffectTrack2DList) UpdateFrame(track, agent, frame, i++); break;
-                    case (int)PlayTrack.ParticleTrack: foreach (var track in ParticleTrackList) UpdateFrame(track, agent, frame, i++); break;
-                    case (int)PlayTrack.AttackTestTrack2D: foreach (var track in AttackTestTrack2DList) UpdateFrame(track, agent, frame, i++); break;
-                    case (int)PlayTrack.SceneRuinTrack: foreach (var track in SceneRuinTrackList) UpdateFrame(track, agent, frame, i++); break;
-                    case (int)PlayTrack.SceneCreateTrack: foreach (var track in SceneCreateTrackList) UpdateFrame(track, agent, frame, i++); break;
-                    case (int)PlayTrack.EventTrack: foreach (var track in EventTrackList) UpdateFrame(track, agent, frame, i++); break;
+                    case (int)PlayTrack.SpecialEffectTrack2D: foreach (var track in SpecialEffectTrack2DList) UpdateFrame(track, agent, frame, index++); break;
+                    case (int)PlayTrack.ParticleTrack: foreach (var track in ParticleTrackList) UpdateFrame(track, agent, frame, index++); break;
+                    case (int)PlayTrack.AttackTestTrack2D: foreach (var track in AttackTestTrack2DList) UpdateFrame(track, agent, frame, index++); break;
+                    case (int)PlayTrack.SceneRuinTrack: foreach (var track in SceneRuinTrackList) UpdateFrame(track, agent, frame, index++); break;
+                    case (int)PlayTrack.SceneCreateTrack: foreach (var track in SceneCreateTrackList) UpdateFrame(track, agent, frame, index++); break;
+                    case (int)PlayTrack.EventTrack: foreach (var track in EventTrackList) UpdateFrame(track, agent, frame, index++); break;
                 }
             }
             callback?.Invoke();
-            foreach (var kv in agent.AttackTestTrack2DDic) SkillPlayAgent.ListPool.PutIn(kv.Value);
-            agent.AttackTestTrack2DDic.Clear();
         }
         private void UpdateFrame(Track_Disk track, SkillPlayAgent agent, int frame, int trackIndex)
         {

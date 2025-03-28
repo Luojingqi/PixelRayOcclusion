@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Codice.Client.BaseCommands.WkStatus.Printers.StatusChangeInfo;
 namespace PRO.SkillEditor
 {
     internal class SkillEditorWindow : EditorWindow
@@ -35,6 +37,7 @@ namespace PRO.SkillEditor
             configField.RegisterValueChangedCallback(evt =>
             {
                 ClearTrack();
+                Save();
                 Config.Skill_Disk = evt.newValue as Skill_Disk;
                 if (evt.newValue == null) return;
                 LoadFromDisk();
@@ -46,6 +49,17 @@ namespace PRO.SkillEditor
                 Config.Agent = evt.newValue as SkillPlayAgent;
             });
 
+            var saveButton = root.Q<Button>("SaveButton");
+            saveButton.clicked += Save;
+            var reloadButton = root.Q<Button>("ReloadButton");
+            reloadButton.clicked += () =>
+            {
+                configField.value = Config.Skill_Disk;
+                if (configField.value == null) return;
+                ClearTrack();
+                LoadFromDisk();
+            };
+
             TimeScaleAxis = new TimeScaleAxis(root.Q<VisualElement>("TimeScaleAxis"));
             TrackParent = root.Q<VisualElement>("TrackView");
             TrackHeadingParent = root.Q<VisualElement>("TrackHeadingParent");
@@ -55,17 +69,17 @@ namespace PRO.SkillEditor
             Gizmos.color = Color.white;
             root.RegisterCallback<PointerDownEvent>(evt =>
             {
-                if (evt.button == 1) ClearSelectSlices();
+                if (evt.button == 1 && evt.ctrlKey == false) ClearSelectSlices();
             });
 
-            configField.value = Config.Skill_Disk;
             agentField.value = Config.Agent;
+            configField.value = Config.Skill_Disk;
         }
 
         [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected | GizmoType.InSelectionHierarchy | GizmoType.InSelectionHierarchy)]
         private static void DrawGizmo(GameObject obj, GizmoType gizmoType)
         {
-            try { if (Inst != null && Inst.Config.Agent != null) foreach(var slice in Inst.SelectSliceHash) slice.DrawGizmo(Inst.Config.Agent); }
+            try { if (Inst != null && Inst.Config.Agent != null) foreach (var slice in Inst.SelectSliceHash) slice.DrawGizmo(Inst.Config.Agent); }
             catch { if (Inst != null) Selection.objects = null; }
         }
         private void DrawHandle(SceneView sceneView)
@@ -73,9 +87,26 @@ namespace PRO.SkillEditor
             try { if (Inst != null && Inst.Config.Agent != null) foreach (var slice in Inst.SelectSliceHash) slice.DrawHandle(Inst.Config.Agent); }
             catch { if (Inst != null) Selection.objects = null; }
         }
-        private void OnEnable() => SceneView.duringSceneGui += DrawHandle;
-        private void OnDestroy() => SceneView.duringSceneGui -= DrawHandle;
+        private void OnEnable()
+        {
+            SceneView.duringSceneGui += DrawHandle;
+        }
+        private void OnDestroy()
+        {
+            SceneView.duringSceneGui -= DrawHandle;
+            Save();
+        }
 
+        public void Save()
+        {
+            if (Config.Skill_Disk != null)
+            {
+                EditorUtility.SetDirty(Config.Skill_Disk);
+                AssetDatabase.SaveAssetIfDirty(Config.Skill_Disk);
+            }
+            EditorUtility.SetDirty(Config);
+            AssetDatabase.SaveAssetIfDirty(Config);
+        }
 
         /// <summary>
         ///  ±º‰øÃ∂»÷·
@@ -102,7 +133,7 @@ namespace PRO.SkillEditor
 
 
 
-        private HashSet<SliceBase> SelectSliceHash = new HashSet<SliceBase>();
+        public HashSet<SliceBase> SelectSliceHash = new HashSet<SliceBase>();
         public void SwitchSelectSlice(SliceBase slice)
         {
             if (SelectSliceHash.Contains(slice))

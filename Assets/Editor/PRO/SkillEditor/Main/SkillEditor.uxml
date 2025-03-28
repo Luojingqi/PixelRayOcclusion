@@ -4,7 +4,13 @@
             <uie:ObjectField label="技能执行人" name="AgentField" style="height: 50%;" />
             <uie:ObjectField label="技能配置文件" name="ConfigField" />
         </ui:VisualElement>
-        <ui:VisualElement style="flex-grow: 1; flex-direction: row-reverse;" />
+        <ui:VisualElement name="Left" style="flex-grow: 0; flex-direction: row;">
+            <ui:VisualElement name="Right" style="flex-grow: 1; width: 200px; flex-shrink: 1; flex-direction: row;" />
+            <ui:VisualElement name="Left" style="flex-grow: 0; width: auto; flex-shrink: 1; flex-direction: row-reverse; flex-basis: auto;">
+                <ui:Button text="保存" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SaveButton" style="width: 50px;" />
+                <ui:Button text="重载" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ReloadButton" style="width: 50px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="Down" style="flex-grow: 1; flex-direction: row; flex-basis: auto; flex-shrink: 1;">
         <ui:VisualElement name="Left" style="flex-grow: 0.1; flex-shrink: 0; height: auto; width: 100px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-right-width: 1px; border-top-right-radius: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">

@@ -11,14 +11,14 @@ namespace PRO.SkillEditor
             Heading.NameText.text = "事件轨道";
             View.AddManipulator(new ContextualMenuManipulator(evt =>
             {
-                evt.menu.AppendAction("添加重播切片", _ => AddSlice(new EventSlice_RepeatPlay(new EventDisk_GotoPlay())));
+                evt.menu.AppendAction("添加重播切片", _ => AddSlice(new EventSlice_跳转播放(new EventDisk_跳转播放())));
             }));
         }
         protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
         {
             switch (sliceDisk)
             {
-                case EventDisk_GotoPlay disk: { AddSlice(new EventSlice_RepeatPlay(disk)); break; }
+                case EventDisk_跳转播放 disk: { AddSlice(new EventSlice_跳转播放(disk)); break; }
                 case EventSlice_Disk disk: { AddSlice(new EventSlice(disk)); break; }
             }
         }

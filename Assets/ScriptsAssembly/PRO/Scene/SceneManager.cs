@@ -60,17 +60,14 @@ namespace PRO
             SceneEntity scene = new SceneEntity(sceneCatalog);
             scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
-            // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.Value.ToString()));
+            // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.value.ToString()));
             //填充
             DrawThread.Init(() =>
             {
                 BlockMaterial.FirstBind();
                 //  FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
                 source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
-
-
             });
-
         }
         public FreelyLightSource source;
         public Transform PoolNode;
@@ -120,6 +117,7 @@ namespace PRO
 
         public async void Update()
         {
+            MousePoint.Update();
             #region 
             //Vector2Int a = new Vector2Int(0, -4);
             //Debug.Log(Block.GlobalToWorld(a) + "|" + Block.WorldToGlobal(Block.GlobalToWorld(a)));

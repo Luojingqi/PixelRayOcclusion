@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -132,9 +131,8 @@ namespace PRO.SkillEditor
         public void AddSlice(SliceBase slice)
         {
             slice.Track = this;
-            if (slice.StartFrame == -1)
+            if (slice.StartFrame == -1)     //说明此数据是新添加的
             {
-                //说明此数据是新添加的
                 slice.StartFrame = sliceList.Count;
                 slice.FrameLength = 1;
                 track_Disk.SlickList.Add(slice.DiskData);

@@ -7,7 +7,10 @@ namespace PRO.SkillEditor
     {
         public AttackTestSlice2D_Rect(SliceBase_Disk sliceDisk) : base(sliceDisk)
         {
-            Name = "矩形";
+            if (sliceDisk.startFrame == -1)
+            {
+                Name = "矩形";
+            }
         }
 
         private AttackTestSlice2D_Rect_Disk diskData => DiskData as AttackTestSlice2D_Rect_Disk;

@@ -1,5 +1,7 @@
-﻿namespace PRO.SkillEditor
-{
+﻿using System;
+
+namespace PRO.SkillEditor
+{    
     public abstract class SliceBase_Disk
     {
         public string name;
@@ -11,7 +13,12 @@
         /// </summary>
         /// <param name="agent">执行的行动人</param>>
         /// <param name="frame">当前轨道执行的帧</param>
-        /// <param name="index">执行此切片内的索引</param>
+        /// <param name="frameIndex">执行此切片内的索引</param>
         public abstract void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex);
+
+        public interface ISliceBufferData
+        {
+            public void PutIn();
+        }
     }
 }

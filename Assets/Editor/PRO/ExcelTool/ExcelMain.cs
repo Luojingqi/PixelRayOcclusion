@@ -3,6 +3,7 @@ using PRO.Tool;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Unity.Plastic.Newtonsoft.Json;
 using Unity.Plastic.Newtonsoft.Json.Linq;
@@ -96,18 +97,33 @@ namespace ExcelTool
                             string value = workbook.Cells[row, col].Value.ToString().Trim(' ');
                             if (value == "")
                                 continue;
-                            bool IsList = attributeTpye.Contains("[]");
-                            if (IsList == false)
-                                ToJsonData.RunObject(attributeTpye.ToLower(), attributeName, value, ref JObject);
+
+                            StringBuilder typeNameSB = new StringBuilder();
+                            StringBuilder setSB = new StringBuilder();
+                            int index = 0;
+                            while (index < attributeTpye.Length)
+                            {
+                                char c = attributeTpye[index];
+                                if (c == '[')
+                                    break;
+                                typeNameSB.Append(c);
+                                index++;
+                            }
+                            while (index < attributeTpye.Length)
+                                setSB.Append(attributeTpye[index++]);
+
+                            string typeName = typeNameSB.ToString();
+                            if (setSB.Length <= 0)
+                                ToJsonData.RunObject(typeName, attributeName, value, ref JObject);
                             else
                             {
+                                string setName = setSB.ToString();
                                 //数组使用'|'分开
                                 string[] strs = value.Split('|', '，');
-                                string tpyeName = attributeTpye.Split('[')[0].ToLower();
                                 JArray dataList = new JArray();
                                 foreach (var str in strs)
                                 {
-                                    ToJsonData.RunArray(tpyeName, attributeName, str.Trim(), ref dataList);
+                                    ToJsonData.RunSet(setName, typeName, attributeName, str.Trim(), ref dataList);
                                 }
                                 JObject[attributeName] = dataList;
                             }
@@ -119,7 +135,7 @@ namespace ExcelTool
                         }
                     }
                 }
-                foreach(var sheet in jsonOnWorksheetDic)
+                foreach (var sheet in jsonOnWorksheetDic)
                 {
                     string JsonText = JsonConvert.SerializeObject(sheet.Value, Formatting.Indented);
                     JsonText = Regex.Unescape(JsonText);

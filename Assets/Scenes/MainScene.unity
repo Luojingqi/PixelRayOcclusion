@@ -2192,27 +2192,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: AttackTestTrack2DDic
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[UnityEngine.RaycastHit2D,
-        UnityEngine.Physics2DModule]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   AgentSprice: {fileID: 320434039}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}
@@ -5495,27 +5475,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: AttackTestTrack2DDic
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[UnityEngine.RaycastHit2D,
-        UnityEngine.Physics2DModule]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   AgentSprice: {fileID: 841414619}
   SpecialEffect2DSpriteList:
   - {fileID: 157119709}
@@ -5608,7 +5568,7 @@ MonoBehaviour:
       Data: 0
     - Name: BuffNameDic
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[GamePlay.BuffBase,
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[GamePlay.Buff.Base.IBuffBase,
         GamePlay.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
@@ -5628,7 +5588,7 @@ MonoBehaviour:
       Data: 
     - Name: BuffTypeDic
       Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[GamePlay.BuffBase,
+      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[GamePlay.Buff.Base.IBuffBase,
         GamePlay.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
@@ -11156,27 +11116,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: AttackTestTrack2DDic
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[UnityEngine.RaycastHit2D,
-        UnityEngine.Physics2DModule]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   AgentSprice: {fileID: 1590746141}
   SpecialEffect2DSpriteList:
   - {fileID: 494794253}
@@ -11207,7 +11147,7 @@ MonoBehaviour:
       Data: 1
     - Name: BuffNameDic
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[GamePlay.BuffBase,
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[GamePlay.Buff.Base.IBuffBase,
         GamePlay.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
@@ -11227,7 +11167,7 @@ MonoBehaviour:
       Data: 
     - Name: BuffTypeDic
       Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[GamePlay.BuffBase,
+      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[GamePlay.Buff.Base.IBuffBase,
         GamePlay.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
@@ -12471,10 +12411,10 @@ RectTransform:
   - {fileID: 414653644}
   m_Father: {fileID: 1586342722958057422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 60, y: -60}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1705470186
 MonoBehaviour:
@@ -14026,90 +13966,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1867576926}
   m_CullTransparentMesh: 1
---- !u!1 &1894169159
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1894169161}
-  - component: {fileID: 1894169160}
-  m_Layer: 0
-  m_Name: Sprite-0001
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!212 &1894169160
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894169159}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: fea9182b2f0096e4d98f1efb296f611c, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.11, y: 0.11}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &1894169161
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894169159}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.4499512, y: -0.33126128, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1930610020
 GameObject:
   m_ObjectHideFlags: 0
@@ -15850,27 +15706,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: AttackTestTrack2DDic
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[UnityEngine.RaycastHit2D,
-        UnityEngine.Physics2DModule]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   AgentSprice: {fileID: 2112103783}
   SpecialEffect2DSpriteList:
   - {fileID: 1665429579}
@@ -16005,7 +15841,7 @@ MonoBehaviour:
       Data: 1
     - Name: BuffNameDic
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[GamePlay.BuffBase,
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[GamePlay.Buff.Base.IBuffBase,
         GamePlay.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
@@ -16025,7 +15861,7 @@ MonoBehaviour:
       Data: 
     - Name: BuffTypeDic
       Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[GamePlay.BuffBase,
+      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[GamePlay.Buff.Base.IBuffBase,
         GamePlay.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
@@ -21376,5 +21212,4 @@ SceneRoots:
   - {fileID: 1590746142}
   - {fileID: 219603401}
   - {fileID: 320434041}
-  - {fileID: 1894169161}
   - {fileID: 2094330454}

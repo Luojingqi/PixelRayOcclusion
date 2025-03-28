@@ -82,7 +82,8 @@ namespace PRO
         public static readonly float Size = 0.05f;
 
         private static List<PixelTypeInfo> pixelTypeInfoList = new List<PixelTypeInfo>();
-        private static Dictionary<string, PixelTypeInfo> pixelTypeInfoDic = new Dictionary<string, PixelTypeInfo>();
+        private static Dictionary<string, PixelTypeInfo> name_pixelTypeInfo_Dic = new Dictionary<string, PixelTypeInfo>();
+        private static Dictionary<string, List<PixelColorInfo>> tag_pixelTypeInfoList_Dic = new Dictionary<string, List<PixelColorInfo>>();
         #region 对象池
         public static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
         public static void PutIn(Pixel pixel, Action<BuildingBase> byUnloadAllPixelAction = null)
@@ -133,15 +134,15 @@ namespace PRO
             else return null;
         }
         #endregion
-        public static List<string> GetPixelAvailableColors(string typeName)
+        public static string[] GetPixelAvailableColors(string typeName)
         {
-            if (pixelTypeInfoDic.TryGetValue(typeName, out PixelTypeInfo info)) return info.availableColors;
+            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out PixelTypeInfo info)) return info.availableColors;
             else return null;
         }
 
         public static PixelTypeInfo GetPixelTypeInfo(string typeName)
         {
-            if (pixelTypeInfoDic.TryGetValue(typeName, out PixelTypeInfo info)) return info;
+            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out PixelTypeInfo info)) return info;
             else return null;
         }
         public static Pixel 空气;
@@ -177,7 +178,7 @@ namespace PRO
             typeInfo = null;
             colorInfo = null;
             if (Block.Check(pixelPos) == false) return false;
-            if (pixelTypeInfoDic.TryGetValue(typeName, out typeInfo))
+            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out typeInfo))
             {
                 colorInfo = BlockMaterial.GetPixelColorInfo(colorName);
                 if (colorInfo != null) return true;
@@ -194,9 +195,9 @@ namespace PRO
             typeInfo = null;
             colorInfo = null;
             if (Block.Check(pixelPos) == false) return false;
-            if (pixelTypeInfoDic.TryGetValue(typeName, out typeInfo))
+            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out typeInfo))
             {
-                string colorName = typeInfo.availableColors[Mathf.Min(colorIndex, typeInfo.availableColors.Count - 1)];
+                string colorName = typeInfo.availableColors[Mathf.Min(colorIndex, typeInfo.availableColors.Length - 1)];
                 colorInfo = BlockMaterial.GetPixelColorInfo(colorName);
                 if (colorInfo != null) return true;
                 else return false;
@@ -209,6 +210,9 @@ namespace PRO
         }
 
         #endregion
+        /// <summary>
+        /// 加载像素类型信息
+        /// </summary>
         public static void LoadPixelTypeInfo()
         {
             string rootPath = AssetManager.ExcelToolSaveJsonPath;
@@ -225,14 +229,16 @@ namespace PRO
                 for (int i = 0; i < InfoArray.Length; i++)
                 {
                     PixelTypeInfo info = InfoArray[i];
-                    if (pixelTypeInfoDic.ContainsKey(info.typeName) == false)
+                    if (name_pixelTypeInfo_Dic.ContainsKey(info.typeName) == false)
                     {
                         if (info.durability == 0)
                         {
                             info.durability = int.MaxValue;
                         }
-                        pixelTypeInfoDic.Add(info.typeName, info);
+                        name_pixelTypeInfo_Dic.Add(info.typeName, info);
                         pixelTypeInfoList.Add(info);
+
+                        //if(tag_pixelTypeInfoList_Dic)
                     }
                 }
             }

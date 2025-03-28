@@ -9,11 +9,7 @@ namespace PRO.SkillEditor
         private ParticleSlice_Disk slice_Disk => DiskData as ParticleSlice_Disk;
         public ParticleSlice(ParticleSlice_Disk sliceDisk) : base(sliceDisk)
         {
-            if (sliceDisk.loadPath != null)
-            {
-                var strs = sliceDisk.loadPath.Split('\\', '/');
-                LabelView.text = strs[strs.Length - 1];
-            }
+
         }
 
         public override void DrawGizmo(SkillPlayAgent agent)

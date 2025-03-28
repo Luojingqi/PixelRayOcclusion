@@ -1,6 +1,4 @@
-using Codice.Client.BaseCommands.BranchExplorer;
 using Sirenix.OdinInspector;
-using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -50,6 +48,10 @@ namespace PRO.SkillEditor
                     }
                     SkillEditorWindow.Inst.SwitchSelectSlice(this);
                 }
+                if (evt.button == 1)
+                {
+                    evt.StopPropagation();
+                }
             });
             View.RegisterCallback<MouseLeaveEvent>(evt =>
             {
@@ -87,6 +89,8 @@ namespace PRO.SkillEditor
 
                 evt.menu.AppendAction("删除切片", _ => Track.RemoveSlice(StartFrame));
             }));
+
+
         }
 
 
@@ -104,6 +108,7 @@ namespace PRO.SkillEditor
             get { return DiskData.name; }
             set { LabelView.text = value; DiskData.name = value; }
         }
+        [ReadOnly]
         [BoxGroup("切片基本信息")]
         [LabelText("起始帧")]
         [ShowInInspector]
@@ -249,6 +254,7 @@ namespace PRO.SkillEditor
             Track.RemoveSlice(StartFrame);
 
         }
+        #region 分割属性面板
         [GUIColor(0, 0, 0, 0)]
         [ShowInInspector]
         [PropertyOrder(0)]
@@ -258,6 +264,7 @@ namespace PRO.SkillEditor
         [ShowInInspector]
         [PropertyOrder(19999)]
         void Divider1() { }
+        #endregion
         /// <summary>
         /// 绘制场景框线
         /// </summary>

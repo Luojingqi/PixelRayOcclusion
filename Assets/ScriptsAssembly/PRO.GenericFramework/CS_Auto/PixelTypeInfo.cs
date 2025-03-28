@@ -17,7 +17,9 @@ namespace PRO.Disk
         
         private string typename;
         
-        private System.Collections.Generic.List<System.String> availablecolors;
+        private System.Collections.Generic.HashSet<System.String> _tags;
+        
+        private string[] availablecolors;
         
         private int _hardness;
         
@@ -49,9 +51,24 @@ namespace PRO.Disk
         }
         
         /// <summary>
+        ///标签
+        ///</summary>
+        public System.Collections.Generic.HashSet<System.String> tags
+        {
+            get
+            {
+                return this._tags;
+            }
+            set
+            {
+                this._tags = value;
+            }
+        }
+        
+        /// <summary>
         ///可用颜色
         ///</summary>
-        public System.Collections.Generic.List<System.String> availableColors
+        public string[] availableColors
         {
             get
             {

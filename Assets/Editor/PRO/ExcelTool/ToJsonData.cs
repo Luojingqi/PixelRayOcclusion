@@ -5,9 +5,9 @@ namespace ExcelTool
 {
     internal static class ToJsonData
     {
-        public static void RunObject(string tpye, string key, string value, ref JObject jsonData)
+        public static void RunObject(string tpyeName, string key, string value, ref JObject jsonData)
         {
-            switch (tpye.ToLower())
+            switch (tpyeName.ToLower())
             {
                 default:
                     jsonData[key] = value;
@@ -90,10 +90,16 @@ namespace ExcelTool
             }
         }
 
-        public static void RunArray(string tpye, string key, string value, ref JArray array)
+        public static void RunSet(string setName, string tpyeName, string key, string value, ref JArray array)
         {
             JObject jObject = new JObject();
-            RunObject(tpye, key, value, ref jObject);
+            switch (setName)
+            {
+                case "[]":
+                case "[list]":
+                case "[hashset]":
+                    RunObject(tpyeName, key, value, ref jObject); break;
+        }
             array.Add(jObject[key]);
         }
     }

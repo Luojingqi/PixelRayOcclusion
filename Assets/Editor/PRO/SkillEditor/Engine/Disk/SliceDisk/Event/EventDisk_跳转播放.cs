@@ -1,6 +1,6 @@
 namespace PRO.SkillEditor
 {
-    public class EventDisk_GotoPlay : EventSlice_Disk
+    public class EventDisk_Ìø×ª²¥·Å : EventSlice_Disk
     {
         public int goToFrame;
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)

@@ -6,7 +6,6 @@ namespace PRO.SkillEditor
     {
         public EventSlice(EventSlice_Disk sliceDisk) : base(sliceDisk)
         {
-            Name = sliceDisk.name;
         }
 
         public override void DrawGizmo(SkillPlayAgent agent)

@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static PRO.SkillEditor.SliceBase_Disk;
 namespace PRO.SkillEditor
 {
     /// <summary>
@@ -34,10 +35,6 @@ namespace PRO.SkillEditor
         }
         [LabelText("¶¯»­¹ìµÀ¾«ÁéäÖÈ¾Æ÷")]
         public SpriteRenderer AgentSprice;
-        /// <summary>
-        /// ¹¥»÷¼ì²â¹ìµÀÃ¿Ö¡·µ»Ø´æ´¢
-        /// </summary>
-        public Dictionary<string, List<RaycastHit2D>> AttackTestTrack2DDic = new Dictionary<string, List<RaycastHit2D>>();
         /// <summary>
         /// ÌØÐ§¹ìµÀµÄ¾«ÁéÍ¼äÖÈ¾Æ÷
         /// </summary>
@@ -100,6 +97,7 @@ namespace PRO.SkillEditor
         {
             UpdateFrame();
         }
+        #region µü´ú²¥·Å
         private float time;
         private void UpdateFrame()
         {
@@ -156,6 +154,32 @@ namespace PRO.SkillEditor
         {
             nowFrame = 0;
             time = 0;
+            ClearBufferData();
+        }
+        #endregion
+
+        private Dictionary<string, ISliceBufferData> SliceBufferDataDic = new Dictionary<string, ISliceBufferData>();
+
+        public T GetBufferData<T>(SliceBase_Disk disk) where T : class, ISliceBufferData
+        {
+            string id = disk.name;
+            if (SliceBufferDataDic.TryGetValue(id, out ISliceBufferData value))
+                if (value is T ret)
+                    return ret;
+            return null;
+        }
+
+        public void AddBufferData(SliceBase_Disk disk, ISliceBufferData data)
+        {
+            string id = disk.name;
+            if (SliceBufferDataDic.ContainsKey(id)) SliceBufferDataDic[id] = data;
+            else SliceBufferDataDic.Add(id, data);
+        }
+
+        public void ClearBufferData()
+        {
+            foreach (var value in SliceBufferDataDic.Values)
+                value.PutIn();
         }
     }
 }
