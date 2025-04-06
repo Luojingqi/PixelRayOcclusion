@@ -24,7 +24,7 @@ namespace PRO.DataStructure
                 {
                     case 0: return x;
                     case 1: return y;
-                    default: return y;
+                    default: return x;
                 }
             }
             set
@@ -33,7 +33,7 @@ namespace PRO.DataStructure
                 {
                     case 0: x = value; break;
                     case 1: y = value; break;
-                    default: y = value; break;
+                    default: x = value; break;
                 }
             }
         }

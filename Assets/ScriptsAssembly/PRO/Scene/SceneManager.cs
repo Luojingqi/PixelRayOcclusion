@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Disk.Scene;
+using PRO.Renderer;
 using PRO.SkillEditor;
 using PRO.Tool;
 using Sirenix.Utilities;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using static PRO.BlockMaterial;
 namespace PRO
 {
 
@@ -62,12 +64,22 @@ namespace PRO
             nowScene = scene;
             // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.value.ToString()));
             //填充
-            DrawThread.Init(() =>
+            DrawThread.Init(nowScene, () =>
             {
                 BlockMaterial.FirstBind();
                 //  FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
                 source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
             });
+
+            List<Block> list0 = new List<Block>();
+            List<BackgroundBlock> list1 = new List<BackgroundBlock>();
+            for (int i = 0; i < 1000; i++)
+            {
+                list0.Add(Block.TakeOut());
+                list1.Add(BackgroundBlock.TakeOut());
+            }
+            list0.ForEach(b => Block.PutIn(b));
+            list1.ForEach(b => BackgroundBlock.PutIn(b));
         }
         public FreelyLightSource source;
         public Transform PoolNode;
@@ -177,11 +189,29 @@ namespace PRO
         }
         private void LateUpdate()
         {
+            if (Monitor.TryEnter(BlockMaterial.DrawApplyQueue))
+            {
+                try
+                {
+                    while (BlockMaterial.DrawApplyQueue.Count > 0)
+                    {
+                        BlockBase blockBase = BlockMaterial.DrawApplyQueue.Dequeue();
+                        blockBase.spriteRenderer.sprite.texture.Apply();
+                        switch (blockBase)
+                        {
+                            case Block block: BlockMaterial.SetBlock(block); break;
+                            case BackgroundBlock background: BlockMaterial.SetBackgroundBlock(background); break;
+                        }
+                    }
+                }
+                finally
+                {
+                    Monitor.Exit(BlockMaterial.DrawApplyQueue);
+                }
+            }
             BlockMaterial.Update();
         }
 
-        private float t;
-        private Vector2Int g;
         #region 任务队列与线程锁
         /// <summary>
         /// 绘制图形任务队列，主线程添加，渲染线程取出
@@ -227,7 +257,89 @@ namespace PRO
         /// </summary>
         public event Action mainThreadEvent;
         #endregion
+
+        public static void ThreadLoadOrCreateBlock(SceneEntity scene, Vector2Int blockPos, Action<BlockBase> endActionUnity = null, Action<BlockBase> endAction = null)
+        {
+
+            scene.BlockBaseInRAM.Add(blockPos);
+
+            var block = scene.CreateBlock(blockPos);
+            var background = scene.CreateBackground(blockPos);
+
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                if (JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
+                    && JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{blockPos}\background.txt", out string backgroundText))
+                {
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        try
+                        {
+                            BlockToDiskEx.ToRAM(blockText, block, scene);
+                            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
+
+                            lock (SceneManager.Inst.mainThreadEventLock)
+                                SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); endActionUnity?.Invoke(block); };
+                            endAction?.Invoke(block);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    });
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        try
+                        {
+                            BlockToDiskEx.ToRAM(backgroundText, background, scene);
+                            if (endActionUnity != null)
+                                lock (SceneManager.Inst.mainThreadEventLock)
+                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(background);
+
+                            endAction?.Invoke(background);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    });
+                }
+                else
+                {
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        BlockBase blockBase = obj as BlockBase;
+                        try
+                        {
+                            for (int x = 0; x < Block.Size.x; x++)
+                                for (int y = 0; y < Block.Size.y; y++)
+                                {
+                                    Pixel pixel = Pixel.空气.Clone(new(x, y));
+                                    blockBase.SetPixel(pixel, false, false, false);
+                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                }
+                            if (endActionUnity != null)
+                                lock (SceneManager.Inst.mainThreadEventLock)
+                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
+                            endAction?.Invoke(block);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    }, block);
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        BlockBase blockBase = obj as BlockBase;
+                        try
+                        {
+                            for (int x = 0; x < Block.Size.x; x++)
+                                for (int y = 0; y < Block.Size.y; y++)
+                                {
+                                    Pixel pixel = Pixel.New("背景", "背景色2", new(x, y));
+                                    blockBase.SetPixel(pixel, false, false, false);
+                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                }
+                            if (endActionUnity != null)
+                             lock (SceneManager.Inst.mainThreadEventLock)
+                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
+                            endAction?.Invoke(block);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    }, background);
+                }
+            });
+        }
     }
-
-
 }

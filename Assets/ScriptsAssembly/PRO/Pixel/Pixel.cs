@@ -3,6 +3,7 @@ using PRO.Disk;
 using PRO.Tool;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine;
 namespace PRO
@@ -32,7 +33,7 @@ namespace PRO
         /// <summary>
         /// 所属的建筑
         /// </summary>
-        public BuildingBase building;
+        public List<BuildingBase> buildingSet = new List<BuildingBase>();
         /// <summary>
         /// 耐久度
         /// </summary>
@@ -86,8 +87,9 @@ namespace PRO
         private static Dictionary<string, List<PixelColorInfo>> tag_pixelTypeInfoList_Dic = new Dictionary<string, List<PixelColorInfo>>();
         #region 对象池
         public static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
-        public static void PutIn(Pixel pixel, Action<BuildingBase> byUnloadAllPixelAction = null)
+        public static void PutIn(Pixel pixel)
         {
+            if (pixel == null) return;
             pixel.typeInfo = null;
             pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
@@ -95,11 +97,9 @@ namespace PRO
             pixel.block = null;
             pixel.durability = 0;
             pixel.affectsTransparency = 1;
-            if (pixel.building != null)
-            {
-                pixel.building.UnloadPixel(pixel, byUnloadAllPixelAction);
-                pixel.building = null;
-            }
+            foreach(var building in pixel.buildingSet)
+                building.UnloadPixel(pixel);
+            pixel.buildingSet.Clear();
 
             pixelPool.PutIn(pixel);
         }

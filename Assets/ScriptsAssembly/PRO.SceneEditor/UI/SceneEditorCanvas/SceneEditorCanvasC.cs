@@ -73,6 +73,7 @@ namespace PRO.SceneEditor
 
                     SceneManager.Inst.NowScene.BuildingInRAM.Add(building.GUID, building);
                     SceneManager.Inst.NowScene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
+                    building.scene = SceneManager.Inst.NowScene;
                 }
 
                 for (int y = 0; y < HoldEntity.height; y++)
@@ -91,13 +92,15 @@ namespace PRO.SceneEditor
                         Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
                         if (building != null)
                         {
-                            Building_Pixel building_Pixel = new Building_Pixel(pixel, new(x, y));
+                            Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(pixel, new(x, y));
                             building.Deserialize_AddBuilding_Pixel(building_Pixel);
                             building.Deserialize_PixelSwitch(building_Pixel, pixel);
                         }
                         block.SetPixel(pixel);
                         block.DrawPixelAsync();
                     }
+                if (building != null)
+                    building.Init();
             }
         }
     }

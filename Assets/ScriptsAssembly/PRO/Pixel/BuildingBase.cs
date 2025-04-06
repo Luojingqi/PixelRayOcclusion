@@ -1,5 +1,4 @@
-﻿using PRO.Disk;
-using PRO.Tool;
+﻿using PRO.Tool;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,12 +12,14 @@ namespace PRO
     /// </summary>
     public abstract class BuildingBase : MonoBehaviour
     {
+        public SceneEntity scene;
         public string GUID;
         public string Name;
         public Dictionary<Vector2Int, Building_Pixel> AllPixel = new Dictionary<Vector2Int, Building_Pixel>();
-        private Dictionary<Vector2Int, Building_Pixel> AllSurvivalPixel = new Dictionary<Vector2Int, Building_Pixel>();
-        private Dictionary<Vector2Int, Building_Pixel> AllDeathPixel = new Dictionary<Vector2Int, Building_Pixel>();
-        private Dictionary<Vector2Int, Building_Pixel> AllUnloadPixel = new Dictionary<Vector2Int, Building_Pixel>();
+        public HashSet<Vector2Int> AllSurvivalPixel = new HashSet<Vector2Int>();
+        public HashSet<Vector2Int> AllDeathPixel = new HashSet<Vector2Int>();
+        public HashSet<Vector2Int> AllUnloadPixel = new HashSet<Vector2Int>();
+
         public Vector2Int global;
         public Vector2Int Size;
         public BoxCollider2D TriggerCollider;
@@ -32,30 +33,30 @@ namespace PRO
         /// </summary>
         public bool CanByBroken = true;
         /// <summary>
-        /// 将这个点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
+        /// 这个蓝图位置的像素点被更改，将这个蓝图点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
         /// </summary>
-        public virtual void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        public void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
             Building_Pixel.State oldState = building_Pixel.GetState();
             building_Pixel.Pixel = pixel;
-            pixel.building = this;
+            pixel.buildingSet.Add(this);
             Building_Pixel.State newState = building_Pixel.GetState();
             if (oldState == newState) return;
             if (newState == Building_Pixel.State.Death)
             {
                 AllSurvivalPixel.Remove(building_Pixel.Offset);
-                AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
+                AllDeathPixel.Add(building_Pixel.Offset);
+                PixelSwitch_Death(building_Pixel);
             }
             else
             {
                 AllDeathPixel.Remove(building_Pixel.Offset);
-                AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
-            }
-            if (AllSurvivalPixel.Count <= 0)
-            {
-                SceneManager.Inst.NowScene.DeleteBuilding(GUID);
+                AllSurvivalPixel.Add(building_Pixel.Offset);
+                PixelSwitch_Survival(building_Pixel);
             }
         }
+        protected abstract void PixelSwitch_Death(Building_Pixel pixelB);
+        protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
         public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel[globalPos - this.global];
         public abstract void Init();
         public static BuildingBase New(Type type, string guid)
@@ -67,45 +68,42 @@ namespace PRO
             building.TriggerCollider = go.AddComponent<BoxCollider2D>();
             building.TriggerCollider.isTrigger = true;
             go.layer = 9;
-            building.Init();
             return building;
         }
         #region 序列化与反序列化
         /// <summary>
-        /// 反序列化过程：添加一个蓝图点到建筑中
+        /// 反序列化过程1：添加一个蓝图点到建筑中
         /// </summary>
-        public void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel)
+        public virtual void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel)
         {
             AllPixel.Add(building_Pixel.Offset, building_Pixel);
-            AllUnloadPixel.Add(building_Pixel.Offset, building_Pixel);
+            AllUnloadPixel.Add(building_Pixel.Offset);
         }
         /// <summary>
-        /// 反序列化过程：将一个蓝图点由未加载状态改为已加载状态
+        /// 反序列化过程2：将一个蓝图点由未加载状态改为已加载状态
         /// </summary>
-        public void Deserialize_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        public virtual void Deserialize_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
             AllUnloadPixel.Remove(building_Pixel.Offset);
             building_Pixel.Pixel = pixel;
-            pixel.building = this;
+            pixel.buildingSet.Add(this);
             Building_Pixel.State newState = building_Pixel.GetState();
             if (newState == Building_Pixel.State.Death)
-                AllDeathPixel.Add(building_Pixel.Offset, building_Pixel);
+                AllDeathPixel.Add(building_Pixel.Offset);
             else
-                AllSurvivalPixel.Add(building_Pixel.Offset, building_Pixel);
+                AllSurvivalPixel.Add(building_Pixel.Offset);
         }
         /// <summary>
-        /// 卸载一个点，当所有点都被卸载将触发回调
+        /// 卸载一个点
         /// </summary>
-        public void UnloadPixel(Pixel pixel, Action<BuildingBase> byUnloadAllPixelAction)
+        public void UnloadPixel(Pixel pixel)
         {
             Building_Pixel building_Pixel = GetBuilding_Pixel(pixel.posG);
             if (building_Pixel.GetState() == Building_Pixel.State.Survival) AllSurvivalPixel.Remove(building_Pixel.Offset);
             else AllDeathPixel.Remove(building_Pixel.Offset);
 
             building_Pixel.Pixel = null;
-            AllUnloadPixel.Add(building_Pixel.Offset, building_Pixel);
-            if (AllUnloadPixel.Count == AllPixel.Count)
-                byUnloadAllPixelAction?.Invoke(this);
+            AllUnloadPixel.Add(building_Pixel.Offset);
         }
         public virtual string Serialize()
         {
@@ -181,7 +179,7 @@ namespace PRO
                 else if (num == 2) colorName = colorNameDic[StackToInt(stack)];
                 else if (num == 3) typeName = typeNameDic[StackToInt(stack)];
             },
-            () => { Deserialize_AddBuilding_Pixel(new Building_Pixel(Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), offset)); },
+            () => { Deserialize_AddBuilding_Pixel(Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), offset)); },
             ref lastDelimiter, ref stack);
             #endregion
             #region CanByBroken  PorB
@@ -227,17 +225,22 @@ namespace PRO
             return spriteRenderer;
         }
 
-        public SpriteRenderer DrawSprite()
+        //public SpriteRenderer DrawSprite()
+        //{
+        //    Texture2D texture = Texture2DPool.TakeOut(Size.x, Size.y);
+        //    SpriteRenderer spriteRenderer = Texture2DPool.TakeOutSpriteRenderer();
+        //    spriteRenderer.sprite = Texture2DPool.GetOnlySprite(texture);
+        //    var data = texture.GetRawTextureData<float>();
+        //    foreach (var building in AllSurvivalPixel.Values)
+        //        data.DrawPixel(texture.width, building.Offset, building.ColorInfo.color);
+        //    texture.Apply();
+        //    spriteRenderer.transform.position = Block.GlobalToWorld(global);
+        //    return spriteRenderer;
+        //}
+
+        public void Delete()
         {
-            Texture2D texture = Texture2DPool.TakeOut(Size.x, Size.y);
-            SpriteRenderer spriteRenderer = Texture2DPool.TakeOutSpriteRenderer();
-            spriteRenderer.sprite = Texture2DPool.GetOnlySprite(texture);
-            var data = texture.GetRawTextureData<float>();
-            foreach (var building in AllSurvivalPixel.Values)
-                data.DrawPixel(texture.width, building.Offset, building.ColorInfo.color);
-            texture.Apply();
-            spriteRenderer.transform.position = Block.GlobalToWorld(global);
-            return spriteRenderer;
+            scene.DeleteBuilding(GUID);
         }
     }
 }

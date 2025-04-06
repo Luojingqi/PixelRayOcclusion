@@ -35,14 +35,14 @@ namespace PRO.Disk.Scene
                         colorNameDic.Add(pixel.colorInfo.colorName, colorNameIndex);
                     }
                     int buildingIndex = 0;
-                    if (pixel.building != null)
-                    {
-                        if (buildingGuidDic.TryGetValue(pixel.building.GUID, out buildingIndex) == false)
-                        {
-                            buildingIndex = buildingGuidDic.Count + 1;
-                            buildingGuidDic.Add(pixel.building.GUID, buildingIndex);
-                        }
-                    }
+                    //if (pixel.building != null)
+                    //{
+                    //    if (buildingGuidDic.TryGetValue(pixel.building.GUID, out buildingIndex) == false)
+                    //    {
+                    //        buildingIndex = buildingGuidDic.Count + 1;
+                    //        buildingGuidDic.Add(pixel.building.GUID, buildingIndex);
+                    //    }
+                    //}
                     sb.Append($"{typeNameIndex}:{colorNameIndex}:{buildingIndex},");
                 }
             sb[sb.Length - 1] = '|';
@@ -120,9 +120,9 @@ namespace PRO.Disk.Scene
                 block.SetPixel(pixel, true, false, false);
                 if (buildingGuid != null)
                 {
-                    pixel.building = sceneEntity.GetBuilding(buildingGuid);
-                    pixel.building.Deserialize_PixelSwitch(pixel.building.GetBuilding_Pixel(pixel.posG), pixel);
-                    buildingGuid = null;
+                    //pixel.building = sceneEntity.GetBuilding(buildingGuid);
+                    //pixel.building.Deserialize_PixelSwitch(pixel.building.GetBuilding_Pixel(pixel.posG), pixel);
+                    //buildingGuid = null;
                 }
                 --pixelNum;
             },

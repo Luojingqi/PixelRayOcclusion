@@ -71,16 +71,19 @@ namespace PRO
         /// <param name="blockPos"></param>
         public void UnloadBlockData(Vector2Int blockPos)
         {
-            Action<BuildingBase> action = (building) =>
-            {
-                BuildingInRAM.Remove(building.GUID);
-                GameObject.Destroy(building.gameObject);
-            };
-            Block.PutIn(GetBlock(blockPos), action);
-            BackgroundBlock.PutIn(GetBackground(blockPos), action);
+            Block.PutIn(GetBlock(blockPos));
+            BackgroundBlock.PutIn(GetBackground(blockPos));
             BlockInRAM[blockPos] = null;
             BackgroundInRAM[blockPos] = null;
             BlockBaseInRAM.Remove(blockPos);
+
+            foreach (var building in BuildingInRAM.Values)
+            {
+                if (building.AllUnloadPixel.Count == building.AllPixel.Count)
+                {
+                    BuildingInRAM.Remove(building.GUID);
+                }
+            }
         }
         /// <summary>
         /// 卸载并且保存一个区块，上方的建筑也会被一并保存
@@ -88,15 +91,17 @@ namespace PRO
         /// <param name="blockPos"></param>
         public void UnloadAndSaveBlockData(Vector2Int blockPos)
         {
-            Action<BuildingBase> action = (building) =>
+            foreach (var building in BuildingInRAM.Values)
             {
-                SaveBuilding(building.GUID);
-                BuildingInRAM.Remove(building.GUID);
-                GameObject.Destroy(building.gameObject);
-            };
+                if (building.AllUnloadPixel.Count == building.AllPixel.Count)
+                {
+                    SaveBuilding(building.GUID);
+                    BuildingInRAM.Remove(building.GUID);
+                }
+            }
             SaveBlockData(blockPos);
-            Block.PutIn(GetBlock(blockPos), action);
-            BackgroundBlock.PutIn(GetBackground(blockPos), action);
+            Block.PutIn(GetBlock(blockPos));
+            BackgroundBlock.PutIn(GetBackground(blockPos));
             BlockInRAM[blockPos] = null;
             BackgroundInRAM[blockPos] = null;
             BlockBaseInRAM.Remove(blockPos);
@@ -122,6 +127,7 @@ namespace PRO
                 BuildingBase building = BuildingBase.New(type, guid);
                 building.Deserialize(buildingText, buildingText.Length);
                 BuildingInRAM.Add(guid, building);
+                building.scene = this;
             }
             else
             {
@@ -139,7 +145,7 @@ namespace PRO
         /// </summary>
         public void Unload()
         {
-            foreach (var blockPos in BlockBaseInRAM.ToList())
+            foreach (var blockPos in BlockBaseInRAM)
                 UnloadBlockData(blockPos);
         }
 
@@ -153,7 +159,7 @@ namespace PRO
                 File.Delete(@$"{sceneCatalog.directoryInfo.FullName}/Building/{guid}.txt");
                 foreach (var item in building.AllPixel.Values)
                 {
-                    item.Pixel.building = null;
+                    item.Pixel.buildingSet.Remove(building);
                     item.Pixel = null;
                 }
                 GameObject.Destroy(building);

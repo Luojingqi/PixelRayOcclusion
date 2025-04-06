@@ -87,6 +87,7 @@ namespace ExcelTool
                     if (strsColor32.Length >= 4) jsonDataColor32["a"] = Convert.ToUInt32(strsColor32[3]);
                     jsonData[key] = jsonDataColor32;
                     break;
+
             }
         }
 

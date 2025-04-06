@@ -12,11 +12,11 @@ namespace PRO
         /// <summary>
         /// 相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int CameraCenterBlockPos { get; private set; }
+        public static Vector2Int CameraCenterBlockPos { get; set; }
         /// <summary>
         /// 上一帧相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int LastCameraCenterBlockPos { get; private set; }
+        public static Vector2Int LastCameraCenterBlockPos { get; set; }
         /// <summary>
         /// 最大光源半径，修改完后需要调用编辑器扩展PRO>2.创建hlsl
         /// 将生成LightRadiusMax个计算着色器函数  每个代表一个不同半径的光源函数
@@ -181,6 +181,26 @@ namespace PRO
         {
             LastCameraCenterBlockPos = CameraCenterBlockPos;
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
+
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
+            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
+
+            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
+                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+                {
+                    var block = SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y));
+                    if (block == null) SceneManager.ThreadLoadOrCreateBlock(SceneManager.Inst.NowScene, new Vector2Int(x, y),
+                        (blockBase) =>
+                        {
+                            switch (blockBase)
+                            {
+                                case Block block: SetBlock(block); break;
+                                case BackgroundBlock background: SetBackgroundBlock(background); break;
+                            }
+                        });
+                }
+
             blockShareMaterialManager.ClearLastBind();
             backgroundShareMaterialManager.ClearLastBind();
 
@@ -199,7 +219,7 @@ namespace PRO
                     while (DrawApplyQueue.Count > 0)
                     {
                         BlockBase blockBase = DrawApplyQueue.Dequeue();
-                        blockBase.spriteRenderer.sprite.texture.Apply();
+                        //blockBase.spriteRenderer.sprite.texture.Apply();
                         switch (blockBase)
                         {
                             case Block block: SetBlock(block); break;

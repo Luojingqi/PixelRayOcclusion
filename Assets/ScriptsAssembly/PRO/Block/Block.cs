@@ -122,7 +122,7 @@ namespace PRO
             return block;
         }
 
-        public static void PutIn(Block block, System.Action<BuildingBase> byUnloadAllPixelAction)
+        public static void PutIn(Block block)
         {
             block.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
@@ -132,7 +132,7 @@ namespace PRO
                     Pixel pixel = block.allPixel[x, y];
                     block.allPixel[x, y] = null;
 
-                    Pixel.PutIn(pixel, byUnloadAllPixelAction);
+                    Pixel.PutIn(pixel);
 
                     BoxCollider2D box = block.allCollider[x, y];
                     if (box != null)

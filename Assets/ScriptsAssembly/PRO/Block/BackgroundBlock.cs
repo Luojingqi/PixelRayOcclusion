@@ -1,6 +1,5 @@
 using PRO.Renderer;
 using PRO.Tool;
-using System;
 using UnityEngine;
 
 namespace PRO
@@ -30,7 +29,7 @@ namespace PRO
         }
         public static BackgroundBlock TakeOut() => BackgroundPool.TakeOutT();
 
-        public static void PutIn(BackgroundBlock background, Action<BuildingBase> byUnloadAllPixelAction)
+        public static void PutIn(BackgroundBlock background)
         {
             background.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
@@ -39,7 +38,7 @@ namespace PRO
                 {
                     Pixel pixel = background.allPixel[x, y];
                     background.allPixel[x, y] = null;
-                    Pixel.PutIn(pixel, byUnloadAllPixelAction);
+                    Pixel.PutIn(pixel);
                 }
             }
             background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);

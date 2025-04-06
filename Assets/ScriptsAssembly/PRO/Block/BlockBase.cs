@@ -52,8 +52,8 @@ namespace PRO
 
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
-            //旧点所属于一个建筑且建筑不可被破坏
-            if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false) return;
+            //旧点所属于一个建筑且建筑不可被破坏，并且耐久大于0
+          //  if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false && removePixel.durability > 0) return;
             if (removePixel != null)
             {
                 if (removePixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius == 0)//&& removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
@@ -61,13 +61,13 @@ namespace PRO
 
                 removeInfo = removePixel.typeInfo;
 
-
-                if (removePixel.building != null)
+                //切换建筑这个点的状态（死亡||存活
+                foreach (var building in removePixel.buildingSet)
                 {
-                    removePixel.building.PixelSwitch(removePixel.building.GetBuilding_Pixel(pixel.posG), pixel);
-                    removePixel.building = null;
+                    building.PixelSwitch(building.GetBuilding_Pixel(pixel.posG), pixel);
                 }
 
+                removePixel.buildingSet.Clear();
                 Pixel.PutIn(removePixel);
             }
 

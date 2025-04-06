@@ -10,7 +10,6 @@ namespace ExcelTool
         public static string _System = "System.";
         public static string _UnityEngine = "UnityEngine.";
         public static string _SystemCollectionsGeneric = "System.Collections.Generic.";
-        public static string _Fix64PhysicsData = "Fix64Physics.Disk.";
         public static string _UnityMathematics = "Unity.Mathematics.";
 
         /// <summary>
@@ -50,10 +49,6 @@ namespace ExcelTool
                 case "int4": typeName = $"{_UnityMathematics}int4"; break;
                 case "uint4": typeName = $"{_UnityMathematics}uint4"; break;
                 case "color32": typeName = $"{_UnityEngine}Color32"; break;
-                case "fix64": typeName = $"{_Fix64PhysicsData}Fix64"; break;
-                case "fixvector3": typeName = $"{_Fix64PhysicsData}FixVector3"; break;
-                case "fixvector2": typeName = $"{_Fix64PhysicsData}FixVector2"; break;
-                case "fixquaternion": typeName = $"{_Fix64PhysicsData}FixQuaternion"; break;
                 default: typeName = "未定义"; Debug.Log(typeString.ToLower()); break;
             }
             switch (setSB.ToString().ToLower())

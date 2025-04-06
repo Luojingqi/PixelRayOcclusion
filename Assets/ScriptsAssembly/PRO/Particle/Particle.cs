@@ -112,7 +112,7 @@ namespace PRO
             {
                 SkillPlayAgent.idle = null;
                 SkillPlayAgent.Skill = null;
-                SkillPlayAgent.ClearTime();
+                SkillPlayAgent.ClearTimeAndBuffer();
             }
             Active = false;
             RecyleState = true;
