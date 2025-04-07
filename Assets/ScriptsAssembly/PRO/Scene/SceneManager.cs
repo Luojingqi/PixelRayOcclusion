@@ -80,6 +80,7 @@ namespace PRO
             }
             list0.ForEach(b => Block.PutIn(b));
             list1.ForEach(b => BackgroundBlock.PutIn(b));
+
         }
         public FreelyLightSource source;
         public Transform PoolNode;
@@ -257,89 +258,5 @@ namespace PRO
         /// </summary>
         public event Action mainThreadEvent;
         #endregion
-
-        public static void ThreadLoadOrCreateBlock(SceneEntity scene, Vector2Int blockPos, Action<BlockBase> endActionUnity = null, Action<BlockBase> endAction = null)
-        {
-
-            scene.BlockBaseInRAM.Add(blockPos);
-
-            var block = scene.CreateBlock(blockPos);
-            var background = scene.CreateBackground(blockPos);
-
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                if (JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
-                    && JsonTool.LoadText($@"{scene.sceneCatalog.directoryInfo}\Block\{blockPos}\background.txt", out string backgroundText))
-                {
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        try
-                        {
-                            BlockToDiskEx.ToRAM(blockText, block, scene);
-                            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-
-                            lock (SceneManager.Inst.mainThreadEventLock)
-                                SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); endActionUnity?.Invoke(block); };
-                            endAction?.Invoke(block);
-                        }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
-                    });
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        try
-                        {
-                            BlockToDiskEx.ToRAM(backgroundText, background, scene);
-                            if (endActionUnity != null)
-                                lock (SceneManager.Inst.mainThreadEventLock)
-                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(background);
-
-                            endAction?.Invoke(background);
-                        }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
-                    });
-                }
-                else
-                {
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        BlockBase blockBase = obj as BlockBase;
-                        try
-                        {
-                            for (int x = 0; x < Block.Size.x; x++)
-                                for (int y = 0; y < Block.Size.y; y++)
-                                {
-                                    Pixel pixel = Pixel.空气.Clone(new(x, y));
-                                    blockBase.SetPixel(pixel, false, false, false);
-                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                                }
-                            if (endActionUnity != null)
-                                lock (SceneManager.Inst.mainThreadEventLock)
-                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
-                            endAction?.Invoke(block);
-                        }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
-                    }, block);
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        BlockBase blockBase = obj as BlockBase;
-                        try
-                        {
-                            for (int x = 0; x < Block.Size.x; x++)
-                                for (int y = 0; y < Block.Size.y; y++)
-                                {
-                                    Pixel pixel = Pixel.New("背景", "背景色2", new(x, y));
-                                    blockBase.SetPixel(pixel, false, false, false);
-                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                                }
-                            if (endActionUnity != null)
-                             lock (SceneManager.Inst.mainThreadEventLock)
-                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
-                            endAction?.Invoke(block);
-                        }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
-                    }, background);
-                }
-            });
-        }
     }
 }

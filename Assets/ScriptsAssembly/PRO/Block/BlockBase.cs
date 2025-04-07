@@ -48,7 +48,7 @@ namespace PRO
         {
             if (pixel == null) return;
             pixel.posG = PixelToGlobal(pixel.pos);
-            pixel.block = this;
+            pixel.blockBase = this;
 
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
@@ -300,9 +300,9 @@ namespace PRO
             {
                 pixel.durability -= durability;
                 if (pixel.durability <= 0)
-                    pixel.block.SetPixel(Pixel.¿ÕÆø.Clone(pixel.pos));
+                    pixel.blockBase.SetPixel(Pixel.¿ÕÆø.Clone(pixel.pos));
                 else
-                    pixel.block.textureData.SetPixelInfoToShader(pixel);
+                    pixel.blockBase.textureData.SetPixelInfoToShader(pixel);
             }
         }
     }

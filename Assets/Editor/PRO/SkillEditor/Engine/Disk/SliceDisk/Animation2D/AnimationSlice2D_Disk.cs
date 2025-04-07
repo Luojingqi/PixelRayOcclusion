@@ -2,7 +2,7 @@
 
 namespace PRO.SkillEditor
 {
-    public class AnimationSlice2D_Disk : SliceBase_Disk
+    public class AnimationSlice2D_Disk : Slice_DiskBase
     {
         public Sprite sprite;
 

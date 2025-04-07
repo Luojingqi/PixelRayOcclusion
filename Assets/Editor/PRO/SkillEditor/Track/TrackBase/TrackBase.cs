@@ -56,7 +56,7 @@ namespace PRO.SkillEditor
 
             SetHeight(60);
             this.track_Disk = track_Disk;
-            HashSet<SliceBase_Disk> hashSet = new HashSet<SliceBase_Disk>();
+            HashSet<Slice_DiskBase> hashSet = new HashSet<Slice_DiskBase>();
             foreach (var sliceDisk in track_Disk.SlickList)
             {
                 if (hashSet.Contains(sliceDisk) == false)
@@ -67,7 +67,11 @@ namespace PRO.SkillEditor
                         AddSlice(new NullSlice(disk));
                         continue;
                     }
-                    ForeachSliceDiskToSlice(sliceDisk);
+                    if (ForeachSliceDiskToSlice(sliceDisk) == false)
+                    {
+                        //  AddSlice(new NullSlice(new NullSlice_Disk() { name = $"未识别的切片类型", startFrame = sliceDisk.startFrame, frameLength = sliceDisk.frameLength, enable = false }));
+                        Debug.LogError($"轨道有未识别的切片类型");
+                    }
                 }
             }
         }
@@ -75,7 +79,7 @@ namespace PRO.SkillEditor
         /// 请在此函数中检查切片数据的类型并添加对应类型的切片到轨道
         /// </summary>
         /// <param name="sliceDisk"></param>
-        protected abstract void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk);
+        protected abstract bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk);
         #region 拖拽资源进入
         /// <summary>
         /// 检查拖拽进入的资源类型

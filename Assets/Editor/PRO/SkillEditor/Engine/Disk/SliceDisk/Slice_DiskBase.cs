@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace PRO.SkillEditor
-{    
-    public abstract class SliceBase_Disk
+﻿namespace PRO.SkillEditor
+{
+    public abstract class Slice_DiskBase
     {
         public string name;
         public int startFrame = -1;

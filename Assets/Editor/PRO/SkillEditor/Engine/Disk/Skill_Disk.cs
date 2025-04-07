@@ -74,17 +74,22 @@ namespace PRO.SkillEditor
             /// </summary>
             EventTrack = 1<<6,
         }
-
-        public void UpdateFrame(SkillPlayAgent agent, int frame, int playTrack = ~0, Action callback = null)
+        /// <summary>
+        /// 更新某一帧的所有指定轨道的帧切片
+        /// </summary>
+        /// <param name="agent">执行人</param>
+        /// <param name="frame">更新帧</param>
+        /// <param name="playTrack">轨道过滤器</param>
+        /// <param name="callback">执行完此帧的回调</param>
+        public void UpdateFrame(SkillPlayAgent agent, int frame, int playTrack = ~0)
         {
             if (agent == null) return;
             int filter = 1;
             for (int i = 0; i < 7; i++)
             {
-                int trackIndex = (playTrack & (filter << i)) >> i;
-                if (trackIndex != 1) continue;
+                int trackIndex = playTrack & (filter << i);
                 int index = 0;
-                switch (i)
+                switch (trackIndex)
                 {
                     case (int)PlayTrack.AnimationTrack2D: foreach (var track in AnimationTrack2DList) UpdateFrame(track, agent, frame, index++); break;
                     case (int)PlayTrack.SpecialEffectTrack2D: foreach (var track in SpecialEffectTrack2DList) UpdateFrame(track, agent, frame, index++); break;
@@ -94,13 +99,12 @@ namespace PRO.SkillEditor
                     case (int)PlayTrack.SceneCreateTrack: foreach (var track in SceneCreateTrackList) UpdateFrame(track, agent, frame, index++); break;
                     case (int)PlayTrack.EventTrack: foreach (var track in EventTrackList) UpdateFrame(track, agent, frame, index++); break;
                 }
-            }
-            callback?.Invoke();
+            }            
         }
         private void UpdateFrame(Track_Disk track, SkillPlayAgent agent, int frame, int trackIndex)
         {
             if (frame >= track.SlickList.Count) return;
-            SliceBase_Disk slice = track.SlickList[frame];
+            Slice_DiskBase slice = track.SlickList[frame];
             if (slice.enable)
                 slice.UpdateFrame(agent, frame, frame - slice.startFrame, trackIndex);
         }

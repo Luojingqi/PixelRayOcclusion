@@ -190,7 +190,7 @@ namespace PRO
                 for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
                 {
                     var block = SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y));
-                    if (block == null) SceneManager.ThreadLoadOrCreateBlock(SceneManager.Inst.NowScene, new Vector2Int(x, y),
+                    if (block == null) SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y),
                         (blockBase) =>
                         {
                             switch (blockBase)

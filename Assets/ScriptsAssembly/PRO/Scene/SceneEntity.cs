@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 
 namespace PRO
@@ -45,6 +46,12 @@ namespace PRO
         #endregion
 
         #region 从磁盘中加载与保存
+
+        #region 同步与多线程加载
+        /// <summary>
+        /// 同步加载一个区块，区块不存在会报错
+        /// </summary>
+        /// <param name="blockPos"></param>
         public void LoadBlockData(Vector2Int blockPos)
         {
             if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
@@ -57,7 +64,7 @@ namespace PRO
                 block.DrawPixelAsync();
                 background.DrawPixelAsync();
                 BlockBaseInRAM.Add(blockPos);
-                var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1)); //此行其实可以交由多线程处理
+                var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
                 GreedyCollider.CreateColliderAction(block, colliderDataList);
             }
             else
@@ -65,6 +72,96 @@ namespace PRO
                 Log.Print($"无法加载区块{blockPos}，可能区块文件不存在", Color.red);
             }
         }
+        /// <summary>
+        /// 使用多线程加载一个区块，区块文件不存在时会创建一个空区块
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="blockPos"></param>
+        /// <param name="endActionUnity"></param>
+        /// <param name="endAction"></param>
+        public void ThreadLoadOrCreateBlock(Vector2Int blockPos, Action<BlockBase> endActionUnity = null, Action<BlockBase> endAction = null)
+        {
+            BlockBaseInRAM.Add(blockPos);
+
+            var block = CreateBlock(blockPos);
+            var background = CreateBackground(blockPos);
+
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
+                    && JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background.txt", out string backgroundText))
+                {
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        try
+                        {
+                            BlockToDiskEx.ToRAM(blockText, block, this);
+                            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
+
+                            lock (SceneManager.Inst.mainThreadEventLock)
+                                SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); endActionUnity?.Invoke(block); };
+                            endAction?.Invoke(block);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    });
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        try
+                        {
+                            BlockToDiskEx.ToRAM(backgroundText, background, this);
+                            if (endActionUnity != null)
+                                lock (SceneManager.Inst.mainThreadEventLock)
+                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(background);
+
+                            endAction?.Invoke(background);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    });
+                }
+                else
+                {
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        BlockBase blockBase = obj as BlockBase;
+                        try
+                        {
+                            for (int x = 0; x < Block.Size.x; x++)
+                                for (int y = 0; y < Block.Size.y; y++)
+                                {
+                                    Pixel pixel = Pixel.空气.Clone(new(x, y));
+                                    blockBase.SetPixel(pixel, false, false, false);
+                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                }
+                            if (endActionUnity != null)
+                                lock (SceneManager.Inst.mainThreadEventLock)
+                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
+                            endAction?.Invoke(block);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    }, block);
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        BlockBase blockBase = obj as BlockBase;
+                        try
+                        {
+                            for (int x = 0; x < Block.Size.x; x++)
+                                for (int y = 0; y < Block.Size.y; y++)
+                                {
+                                    Pixel pixel = Pixel.New("背景", "背景色2", new(x, y));
+                                    blockBase.SetPixel(pixel, false, false, false);
+                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                }
+                            if (endActionUnity != null)
+                                lock (SceneManager.Inst.mainThreadEventLock)
+                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
+                            endAction?.Invoke(block);
+                        }
+                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                    }, background);
+                }
+            });
+        }
+        #endregion
         /// <summary>
         /// 卸载一个区块，上方的建筑也会被一并卸载
         /// </summary>
@@ -76,14 +173,14 @@ namespace PRO
             BlockInRAM[blockPos] = null;
             BackgroundInRAM[blockPos] = null;
             BlockBaseInRAM.Remove(blockPos);
-
+            var list = SetPool.TakeOut_List<BuildingBase>();
             foreach (var building in BuildingInRAM.Values)
-            {
                 if (building.AllUnloadPixel.Count == building.AllPixel.Count)
-                {
-                    BuildingInRAM.Remove(building.GUID);
-                }
-            }
+                    list.Add(building);
+
+            foreach (var building in list)
+                BuildingInRAM.Remove(building.GUID);
+            SetPool.PutIn(list);
         }
         /// <summary>
         /// 卸载并且保存一个区块，上方的建筑也会被一并保存
@@ -91,14 +188,17 @@ namespace PRO
         /// <param name="blockPos"></param>
         public void UnloadAndSaveBlockData(Vector2Int blockPos)
         {
+            var list = SetPool.TakeOut_List<BuildingBase>();
             foreach (var building in BuildingInRAM.Values)
-            {
                 if (building.AllUnloadPixel.Count == building.AllPixel.Count)
-                {
-                    SaveBuilding(building.GUID);
-                    BuildingInRAM.Remove(building.GUID);
-                }
+                    list.Add(building);
+            foreach (var building in list)
+            {
+                SaveBuilding(building.GUID);
+                BuildingInRAM.Remove(building.GUID);
             }
+            SetPool.PutIn(list);
+
             SaveBlockData(blockPos);
             Block.PutIn(GetBlock(blockPos));
             BackgroundBlock.PutIn(GetBackground(blockPos));
@@ -123,7 +223,6 @@ namespace PRO
             if (sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type) &&
                 JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", out string buildingText))
             {
-
                 BuildingBase building = BuildingBase.New(type, guid);
                 building.Deserialize(buildingText, buildingText.Length);
                 BuildingInRAM.Add(guid, building);
@@ -162,7 +261,7 @@ namespace PRO
                     item.Pixel.buildingSet.Remove(building);
                     item.Pixel = null;
                 }
-                GameObject.Destroy(building);
+                GameObject.Destroy(building.gameObject);
             }
         }
         #region 创建区块的空游戏物体

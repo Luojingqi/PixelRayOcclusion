@@ -1,10 +1,7 @@
 ﻿using PRO.DataStructure;
 using PRO.Tool;
-using Sirenix.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
 
 namespace PRO.Disk.Scene
 {
@@ -35,15 +32,16 @@ namespace PRO.Disk.Scene
                         colorNameDic.Add(pixel.colorInfo.colorName, colorNameIndex);
                     }
                     int buildingIndex = 0;
-                    //if (pixel.building != null)
-                    //{
-                    //    if (buildingGuidDic.TryGetValue(pixel.building.GUID, out buildingIndex) == false)
-                    //    {
-                    //        buildingIndex = buildingGuidDic.Count + 1;
-                    //        buildingGuidDic.Add(pixel.building.GUID, buildingIndex);
-                    //    }
-                    //}
-                    sb.Append($"{typeNameIndex}:{colorNameIndex}:{buildingIndex},");
+                    foreach (var building in pixel.buildingSet)
+                    {
+                        if (buildingGuidDic.TryGetValue(building.GUID, out buildingIndex) == false)
+                        {
+                            buildingIndex = buildingGuidDic.Count + 1;
+                            buildingGuidDic.Add(building.GUID, buildingIndex);
+                        }
+                        sb.Append($"{buildingIndex}:");
+                    }
+                    sb.Append($"{typeNameIndex}:{colorNameIndex},");
                 }
             sb[sb.Length - 1] = '|';
             foreach (var kv in typeNameDic)
@@ -103,14 +101,18 @@ namespace PRO.Disk.Scene
             () => { typeNameDic.Add(index, typeName); },
             ref lastDelimiter, ref stack);
             #endregion
-            buildingGuid = null;
+            List<BuildingBase> buildingList = new List<BuildingBase>();
             int pixelNum = Block.Size.x * Block.Size.y - 1;
             JsonTool.Deserialize_Data(blockText, (num) =>
             {
                 int dicIndex = JsonTool.StackToInt(stack);
-                if (num == 0 && dicIndex != 0) buildingGuid = buildingGuidDic[dicIndex];
-                else if (num == 1) colorName = colorNameDic[dicIndex];
-                else if (num == 2) typeName = typeNameDic[dicIndex];
+                if (num == 0) colorName = colorNameDic[dicIndex];
+                else if (num == 1) typeName = typeNameDic[dicIndex];
+                else
+                {
+                    var building = sceneEntity.GetBuilding(buildingGuidDic[dicIndex]);
+                    if (building != null) buildingList.Add(building);
+                }
             },
             () =>
             {
@@ -118,12 +120,12 @@ namespace PRO.Disk.Scene
                 int y = pixelNum / Block.Size.y;
                 Pixel pixel = Pixel.TakeOut(typeName, colorName, new(x, y));
                 block.SetPixel(pixel, true, false, false);
-                if (buildingGuid != null)
+                foreach (var building in buildingList)
                 {
-                    //pixel.building = sceneEntity.GetBuilding(buildingGuid);
-                    //pixel.building.Deserialize_PixelSwitch(pixel.building.GetBuilding_Pixel(pixel.posG), pixel);
-                    //buildingGuid = null;
+                    pixel.buildingSet.Add(building);
+                    building.Deserialize_PixelSwitch(building.GetBuilding_Pixel(pixel.posG), pixel);
                 }
+                buildingList.Clear();
                 --pixelNum;
             },
             ref lastDelimiter, ref stack);

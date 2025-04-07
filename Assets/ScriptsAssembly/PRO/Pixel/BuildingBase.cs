@@ -57,7 +57,7 @@ namespace PRO
         }
         protected abstract void PixelSwitch_Death(Building_Pixel pixelB);
         protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
-        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel[globalPos - this.global];
+        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos) => AllPixel.GetValueOrDefault(globalPos - this.global);
         public abstract void Init();
         public static BuildingBase New(Type type, string guid)
         {

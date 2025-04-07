@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2579562658721522438}
   - component: {fileID: -122658586236707096}
   - component: {fileID: 3925744354144651879}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: "Particle_\u901A\u7528\u793A\u4F8B"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,27 +170,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: AttackTestTrack2DDic
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[UnityEngine.RaycastHit2D,
-        UnityEngine.Physics2DModule]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   AgentSprice: {fileID: 0}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}

@@ -90,13 +90,13 @@ namespace PRO.SceneEditor
                             block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
 
                         Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
+                        block.SetPixel(pixel);
                         if (building != null)
                         {
                             Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(pixel, new(x, y));
                             building.Deserialize_AddBuilding_Pixel(building_Pixel);
                             building.Deserialize_PixelSwitch(building_Pixel, pixel);
                         }
-                        block.SetPixel(pixel);
                         block.DrawPixelAsync();
                     }
                 if (building != null)

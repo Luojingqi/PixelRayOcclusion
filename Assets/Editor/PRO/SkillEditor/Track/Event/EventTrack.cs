@@ -1,3 +1,4 @@
+using PROTool;
 using System;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -9,18 +10,38 @@ namespace PRO.SkillEditor
         public EventTrack(Track_Disk track_Disk) : base(track_Disk)
         {
             Heading.NameText.text = "事件轨道";
-            View.AddManipulator(new ContextualMenuManipulator(evt =>
+            var list = ReflectionTool.GetDerivedClasses(typeof(EventSlice_DiskBase));
+            foreach (var item in list)
             {
-                evt.menu.AppendAction("添加重播切片", _ => AddSlice(new EventSlice_跳转播放(new EventDisk_跳转播放())));
-            }));
+                View.AddManipulator(new ContextualMenuManipulator(evt =>
+                {
+                    evt.menu.AppendAction(item.Name.Split('_', 2)[1], _ =>
+                    {
+                        AddSlice(DiskToSlice(Activator.CreateInstance(item) as Slice_DiskBase));
+                    });
+                }));
+            }
         }
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
+        {
+            var slice = DiskToSlice(sliceDisk);
+            if (slice == null) return false;
+            else
+            {
+                AddSlice(slice);
+                return true;
+            }
+        }
+
+        private EventSlice DiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case EventDisk_跳转播放 disk: { AddSlice(new EventSlice_跳转播放(disk)); break; }
-                case EventSlice_Disk disk: { AddSlice(new EventSlice(disk)); break; }
+                case EventDisk_跳转播放 disk: return new EventSlice_跳转播放(disk);
+                case EventDisk_创建Building disk: return new EventSlice_创建Building(disk);
+                case EventSlice_DiskBase disk: return new EventSlice(disk);
             }
+            return null;
         }
 
         protected override bool DragAssetTypeCheck(Type type)
@@ -35,8 +56,8 @@ namespace PRO.SkillEditor
                 MonoScript monoScript = objects[i] as MonoScript;
                 if (monoScript == null) continue;
                 Type type = monoScript.GetClass();
-                if (type.IsSubclassOf(typeof(EventSlice_Disk)) == false) continue;
-                EventSlice_Disk disk = Activator.CreateInstance(type) as EventSlice_Disk;
+                if (type.IsSubclassOf(typeof(EventSlice_DiskBase)) == false) continue;
+                EventSlice_DiskBase disk = Activator.CreateInstance(type) as EventSlice_DiskBase;
                 AddSlice(new EventSlice(disk));
             }
         }

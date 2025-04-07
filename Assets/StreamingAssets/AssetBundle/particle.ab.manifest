@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3398653845
+CRC: 2568130898
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b2d4ca8ddddca95b74c01bc03fa27d26
+    Hash: b41780ac6d6a8f4c2377bcd381f870ce
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a0724f6028a97cb1d407fc8f1ded7ebb
+    Hash: 70a3cf6eefee27ef9c2a690dfd78f06e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b2d4ca8ddddca95b74c01bc03fa27d26
+    Hash: b41780ac6d6a8f4c2377bcd381f870ce
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -35,6 +35,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 5f28e0b0a60f9394a8325af678984317, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: f2e15769c3b63f0458b12fea415b3777, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -50,4 +52,5 @@ Assets:
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u6C34.prefab"
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u98DE\u884C\u7BAD\u5934\u70B8\u5F39/Particle_\u98DE\u884C\u7BAD\u5934\u70B8\u5F39.prefab"
 - "Assets/ScriptsAssembly/PRO/Particle/Particle_\u5355\u50CF\u7D20.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u6BD2\u6DB2.prefab"
 Dependencies: []

@@ -7,6 +7,6 @@ namespace PRO.SkillEditor
 {
     public class Track_Disk
     {
-        public List<SliceBase_Disk> SlickList = new List<SliceBase_Disk>();
+        public List<Slice_DiskBase> SlickList = new List<Slice_DiskBase>();
     }
 }

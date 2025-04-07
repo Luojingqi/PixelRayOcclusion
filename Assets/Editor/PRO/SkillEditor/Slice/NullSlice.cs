@@ -5,7 +5,7 @@ namespace PRO.SkillEditor
 {
     internal class NullSlice : SliceBase
     {
-        public NullSlice(SliceBase_Disk sliceDisk) : base(sliceDisk)
+        public NullSlice(Slice_DiskBase sliceDisk) : base(sliceDisk)
         {
             if (sliceDisk.startFrame == -1)
             {

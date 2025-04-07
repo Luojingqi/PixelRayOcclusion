@@ -162,6 +162,78 @@
     }
   },
   {
+    "colorName": "花朵茎秆色0",
+    "color": {
+      "r": 0,
+      "g": 128,
+      "b": 0,
+      "a": 255
+    },
+    "affectsLightIntensity": 0.6
+  },
+  {
+    "colorName": "花朵茎秆色1",
+    "color": {
+      "r": 84,
+      "g": 130,
+      "b": 53,
+      "a": 255
+    },
+    "affectsLightIntensity": 0.25
+  },
+  {
+    "colorName": "花朵花瓣色0",
+    "color": {
+      "r": 255,
+      "g": 102,
+      "b": 204,
+      "a": 255
+    },
+    "lightPathColorMixing": 0.75
+  },
+  {
+    "colorName": "花朵花瓣色1",
+    "color": {
+      "r": 255,
+      "g": 153,
+      "b": 255,
+      "a": 255
+    },
+    "lightPathColorMixing": 0.6
+  },
+  {
+    "colorName": "花朵花瓣_发光_色0",
+    "color": {
+      "r": 255,
+      "g": 51,
+      "b": 204,
+      "a": 255
+    },
+    "lightPathColorMixing": 1.0,
+    "luminousRadius": 6,
+    "luminousColor": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    }
+  },
+  {
+    "colorName": "花朵花瓣_发光_色1",
+    "color": {
+      "r": 255,
+      "g": 102,
+      "b": 255,
+      "a": 255
+    },
+    "lightPathColorMixing": 1.0,
+    "luminousRadius": 2,
+    "luminousColor": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    }
+  },
+  {
     "colorName": "岩石色0",
     "color": {
       "r": 144,
@@ -206,10 +278,10 @@
   {
     "colorName": "毒液色0",
     "color": {
-      "r": 55,
-      "g": 86,
-      "b": 35,
-      "a": 255
+      "r": 84,
+      "g": 130,
+      "b": 53,
+      "a": 235
     },
     "lightPathColorMixing": 0.1,
     "affectsLightIntensity": 0.1,
@@ -221,10 +293,27 @@
       "r": 242,
       "g": 184,
       "b": 0,
-      "a": 235
+      "a": 230
     },
     "lightPathColorMixing": 0.1,
     "affectsLightIntensity": 0.1
+  },
+  {
+    "colorName": "照明弹色0",
+    "color": {
+      "r": 185,
+      "g": 185,
+      "b": 185,
+      "a": 255
+    },
+    "lightPathColorMixing": 1.0,
+    "affectsLightIntensity": 0.5,
+    "luminousRadius": 30,
+    "luminousColor": {
+      "r": 230,
+      "g": 230,
+      "b": 230
+    }
   },
   {
     "colorName": "鼠标光源0",
@@ -289,16 +378,16 @@
   {
     "colorName": "光源3",
     "color": {
-      "r": 200,
-      "g": 100,
-      "b": 30,
+      "r": 230,
+      "g": 230,
+      "b": 230,
       "a": 255
     },
     "luminousRadius": 30,
     "luminousColor": {
-      "r": 200,
-      "g": 100,
-      "b": 30
+      "r": 230,
+      "g": 230,
+      "b": 230
     }
   },
   {

@@ -1,6 +1,6 @@
 namespace PRO.SkillEditor
 {
-    public class EventDisk_跳转播放 : EventSlice_Disk
+    public class EventDisk_跳转播放 : EventSlice_DiskBase
     {
         public int goToFrame;
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)

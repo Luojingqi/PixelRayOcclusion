@@ -9,7 +9,7 @@ namespace PRO.SkillEditor
         private ParticleSlice_Disk slice_Disk => DiskData as ParticleSlice_Disk;
         public ParticleSlice(ParticleSlice_Disk sliceDisk) : base(sliceDisk)
         {
-
+            LoadPath = LoadPath;
         }
 
         public override void DrawGizmo(SkillPlayAgent agent)

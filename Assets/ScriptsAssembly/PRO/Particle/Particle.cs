@@ -106,7 +106,7 @@ namespace PRO
             RemainTime = int.MaxValue;
 
             if (Collider != null) Collider.enabled = true;
-            gameObject.layer = 10;
+            gameObject.layer = 15;
 
             if (SkillPlayAgent != null)
             {

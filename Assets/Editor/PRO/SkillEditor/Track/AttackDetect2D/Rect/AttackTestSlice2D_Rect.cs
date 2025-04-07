@@ -5,7 +5,7 @@ namespace PRO.SkillEditor
 {
     internal class AttackTestSlice2D_Rect : AttackTestSlice2DBase
     {
-        public AttackTestSlice2D_Rect(SliceBase_Disk sliceDisk) : base(sliceDisk)
+        public AttackTestSlice2D_Rect(Slice_DiskBase sliceDisk) : base(sliceDisk)
         {
             if (sliceDisk.startFrame == -1)
             {
@@ -23,9 +23,13 @@ namespace PRO.SkillEditor
 
         public override void DrawHandle(SkillPlayAgent agent)
         {
-            HandlePosition(agent, diskData.rotation, ref diskData.position);
+            Vector3 position = diskData.position;
+            HandlePosition(agent, diskData.rotation, ref position);
+            diskData.position = position;
             HandleRotation(agent, diskData.position, ref diskData.rotation);
-            HandleScale(agent, diskData.position, diskData.rotation, ref diskData.scale);
+            Vector3 scale = diskData.scale;
+            HandleScale(agent, diskData.position, diskData.rotation, ref scale);
+            diskData.scale = scale;
         }
     }
 }

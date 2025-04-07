@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3132154831165743482}
   - component: {fileID: 345040197010824553}
   - component: {fileID: 258844807222603299}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: "Particle_\u5355\u50CF\u7D20"
   m_TagString: Untagged
   m_Icon: {fileID: 0}

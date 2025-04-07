@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static PRO.SkillEditor.SliceBase_Disk;
+using static PRO.SkillEditor.Slice_DiskBase;
 namespace PRO.SkillEditor
 {
     /// <summary>
@@ -50,7 +50,7 @@ namespace PRO.SkillEditor
             set
             {
                 skill = value;
-                ClearTime();
+                ClearTimeAndBuffer();
                 if (value != null)
                 {
                     Skill.UpdateFrame(this, 0);
@@ -102,65 +102,46 @@ namespace PRO.SkillEditor
         private void UpdateFrame()
         {
             if (Play == false || skill == null) return;
-            time += Time.deltaTime * 1000;
-            while (time >= Skill.FrameTime)
+            if (UpdateFrameScript(Skill))
             {
-                time -= Skill.FrameTime;
-                Skill.UpdateFrame(this, ++nowFrame);
-                if (nowFrame >= Skill.MaxFrame)
-                {
-                    Skill = idle;
-                    return;
-                }
+                Skill = idle;
             }
         }
-        ///// <summary>
-        ///// 不自动播放，使用手动api播放
-        ///// </summary>
-        //public void UpdateFrameScript(int playTrack)
-        //{
-        //    time0 += Time.deltaTime * 1000;
-        //    while (time0 >= Skill.FrameTime)
-        //    {
-        //        time0 -= Skill.FrameTime;
-        //        Skill.UpdateFrame(this, ++nowFrame, playTrack);
-        //        if (nowFrame >= Skill.MaxFrame)
-        //        {
-        //            Skill = idle;
-        //            return;
-        //        }
-        //    }
-        //}
         /// <summary>
-        /// 不自动播放，使用手动api播放
+        /// 不自动播放，使用手动api播放，需要每帧调用
+        /// 返回为真代表播放完毕
         /// </summary>
-        public bool UpdateFrameScript(Skill_Disk playSkill, int playTrack, Action action = null)
+        /// <param name="playSkill"></param>
+        /// <param name="playTrack"></param>
+        /// <param name="autoClear">是否播放完毕后自动调用清理时间和缓冲区函数</param>
+        /// <returns></returns>
+        public bool UpdateFrameScript(Skill_Disk playSkill, int playTrack = ~0, bool autoClear = true)
         {
             time += Time.deltaTime * 1000;
             while (time >= playSkill.FrameTime)
             {
                 time -= playSkill.FrameTime;
-                playSkill.UpdateFrame(this, nowFrame++, playTrack, action);
+                playSkill.UpdateFrame(this, nowFrame++, playTrack);
                 if (nowFrame >= playSkill.MaxFrame)
                 {
-                    ClearTime();
+                    if (autoClear) ClearTimeAndBuffer();
                     return true;
                 }
             }
             return false;
         }
 
-        public void ClearTime()
+        public void ClearTimeAndBuffer()
         {
             nowFrame = 0;
             time = 0;
-            ClearBufferData();
+            ClearBuffer();
         }
         #endregion
 
         private Dictionary<string, ISliceBufferData> SliceBufferDataDic = new Dictionary<string, ISliceBufferData>();
 
-        public T GetBufferData<T>(SliceBase_Disk disk) where T : class, ISliceBufferData
+        public T GetBufferData<T>(Slice_DiskBase disk) where T : class, ISliceBufferData
         {
             string id = disk.name;
             if (SliceBufferDataDic.TryGetValue(id, out ISliceBufferData value))
@@ -168,15 +149,25 @@ namespace PRO.SkillEditor
                     return ret;
             return null;
         }
+        /// <summary>
+        /// id为切片名称
+        /// </summary>
+        public T GetBufferData<T>(string id) where T : class, ISliceBufferData
+        {
+            if (SliceBufferDataDic.TryGetValue(id, out ISliceBufferData value))
+                if (value is T ret)
+                    return ret;
+            return null;
+        }
 
-        public void AddBufferData(SliceBase_Disk disk, ISliceBufferData data)
+        public void AddBufferData(Slice_DiskBase disk, ISliceBufferData data)
         {
             string id = disk.name;
             if (SliceBufferDataDic.ContainsKey(id)) SliceBufferDataDic[id] = data;
             else SliceBufferDataDic.Add(id, data);
         }
 
-        public void ClearBufferData()
+        public void ClearBuffer()
         {
             foreach (var value in SliceBufferDataDic.Values)
                 value.PutIn();

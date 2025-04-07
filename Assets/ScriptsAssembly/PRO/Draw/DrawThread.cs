@@ -18,7 +18,7 @@ namespace PRO
 
             for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
                 for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
-                    SceneManager.ThreadLoadOrCreateBlock(scene, new Vector2Int(x, y), null, (b) => { endNum--; });
+                    scene.ThreadLoadOrCreateBlock(new Vector2Int(x, y), null, (b) => { endNum--; });
 
 
             while (maxTime >= 0)

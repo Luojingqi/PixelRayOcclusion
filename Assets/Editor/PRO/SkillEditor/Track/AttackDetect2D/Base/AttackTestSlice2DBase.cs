@@ -5,7 +5,7 @@ namespace PRO.SkillEditor
 {
     internal abstract class AttackTestSlice2DBase : SliceBase
     {
-        protected AttackTestSlice2DBase(SliceBase_Disk sliceDisk) : base(sliceDisk)
+        protected AttackTestSlice2DBase(Slice_DiskBase sliceDisk) : base(sliceDisk)
         {
         }
 
@@ -13,12 +13,12 @@ namespace PRO.SkillEditor
 
         [LabelText("位置")]
         [ShowInInspector]
-        public Vector3 Position { get => DiskData_AT.position; set => DiskData_AT.position = value; }
+        public Vector2 Position { get => DiskData_AT.position; set => DiskData_AT.position = value; }
         [LabelText("旋转")]
         [ShowInInspector]
         public Quaternion Rotation { get => DiskData_AT.rotation; set => DiskData_AT.rotation = value; }
         [LabelText("缩放")]
         [ShowInInspector]
-        public Vector3 Scale { get => DiskData_AT.scale; set => DiskData_AT.scale = value; }
+        public Vector2 Scale { get => DiskData_AT.scale; set => DiskData_AT.scale = value; }
     }
 }

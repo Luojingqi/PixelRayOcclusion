@@ -20,12 +20,13 @@ namespace PRO.SkillEditor
         {
             return false;
         }
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case ParticleSlice_Disk disk: { AddSlice(new ParticleSlice(disk)); break; }
+                case ParticleSlice_Disk disk: { AddSlice(new ParticleSlice(disk)); return true; }
             }
+            return false;
         }
         protected override void DragAssetExit(DragExitedEvent evt, object[] objects)
         {

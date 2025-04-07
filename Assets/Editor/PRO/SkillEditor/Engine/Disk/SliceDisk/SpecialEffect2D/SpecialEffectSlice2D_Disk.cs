@@ -2,7 +2,7 @@
 
 namespace PRO.SkillEditor
 {
-    public class SpecialEffectSlice2D_Disk : SliceBase_Disk
+    public class SpecialEffectSlice2D_Disk : Slice_DiskBase
     {
         public Vector3 position;
         public Quaternion rotation = Quaternion.identity;

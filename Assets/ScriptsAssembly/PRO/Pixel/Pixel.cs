@@ -29,7 +29,7 @@ namespace PRO
         /// <summary>
         /// 所在的区块
         /// </summary>
-        public BlockBase block;
+        public BlockBase blockBase;
         /// <summary>
         /// 所属的建筑
         /// </summary>
@@ -94,7 +94,7 @@ namespace PRO
             pixel.colorInfo = null;
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
-            pixel.block = null;
+            pixel.blockBase = null;
             pixel.durability = 0;
             pixel.affectsTransparency = 1;
             foreach(var building in pixel.buildingSet)

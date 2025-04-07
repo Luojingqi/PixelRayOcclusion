@@ -36,19 +36,12 @@
   },
   {
     "typeName": "木头",
+    "tags": [
+      null
+    ],
     "availableColors": [
       "木头色0",
       "木头色1"
-    ],
-    "hardness": 0,
-    "durability": 10,
-    "collider": true
-  },
-  {
-    "typeName": "岩石",
-    "availableColors": [
-      "岩石色0",
-      "岩石色1"
     ],
     "hardness": 0,
     "durability": 10,
@@ -60,7 +53,61 @@
     }
   },
   {
+    "typeName": "花朵茎秆",
+    "tags": [
+      null,
+      null
+    ],
+    "availableColors": [
+      "花朵茎秆色0",
+      "花朵茎秆色1"
+    ],
+    "hardness": 0,
+    "durability": 10,
+    "burnOdds": 25,
+    "burnTimeRange": {
+      "x": 1000,
+      "y": 2000
+    }
+  },
+  {
+    "typeName": "花朵花瓣",
+    "tags": [
+      null,
+      null
+    ],
+    "availableColors": [
+      "花朵花瓣色0",
+      "花朵花瓣色1",
+      "花朵花瓣_发光_色0",
+      "花朵花瓣_发光_色1"
+    ],
+    "hardness": 0,
+    "durability": 10,
+    "burnOdds": 20,
+    "burnTimeRange": {
+      "x": 500,
+      "y": 1250
+    }
+  },
+  {
+    "typeName": "岩石",
+    "tags": [
+      null
+    ],
+    "availableColors": [
+      "岩石色0",
+      "岩石色1"
+    ],
+    "hardness": 0,
+    "durability": 10,
+    "collider": true
+  },
+  {
     "typeName": "水",
+    "tags": [
+      null
+    ],
     "availableColors": [
       "水色0"
     ],
@@ -70,6 +117,9 @@
   },
   {
     "typeName": "水蒸气",
+    "tags": [
+      null
+    ],
     "availableColors": [
       "水蒸气色0"
     ],
@@ -79,6 +129,9 @@
   },
   {
     "typeName": "毒液",
+    "tags": [
+      null
+    ],
     "availableColors": [
       "毒液色0"
     ],
@@ -135,6 +188,9 @@
   },
   {
     "typeName": "火焰",
+    "tags": [
+      null
+    ],
     "availableColors": [
       "火焰色0",
       "火焰色1",
@@ -148,5 +204,13 @@
     ],
     "hardness": 0,
     "durability": -2000
+  },
+  {
+    "typeName": "照明弹",
+    "availableColors": [
+      "照明弹色0"
+    ],
+    "hardness": 0,
+    "durability": 5
   }
 ]

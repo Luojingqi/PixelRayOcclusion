@@ -36,8 +36,8 @@ namespace PRO.SkillEditor
             configField.objectType = typeof(Skill_Disk);
             configField.RegisterValueChangedCallback(evt =>
             {
-                ClearTrack();
                 Save();
+                ClearTrack();
                 Config.Skill_Disk = evt.newValue as Skill_Disk;
                 if (evt.newValue == null) return;
                 LoadFromDisk();

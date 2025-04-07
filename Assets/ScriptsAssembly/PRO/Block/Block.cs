@@ -221,7 +221,7 @@ namespace PRO
         }
         public static void AddFluidUpdateHash(Pixel pixel)
         {
-            Block block = pixel.block as Block;
+            Block block = pixel.blockBase as Block;
             switch (pixel.typeInfo.fluidType)
             {
                 case 1: AddHashSet(block.fluidUpdateHash1[pixel.pos.y], pixel.pos); break;

@@ -14,12 +14,13 @@ namespace PRO.SkillEditor
         {
             Heading.NameText.text = "2D¶¯»­¹ìµÀ";
         }
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case AnimationSlice2D_Disk disk: { AddSlice(new AnimationSlice2D(disk)); break; }
+                case AnimationSlice2D_Disk disk: { AddSlice(new AnimationSlice2D(disk)); return true; }
             }
+            return false;
         }
 
 

@@ -13,12 +13,13 @@ namespace PRO.SkillEditor
         {
             Heading.NameText.text = "场景破坏轨道";
         }
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case SceneRuin_Disk disk: { AddSlice(new SceneRuinSlice(disk)); break; }
+                case SceneRuin_Disk disk: { AddSlice(new SceneRuinSlice(disk)); return true; }
             }
+            return false;
         }
 
         protected override bool DragAssetTypeCheck(Type type)

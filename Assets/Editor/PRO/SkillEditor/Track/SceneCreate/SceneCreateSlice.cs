@@ -5,7 +5,7 @@ namespace PRO.SkillEditor
 {
     internal class SceneCreateSlice : SliceBase
     {
-        public SceneCreateSlice(SliceBase_Disk sliceDisk) : base(sliceDisk)
+        public SceneCreateSlice(Slice_DiskBase sliceDisk) : base(sliceDisk)
         {
         }
 

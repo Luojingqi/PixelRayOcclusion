@@ -12,7 +12,7 @@ namespace PRO.SkillEditor
         protected Label LabelView;
         [HideInInspector]
         public TrackBase Track;
-        public SliceBase(SliceBase_Disk sliceDisk)
+        public SliceBase(Slice_DiskBase sliceDisk)
         {
             DiskData = sliceDisk;
             View = new VisualElement();
@@ -80,6 +80,7 @@ namespace PRO.SkillEditor
                 {
                     Track.SetSliceFrameLength(StartFrame, FrameLength + 1);
                 }
+                evt.StopPropagation();
             });
             #endregion
 
@@ -98,7 +99,7 @@ namespace PRO.SkillEditor
         [BoxGroup]
         [LabelText("磁盘数据")]
         [ShowInInspector]
-        public SliceBase_Disk DiskData { get; set; }
+        public Slice_DiskBase DiskData { get; set; }
 
         [BoxGroup("切片基本信息")]
         [LabelText("名称")]

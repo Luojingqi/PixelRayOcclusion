@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PRO.SkillEditor
 {
-    public class SceneRuin_Disk : SliceBase_Disk
+    public class SceneRuin_Disk : Slice_DiskBase
     {
         public Vector2Int offset;
 

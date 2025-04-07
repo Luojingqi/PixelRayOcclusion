@@ -77,12 +77,13 @@ namespace PRO.SkillEditor
             return i;               // 返回基准的最终索引
         }
         #endregion
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case SceneCreate_Disk disk: { AddSlice(new SceneCreateSlice(disk)); break; }
+                case SceneCreate_Disk disk: { AddSlice(new SceneCreateSlice(disk)); return true; }
             }
+            return false;
         }
 
         protected override bool DragAssetTypeCheck(Type type)

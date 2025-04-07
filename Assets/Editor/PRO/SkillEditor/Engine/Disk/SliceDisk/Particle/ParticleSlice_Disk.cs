@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PRO.SkillEditor
 {
-    public class ParticleSlice_Disk : SliceBase_Disk
+    public class ParticleSlice_Disk : Slice_DiskBase
     {
         /// <summary>
         /// 粒子创建的位置

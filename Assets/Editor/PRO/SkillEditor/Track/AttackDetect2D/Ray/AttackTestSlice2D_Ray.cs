@@ -6,7 +6,7 @@ namespace PRO.SkillEditor
 {
     internal class AttackTestSlice2D_Ray : AttackTestSlice2DBase
     {
-        public AttackTestSlice2D_Ray(SliceBase_Disk sliceDisk) : base(sliceDisk)
+        public AttackTestSlice2D_Ray(Slice_DiskBase sliceDisk) : base(sliceDisk)
         {
             if (sliceDisk.startFrame == -1)
             {

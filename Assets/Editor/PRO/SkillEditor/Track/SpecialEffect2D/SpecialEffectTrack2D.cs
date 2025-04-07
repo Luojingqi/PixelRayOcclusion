@@ -10,12 +10,13 @@ namespace PRO.SkillEditor
         {
             Heading.NameText.text = "2D特效轨道";
         }
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case SpecialEffectSlice2D_Disk disk: { AddSlice(new SpecialEffectSlice2D(disk)); break; }
+                case SpecialEffectSlice2D_Disk disk: { AddSlice(new SpecialEffectSlice2D(disk)); return true; }
             }
+            return false;
         }
 
         protected override bool DragAssetTypeCheck(Type type)

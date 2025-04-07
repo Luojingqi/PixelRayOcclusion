@@ -17,13 +17,14 @@ namespace PRO.SkillEditor
                 evt.menu.AppendAction("添加矩形切片", _ => AddSlice(new AttackTestSlice2D_Rect(new AttackTestSlice2D_Rect_Disk())));
             }));
         }
-        protected override void ForeachSliceDiskToSlice(SliceBase_Disk sliceDisk)
+        protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {
             switch (sliceDisk)
             {
-                case AttackTestSlice2D_Ray_Disk disk: { AddSlice(new AttackTestSlice2D_Ray(disk)); break; }
-                case AttackTestSlice2D_Rect_Disk disk: { AddSlice(new AttackTestSlice2D_Rect(disk)); break; }
+                case AttackTestSlice2D_Ray_Disk disk: { AddSlice(new AttackTestSlice2D_Ray(disk)); return true; }
+                case AttackTestSlice2D_Rect_Disk disk: { AddSlice(new AttackTestSlice2D_Rect(disk)); return true; }
             }
+            return false;
         }
 
         protected override bool DragAssetTypeCheck(Type type)
