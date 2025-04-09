@@ -159,6 +159,8 @@ namespace PRO
             }
             colliderNode = new GameObject("ColliderNode").transform;
             colliderNode.parent = transform;
+
+            spriteRenderer.sortingOrder = 10;
         }
 
 

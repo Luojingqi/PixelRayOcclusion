@@ -49,7 +49,7 @@ namespace PRO
         public override void Init()
         {
             base.Init();
-            spriteRenderer.sortingOrder = -1;
+            spriteRenderer.sortingOrder = -10;
         }
 
     }

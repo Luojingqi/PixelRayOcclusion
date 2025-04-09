@@ -1,0 +1,6 @@
+pluginManagement { repositories { ARTIFACTORYREPOSITORY maven{url'https://maven.aliyun.com/repository/google'} gradlePluginPortal() google() mavenCentral() } }
+
+include ':launcher', ':unityLibrary'
+**INCLUDES**
+
+dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS) repositories { ARTIFACTORYREPOSITORY maven{url'https://maven.aliyun.com/repository/google'} google() mavenCentral() flatDir { dirs "${project(':unityLibrary').projectDir}/libs" } } }

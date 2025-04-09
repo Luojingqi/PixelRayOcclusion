@@ -10,7 +10,7 @@ Shader "PixelRayOcclusion/Background_Renderer"
         ZWrite Off // 禁用深度写入
         ZTest LEqual // 保持深度测试
         Blend SrcAlpha OneMinusSrcAlpha
-        Tags { "Queue" = "Geometry" } 
+        Tags { "Queue" = "Transparent" } 
         Pass
         {
             CGPROGRAM
