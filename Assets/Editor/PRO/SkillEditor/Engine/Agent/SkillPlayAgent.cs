@@ -150,7 +150,7 @@ namespace PRO.SkillEditor
             return null;
         }
         /// <summary>
-        /// id为切片名称
+        /// 获取某个id的缓冲区数据 id为切片名称
         /// </summary>
         public T GetBufferData<T>(string id) where T : class, ISliceBufferData
         {

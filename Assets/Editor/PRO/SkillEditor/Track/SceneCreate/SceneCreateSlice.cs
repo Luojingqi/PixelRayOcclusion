@@ -1,5 +1,8 @@
-﻿using UnityEditor;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using static PRO.SkillEditor.SceneCreate_Disk;
 
 namespace PRO.SkillEditor
 {
@@ -11,7 +14,7 @@ namespace PRO.SkillEditor
 
         public override void DrawGizmo(SkillPlayAgent agent)
         {
-            
+
         }
 
         public override void DrawHandle(SkillPlayAgent agent)
@@ -24,6 +27,16 @@ namespace PRO.SkillEditor
                 diskData.offset = Block.WorldToGlobal(ret - agent.transform.position);
             }
         }
-        public SceneCreate_Disk diskData => DiskData as SceneCreate_Disk;
+        private SceneCreate_Disk diskData => DiskData as SceneCreate_Disk;
+
+        [LabelText("偏移")]
+        [ShowInInspector]
+        public Vector2Int offset { get => diskData.offset; set => diskData.offset = value; }
+        [LabelText("放置的层")]
+        [ShowInInspector]
+        public BlockBase.BlockType BlockType { get => diskData.BlockType; set => diskData.BlockType = value; }
+        [LabelText("创建的点集")]
+        [ShowInInspector]
+        public List<PixelData> CreatePixelList { get => diskData.CreatePixelList; set => diskData.CreatePixelList = value; }
     }
 }

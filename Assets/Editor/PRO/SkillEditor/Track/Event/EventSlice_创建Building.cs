@@ -8,7 +8,7 @@ namespace PRO.SkillEditor
 {
     internal class EventSlice_创建Building : EventSlice
     {
-        public EventSlice_创建Building(EventSlice_DiskBase sliceDisk) : base(sliceDisk)
+        public EventSlice_创建Building(EventDisk_创建Building sliceDisk) : base(sliceDisk)
         {
 
         }

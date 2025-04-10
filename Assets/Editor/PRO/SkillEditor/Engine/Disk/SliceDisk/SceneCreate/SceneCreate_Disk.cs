@@ -6,8 +6,9 @@ namespace PRO.SkillEditor
 {
     public class SceneCreate_Disk : Slice_DiskBase
     {
-        public List<PixelData> CreatePixelList = new List<PixelData>();
         public Vector2Int offset;
+        public BlockBase.BlockType BlockType;
+        public List<PixelData> CreatePixelList = new List<PixelData>();
 
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
@@ -18,10 +19,17 @@ namespace PRO.SkillEditor
                 foreach (var data in CreatePixelList)
                 {
                     Vector2Int gloabPos = agentPos + nor.RotatePos(data.pos + offset);
-                    Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
+                    BlockBase blockBase = null;
+                    if (BlockType == BlockBase.BlockType.Block)
+                        blockBase = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
+                    else
+                        blockBase = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(gloabPos));
+                    if (blockBase == null) continue;
                     Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
+                    Pixel oldPixel = blockBase.GetPixel(pixelPos);
+                    if (oldPixel.typeInfo.typeName != "空气") continue;
                     Pixel pixel = Pixel.TakeOut(data.typeName, data.colorName, pixelPos);
-                    block.SetPixel(pixel);
+                    blockBase.SetPixel(pixel);
                 }
             }
             catch

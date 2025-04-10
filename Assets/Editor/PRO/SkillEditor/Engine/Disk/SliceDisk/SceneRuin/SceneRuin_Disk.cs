@@ -1,5 +1,4 @@
 ﻿using PRO.DataStructure;
-using PRO.Tool;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,25 +8,40 @@ namespace PRO.SkillEditor
     {
         public Vector2Int offset;
 
-        public Sprite sprite;
+        public BlockBase.BlockType BlockType;
+        /// <summary>
+        /// 破坏的坚硬度
+        /// </summary>
+        public int hardness = -1;
+        /// <summary>
+        /// 破坏的耐久度
+        /// </summary>
+        public int durability = int.MaxValue;
+        /// <summary>
+        /// 破坏的像素点
+        /// </summary>
+        public List<Vector2Int> pixelList = new List<Vector2Int>();
 
-        public Dictionary<string, List<Vector2Int>> RuinPixelDic = new Dictionary<string, List<Vector2Int>>();
+        public Sprite sprite;
 
 
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
             try
             {
-                foreach (var kv in RuinPixelDic)
+                var nor = PixelPosRotate.New(agent.transform.rotation.eulerAngles);
+                Vector2Int agentPos = Block.WorldToGlobal(agent.transform.position);
+                foreach (var pos in pixelList)
                 {
-                    foreach (var pos in kv.Value)
-                    {
-                        Vector2Int gloabPos = Block.WorldToGlobal(agent.transform.position) + pos + offset;
-                        Block block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
-                        Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                        Pixel pixel = Pixel.空气.Clone(pixelPos);
-                        block.SetPixel(pixel);
-                    }
+                    Vector2Int gloabPos = agentPos + nor.RotatePos(pos + offset);
+                    BlockBase blockBase = null;
+                    if (BlockType == BlockBase.BlockType.Block)
+                        blockBase = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
+                    else
+                        blockBase = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(gloabPos));
+                    if (blockBase == null) continue;
+                    Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
+                    blockBase.TryDestroyPixel(blockBase.GetPixel(pixelPos), hardness, durability);
                 }
             }
             catch
@@ -35,7 +49,8 @@ namespace PRO.SkillEditor
                 Debug.Log("请在运行模式下查看效果：场景破坏轨道");
             }
 #if UNITY_EDITOR
-            EditorShow(agent, trackIndex);
+            if (Application.isPlaying == false)
+                EditorShow(agent, trackIndex);
 #endif
         }
         public void EditorShow(SkillPlayAgent agent, int trackIndex)
@@ -51,6 +66,7 @@ namespace PRO.SkillEditor
             else
             {
                 renderer = trans.GetComponent<SpriteRenderer>();
+                renderer.sortingOrder = 20;
             }
             renderer.sprite = sprite;
             renderer.transform.position = agent.transform.position + Block.GlobalToWorld(offset);

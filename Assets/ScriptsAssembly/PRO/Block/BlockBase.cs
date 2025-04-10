@@ -18,6 +18,12 @@ namespace PRO
         /// </summary>
         public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((BlockPos.x * Block.Size.x + pixelPos.x) * Pixel.Size, (BlockPos.y * Block.Size.y + pixelPos.y) * Pixel.Size);
         public Vector2Int PixelToGlobal(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
+
+        public enum BlockType
+        {
+            Block,
+            BackgroundBlock,
+        }
         #endregion
 
         public virtual void Init()
@@ -293,7 +299,7 @@ namespace PRO
         /// </summary>
         /// <param name="hardness">坚硬度，-1代表无视坚硬度直接对耐久度破坏</param>
         /// <param name="durability">破坏的耐久度</param>
-        public static void TryDestroyPixel(Pixel pixel, int hardness = -1, int durability = int.MaxValue)
+        public void TryDestroyPixel(Pixel pixel, int hardness = -1, int durability = int.MaxValue)
         {
             if (pixel.typeInfo.typeName == "空气") return;
             if (hardness == -1 && pixel.typeInfo.hardness != -1 || hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)

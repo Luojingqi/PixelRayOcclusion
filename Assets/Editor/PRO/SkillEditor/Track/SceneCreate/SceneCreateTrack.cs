@@ -33,7 +33,7 @@ namespace PRO.SkillEditor
             foreach (var slice in sliceList)
             {
                 List<PixelData> newList = new List<PixelData>();
-                foreach (var data in slice.diskData.CreatePixelList)
+                foreach (var data in slice.CreatePixelList)
                 {
                     if (hash.Contains(data) == false)
                     {
@@ -41,8 +41,8 @@ namespace PRO.SkillEditor
                         hash.Add(data);
                     }
                 }
-                slice.diskData.CreatePixelList = newList;
-                slice.Name = $"{slice.diskData.name.Split('\n')[0]}\n点:{slice.diskData.CreatePixelList.Count}";
+                slice.CreatePixelList = newList;
+                slice.Name = $"{slice.Name.Split('\n')[0]}\n点:{slice.CreatePixelList.Count}";
             }
 
         }
@@ -65,11 +65,11 @@ namespace PRO.SkillEditor
             while (i < j)
             {
                 // 从右向左找第一个小于基准的元素
-                while (i < j && list[j].diskData.CreatePixelList.Count >= pivot.diskData.CreatePixelList.Count) j--;
+                while (i < j && list[j].CreatePixelList.Count >= pivot.CreatePixelList.Count) j--;
                 list[i] = list[j];    // 将该元素移到左侧空位
 
                 // 从左向右找第一个大于基准的元素
-                while (i < j && list[i].diskData.CreatePixelList.Count <= pivot.diskData.CreatePixelList.Count) i++;
+                while (i < j && list[i].CreatePixelList.Count <= pivot.CreatePixelList.Count) i++;
                 list[j] = list[i];    // 将该元素移到右侧空位
             }
 
