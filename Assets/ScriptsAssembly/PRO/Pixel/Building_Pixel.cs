@@ -6,30 +6,34 @@ namespace PRO
 {
     public class Building_Pixel
     {
-        private PixelTypeInfo typeInfo;
-        private PixelColorInfo colorInfo;
+        private PixelTypeInfo _typeInfo;
+        private PixelColorInfo _colorInfo;
         /// <summary>
         /// 偏移
         /// </summary>
-        private Vector2Int offset;
+        private Vector2Int _offset;
+        private BlockBase.BlockType _blockType;
 
-        public Pixel Pixel;
-        public PixelTypeInfo TypeInfo => typeInfo;
-        public PixelColorInfo ColorInfo => colorInfo;
+        public Pixel pixel;
+        public PixelTypeInfo typeInfo => _typeInfo;
+        public PixelColorInfo colorInfo => _colorInfo;
         /// <summary>
         /// 偏移
         /// </summary>
-        public Vector2Int Offset => offset;
+        public Vector2Int offset => _offset;
+
+        public BlockBase.BlockType blockType => _blockType;
 
 
         /// <summary>
         /// 创建一个未加载的蓝图点
         /// </summary>
-        public Building_Pixel Init(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Int offset)
+        public Building_Pixel Init(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Int offset, BlockBase.BlockType blockType)
         {
-            this.typeInfo = typeInfo;
-            this.colorInfo = colorInfo;
-            this.offset = offset;
+            this._typeInfo = typeInfo;
+            this._colorInfo = colorInfo;
+            this._offset = offset;
+            this._blockType = blockType;
             return this;
         }
         /// <summary>
@@ -37,10 +41,11 @@ namespace PRO
         /// </summary>
         public Building_Pixel Init(Pixel pixel, Vector2Int offset)
         {
-            this.typeInfo = pixel.typeInfo;
-            this.colorInfo = pixel.colorInfo;
-            this.Pixel = pixel;
-            this.offset = offset;
+            this._typeInfo = pixel.typeInfo;
+            this._colorInfo = pixel.colorInfo;
+            this.pixel = pixel;
+            this._offset = offset;
+            this._blockType = pixel.blockBase.blockType;
             return this;
         }
 
@@ -52,17 +57,17 @@ namespace PRO
         }
         public State GetState()
         {
-            if (Pixel == null) return State.Unload;
-            if (Pixel.typeInfo == typeInfo && Pixel.colorInfo == colorInfo) return State.Survival;
+            if (pixel == null) return State.Unload;
+            if (pixel.typeInfo == _typeInfo && pixel.colorInfo == _colorInfo) return State.Survival;
             return State.Death;
         }
 
         private static ObjectPool<Building_Pixel> pool = new ObjectPool<Building_Pixel>();
         public static void PutIn(Building_Pixel building_Pixel)
         {
-            building_Pixel.typeInfo = null;
-            building_Pixel.colorInfo = null;
-            building_Pixel.Pixel = null;
+            building_Pixel._typeInfo = null;
+            building_Pixel._colorInfo = null;
+            building_Pixel.pixel = null;
         }
         public static Building_Pixel TakeOut()
         {

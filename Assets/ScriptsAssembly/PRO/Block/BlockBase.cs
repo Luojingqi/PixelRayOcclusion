@@ -40,6 +40,8 @@ namespace PRO
         public Vector2Int BlockPos { get { return blockPos; } set { blockPos = value; } }
         [SerializeField]
         protected Vector2Int blockPos;
+        protected BlockType _blockType;
+        public BlockType blockType => _blockType;
         #region 像素点集
         /// <summary>
         /// 像素点集
@@ -59,7 +61,7 @@ namespace PRO
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
             //旧点所属于一个建筑且建筑不可被破坏，并且耐久大于0
-          //  if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false && removePixel.durability > 0) return;
+            //  if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false && removePixel.durability > 0) return;
             if (removePixel != null)
             {
                 if (removePixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius == 0)//&& removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
@@ -70,7 +72,7 @@ namespace PRO
                 //切换建筑这个点的状态（死亡||存活
                 foreach (var building in removePixel.buildingSet)
                 {
-                    building.PixelSwitch(building.GetBuilding_Pixel(pixel.posG), pixel);
+                    building.PixelSwitch(building.GetBuilding_Pixel(pixel.posG, removePixel.blockBase.blockType), pixel);
                 }
 
                 removePixel.buildingSet.Clear();

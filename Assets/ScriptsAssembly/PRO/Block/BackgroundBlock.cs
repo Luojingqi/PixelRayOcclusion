@@ -50,6 +50,8 @@ namespace PRO
         {
             base.Init();
             spriteRenderer.sortingOrder = -10;
+
+            _blockType = BlockType.BackgroundBlock;
         }
 
     }

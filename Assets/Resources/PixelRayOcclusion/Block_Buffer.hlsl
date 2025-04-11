@@ -12,7 +12,7 @@ StructuredBuffer<PixelColorInfo> AllPixelColorInfo;
 
 int2 UVToPixel(float2 uv)
 {
-    return int2(uv.x * BlockSizeY, uv.y * BlockSizeY);
+    return min(int2(uv.x * BlockSizeY, uv.y * BlockSizeY), int2(BlockSizeX - 1, BlockSizeY - 1));
 }
 
 int PixelToIndex(int2 pos)

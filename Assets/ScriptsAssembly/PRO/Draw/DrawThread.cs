@@ -7,29 +7,18 @@ namespace PRO
 {
     public static class DrawThread
     {
-        private static int endNum;
-        private static int maxTime = 30000;
-        public static void Init(SceneEntity scene, Action endAction)
+        public static void Init(SceneEntity scene)
         {
-            endNum = BlockBufferLength;
             Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
             Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
             Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
 
             for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
                 for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
-                    scene.ThreadLoadOrCreateBlock(new Vector2Int(x, y), null, (b) => { endNum--; });
+                    scene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
 
-
-            while (maxTime >= 0)
-            {
-                if (endNum <= 0) break;
-                Thread.Sleep(100); maxTime -= 100;
-            }
-            if (maxTime <= 0) Debug.Log("³õÊ¼»¯Ê§°Ü");
             Thread thread = new Thread(LoopDraw);
             thread.Start();
-            endAction();
         }
 
         /// <summary>

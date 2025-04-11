@@ -78,7 +78,8 @@ namespace PRO.Disk.Scene
                 if (buildingGuid != null && buildingGuid.Length > 0)
                 {
                     buildingGuidDic.Add(index, buildingGuid);
-                    if (sceneEntity.GetBuilding(buildingGuid) == null) sceneEntity.LoadBuilding(buildingGuid);
+                    if (sceneEntity.GetBuilding(buildingGuid) == null)
+                        SceneManager.Inst.AddMainThreadEvent_Clear_WaitInvoke_Lock(() => sceneEntity.LoadBuilding(buildingGuid));
                 }
             },
             ref lastDelimiter, ref stack);
@@ -123,7 +124,7 @@ namespace PRO.Disk.Scene
                 foreach (var building in buildingList)
                 {
                     pixel.buildingSet.Add(building);
-                    building.Deserialize_PixelSwitch(building.GetBuilding_Pixel(pixel.posG), pixel);
+                    building.Deserialize_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType), pixel);
                 }
                 buildingList.Clear();
                 --pixelNum;

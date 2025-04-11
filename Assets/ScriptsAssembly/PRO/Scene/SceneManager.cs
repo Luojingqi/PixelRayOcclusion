@@ -9,6 +9,7 @@ using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using static PRO.BlockMaterial;
 namespace PRO
@@ -64,12 +65,9 @@ namespace PRO
             nowScene = scene;
             // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.value.ToString()));
             //填充
-            DrawThread.Init(nowScene, () =>
-            {
-                BlockMaterial.FirstBind();
-                //  FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 50).GloabPos = new Vector2Int();
-                source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
-            });
+            DrawThread.Init(nowScene);
+            BlockMaterial.FirstBind();
+            source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
 
             List<Block> list0 = new List<Block>();
             List<BackgroundBlock> list1 = new List<BackgroundBlock>();
@@ -175,16 +173,27 @@ namespace PRO
                         NowScene.GetBlock(new(x, y)).UpdateFluid2();
             }
 
-            if (Monitor.TryEnter(mainThreadEventLock))
+            if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))
             {
                 try
                 {
-                    mainThreadEvent?.Invoke();
-                    mainThreadEvent = null;
+                    mainThreadUpdateEvent_UnClear?.Invoke();
                 }
                 finally
                 {
-                    Monitor.Exit(mainThreadEventLock);
+                    Monitor.Exit(mainThreadUpdateEventLock_UnClear);
+                }
+            }
+            if (Monitor.TryEnter(mainThreadUpdateEventLock_Clear))
+            {
+                try
+                {
+                    mainThreadUpdateEvent_Clear?.Invoke();
+                    mainThreadUpdateEvent_Clear = null;
+                }
+                finally
+                {
+                    Monitor.Exit(mainThreadUpdateEventLock_Clear);
                 }
             }
         }
@@ -249,14 +258,68 @@ namespace PRO
                 }
             }
         }
+
+        #region 主线程更新事件_UnClear
         /// <summary>
-        /// 主线程的事件锁
+        /// 主线程的更新事件锁
         /// </summary>
-        public readonly object mainThreadEventLock = new object();
+        private readonly object mainThreadUpdateEventLock_UnClear = new object();
         /// <summary>
-        /// 主线程事件，添加事件需要先锁定主线程锁mainThreadEventLock
+        /// 主线程更新事件
         /// </summary>
-        public event Action mainThreadEvent;
+        private event Action mainThreadUpdateEvent_UnClear;
+        /// <summary>
+        /// 事件添加到主线程更新事件
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddMainThreadEvent_UnClear_Lock(Action action)
+        {
+            lock (mainThreadUpdateEventLock_UnClear)
+            {
+                mainThreadUpdateEvent_UnClear += action;
+            }
+        }
+        #endregion
+
+        #region 主线程更新事件_Clear
+        /// <summary>
+        /// 主线程的更新事件锁
+        /// </summary>
+        private readonly object mainThreadUpdateEventLock_Clear = new object();
+        /// <summary>
+        /// 主线程更新事件
+        /// </summary>
+        private event Action mainThreadUpdateEvent_Clear;
+        /// <summary>
+        /// 事件添加到主线程更新事件
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddMainThreadEvent_Clear_Lock(Action action)
+        {
+            lock (mainThreadUpdateEventLock_Clear)
+            {
+                mainThreadUpdateEvent_Clear += action;
+            }
+        }
+        private ObjectPoolArbitrary<ManualResetEvent> manualResetEventPool = new ObjectPoolArbitrary<ManualResetEvent>(() => new ManualResetEvent(false));
+        /// <summary>
+        /// 事件添加到主线程更新事件，并等待执行完毕，禁止主线程调用
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddMainThreadEvent_Clear_WaitInvoke_Lock(Action action)
+        {
+            var manual = manualResetEventPool.TakeOut();
+            lock (mainThreadUpdateEventLock_Clear)
+            {
+                mainThreadUpdateEvent_Clear += action;
+                mainThreadUpdateEvent_Clear += () => manual.Set();
+            }
+            manual.WaitOne();
+            manual.Reset();
+            manualResetEventPool.PutIn(manual);
+        }
+        #endregion
+
         #endregion
     }
 }

@@ -161,6 +161,8 @@ namespace PRO
             colliderNode.parent = transform;
 
             spriteRenderer.sortingOrder = 10;
+
+            _blockType = BlockType.Block;
         }
 
 

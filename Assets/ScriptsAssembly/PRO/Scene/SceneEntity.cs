@@ -49,36 +49,12 @@ namespace PRO
 
         #region 同步与多线程加载
         /// <summary>
-        /// 同步加载一个区块，区块不存在会报错
-        /// </summary>
-        /// <param name="blockPos"></param>
-        public void LoadBlockData(Vector2Int blockPos)
-        {
-            if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
-                && JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background.txt", out string backgroundText))
-            {
-                Block block = CreateBlock(blockPos);
-                BackgroundBlock background = CreateBackground(blockPos);
-                BlockToDiskEx.ToRAM(blockText, block, this);
-                BlockToDiskEx.ToRAM(backgroundText, background, this);
-                block.DrawPixelAsync();
-                background.DrawPixelAsync();
-                BlockBaseInRAM.Add(blockPos);
-                var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-                GreedyCollider.CreateColliderAction(block, colliderDataList);
-            }
-            else
-            {
-                Log.Print($"无法加载区块{blockPos}，可能区块文件不存在", Color.red);
-            }
-        }
-        /// <summary>
         /// 使用多线程加载一个区块，区块文件不存在时会创建一个空区块
         /// </summary>
         /// <param name="scene"></param>
         /// <param name="blockPos"></param>
-        /// <param name="endActionUnity"></param>
-        /// <param name="endAction"></param>
+        /// <param name="endActionUnity">每次加载完成一个区块都会传递方法让主线程执行</param>
+        /// <param name="endAction">每次加载完成一个区块都会执行</param>
         public void ThreadLoadOrCreateBlock(Vector2Int blockPos, Action<BlockBase> endActionUnity = null, Action<BlockBase> endAction = null)
         {
             BlockBaseInRAM.Add(blockPos);
@@ -98,11 +74,10 @@ namespace PRO
                             BlockToDiskEx.ToRAM(blockText, block, this);
                             var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
 
-                            lock (SceneManager.Inst.mainThreadEventLock)
-                                SceneManager.Inst.mainThreadEvent += () => { GreedyCollider.CreateColliderAction(block, colliderDataList); endActionUnity?.Invoke(block); };
+                            SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => { GreedyCollider.CreateColliderAction(block, colliderDataList); endActionUnity?.Invoke(block); });
                             endAction?.Invoke(block);
                         }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
                     });
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
@@ -110,12 +85,10 @@ namespace PRO
                         {
                             BlockToDiskEx.ToRAM(backgroundText, background, this);
                             if (endActionUnity != null)
-                                lock (SceneManager.Inst.mainThreadEventLock)
-                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(background);
-
+                                SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => endActionUnity.Invoke(background));
                             endAction?.Invoke(background);
                         }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
                     });
                 }
                 else
@@ -133,11 +106,10 @@ namespace PRO
                                     blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                                 }
                             if (endActionUnity != null)
-                                lock (SceneManager.Inst.mainThreadEventLock)
-                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
+                                SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => endActionUnity.Invoke(blockBase));
                             endAction?.Invoke(block);
                         }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
                     }, block);
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
@@ -152,11 +124,10 @@ namespace PRO
                                     blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                                 }
                             if (endActionUnity != null)
-                                lock (SceneManager.Inst.mainThreadEventLock)
-                                    SceneManager.Inst.mainThreadEvent += () => endActionUnity.Invoke(blockBase);
+                                SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => endActionUnity.Invoke(blockBase));
                             endAction?.Invoke(block);
                         }
-                        catch (Exception e) { SceneManager.Inst.mainThreadEvent += () => Log.Print($"线程报错：{e}", Color.red); }
+                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
                     }, background);
                 }
             });
@@ -258,8 +229,8 @@ namespace PRO
                 File.Delete(@$"{sceneCatalog.directoryInfo.FullName}/Building/{guid}.txt");
                 foreach (var item in building.AllPixel.Values)
                 {
-                    item.Pixel.buildingSet.Remove(building);
-                    item.Pixel = null;
+                    item.pixel.buildingSet.Remove(building);
+                    item.pixel = null;
                 }
                 GameObject.Destroy(building.gameObject);
             }

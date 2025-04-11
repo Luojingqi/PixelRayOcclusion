@@ -69,7 +69,6 @@ namespace PRO.SceneEditor
                     building.TriggerCollider.transform.position = Block.GlobalToWorld(global);
                     building.global = global;
                     building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
-                    building.PorB = !view.Toggle.isOn;
 
                     SceneManager.Inst.NowScene.BuildingInRAM.Add(building.GUID, building);
                     SceneManager.Inst.NowScene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
