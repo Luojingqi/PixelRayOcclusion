@@ -38,6 +38,17 @@ namespace PRO
         {
             return BackgroundInRAM[blockPos];
         }
+
+        public BlockBase GetBlockBase(BlockBase.BlockType blockType, Vector2Int blockPos)
+        {
+            switch (blockType)
+            {
+                default:
+                case BlockBase.BlockType.Block: return GetBlock(blockPos);
+                case BlockBase.BlockType.BackgroundBlock: return GetBackground(blockPos);
+            }
+        }
+
         public BuildingBase GetBuilding(string guid)
         {
             BuildingInRAM.TryGetValue(guid, out var building);
@@ -194,7 +205,7 @@ namespace PRO
             if (sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type) &&
                 JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", out string buildingText))
             {
-                BuildingBase building = BuildingBase.New(type, guid);
+                BuildingBase building = BuildingBase.New(type, guid, this);
                 building.Deserialize(buildingText, buildingText.Length);
                 BuildingInRAM.Add(guid, building);
                 building.scene = this;

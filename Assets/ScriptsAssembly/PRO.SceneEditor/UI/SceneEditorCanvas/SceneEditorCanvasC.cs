@@ -50,29 +50,23 @@ namespace PRO.SceneEditor
         {
             if (HoldEntity == null) return;
             if (Input.GetKeyDown(KeyCode.Mouse1)) { ClearHold(); return; }
-            Vector3 m = Input.mousePosition;
-            m.z = 1;
-            m = Camera.main.ScreenToWorldPoint(m);
-            Vector2Int blockPos = Block.WorldToBlock(m);
-            Vector2Int global = Block.WorldToGlobal(m);
-            Vector2Byte pixelPos = Block.WorldToPixel(m);
-            view.HoldIcon.transform.position = Block.GlobalToWorld(global);
+            Vector2Int global = MousePoint.globalPos;
+            view.HoldIcon.transform.position = Block.GlobalToWorld(MousePoint.globalPos);
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 BuildingBase building = null;
                 if (view.Dropdown.value != 0)
                 {
-                    building = BuildingBase.New(DerivedBuildingBaseList[view.Dropdown.value - 1], Guid.NewGuid().ToString());
+                    building = BuildingBase.New(DerivedBuildingBaseList[view.Dropdown.value - 1], Guid.NewGuid().ToString(), SceneManager.Inst.NowScene);
                     building.TriggerCollider.size = new Vector2(HoldEntity.width, HoldEntity.height) * Pixel.Size;
                     building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
-                    building.TriggerCollider.transform.position = Block.GlobalToWorld(global);
+                    building.transform.position = Block.GlobalToWorld(global);
                     building.global = global;
                     building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
 
-                    SceneManager.Inst.NowScene.BuildingInRAM.Add(building.GUID, building);
-                    SceneManager.Inst.NowScene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
-                    building.scene = SceneManager.Inst.NowScene;
+                    building.scene.BuildingInRAM.Add(building.GUID, building);
+                    building.scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
                 }
 
                 for (int y = 0; y < HoldEntity.height; y++)
@@ -82,21 +76,16 @@ namespace PRO.SceneEditor
                         string colorName = HoldEntity.pixels[y * HoldEntity.width + x].colorName;
                         if (typeName == "¿ÕÆø") continue;
                         Vector2Int nowGloab = global + new Vector2Int(x, y);
-                        BlockBase block = null;
-                        if (view.Toggle.isOn)
-                            block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(nowGloab));
-                        else
-                            block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nowGloab));
-
+                        BlockBase blockBase = SceneManager.Inst.NowScene.GetBlockBase(view.Toggle.isOn ? BlockBase.BlockType.BackgroundBlock : BlockBase.BlockType.Block, Block.GlobalToBlock(nowGloab));
+                        if (blockBase == null) continue;
                         Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
-                        block.SetPixel(pixel);
+                        blockBase.SetPixel(pixel);
                         if (building != null)
                         {
                             Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(pixel, new(x, y));
                             building.Deserialize_AddBuilding_Pixel(building_Pixel);
                             building.Deserialize_PixelSwitch(building_Pixel, pixel);
                         }
-                        block.DrawPixelAsync();
                     }
                 if (building != null)
                     building.Init();

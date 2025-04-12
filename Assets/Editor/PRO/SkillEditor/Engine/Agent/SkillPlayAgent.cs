@@ -150,7 +150,7 @@ namespace PRO.SkillEditor
             return null;
         }
         /// <summary>
-        /// 获取某个id的缓冲区数据 id为切片名称
+        /// 获取某个id的缓冲区数据
         /// </summary>
         public T GetBufferData<T>(string id) where T : class, ISliceBufferData
         {
@@ -163,6 +163,11 @@ namespace PRO.SkillEditor
         public void AddBufferData(Slice_DiskBase disk, ISliceBufferData data)
         {
             string id = disk.name;
+            if (SliceBufferDataDic.ContainsKey(id)) SliceBufferDataDic[id] = data;
+            else SliceBufferDataDic.Add(id, data);
+        }
+        public void AddBufferData(string id, ISliceBufferData data)
+        {
             if (SliceBufferDataDic.ContainsKey(id)) SliceBufferDataDic[id] = data;
             else SliceBufferDataDic.Add(id, data);
         }

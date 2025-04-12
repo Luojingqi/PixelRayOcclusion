@@ -21,14 +21,6 @@ namespace PRO.SkillEditor
 
         public override void DrawHandle(SkillPlayAgent agent)
         {
-            if (Tools.current != UnityEditor.Tool.Move) return;
-            EditorGUI.BeginChangeCheck();
-            Vector3 ret = Handles.PositionHandle(Block.GlobalToWorld(diskData.offset) + agent.transform.position, Quaternion.identity);
-            if (EditorGUI.EndChangeCheck())
-            {
-                diskData.offset = Block.WorldToGlobal(ret - agent.transform.position);
-                diskData.EditorShow(SkillEditorWindow.Inst.Config.Agent, Track.trackIndex);
-            }
         }
 
         public override void Select()
@@ -48,12 +40,6 @@ namespace PRO.SkillEditor
         private SceneRuin_Disk diskData => DiskData as SceneRuin_Disk;
 
 
-
-
-
-        [LabelText("偏移")]
-        [ShowInInspector]
-        public Vector2Int offset { get => diskData.offset; set => diskData.offset = value; }
         [LabelText("破坏的层")]
         [ShowInInspector]
         public BlockBase.BlockType BlockType { get => diskData.BlockType; set => diskData.BlockType = value; }
@@ -89,5 +75,67 @@ namespace PRO.SkillEditor
                     }
             }
         }
+
+        [Button("剔除重复点")]
+        [ShowInInspector]
+        private void 剔除重复点Action()
+        {
+            List<SceneRuinSlice> sliceList = new List<SceneRuinSlice>();
+            int index = 0;
+            foreach (var selectSlice in SkillEditorWindow.Inst.SelectSliceHash)
+            {
+                if (index++ == 0 && this != selectSlice) return;
+                if (selectSlice is SceneRuinSlice slice) sliceList.Add(slice);
+            }
+
+            QuickSort(sliceList, 0, sliceList.Count - 1);
+
+            HashSet<Vector2Int> hash = new HashSet<Vector2Int>();
+            foreach (var slice in sliceList)
+            {
+                List<Vector2Int> newList = new List<Vector2Int>();
+                foreach (var data in slice.pixelList)
+                {
+                    if (hash.Contains(data) == false)
+                    {
+                        newList.Add(data);
+                        hash.Add(data);
+                    }
+                }
+                slice.pixelList = newList;
+            }
+
+        }
+        #region 快速排序
+        private static void QuickSort(List<SceneRuinSlice> list, int begin, int end)
+        {
+            if (begin >= end) return; // 基线条件：子数组长度为0或1时停止递归
+
+            int pivotIndex = Partition(list, begin, end); // 获取基准元素的正确位置
+            QuickSort(list, begin, pivotIndex - 1);       // 递归处理左半区
+            QuickSort(list, pivotIndex + 1, end);          // 递归处理右半区
+        }
+        // 分区函数（核心逻辑）
+        private static int Partition(List<SceneRuinSlice> list, int begin, int end)
+        {
+            var pivot = list[begin]; // 选择首元素作为基准（可优化为随机选择）
+            int i = begin;          // 左扫描指针
+            int j = end;            // 右扫描指针
+
+            while (i < j)
+            {
+                // 从右向左找第一个小于基准的元素
+                while (i < j && list[j].pixelList.Count >= pivot.pixelList.Count) j--;
+                list[i] = list[j];    // 将该元素移到左侧空位
+
+                // 从左向右找第一个大于基准的元素
+                while (i < j && list[i].pixelList.Count <= pivot.pixelList.Count) i++;
+                list[j] = list[i];    // 将该元素移到右侧空位
+            }
+
+            list[i] = pivot;         // 基准元素归位
+            return i;               // 返回基准的最终索引
+        }
+        #endregion
     }
 }

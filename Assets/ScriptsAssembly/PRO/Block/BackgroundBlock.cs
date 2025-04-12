@@ -54,5 +54,11 @@ namespace PRO
             _blockType = BlockType.BackgroundBlock;
         }
 
+        public static Pixel GetPixel(Vector2Int globalPos)
+        {
+            var block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(globalPos));
+            if (block == null) return null;
+            return block.GetPixel(Block.GlobalToPixel(globalPos));
+        }
     }
 }

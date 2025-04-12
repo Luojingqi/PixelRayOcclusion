@@ -64,7 +64,7 @@ namespace PRO
             scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
             // scene.sceneCatalog.buildingTypeDic.ForEach(kv => Debug.Log(kv.value.ToString()));
-            //填充
+            //初始化场景
             DrawThread.Init(nowScene);
             BlockMaterial.FirstBind();
             source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
@@ -79,72 +79,25 @@ namespace PRO
             list0.ForEach(b => Block.PutIn(b));
             list1.ForEach(b => BackgroundBlock.PutIn(b));
 
+
+            var r = PixelPosRotate.New(new Vector3(180, 0, 90));
+            Debug.Log(r.RotatePos(new Vector2Int(50, 25)));
+            Debug.Log(r.RotatePosInverse(r.RotatePos(new Vector2Int(50, 25))));
+
         }
         public FreelyLightSource source;
         public Transform PoolNode;
-        #region 弃用
-        //[NonSerialized]
-        ///// <summary>
-        ///// 需要更新的区块
-        ///// </summary>
-        //public List<Block> BlockUpdateList = new List<Block>();
-        ///// <summary>
-        ///// 添加需要更新的区块
-        ///// </summary>
-        //public void AddUpdateBlock(Block block)
-        //{
-        //    int l = 0;
-        //    int r = BlockUpdateList.Count - 1;
-        //    int b = 0;
-        //    while (l <= r)
-        //    {
-        //        b = (l + r) / 2;
-        //        if (block.blockPos.y < BlockUpdateList[b].blockPos.y)
-        //            r = b - 1;
-        //        else if (block.blockPos.y > BlockUpdateList[b].blockPos.y)
-        //            l = b + 1;
-        //        else break;
-        //    }
-        //    BlockUpdateList.Add(block);
-        //    if (block.blockPos.y > BlockUpdateList[b].blockPos.y) b++;
-
-
-        //    for (int i = b; i < BlockUpdateList.Count - 1; i++)
-        //    {
-        //        Block temp = BlockUpdateList[i];
-        //        BlockUpdateList[i] = BlockUpdateList[BlockUpdateList.Count - 1];
-        //        BlockUpdateList[BlockUpdateList.Count - 1] = temp;
-        //    }
-        //}
-        #endregion
         float time0 = 0;
         float time1 = 0;
         float time2 = 0;
-        int n = 2;
         int l = 3;
-        int k = 20;
 
         public static float updatetime = 0.2f;
 
-        public async void Update()
+        public void Update()
         {
             MousePoint.Update();
-            #region 
-            //Vector2Int a = new Vector2Int(0, -4);
-            //Debug.Log(Block.GlobalToWorld(a) + "|" + Block.WorldToGlobal(Block.GlobalToWorld(a)));
-            ////if (Input.GetKeyDown(KeyCode.Mouse0))
-            ////{
-            ////    var hit = Physics2D.Raycast(m, Vector2.zero, 0, 1 << 9);
-            ////    if (hit.collider != null)
-            ////    {
-            ////        // Debug.Log(hit.transform.name + "|" + hit.collider.name);
-            ////        hit.transform.GetComponent<BuildingBase>().CreateSelectionBox(Color.red);
-            ////    }
-            ////}
-            #endregion
-            if (source != null)
-                source.GloabPos = MousePoint.globalPos;
-            // if (Input.GetKey(KeyCode.Space))
+            if (source != null) source.GloabPos = MousePoint.globalPos;
             time0 += Time.deltaTime;
             while (time0 > updatetime)
             {

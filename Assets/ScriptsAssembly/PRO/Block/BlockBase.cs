@@ -110,11 +110,11 @@ namespace PRO
         public readonly Dictionary<Vector2Byte, LightSource> lightSourceDic = new Dictionary<Vector2Byte, LightSource>();
         private void AddLightSource(Pixel pixel)
         {
-            Vector2Int gloabPos = Block.PixelToGlobal(blockPos, pixel.pos);
+            var lightSource = new LightSource(pixel.posG, pixel.colorInfo.luminousColor, pixel.colorInfo.luminousRadius);
             if (lightSourceDic.ContainsKey(pixel.pos))
-                lightSourceDic[pixel.pos] = new LightSource(gloabPos, pixel.colorInfo.luminousColor, pixel.colorInfo.luminousRadius);
+                lightSourceDic[pixel.pos] = lightSource;
             else
-                lightSourceDic.Add(pixel.pos, new LightSource(gloabPos, pixel.colorInfo.luminousColor, pixel.colorInfo.luminousRadius));
+                lightSourceDic.Add(pixel.pos, lightSource);
         }
 
         private void RemoveLightSource(Pixel pixel)
@@ -204,7 +204,6 @@ namespace PRO
                 }
             }
         }
-        public void DrawPixelAsync() => Enqueue(null);
         public void DrawPixelAsync(Vector2Byte pos, Color32 color) => Enqueue(new DrawPixelTask(pos, color));
         public async void DrawPixelAsync(Vector2Byte[] pos, Color32[] color)
         {
@@ -301,8 +300,9 @@ namespace PRO
         /// </summary>
         /// <param name="hardness">坚硬度，-1代表无视坚硬度直接对耐久度破坏</param>
         /// <param name="durability">破坏的耐久度</param>
-        public void TryDestroyPixel(Pixel pixel, int hardness = -1, int durability = int.MaxValue)
+        public void TryDestroyPixel(Vector2Byte pixelPos, int hardness = -1, int durability = int.MaxValue)
         {
+            Pixel pixel = GetPixel(pixelPos);
             if (pixel.typeInfo.typeName == "空气") return;
             if (hardness == -1 && pixel.typeInfo.hardness != -1 || hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
             {

@@ -6,8 +6,6 @@ namespace PRO.SkillEditor
 {
     public class SceneRuin_Disk : Slice_DiskBase
     {
-        public Vector2Int offset;
-
         public BlockBase.BlockType BlockType;
         /// <summary>
         /// 破坏的坚硬度
@@ -33,7 +31,7 @@ namespace PRO.SkillEditor
                 Vector2Int agentPos = Block.WorldToGlobal(agent.transform.position);
                 foreach (var pos in pixelList)
                 {
-                    Vector2Int gloabPos = agentPos + nor.RotatePos(pos + offset);
+                    Vector2Int gloabPos = agentPos + nor.RotatePos(pos);
                     BlockBase blockBase = null;
                     if (BlockType == BlockBase.BlockType.Block)
                         blockBase = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
@@ -41,7 +39,7 @@ namespace PRO.SkillEditor
                         blockBase = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(gloabPos));
                     if (blockBase == null) continue;
                     Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                    blockBase.TryDestroyPixel(blockBase.GetPixel(pixelPos), hardness, durability);
+                    blockBase.TryDestroyPixel(pixelPos, hardness, durability);
                 }
             }
             catch
@@ -69,7 +67,7 @@ namespace PRO.SkillEditor
                 renderer.sortingOrder = 20;
             }
             renderer.sprite = sprite;
-            renderer.transform.position = agent.transform.position + Block.GlobalToWorld(offset);
+            renderer.transform.position = agent.transform.position;
         }
     }
 }

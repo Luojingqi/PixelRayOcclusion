@@ -14,8 +14,11 @@
         /// <param name="frameIndex">执行此切片内的索引</param>
         public abstract void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex);
 
+        /// <summary>
+        /// 缓冲对象，用于切片之间的数据交互
+        /// </summary>
         public interface ISliceBufferData
-        {
+        {            
             public void PutIn();
         }
     }

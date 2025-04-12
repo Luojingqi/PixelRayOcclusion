@@ -67,16 +67,19 @@ namespace PRO
         }
         protected abstract void PixelSwitch_Death(Building_Pixel pixelB);
         protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
-        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(globalPos - this.global, blockType));
+        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - global), blockType));
         public abstract void Init();
-        public static BuildingBase New(Type type, string guid)
+        public static BuildingBase New(Type type, string guid, SceneEntity scene)
         {
             if (typeof(BuildingBase).IsAssignableFrom(type) == false) return null;
             GameObject go = new GameObject(type.Name);
             BuildingBase building = (BuildingBase)go.AddComponent(type);
+            building.Name = type.Name;
             building.GUID = guid;
             building.TriggerCollider = go.AddComponent<BoxCollider2D>();
             building.TriggerCollider.isTrigger = true;
+            building.scene = scene;
+
             go.layer = (int)GameLayer.Building;
             return building;
         }

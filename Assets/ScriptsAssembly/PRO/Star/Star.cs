@@ -24,7 +24,6 @@ public class Star
             var block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(pos_G));
             Pixel pixel = Pixel.TakeOut(name, 0, Block.GlobalToPixel(pos_G));
             block.SetPixel(pixel);
-            block.DrawPixelAsync();
         }
     }
 
