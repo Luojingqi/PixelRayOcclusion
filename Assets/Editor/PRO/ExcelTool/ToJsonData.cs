@@ -94,7 +94,7 @@ namespace ExcelTool
         public static void RunSet(string setName, string tpyeName, string key, string value, ref JArray array)
         {
             JObject jObject = new JObject();
-            switch (setName)
+            switch (setName.ToLower())
             {
                 case "[]":
                 case "[list]":

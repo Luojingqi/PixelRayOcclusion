@@ -35,6 +35,8 @@ namespace PRO.Disk
         
         private UnityEngine.Vector2Int burntimerange;
         
+        private string[] electricitypixle;
+        
         /// <summary>
         ///类型名称
         ///</summary>
@@ -182,6 +184,21 @@ namespace PRO.Disk
             set
             {
                 this.burntimerange = value;
+            }
+        }
+        
+        /// <summary>
+        ///带电与导电像素相互转换，需要输入相互转换的类型与颜色
+        ///</summary>
+        public string[] electricityPixle
+        {
+            get
+            {
+                return this.electricitypixle;
+            }
+            set
+            {
+                this.electricitypixle = value;
             }
         }
     }

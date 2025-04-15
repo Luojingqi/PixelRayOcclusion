@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using PRO.Tool;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static PRO.BlockMaterial;
@@ -27,15 +29,9 @@ namespace PRO
         /// <param name="blocks"></param>
         private static void LoopDraw(object obj)
         {
+            Debug.Log("消费者线程" + Thread.CurrentThread.ManagedThreadId);
             while (true)
             {
-                //更新需要绘制图形的任务
-                //lock (SceneManager.Inst.DrawGraphTaskQueue)
-                //    while (SceneManager.Inst.DrawGraphTaskQueue.Count > 0)
-                //    {
-                //        DrawGraphTaskData task = SceneManager.Inst.DrawGraphTaskQueue.Dequeue();
-                //        DrawGraphTaskInvoke(task);
-                //    }
                 SceneEntity scene = SceneManager.Inst.NowScene;
                 Vector2Int minLightBufferBlockPos = BlockMaterial.CameraCenterBlockPos - BlockMaterial.LightResultBufferBlockSize / 2;
                 for (int x = 0; x < BlockMaterial.LightResultBufferBlockSize.x; x++)
@@ -72,49 +68,71 @@ namespace PRO
                             }
                         }
                     }
+
                 Thread.Sleep(50);
+
+                lock (loopDrawLock)
+                {
+                    for (int i = uniTaskDataList.Count - 1; i >= 0; i--)
+                    {
+                        var data = uniTaskDataList[i];
+                        if (data.endFrame <= Frame)
+                        {
+                            uniTaskDataList.RemoveAt(i);
+                            data.task.TrySetResult();
+                        }
+                    }
+                    Frame++;
+                }
             }
         }
-        #region 绘制图形任务，暂时弃用
+        public static int Frame { get; private set; }
+        private static readonly object loopDrawLock = new object();
+
+        private static List<WaitLoopDrawUniTask> uniTaskDataList = new List<WaitLoopDrawUniTask>();
+
         /// <summary>
-        /// 绘制任务执行
+        /// 主线程等待渲染循环几帧，等待完成后后续的代码会进入渲染循环线程
         /// </summary>
-        //private static void DrawGraphTaskInvoke(DrawGraphTaskData task)
-        //{
-        //    switch (task)
-        //    {
-        //        case DrawGraph_Line data:
-        //            {
-        //                var chackBox = GetLine(data.pos_G0, data.pos_G1);
-        //                DrawPixelSync(chackBox, data.color);
-        //                break;
-        //            }
-        //        case DrawGraph_Ring data:
-        //            {
-        //                var chackBox = GetRing(data.pos_G, data.r);
-        //                DrawPixelSync(chackBox, data.color);
-        //                break;
-        //            }
-        //        case DrawGraph_Circle data:
-        //            {
-        //                var chackBox = GetCircle(data.pos_G, data.r);
-        //                DrawPixelSync(chackBox, data.color);
-        //                break;
-        //            }
-        //        case DrawGraph_Polygon data:
-        //            {
-        //                var chackBox = GetPolygon(data.pos_G, data.r, data.n, data.rotate);
-        //                DrawPixelSync(chackBox, data.color);
-        //                break;
-        //            }
-        //        case DrawGraph_Octagon data:
-        //            {
-        //                var chackBox = GetOctagon(data.pos_G, data.r);
-        //                DrawPixelSync(chackBox, data.color);
-        //                break;
-        //            }
-        //    }
-        //}
-        #endregion
+        /// <param name="waitFrame"></param>
+        /// <returns></returns>
+        public static async UniTask MainThreadWaitLoopDraw(int waitFrame)
+        {
+            var data = new WaitLoopDrawUniTask()
+            {
+                task = AutoResetUniTaskCompletionSource.Create(),
+            };
+            while (true)
+            {
+                bool isLock = false;
+                try
+                {
+                    isLock = Monitor.TryEnter(loopDrawLock);
+                    if (isLock)
+                    {
+                        data.endFrame = waitFrame + Frame;
+                        uniTaskDataList.Add(data);
+                        break;
+                    }
+                    else
+                    {
+                        await UniTask.Yield();
+                    }
+                }
+                finally
+                {
+                    if (isLock)
+                        Monitor.Exit(loopDrawLock);
+                }
+            }
+            await data.task.Task;
+            return;
+        }
+        private struct WaitLoopDrawUniTask
+        {
+            public int endFrame;
+            public AutoResetUniTaskCompletionSource task;
+        }
+
     }
 }

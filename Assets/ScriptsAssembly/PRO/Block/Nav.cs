@@ -119,7 +119,7 @@ namespace PRO
         /// <summary>
         /// 快速估算距离代价
         /// </summary>
-        private static int FastDistance(Vector2Int start, Vector2Int end) => Mathf.Abs(end.x - start.x + end.y - start.y);
+        private static int FastDistance(Vector2Int start, Vector2Int end) => Mathf.Abs(end.x - start.x) + Mathf.Abs(end.y - start.y);
 
 
     }

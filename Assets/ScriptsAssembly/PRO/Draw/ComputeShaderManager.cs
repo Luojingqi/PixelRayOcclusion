@@ -63,10 +63,7 @@ namespace PRO.Renderer
                 lightResultBufferCSArray[i].UpdateFreelyLightSource();
             }
         }
-        /// <summary>
-        /// 每帧更新的区块数量
-        /// </summary>
-        public static int FrameUpdateBlockNum = 5;
+        
         private int offset = 0;
         public void Update()
         {

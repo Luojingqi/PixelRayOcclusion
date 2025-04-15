@@ -54,6 +54,13 @@ namespace PRO
             BuildingInRAM.TryGetValue(guid, out var building);
             return building;
         }
+
+        public Pixel GetPixel(BlockBase.BlockType blockType, Vector2Int globalPos)
+        {
+            var blockBase = GetBlockBase(blockType, Block.GlobalToBlock(globalPos));
+            if (blockBase != null) return blockBase.GetPixel(Block.GlobalToPixel(globalPos));
+            return null;
+        }
         #endregion
 
         #region 从磁盘中加载与保存
@@ -112,7 +119,7 @@ namespace PRO
                             for (int x = 0; x < Block.Size.x; x++)
                                 for (int y = 0; y < Block.Size.y; y++)
                                 {
-                                    Pixel pixel = Pixel.空气.Clone(new(x, y));
+                                    Pixel pixel = Pixel.空气.CloneTo(new Pixel(), new Vector2Byte(x, y));
                                     blockBase.SetPixel(pixel, false, false, false);
                                     blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                                 }

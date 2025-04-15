@@ -26,6 +26,7 @@ namespace PRO
         }
         /// <summary>
         /// 粒子剩余的存活时间 ms
+        /// 为0会被回收
         /// </summary>
         public int RemainTime
         {

@@ -68,7 +68,6 @@ namespace PRO
             DrawThread.Init(nowScene);
             BlockMaterial.FirstBind();
             source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
-
             List<Block> list0 = new List<Block>();
             List<BackgroundBlock> list1 = new List<BackgroundBlock>();
             for (int i = 0; i < 1000; i++)
@@ -78,12 +77,6 @@ namespace PRO
             }
             list0.ForEach(b => Block.PutIn(b));
             list1.ForEach(b => BackgroundBlock.PutIn(b));
-
-
-            var r = PixelPosRotate.New(new Vector3(180, 0, 90));
-            Debug.Log(r.RotatePos(new Vector2Int(50, 25)));
-            Debug.Log(r.RotatePosInverse(r.RotatePos(new Vector2Int(50, 25))));
-
         }
         public FreelyLightSource source;
         public Transform PoolNode;
@@ -254,22 +247,21 @@ namespace PRO
                 mainThreadUpdateEvent_Clear += action;
             }
         }
-        private ObjectPoolArbitrary<ManualResetEvent> manualResetEventPool = new ObjectPoolArbitrary<ManualResetEvent>(() => new ManualResetEvent(false));
+        private ObjectPoolArbitrary<AutoResetEvent> resetEventPool = new ObjectPoolArbitrary<AutoResetEvent>(() => new AutoResetEvent(false));
         /// <summary>
         /// 事件添加到主线程更新事件，并等待执行完毕，禁止主线程调用
         /// </summary>
         /// <param name="action"></param>
         public void AddMainThreadEvent_Clear_WaitInvoke_Lock(Action action)
         {
-            var manual = manualResetEventPool.TakeOut();
+            var manual = resetEventPool.TakeOut();
             lock (mainThreadUpdateEventLock_Clear)
             {
                 mainThreadUpdateEvent_Clear += action;
                 mainThreadUpdateEvent_Clear += () => manual.Set();
             }
             manual.WaitOne();
-            manual.Reset();
-            manualResetEventPool.PutIn(manual);
+            resetEventPool.PutIn(manual);
         }
         #endregion
 

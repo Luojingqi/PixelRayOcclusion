@@ -34,6 +34,11 @@ namespace PRO
         /// 更改后需要 调用编辑器扩展PRO>2.创建hlsl
         /// </summary>
         public static readonly Vector2Int EachBlockReceiveLightSize = new Vector2Int(5, 5);
+        /// <summary>
+        /// 每帧更新的区块数量
+        /// </summary>
+        public static int FrameUpdateBlockNum;
+
         public static int BlockBufferLength { get; private set; }
         public static int LightResultBufferLength { get; private set; }
         private static PROconfig proConfig;
@@ -57,7 +62,7 @@ namespace PRO
                 return;
             }
             proConfig = JsonTool.ToObject<PROconfig>(proConfigText);
-            ComputeShaderManager.FrameUpdateBlockNum = proConfig.FrameUpdateBlockNum;
+            FrameUpdateBlockNum = proConfig.FrameUpdateBlockNum;
             BlockBufferLength = (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x) * (EachBlockReceiveLightSize.y - 1 + LightResultBufferBlockSize.y);
             LightResultBufferLength = LightResultBufferBlockSize.x * LightResultBufferBlockSize.y;
 

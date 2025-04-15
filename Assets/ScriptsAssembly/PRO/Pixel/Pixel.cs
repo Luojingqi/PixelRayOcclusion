@@ -1,9 +1,7 @@
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Tool;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using UnityEngine;
 namespace PRO
@@ -11,55 +9,74 @@ namespace PRO
     public class Pixel
     {
         /// <summary>
-        /// 在块内坐标
+        /// 在块内坐标，不可设置
         /// </summary>
         public Vector2Byte pos;
         /// <summary>
-        /// 全局坐标
+        /// 全局坐标，不可设置
         /// </summary>
         public Vector2Int posG;
         /// <summary>
-        /// 像素类型
+        /// 像素类型，不可设置
         /// </summary>
         public PixelTypeInfo typeInfo;
         /// <summary>
-        /// 像素颜色
+        /// 像素颜色，不可设置
         /// </summary>
         public PixelColorInfo colorInfo;
         /// <summary>
-        /// 所在的区块
+        /// 所在的区块，不可设置
         /// </summary>
         public BlockBase blockBase;
         /// <summary>
-        /// 所属的建筑
+        /// 所属的建筑，不可设置
         /// </summary>
         public List<BuildingBase> buildingSet = new List<BuildingBase>();
         /// <summary>
         /// 耐久度
         /// </summary>
-        public int durability = -1;
+        public int durability { get => _durability; set { _durability = value; if (blockBase != null) { blockBase.SetPixelInfoToShader(pos); blockBase.DrawPixelAsync(pos, colorInfo.color); } } }
+        public int _durability = -1;
         /// <summary>
         /// 透明度影响系数
         /// </summary>
-        public float affectsTransparency = 1;
-
+        public float affectsTransparency { get => _affectsTransparency; set { _affectsTransparency = value; if (blockBase != null) { blockBase.SetPixelInfoToShader(pos); blockBase.DrawPixelAsync(pos, colorInfo.color); } } }
+        private float _affectsTransparency = 1;
         /// <summary>
         /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查
         /// </summary>
         public Pixel() { }
-
+        /// <summary>
+        /// 克隆
+        /// 仅{ 像素类型，颜色类型，坐标，耐久，透明度影响系数 }相同
+        /// </summary>
         public Pixel Clone()
         {
             Pixel pixel = pixelPool.TakeOut();
             InitPixel(pixel, typeInfo, colorInfo, pos, durability);
-            pixel.affectsTransparency = affectsTransparency;
+            pixel._affectsTransparency = _affectsTransparency;
+            pixel.posG = posG;
             return pixel;
         }
+        /// <summary>
+        /// 克隆后重新设置局部坐标
+        /// 仅{ 像素类型，颜色类型，局部坐标，耐久，透明度影响系数 }相同
+        /// </summary>
         public Pixel Clone(Vector2Byte pos)
         {
             Pixel pixel = pixelPool.TakeOut();
             InitPixel(pixel, typeInfo, colorInfo, pos, durability);
-            pixel.affectsTransparency = affectsTransparency;
+            pixel._affectsTransparency = _affectsTransparency;
+            return pixel;
+        }
+        /// <summary>
+        /// 克隆后重新设置局部坐标
+        /// 仅{ 像素类型，颜色类型，局部坐标，耐久，透明度影响系数 }相同
+        /// </summary>
+        public Pixel CloneTo(Pixel pixel, Vector2Byte pos)
+        {
+            InitPixel(pixel, typeInfo, colorInfo, pos, durability);
+            pixel._affectsTransparency = _affectsTransparency;
             return pixel;
         }
 
@@ -69,9 +86,9 @@ namespace PRO
             pixel.typeInfo = typeInfo;
             pixel.colorInfo = colorInfo;
             if (durability == 0)
-                pixel.durability = typeInfo.durability;
+                pixel._durability = typeInfo.durability;
             else
-                pixel.durability = durability;
+                pixel._durability = durability;
         }
 
 
@@ -95,9 +112,9 @@ namespace PRO
             pixel.pos = Vector2Byte.max;
             pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
             pixel.blockBase = null;
-            pixel.durability = 0;
-            pixel.affectsTransparency = 1;
-            foreach(var building in pixel.buildingSet)
+            pixel._durability = 0;
+            pixel._affectsTransparency = 1;
+            foreach (var building in pixel.buildingSet)
                 building.UnloadPixel(pixel);
             pixel.buildingSet.Clear();
 
@@ -235,6 +252,8 @@ namespace PRO
                         {
                             info.durability = int.MaxValue;
                         }
+                        if (info.tags == null) info.tags = new HashSet<string>();
+
                         name_pixelTypeInfo_Dic.Add(info.typeName, info);
                         pixelTypeInfoList.Add(info);
 

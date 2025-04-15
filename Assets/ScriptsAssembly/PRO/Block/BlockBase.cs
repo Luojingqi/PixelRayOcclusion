@@ -34,6 +34,8 @@ namespace PRO
             textureData = new TextureData(spriteRenderer.sprite.texture);
         }
         public SpriteRenderer spriteRenderer;
+
+        public Screen screen;
         /// <summary>
         /// 区块坐标，worldPos.x / Block.Size.x
         /// </summary>
@@ -171,6 +173,7 @@ namespace PRO
                 };
             }
         }
+        public void SetPixelInfoToShader(Vector2Byte pos) => textureData.SetPixelInfoToShader(GetPixel(pos));
 
         /// <summary>
         /// 任务队列，渲染任务添加进入由渲染线程访问修改
@@ -309,8 +312,6 @@ namespace PRO
                 pixel.durability -= durability;
                 if (pixel.durability <= 0)
                     pixel.blockBase.SetPixel(Pixel.空气.Clone(pixel.pos));
-                else
-                    pixel.blockBase.textureData.SetPixelInfoToShader(pixel);
             }
         }
     }

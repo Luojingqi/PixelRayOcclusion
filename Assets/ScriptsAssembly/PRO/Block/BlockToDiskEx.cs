@@ -119,6 +119,7 @@ namespace PRO.Disk.Scene
             {
                 int x = pixelNum % Block.Size.x;
                 int y = pixelNum / Block.Size.y;
+                //此处应当解决线程问题，暂时忽略
                 Pixel pixel = Pixel.TakeOut(typeName, colorName, new(x, y));
                 block.SetPixel(pixel, true, false, false);
                 foreach (var building in buildingList)

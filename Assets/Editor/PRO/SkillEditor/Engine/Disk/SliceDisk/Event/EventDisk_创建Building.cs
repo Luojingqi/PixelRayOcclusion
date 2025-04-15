@@ -10,24 +10,23 @@ namespace PRO.SkillEditor
         public Type type;
 
         public Vector2Int size;
-
-        public Vector2Int offset;
+        
 
         public List<PixelData> pixelList = new List<PixelData>();
 
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
-            if (frameIndex == 0)
+            if (frameIndex == frameLength - 1)
             {
                 var nor = PixelPosRotate.New(agent.transform.rotation.eulerAngles);
-                Vector2Int gloabPos = Block.WorldToGlobal(agent.transform.position) + offset;
+                Vector2Int agentGlobalPos = Block.WorldToGlobal(agent.transform.position);
 
                 var building = BuildingBase.New(type, Guid.NewGuid().ToString(), SceneManager.Inst.NowScene);
                 building.TriggerCollider.size = (Vector2)size * Pixel.Size;
                 building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
-                building.transform.position = Block.GlobalToWorld(gloabPos);
+                building.transform.position = Block.GlobalToWorld(agentGlobalPos);
                 building.transform.rotation = agent.transform.rotation;
-                building.global = gloabPos;
+                building.global = agentGlobalPos;
                 building.Size = size;
 
                 foreach (var pixelData in pixelList)
@@ -36,19 +35,10 @@ namespace PRO.SkillEditor
                     building.Deserialize_AddBuilding_Pixel(building_Pixel);
                 }
 
-                var bufferData = BufferData.TakeOut();
-                bufferData.value = building;
-                agent.AddBufferData(this, bufferData);
-            }
-            if (frameIndex == frameLength - 1)
-            {
-                var building = agent.GetBufferData<BufferData>(this).value;
 
                 building.scene.BuildingInRAM.Add(building.GUID, building);
                 building.scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
-
-                var nor = PixelPosRotate.New(building.transform.rotation.eulerAngles);
-                Vector2Int agentGlobalPos = Block.WorldToGlobal(building.transform.position);
+                
                 foreach (var pixelData in pixelList)
                 {
                     Vector2Int globalPos = agentGlobalPos + nor.RotatePos(pixelData.pos);

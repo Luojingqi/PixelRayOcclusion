@@ -167,10 +167,10 @@ namespace PRO.Tool
         /// <summary>
         /// 获取一个实心圆
         /// </summary>
-        public static List<Vector2Int> GetCircle(Vector2Int pos_G, int r)
+        public static List<Vector2Int> GetCircle(Vector2Int pos_G, int r, ref List<Vector2Int> list)
         {
             int rr = r * r;
-            List<Vector2Int> list = new List<Vector2Int>();
+            if (list == null) list = new List<Vector2Int>();
             for (int x = -r; x <= r; x++)
                 for (int y = -r; y <= r; y++)
                     if (x * x + y * y <= rr) list.Add(new Vector2Int(x + pos_G.x, y + pos_G.y));

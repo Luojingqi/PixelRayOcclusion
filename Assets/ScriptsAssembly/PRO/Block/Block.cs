@@ -166,12 +166,6 @@ namespace PRO
         }
 
 
-        public static Pixel GetPixel(Vector2Int globalPos)
-        {
-            var block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(globalPos));
-            if (block == null) return null;
-            return block.GetPixel(Block.GlobalToPixel(globalPos));
-        }
         /// <summary>
         /// 获取点（如果点不在此区块会被修正到对应区块）
         /// </summary>
@@ -545,11 +539,8 @@ namespace PRO
             var block1 = SceneManager.Inst.NowScene.GetBlock(GlobalToBlock(p1_G));
             var p0 = block0.GetPixel(Block.GlobalToPixel(p0_G));
             var p1 = block1.GetPixel(Block.GlobalToPixel(p1_G));
-            var temp = p0.pos;
-            p0.pos = p1.pos;
-            p1.pos = temp;
-            var p0_Clone = p0.Clone();
-            var p1_Clone = p1.Clone();
+            var p0_Clone = p0.Clone(p1.pos);
+            var p1_Clone = p1.Clone(p0.pos);
             block1.SetPixel(p0_Clone, true, false, false);
             block0.SetPixel(p1_Clone, true, false, false);
         }
