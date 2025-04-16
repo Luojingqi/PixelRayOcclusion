@@ -25,6 +25,7 @@ namespace PRO
         public HashSet<Vector2Int> BlockBaseInRAM = new HashSet<Vector2Int>();
         private CrossList<Block> BlockInRAM = new CrossList<Block>();
         private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
+        public HashSet<Particle> ActiveParticleHash = new HashSet<Particle>();
         /// <summary>
         /// key£ºguid  value£ºbuilding
         /// </summary>
@@ -215,7 +216,6 @@ namespace PRO
                 BuildingBase building = BuildingBase.New(type, guid, this);
                 building.Deserialize(buildingText, buildingText.Length);
                 BuildingInRAM.Add(guid, building);
-                building.scene = this;
             }
             else
             {
@@ -261,7 +261,7 @@ namespace PRO
         /// <returns></returns>
         public Block CreateBlock(Vector2Int blockPos)
         {
-            var block = Block.TakeOut();
+            var block = Block.TakeOut(this);
             block.name = $"Block{blockPos}";
             BlockInRAM[blockPos] = block;
             block.transform.position = Block.BlockToWorld(blockPos);
@@ -275,7 +275,7 @@ namespace PRO
         /// <returns></returns>
         public BackgroundBlock CreateBackground(Vector2Int blockPos)
         {
-            var back = BackgroundBlock.TakeOut();
+            var back = BackgroundBlock.TakeOut(this);
             BackgroundInRAM[blockPos] = back;
             back.transform.position = Block.BlockToWorld(blockPos);
             back.transform.parent = GetBlock(blockPos).transform;

@@ -30,7 +30,7 @@ namespace PRO.SkillEditor
                 foreach (var data in pixelList)
                 {
                     Vector2Int gloabPos = agentPos + nor.RotatePos(data.pos);
-                    BlockBase blockBase = SceneManager.Inst.NowScene.GetBlockBase(blockType, Block.GlobalToBlock(gloabPos));
+                    BlockBase blockBase = agent.Scene.GetBlockBase(blockType, Block.GlobalToBlock(gloabPos));
                     if (blockBase == null) continue;
                     Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
                     Pixel oldPixel = blockBase.GetPixel(pixelPos);

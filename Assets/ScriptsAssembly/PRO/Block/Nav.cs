@@ -41,7 +41,7 @@ namespace PRO
                         walkRing[index++] = new Vector2Int(x, y);
 
         }
-        public List<Vector2Int> TryNav(Vector2Int start_G, Vector2Int end_G, PriorityQueue<Vector2Int> queue = null, Dictionary<Vector2Int, Vector2Int> dic = null, List<Vector2Int> navList = null)
+        public List<Vector2Int> TryNav(SceneEntity scene, Vector2Int start_G, Vector2Int end_G, PriorityQueue<Vector2Int> queue = null, Dictionary<Vector2Int, Vector2Int> dic = null, List<Vector2Int> navList = null)
         {
             if (queue == null) queue = new PriorityQueue<Vector2Int>(); else queue.Clear();
             if (dic == null) dic = new Dictionary<Vector2Int, Vector2Int>(); else dic.Clear();
@@ -61,7 +61,7 @@ namespace PRO
                 for (int i = 0; i < walkRing.Length; i++)
                 {
                     Vector2Int r = walkRing[i] + now;
-                    if (dic.ContainsKey(r) == false && ChackCanNav(r))
+                    if (dic.ContainsKey(r) == false && ChackCanNav(scene, r))
                     {
                         queue.Enqueue(r, FastDistance(r, end_G));
                         dic.Add(r, now);
@@ -85,7 +85,7 @@ namespace PRO
             return navList;
         }
 
-        public bool ChackCanNav(Vector2Int globalPos)
+        public bool ChackCanNav(SceneEntity scene, Vector2Int globalPos)
         {
             Block block = null;
             for (int i = 0; i < chackBox.Length; i++)
@@ -94,7 +94,7 @@ namespace PRO
                 var blockPos = Block.GlobalToBlock(pos);
                 if (block == null || block.BlockPos != blockPos)
                 {
-                    block = SceneManager.Inst.NowScene.GetBlock(blockPos);
+                    block = scene.GetBlock(blockPos);
                     if (block == null) return false;
                 }
                 Pixel pixel = block.GetPixel(Block.GlobalToPixel(pos));
@@ -106,7 +106,7 @@ namespace PRO
                 var blockPos = Block.GlobalToBlock(pos);
                 if (block == null || block.BlockPos != blockPos)
                 {
-                    block = SceneManager.Inst.NowScene.GetBlock(blockPos);
+                    block = scene.GetBlock(blockPos);
                     if (block == null) return false;
                 }
                 Pixel pixel = block.GetPixel(Block.GlobalToPixel(pos));

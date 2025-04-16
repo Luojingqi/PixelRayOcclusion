@@ -9,10 +9,10 @@ namespace PRO
     public class ParticleManager : MonoBehaviour
     {
         public static ParticleManager Inst { get; private set; }
-        public HashSet<Particle> ActiveParticleHash = new HashSet<Particle>();
 
 
-        private Dictionary<string, GameObjectPool<Particle>> particlePoolDic = new Dictionary<string, GameObjectPool<Particle>>();
+
+        private Dictionary<string, ParticlePool> particlePoolDic = new Dictionary<string, ParticlePool>();
         [NonSerialized]
         public Transform Node;
 
@@ -23,19 +23,11 @@ namespace PRO
             Node = new GameObject("ParticleNode").transform;
             {
                 Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_单像素").GetComponent<Particle>();
-                var pool = new GameObjectPool<Particle>(particle.gameObject, Node);
-                pool.CreateEventT += (g, t) => t.Init("单像素");
-                pool.TakeOutEventT += (g, t) => t.TakeOut();
-                pool.PutInEventT += (g, t) => t.PutIn();
-                particlePoolDic.Add("单像素", pool);
+                particlePoolDic.Add("单像素", new ParticlePool(particle.gameObject, Node, "单像素"));
             }
             {
                 Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_通用0").GetComponent<Particle>();
-                var pool = new GameObjectPool<Particle>(particle.gameObject, Node);
-                pool.CreateEventT += (g, t) => t.Init("通用0");
-                pool.TakeOutEventT += (g, t) => t.TakeOut();
-                pool.PutInEventT += (g, t) => { t.PutIn(); t.SkillPlayAgent.Skill = null; t.Renderer.sprite = null; };
-                particlePoolDic.Add("通用0", pool);
+                particlePoolDic.Add("通用0", new ParticlePool(particle.gameObject, Node, "通用0"));
             }
         }
         public void Start()
@@ -51,20 +43,16 @@ namespace PRO
         /// </summary>
         /// <param name="loadPath"></param>
         /// <returns></returns>
-        public GameObjectPool<Particle> GetPool(string loadPath)
+        public ParticlePool GetPool(string loadPath)
         {
-            if (particlePoolDic.TryGetValue(loadPath, out GameObjectPool<Particle> pool)) return pool;
+            if (particlePoolDic.TryGetValue(loadPath, out ParticlePool pool)) return pool;
             else
             {
-                GameObject go = null;
-                go = go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\GamePlay\技能\{loadPath}");
+                GameObject go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\GamePlay\技能\{loadPath}");
                 if (go == null) go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\{loadPath}");
                 if (go == null) return null;
                 Particle particle = go.GetComponent<Particle>();
-                pool = new GameObjectPool<Particle>(particle.gameObject, Node);
-                pool.CreateEventT += (g, t) => t.Init(loadPath);
-                pool.TakeOutEventT += (g, t) => t.TakeOut();
-                pool.PutInEventT += (g, t) => t.PutIn();
+                pool = new ParticlePool(particle.gameObject, Node, loadPath);
                 particlePoolDic.Add(loadPath, pool);
                 return pool;
             }
@@ -74,7 +62,7 @@ namespace PRO
         public void Update()
         {
             int time = (int)(Time.deltaTime * 1000);
-            foreach (var particle in ActiveParticleHash)
+            foreach (var particle in SceneManager.Inst.NowScene.ActiveParticleHash)
             {
                 if (particle.Active)
                     particle.UpdateRemainTime(time);
@@ -83,13 +71,41 @@ namespace PRO
             }
             foreach (var particle in ReadyPutInList)
             {
-                ActiveParticleHash.Remove(particle);
+                SceneManager.Inst.NowScene.ActiveParticleHash.Remove(particle);
                 if (particle.RecyleState == false)
-                    GetPool(particle.loadPath).PutIn(particle.gameObject);
+                    GetPool(particle.loadPath).PutIn(particle);
             }
             ReadyPutInList.Clear();
         }
 
+        public class ParticlePool
+        {
+            private GameObjectPool<Particle> pool;
+            public ParticlePool(GameObject prefab, Transform parent, string loadPath)
+            {
+                pool = new GameObjectPool<Particle>(prefab, parent);
+                pool.CreateEventT += (g, t) => t.Init(loadPath);
+            }
+            public Particle TakeOut(SceneEntity scene)
+            {
+                var particle = pool.TakeOutT();
+                particle.TakeOut(scene);
+                particle.SkillPlayAgent?.SetScene(scene);
+                scene.ActiveParticleHash.Add(particle);
+                return particle;
+            }
 
+            public void PutIn(Particle particle)
+            {
+                if (particle.loadPath == "通用0")
+                {
+                    particle.SkillPlayAgent.Skill = null;
+                    particle.Renderer.sprite = null;
+                }
+                particle.PutIn();
+                particle.SkillPlayAgent?.SetScene(null);
+                pool.PutIn(particle.gameObject);
+            }
+        }
     }
 }

@@ -32,14 +32,8 @@ namespace PRO.SkillEditor
                 foreach (var pos in pixelList)
                 {
                     Vector2Int gloabPos = agentPos + nor.RotatePos(pos);
-                    BlockBase blockBase = null;
-                    if (BlockType == BlockBase.BlockType.Block)
-                        blockBase = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos));
-                    else
-                        blockBase = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(gloabPos));
-                    if (blockBase == null) continue;
-                    Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                    blockBase.TryDestroyPixel(pixelPos, hardness, durability);
+                    Pixel pixel = agent.Scene.GetPixel(BlockType, gloabPos);
+                    pixel?.blockBase.TryDestroyPixel(pixel.pos, hardness, durability);
                 }
             }
             catch

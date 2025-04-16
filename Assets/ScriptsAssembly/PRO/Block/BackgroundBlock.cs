@@ -27,7 +27,12 @@ namespace PRO
             };
             go.transform.parent = backgroundPoolGo.transform;
         }
-        public static BackgroundBlock TakeOut() => BackgroundPool.TakeOutT();
+        public static BackgroundBlock TakeOut(SceneEntity scene)
+        {
+            var background = BackgroundPool.TakeOutT();
+            background._screen = scene;
+            return background;
+        }
 
         public static void PutIn(BackgroundBlock background)
         {
@@ -42,6 +47,9 @@ namespace PRO
                 }
             }
             background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+
+            background._screen = null;
+
             BackgroundPool.PutIn(background.gameObject);
         }
         #endregion
@@ -52,13 +60,6 @@ namespace PRO
             spriteRenderer.sortingOrder = -10;
 
             _blockType = BlockType.BackgroundBlock;
-        }
-
-        public static Pixel GetPixel(Vector2Int globalPos)
-        {
-            var block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(globalPos));
-            if (block == null) return null;
-            return block.GetPixel(Block.GlobalToPixel(globalPos));
         }
     }
 }

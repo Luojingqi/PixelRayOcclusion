@@ -115,10 +115,11 @@ namespace PRO
             go.transform.parent = blockPoolGo.transform;
         }
 
-        public static Block TakeOut()
+        public static Block TakeOut(SceneEntity scene)
         {
             Block block = BlockPool.TakeOutT();
             block.transform.parent = BlockNode;
+            block._screen = scene;
             return block;
         }
 
@@ -145,6 +146,7 @@ namespace PRO
             block.name = "Block(Clone)";
             block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
 
+            block._screen = null;
             BlockPool.PutIn(block.gameObject);
         }
         #endregion 
@@ -177,7 +179,7 @@ namespace PRO
             }
             else
             {
-                Block block = SceneManager.Inst.NowScene.GetBlock(rightBlock);
+                Block block = Scene.GetBlock(rightBlock);
                 if (block == null)
                     return null;
                 else
@@ -219,6 +221,7 @@ namespace PRO
         }
         public static void AddFluidUpdateHash(Pixel pixel)
         {
+            if (pixel == null) return;
             Block block = pixel.blockBase as Block;
             switch (pixel.typeInfo.fluidType)
             {
@@ -234,6 +237,7 @@ namespace PRO
         }
         public void UpdateFluid1()
         {
+            SceneEntity scene = SceneManager.Inst.NowScene;
             Random.InitState((int)(Time.deltaTime * 1000000));
             for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
@@ -273,7 +277,7 @@ namespace PRO
                     while (_queue.Count > 0)
                     {
                         Vector2Int nextPosG = _queue.Dequeue();
-                        Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nextPosG));
+                        Block nextBlock = scene.GetBlock(Block.GlobalToBlock(nextPosG));
                         if (nextBlock == null)
                         {
                             updateProbability -= updateProbabilityDecay1;
@@ -295,9 +299,7 @@ namespace PRO
                                     for (int x = -2; x <= 2; x++)
                                     {
                                         var tempG = nextPosG + new Vector2Int(x, y);
-                                        Block tempBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(tempG));
-                                        if (tempBlock == null) continue;
-                                        AddFluidUpdateHash(tempBlock.GetPixel(Block.GlobalToPixel(tempG)));
+                                        AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
                                     }
                                 #endregion
 
@@ -340,6 +342,7 @@ namespace PRO
         }
         public void UpdateFluid2()
         {
+            SceneEntity scene = SceneManager.Inst.NowScene;
             Random.InitState((int)(Time.deltaTime * 1000000));
             for (int i = fluidUpdateHash2.Length - 1; i >= 0; i--)
             {
@@ -384,7 +387,7 @@ namespace PRO
                     while (_queue.Count > 0)
                     {
                         Vector2Int nextPosG = _queue.Dequeue();
-                        Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nextPosG));
+                        Block nextBlock = scene.GetBlock(Block.GlobalToBlock(nextPosG));
                         if (nextBlock == null) { updateProbability -= updateProbabilityDecay2; continue; }
 
                         Pixel nextPixel = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
@@ -405,9 +408,7 @@ namespace PRO
                                     for (int x = -2; x <= 2; x++)
                                     {
                                         var tempG = nextPosG + new Vector2Int(x, y);
-                                        Block tempBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(tempG));
-                                        if (tempBlock == null) continue;
-                                        AddFluidUpdateHash(tempBlock.GetPixel(Block.GlobalToPixel(tempG)));
+                                        AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
                                     }
                                 #endregion
 
@@ -423,7 +424,7 @@ namespace PRO
                                             stopUpdate = true;
                                             if (Random.Range(0, 100) < 25)
                                             {
-                                                Particle particle = ParticleManager.Inst.GetPool("特殊粒子/水").TakeOutT();
+                                                Particle particle = ParticleManager.Inst.GetPool("特殊粒子/水").TakeOut(scene);
                                                 particle.SetGlobal(nextPosG);
                                             }
                                         }
@@ -447,6 +448,7 @@ namespace PRO
         }
         public void UpdateFluid3()
         {
+            SceneEntity scene = SceneManager.Inst.NowScene;
             for (int i = 0; i < fluidUpdateHash3.Length; i++)
             {
                 _posList.Clear();
@@ -490,7 +492,7 @@ namespace PRO
                     while (_queue.Count > 0)
                     {
                         Vector2Int nextPosG = _queue.Dequeue();
-                        Block nextBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(nextPosG));
+                        Block nextBlock = scene.GetBlock(Block.GlobalToBlock(nextPosG));
                         if (nextBlock == null) continue;
 
                         Pixel nextPixel = nextBlock.GetPixel(Block.GlobalToPixel(nextPosG));
@@ -506,10 +508,7 @@ namespace PRO
                                 {
                                     //  var tempG = nextPosG + new Vector2Int(0, 0);
                                     var tempG = nextPosG + new Vector2Int(x, y);
-                                    Block timpBlock = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(tempG));
-                                    if (timpBlock == null) continue;
-                                    var tempP = Block.GlobalToPixel(tempG);
-                                    AddHashSet(timpBlock.fluidUpdateHash3[tempP.y], tempP);
+                                    AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
                                 }
                             SwapFluid(nextPosG, pixel.posG);
                             stopUpdate = false;
@@ -535,8 +534,8 @@ namespace PRO
         }
         private void SwapFluid(Vector2Int p0_G, Vector2Int p1_G)
         {
-            var block0 = SceneManager.Inst.NowScene.GetBlock(GlobalToBlock(p0_G));
-            var block1 = SceneManager.Inst.NowScene.GetBlock(GlobalToBlock(p1_G));
+            var block0 = _screen.GetBlock(GlobalToBlock(p0_G));
+            var block1 = _screen.GetBlock(GlobalToBlock(p1_G));
             var p0 = block0.GetPixel(Block.GlobalToPixel(p0_G));
             var p1 = block1.GetPixel(Block.GlobalToPixel(p1_G));
             var p0_Clone = p0.Clone(p1.pos);

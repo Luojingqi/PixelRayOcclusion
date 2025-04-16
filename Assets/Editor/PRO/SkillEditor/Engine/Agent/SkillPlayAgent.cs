@@ -9,23 +9,11 @@ namespace PRO.SkillEditor
     /// <summary>
     /// 技能播放的执行人
     /// </summary>
-    public class SkillPlayAgent : SerializedMonoBehaviour
+    public class SkillPlayAgent : SerializedMonoBehaviour, IScene
     {
-        #region 对象池
-        private static ObjectPool<List<RaycastHit2D>> listPool;
-        public static ObjectPool<List<RaycastHit2D>> ListPool
-        {
-            get
-            {
-                if (listPool == null)
-                {
-                    listPool = new ObjectPool<List<RaycastHit2D>>();
-                    listPool.PutInEvent += t => t.Clear();
-                }
-                return listPool;
-            }
-        }
-        #endregion
+        public SceneEntity Scene => _scene;
+        private SceneEntity _scene;
+        public void SetScene(SceneEntity scene) => _scene = scene;
         public void Init()
         {
             if (AgentSprice == null)
@@ -89,6 +77,7 @@ namespace PRO.SkillEditor
                 nowFrame = value;
             }
         }
+
         [ShowInInspector]
         private int nowFrame;
 

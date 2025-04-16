@@ -10,7 +10,7 @@ namespace PRO.SkillEditor
         public Type type;
 
         public Vector2Int size;
-        
+
 
         public List<PixelData> pixelList = new List<PixelData>();
 
@@ -21,7 +21,7 @@ namespace PRO.SkillEditor
                 var nor = PixelPosRotate.New(agent.transform.rotation.eulerAngles);
                 Vector2Int agentGlobalPos = Block.WorldToGlobal(agent.transform.position);
 
-                var building = BuildingBase.New(type, Guid.NewGuid().ToString(), SceneManager.Inst.NowScene);
+                var building = BuildingBase.New(type, Guid.NewGuid().ToString(), agent.Scene);
                 building.TriggerCollider.size = (Vector2)size * Pixel.Size;
                 building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
                 building.transform.position = Block.GlobalToWorld(agentGlobalPos);
@@ -36,13 +36,13 @@ namespace PRO.SkillEditor
                 }
 
 
-                building.scene.BuildingInRAM.Add(building.GUID, building);
-                building.scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
-                
+                building.Scene.BuildingInRAM.Add(building.GUID, building);
+                building.Scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
+
                 foreach (var pixelData in pixelList)
                 {
                     Vector2Int globalPos = agentGlobalPos + nor.RotatePos(pixelData.pos);
-                    BlockBase blockBase = building.scene.GetBlockBase(pixelData.blockType, Block.GlobalToBlock(globalPos));
+                    BlockBase blockBase = building.Scene.GetBlockBase(pixelData.blockType, Block.GlobalToBlock(globalPos));
                     if (blockBase == null) continue;
                     Pixel pixel = blockBase.GetPixel(Block.GlobalToPixel(globalPos));
                     building.Deserialize_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixelData.blockType), pixel);

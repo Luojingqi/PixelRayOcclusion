@@ -1,16 +1,16 @@
 using Cysharp.Threading.Tasks;
-using PRO.Disk;
 using PRO.DataStructure;
+using PRO.Disk;
 using PRO.Tool;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine;
 using static PRO.Renderer.ComputeShaderManager;
-using System.Runtime.InteropServices;
 namespace PRO
 {
-    public class BlockBase : MonoBehaviour
+    public class BlockBase : MonoBehaviour, IScene
     {
         #region 坐标转换
         /// <summary>
@@ -35,7 +35,8 @@ namespace PRO
         }
         public SpriteRenderer spriteRenderer;
 
-        public Screen screen;
+        public SceneEntity Scene => _screen;
+        protected SceneEntity _screen;
         /// <summary>
         /// 区块坐标，worldPos.x / Block.Size.x
         /// </summary>
@@ -44,6 +45,7 @@ namespace PRO
         protected Vector2Int blockPos;
         protected BlockType _blockType;
         public BlockType blockType => _blockType;
+
         #region 像素点集
         /// <summary>
         /// 像素点集
@@ -268,9 +270,7 @@ namespace PRO
             for (int i = 0; i < 1; i++)
             {
                 Vector2Int posG = pixel.posG + ring[Random.Range(0, ring.Length)];
-                BlockBase block = null;
-                if (this is Block) block = SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(posG));
-                else block = SceneManager.Inst.NowScene.GetBackground(Block.GlobalToBlock(posG));
+                BlockBase block = Scene.GetBlockBase(blockType, Block.GlobalToBlock(posG));
                 if (block == null) continue;
                 Pixel nextPixel = block.GetPixel(Block.GlobalToPixel(posG));
                 if (nextPixel.typeInfo.typeName == "火焰") num++;

@@ -65,8 +65,8 @@ namespace PRO.SceneEditor
                     building.global = global;
                     building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
 
-                    building.scene.BuildingInRAM.Add(building.GUID, building);
-                    building.scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
+                    building.Scene.BuildingInRAM.Add(building.GUID, building);
+                    building.Scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
                 }
 
                 for (int y = 0; y < HoldEntity.height; y++)

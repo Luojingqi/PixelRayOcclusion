@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class FreelyLightSource
+    public class FreelyLightSource : IScene
     {
+        public SceneEntity Scene => _scene;
+        private SceneEntity _scene;
         private Vector2Int? gloabPos;
         private int radius = 1;
         public Vector3Int color;
@@ -18,20 +20,20 @@ namespace PRO
                 if (value == null)
                 {
                     if (gloabPos != null)
-                        SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(gloabPos.Value))?.FreelyLightSourceHash.Remove(this);
+                        _scene.GetBlock(Block.GlobalToBlock(gloabPos.Value))?.FreelyLightSourceHash.Remove(this);
                 }
                 else
                 {
                     if (gloabPos == null)
-                        SceneManager.Inst.NowScene.GetBlock(Block.GlobalToBlock(value.Value))?.FreelyLightSourceHash.Add(this);
+                        _scene.GetBlock(Block.GlobalToBlock(value.Value))?.FreelyLightSourceHash.Add(this);
                     else
                     {
                         Vector2Int blockPos0 = Block.GlobalToBlock(value.Value);
                         Vector2Int blockPos1 = Block.GlobalToBlock(gloabPos.Value);
                         if (blockPos0 != blockPos1)
                         {
-                            SceneManager.Inst.NowScene.GetBlock(blockPos0)?.FreelyLightSourceHash.Add(this);
-                            SceneManager.Inst.NowScene.GetBlock(blockPos1)?.FreelyLightSourceHash.Remove(this);
+                            _scene.GetBlock(blockPos0)?.FreelyLightSourceHash.Add(this);
+                            _scene.GetBlock(blockPos1)?.FreelyLightSourceHash.Remove(this);
                         }
                     }
                 }
@@ -50,28 +52,31 @@ namespace PRO
         }
 
         private FreelyLightSource() { }
-        public static FreelyLightSource New(Vector3Int color, int radius)
+        public static FreelyLightSource New(SceneEntity scene, Vector3Int color, int radius)
         {
             if (radius <= 0 || radius > BlockMaterial.LightRadiusMax) return null;
             FreelyLightSource fls = new FreelyLightSource();
             fls.radius = radius;
             fls.color = color;
+            fls._scene = scene;
             return fls;
         }
-        public static FreelyLightSource New(PixelColorInfo info)
+        public static FreelyLightSource New(SceneEntity scene, PixelColorInfo info)
         {
             if (info == null) return null;
             FreelyLightSource fls = new FreelyLightSource();
             fls.radius = info.luminousRadius;
             fls.color = new Vector3Int(info.color.r, info.color.g, info.color.b);
+            fls._scene = scene;
             return fls;
         }
-        public static FreelyLightSource New(Color32 color, int radius)
+        public static FreelyLightSource New(SceneEntity scene, Color32 color, int radius)
         {
             if (radius <= 0 || radius > BlockMaterial.LightRadiusMax) return null;
             FreelyLightSource fls = new FreelyLightSource();
             fls.radius = radius;
             fls.color = new Vector3Int(color.r, color.g, color.b);
+            fls._scene = scene;
             return fls;
         }
     }

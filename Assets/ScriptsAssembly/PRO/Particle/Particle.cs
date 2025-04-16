@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class Particle : MonoBehaviour
+    public class Particle : MonoBehaviour, IScene
     {
         public SpriteRenderer Renderer { get; private set; }
         public Rigidbody2D Rig2D { get; private set; }
@@ -57,11 +57,15 @@ namespace PRO
         /// 当前是否已被回收
         /// </summary>
         public bool RecyleState { get; private set; }
+
+        public SceneEntity Scene => _scene;
+        private SceneEntity _scene;
+
         public void UpdateRemainTime(int cutDown)
         {
-            if (SceneManager.Inst.NowScene.GetBlock(Block.WorldToBlock(transform.position)) == null)
+            if (Scene.GetBlock(Block.WorldToBlock(transform.position)) == null)
             {
-                ParticleManager.Inst.GetPool(loadPath).PutIn(this.gameObject);
+                ParticleManager.Inst.GetPool(loadPath).PutIn(this);
                 return;
             }
             // transform.rotation = Quaternion.FromToRotation(Vector3.up, Rig2D.velocity);
@@ -81,12 +85,12 @@ namespace PRO
             SkillPlayAgent?.Init();
         }
 
-        public virtual void TakeOut()
+        public virtual void TakeOut(SceneEntity scene)
         {
-            ParticleManager.Inst.ActiveParticleHash.Add(this);
             RemainTime = UnityEngine.Random.Range(SurviveTimeRange.x, SurviveTimeRange.y);
             Active = true;
             RecyleState = false;
+            _scene = scene;
         }
         public virtual void PutIn()
         {

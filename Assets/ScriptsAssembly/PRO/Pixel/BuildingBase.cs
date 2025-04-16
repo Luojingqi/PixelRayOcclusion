@@ -10,7 +10,7 @@ namespace PRO
     /// <summary>
     /// 建筑的基类，一个建筑是由一堆点组合的合集
     /// </summary>
-    public abstract class BuildingBase : MonoBehaviour
+    public abstract class BuildingBase : MonoBehaviour, IScene
     {
         public struct Index
         {
@@ -24,7 +24,8 @@ namespace PRO
             }
         }
 
-        public SceneEntity scene;
+        public SceneEntity Scene => _scene;
+        public SceneEntity _scene;
         public string GUID;
         public string Name;
         public Dictionary<Index, Building_Pixel> AllPixel = new Dictionary<Index, Building_Pixel>();
@@ -40,6 +41,8 @@ namespace PRO
         /// 这个建筑是否可以被破坏
         /// </summary>
         public bool CanByBroken = true;
+
+
         /// <summary>
         /// 这个蓝图位置的像素点被更改，将这个蓝图点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
         /// </summary>
@@ -78,7 +81,7 @@ namespace PRO
             building.GUID = guid;
             building.TriggerCollider = go.AddComponent<BoxCollider2D>();
             building.TriggerCollider.isTrigger = true;
-            building.scene = scene;
+            building._scene = scene;
 
             go.layer = (int)GameLayer.Building;
             return building;
@@ -256,7 +259,7 @@ namespace PRO
 
         public void Delete()
         {
-            scene.DeleteBuilding(GUID);
+            Scene.DeleteBuilding(GUID);
         }
     }
 }

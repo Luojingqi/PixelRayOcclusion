@@ -43,7 +43,7 @@ namespace PRO.SkillEditor
                 int num = Random.Range(numRange.x, numRange.y + 1);
                 for (int i = 0; i < num; i++)
                 {
-                    Particle particle = pool.TakeOutT();
+                    Particle particle = pool.TakeOut(agent.Scene);
                     particle.Renderer.color = color;
                     particle.SurviveTimeRange = surviveTimeRange;
                     particle.transform.position = agent.transform.rotation * position + agent.transform.position;

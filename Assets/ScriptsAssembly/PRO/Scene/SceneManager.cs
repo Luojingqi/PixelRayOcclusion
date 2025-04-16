@@ -67,16 +67,16 @@ namespace PRO
             //初始化场景
             DrawThread.Init(nowScene);
             BlockMaterial.FirstBind();
-            source = FreelyLightSource.New(BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
+            source = FreelyLightSource.New(NowScene, BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
             List<Block> list0 = new List<Block>();
             List<BackgroundBlock> list1 = new List<BackgroundBlock>();
-            for (int i = 0; i < 1000; i++)
-            {
-                list0.Add(Block.TakeOut());
-                list1.Add(BackgroundBlock.TakeOut());
-            }
-            list0.ForEach(b => Block.PutIn(b));
-            list1.ForEach(b => BackgroundBlock.PutIn(b));
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    list0.Add(Block.TakeOut());
+            //    list1.Add(BackgroundBlock.TakeOut());
+            //}
+            //list0.ForEach(b => Block.PutIn(b));
+            //list1.ForEach(b => BackgroundBlock.PutIn(b));
         }
         public FreelyLightSource source;
         public Transform PoolNode;

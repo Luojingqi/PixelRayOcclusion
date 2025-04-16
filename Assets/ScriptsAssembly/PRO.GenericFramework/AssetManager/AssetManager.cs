@@ -89,8 +89,6 @@ namespace PRO.Tool
                 MainManifest = assetBundleMainManifest.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
                 Debug.Log("加载AssetBundleManifest");
             }
-
-            //获取包名
             if (bundleDic.ContainsKey(bundlePath) == false)
             {
                 //获取准备加载包的依赖包名
