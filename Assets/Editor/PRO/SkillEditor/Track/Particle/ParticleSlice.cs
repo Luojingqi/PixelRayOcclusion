@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -105,10 +106,10 @@ namespace PRO.SkillEditor
         }
         [LabelText("ÑÕÉ«")]
         [ShowInInspector]
-        public Color color
+        public List<Color32> colorList
         {
-            get { return slice_Disk.color; }
-            set { slice_Disk.color = value; }
+            get { return slice_Disk.colorList; }
+            set { slice_Disk.colorList = value; }
         }
     }
 }

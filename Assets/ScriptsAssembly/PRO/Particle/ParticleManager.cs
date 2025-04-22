@@ -58,24 +58,29 @@ namespace PRO
             }
         }
 
-        private List<Particle> ReadyPutInList = new List<Particle>();
+        // private List<Particle> ReadyPutInList = new List<Particle>();
         public void Update()
         {
             int time = (int)(Time.deltaTime * 1000);
-            foreach (var particle in SceneManager.Inst.NowScene.ActiveParticleHash)
+            for (int i = SceneManager.Inst.NowScene.ActiveParticle.Count - 1; i >= 0; i--)
             {
+                var particle = SceneManager.Inst.NowScene.ActiveParticle[i];
                 if (particle.Active)
                     particle.UpdateRemainTime(time);
                 if (particle.RemainTime <= 0 || particle.Active == false)
-                    ReadyPutInList.Add(particle);
+                {
+                    SceneManager.Inst.NowScene.ActiveParticle.RemoveAt(i);
+                    if (particle.RecyleState == false)
+                        GetPool(particle.loadPath).PutIn(particle);
+                }
             }
-            foreach (var particle in ReadyPutInList)
-            {
-                SceneManager.Inst.NowScene.ActiveParticleHash.Remove(particle);
-                if (particle.RecyleState == false)
-                    GetPool(particle.loadPath).PutIn(particle);
-            }
-            ReadyPutInList.Clear();
+            //foreach (var particle in ReadyPutInList)
+            //{
+            //    SceneManager.Inst.NowScene.ActiveParticle.Remove(particle);
+            //    if (particle.RecyleState == false)
+            //        GetPool(particle.loadPath).PutIn(particle);
+            //}
+            //ReadyPutInList.Clear();
         }
 
         public class ParticlePool
@@ -91,7 +96,7 @@ namespace PRO
                 var particle = pool.TakeOutT();
                 particle.TakeOut(scene);
                 particle.SkillPlayAgent?.SetScene(scene);
-                scene.ActiveParticleHash.Add(particle);
+                scene.ActiveParticle.Add(particle);
                 return particle;
             }
 

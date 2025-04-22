@@ -18,7 +18,7 @@ namespace PRO
             boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
             BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
             boxCollider.gameObject.SetActive(false);
-            boxCollider.gameObject.layer = 11;
+            boxCollider.gameObject.layer = (int)GameLayer.Block;
             boxCollider.transform.parent = boxCollider2DPoolGo.transform;
             BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform);
 

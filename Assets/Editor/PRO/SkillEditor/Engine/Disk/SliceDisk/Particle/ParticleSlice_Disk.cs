@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -33,7 +34,7 @@ namespace PRO.SkillEditor
         /// </summary>
         public Vector2Int surviveTimeRange = new Vector2Int(int.MaxValue, int.MaxValue);
 
-        public Color color = Color.white;
+        public List<Color32> colorList = new List<Color32>();
 
         public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
         {
@@ -44,7 +45,8 @@ namespace PRO.SkillEditor
                 for (int i = 0; i < num; i++)
                 {
                     Particle particle = pool.TakeOut(agent.Scene);
-                    particle.Renderer.color = color;
+                    if (colorList.Count > 0)
+                        particle.Renderer.color = colorList[Random.Range(0, colorList.Count - 1)];
                     particle.SurviveTimeRange = surviveTimeRange;
                     particle.transform.position = agent.transform.rotation * position + agent.transform.position;
                     particle.Rig2D.AddForce(agent.transform.rotation * Vector3.Lerp(directionMin, directionMax, Random.Range(0f, 1f)) * Random.Range(forceRange.x, forceRange.y), ForceMode2D.Impulse);

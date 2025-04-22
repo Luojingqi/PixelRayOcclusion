@@ -1,17 +1,11 @@
 using Cysharp.Threading.Tasks;
-using PRO.DataStructure;
-using PRO.Disk;
 using PRO.Disk.Scene;
-using PRO.Renderer;
-using PRO.SkillEditor;
 using PRO.Tool;
-using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
-using static PRO.BlockMaterial;
 namespace PRO
 {
 
@@ -90,6 +84,9 @@ namespace PRO
         public void Update()
         {
             MousePoint.Update();
+            var p = MousePoint.block.GetPixel(MousePoint.pixelPos);
+            if (p != null)
+                GameObject.Find("UI/GameMainCanvas/pixel").GetComponent<TMP_Text>().text = p.typeInfo.typeName + "|" + p.colorInfo.colorName + "|" + p.posG;
             if (source != null) source.GloabPos = MousePoint.globalPos;
             time0 += Time.deltaTime;
             while (time0 > updatetime)
@@ -118,29 +115,22 @@ namespace PRO
                     for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid2();
             }
-
-            if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))
+            if (Monitor.TryEnter(MainThreadUpdateLock))
             {
                 try
                 {
-                    mainThreadUpdateEvent_UnClear?.Invoke();
+                    if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))
+                    {
+                        try { mainThreadUpdateEvent_UnClear?.Invoke(); }
+                        finally { Monitor.Exit(mainThreadUpdateEventLock_UnClear); }
+                    }
+                    if (Monitor.TryEnter(mainThreadUpdateEventLock_Clear))
+                    {
+                        try { mainThreadUpdateEvent_Clear?.Invoke(); mainThreadUpdateEvent_Clear = null; }
+                        finally { Monitor.Exit(mainThreadUpdateEventLock_Clear); }
+                    }
                 }
-                finally
-                {
-                    Monitor.Exit(mainThreadUpdateEventLock_UnClear);
-                }
-            }
-            if (Monitor.TryEnter(mainThreadUpdateEventLock_Clear))
-            {
-                try
-                {
-                    mainThreadUpdateEvent_Clear?.Invoke();
-                    mainThreadUpdateEvent_Clear = null;
-                }
-                finally
-                {
-                    Monitor.Exit(mainThreadUpdateEventLock_Clear);
-                }
+                finally { Monitor.Exit(MainThreadUpdateLock); }
             }
         }
         private void LateUpdate()
@@ -204,6 +194,7 @@ namespace PRO
                 }
             }
         }
+        public readonly object MainThreadUpdateLock = new object();
 
         #region 主线程更新事件_UnClear
         /// <summary>

@@ -104,6 +104,14 @@ namespace PRO.Disk.Scene
             #endregion
             List<BuildingBase> buildingList = new List<BuildingBase>();
             int pixelNum = Block.Size.x * Block.Size.y - 1;
+
+            ListPackage<Pixel> list = default;
+            lock (SceneManager.Inst.MainThreadUpdateLock)
+            {
+                list = SetPool.TakeOut_List<Pixel>();
+                for (int i = 0; i <= pixelNum; i++)
+                    list.Add(Pixel.pixelPool.TakeOut());
+            }
             JsonTool.Deserialize_Data(blockText, (num) =>
             {
                 int dicIndex = JsonTool.StackToInt(stack);
@@ -119,8 +127,8 @@ namespace PRO.Disk.Scene
             {
                 int x = pixelNum % Block.Size.x;
                 int y = pixelNum / Block.Size.y;
-                //此处应当解决线程问题，暂时忽略
-                Pixel pixel = Pixel.TakeOut(typeName, colorName, new(x, y));
+                Pixel pixel = list[pixelNum];
+                Pixel.InitPixel(pixel, Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), new(x, y), 0);
                 block.SetPixel(pixel, true, false, false);
                 foreach (var building in buildingList)
                 {
@@ -131,6 +139,10 @@ namespace PRO.Disk.Scene
                 --pixelNum;
             },
             ref lastDelimiter, ref stack);
+            lock (SceneManager.Inst.MainThreadUpdateLock)
+            {
+                SetPool.PutIn(list);
+            }
         }
     }
 }

@@ -56,6 +56,7 @@ namespace PRO
 
         public static void Init()
         {
+            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
             if (!JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
             {
                 Debug.Log("PROconfig.json加载失败，BlockMaterial无法初始化");
@@ -174,8 +175,6 @@ namespace PRO
 
         public static void FirstBind()
         {
-            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-
             blockShareMaterialManager.FirstBind();
             backgroundShareMaterialManager.FirstBind();
             computeShaderManager.FirstBind();

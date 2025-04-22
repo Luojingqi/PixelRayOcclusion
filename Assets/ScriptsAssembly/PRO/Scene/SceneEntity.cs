@@ -25,7 +25,7 @@ namespace PRO
         public HashSet<Vector2Int> BlockBaseInRAM = new HashSet<Vector2Int>();
         private CrossList<Block> BlockInRAM = new CrossList<Block>();
         private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
-        public HashSet<Particle> ActiveParticleHash = new HashSet<Particle>();
+        public List<Particle> ActiveParticle = new List<Particle>();
         /// <summary>
         /// key£ºguid  value£ºbuilding
         /// </summary>

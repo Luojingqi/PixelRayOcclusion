@@ -16,17 +16,21 @@ namespace PRO
         /// <summary>
         /// 世界坐标点to块坐标
         /// </summary>
-        public static Vector2Int WorldToBlock(Vector2 worldPos) => new Vector2Int((int)Mathf.Round(worldPos.x / Block.Size.x / Pixel.Size - 0.5f), (int)Mathf.Round(worldPos.y / Block.Size.y / Pixel.Size - 0.5f));
+        public static Vector2Int WorldToBlock(Vector2 worldPos) => GlobalToBlock(WorldToGlobal(worldPos));
         public static Vector2Int WorldToGlobal(Vector2 worldPos)
         {
-            int x = (int)Mathf.Floor(worldPos.x / Pixel.Size);
-            int y = (int)Mathf.Floor(worldPos.y / Pixel.Size);
+           // float absX = Mathf.Abs(worldPos.x);
+           // float absY = Mathf.Abs(worldPos.y);
+            int x = (int)Mathf.Floor((int)(worldPos.x * 100) / 100f / Pixel.Size);
+            int y = (int)Mathf.Floor((int)(worldPos.y * 100) / 100f / Pixel.Size);
+          //  if (worldPos.x < 0 && absX % Pixel.Size > 0) x = -x - 1;
+          //  if (worldPos.y < 0 && absY % Pixel.Size > 0) y = -y - 1;
             return new Vector2Int(x, y);
         }
         /// <summary>
         /// 块坐标to世界坐标点
         /// </summary>
-        public static Vector3 BlockToWorld(Vector2Int blockPos) => new Vector3(blockPos.x * Block.Size.x * Pixel.Size, blockPos.y * Block.Size.y * Pixel.Size);
+        public static Vector3 BlockToWorld(Vector2Int blockPos) => new Vector3((blockPos.x * Block.Size.x * Pixel.Size), (blockPos.y * Block.Size.y * Pixel.Size));
         /// <summary>
         /// 世界坐标点to点坐标（局部）
         /// </summary>
@@ -46,7 +50,7 @@ namespace PRO
             if (globalPos.y < 0) globalPos.y -= Block.Size.y - 1;
             return new Vector2Int(globalPos.x / Block.Size.x, globalPos.y / Block.Size.y);
         }
-        public static Vector3 GlobalToWorld(Vector2Int globalPos) => new Vector3(globalPos.x * Pixel.Size, globalPos.y * Pixel.Size);
+        public static Vector3 GlobalToWorld(Vector2Int globalPos) => new Vector3((globalPos.x * Pixel.Size), (globalPos.y * Pixel.Size));
         /// <summary>
         /// 检查坐标是否非法
         /// </summary>

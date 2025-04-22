@@ -16,7 +16,7 @@ namespace PRO
         /// <summary>
         /// 点坐标（局部）to世界坐标点
         /// </summary>
-        public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((BlockPos.x * Block.Size.x + pixelPos.x) * Pixel.Size, (BlockPos.y * Block.Size.y + pixelPos.y) * Pixel.Size);
+        public Vector3 PixelToWorld(Vector2Byte pixelPos) => new Vector3((float)((BlockPos.x * Block.Size.x + pixelPos.x) * (double)Pixel.Size), (float)((BlockPos.y * Block.Size.y + pixelPos.y) * (double)Pixel.Size));
         public Vector2Int PixelToGlobal(Vector2Byte pixelPos) => new Vector2Int(BlockPos.x * Block.Size.x + pixelPos.x, BlockPos.y * Block.Size.y + pixelPos.y);
 
         public enum BlockType
@@ -267,20 +267,25 @@ namespace PRO
             if (pixel.typeInfo.typeName != "火焰") return;
 
             int num = 0;
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 8; i++)
             {
-                Vector2Int posG = pixel.posG + ring[Random.Range(0, ring.Length)];
-                BlockBase block = Scene.GetBlockBase(blockType, Block.GlobalToBlock(posG));
-                if (block == null) continue;
-                Pixel nextPixel = block.GetPixel(Block.GlobalToPixel(posG));
-                if (nextPixel.typeInfo.typeName == "火焰") num++;
-                if (nextPixel.typeInfo.burnOdds == 0) continue;
-                if (UnityEngine.Random.Range(0, 100) < 10)
+                Vector2Int posG = pixel.posG + ring[i];
+                Vector2Byte pos = Block.GlobalToPixel(posG);
                 {
-                    Pixel pixel_燃烧扩散 = Pixel.TakeOut(pixel.typeInfo, pixel.colorInfo, nextPixel.pos);
-                    pixel_燃烧扩散.durability = -Random.Range(nextPixel.typeInfo.burnTimeRange.x, nextPixel.typeInfo.burnTimeRange.y);
-                    //燃烧扩散
-                    block.SetPixel(pixel_燃烧扩散);
+                    BlockBase block = Scene.GetBlockBase(BlockType.Block, Block.GlobalToBlock(posG));
+                    if (block != null)
+                    {
+                        Pixel nextPixel = block.GetPixel(pos);
+                        if (nextPixel != null && nextPixel.typeInfo.typeName == "火焰") num++;
+                    }
+                }
+                {
+                    BlockBase block = Scene.GetBlockBase(BlockType.BackgroundBlock, Block.GlobalToBlock(posG));
+                    if (block != null)
+                    {
+                        Pixel nextPixel = block.GetPixel(pos);
+                        if (nextPixel != null && nextPixel.typeInfo.typeName == "火焰") num++;
+                    }
                 }
             }
             pixel.durability += time;
@@ -289,10 +294,44 @@ namespace PRO
                 SetPixel(Pixel.空气.Clone(pixel.pos));
                 return;
             }
+            else
+            {
+                {
+                    //随机向周围一点尝试扩散
+                    Pixel nextPixel = Scene.GetPixel((BlockType)Random.Range(0, 2), pixel.posG + ring[Random.Range(0, ring.Length)]);
+                    if (Random.Range(0, 100) < nextPixel.typeInfo.burnOdds)
+                        nextPixel.blockBase.SetPixel(Pixel.TakeOut(pixel.typeInfo, pixel.colorInfo, nextPixel.pos, -Random.Range(nextPixel.typeInfo.burnTimeRange.x, nextPixel.typeInfo.burnTimeRange.y)));
+                }
 
-            Pixel newPixel = Pixel.TakeOut("火焰", num, pixel.pos);
-            newPixel.durability = pixel.durability;
-            SetPixel(newPixel);
+                if (Random.Range(0, 100) < 50)
+                {
+                    //产生火苗粒子
+                    Pixel upPixel0 = Scene.GetPixel(BlockType.Block, pixel.posG + Vector2Int.up);
+                    Pixel upPixel1 = Scene.GetPixel(BlockType.BackgroundBlock, pixel.posG + Vector2Int.up);
+                    if (upPixel0 != null && upPixel0.typeInfo.typeName != "火焰" && upPixel1 != null && upPixel1.typeInfo.typeName != "火焰")
+                    {
+                        var particle = ParticleManager.Inst.GetPool("特殊粒子/火苗").TakeOut(Scene);
+                        particle.SetGlobal(pixel.posG);
+                        particle.Renderer.color = pixel.colorInfo.color;
+                    }
+                }
+
+
+                //模拟正态分布火焰强度变化
+                int length = pixel.typeInfo.availableColors.Length / 2;
+                float p = Mathf.Clamp(Mathf.Abs((float)pixel.durability / pixel.typeInfo.durability), 0, 1);
+                int colorIndex = length + 1 - (int)(p / (1f / length));
+                if (Random.Range(0, 100) < 50) ;
+                else if (Random.Range(0, 100) < 45)
+                    colorIndex += Random.Range(0, 2) == 0 ? -1 : 1;
+                else if (Random.Range(0, 100) < 35)
+                    colorIndex += Random.Range(0, 2) == 0 ? -2 : 2;
+                else if (Random.Range(0, 100) < 23)
+                    colorIndex += Random.Range(0, 2) == 0 ? -3 : 3;
+                colorIndex = Mathf.Clamp(colorIndex, 0, length - 1);
+                //处在火焰中心的火焰不发光，防止太亮
+                SetPixel(Pixel.TakeOut(pixel.typeInfo, BlockMaterial.GetPixelColorInfo(pixel.typeInfo.availableColors[num >= 5 ? colorIndex + 8 : colorIndex]), pixel.pos, pixel.durability));
+            }
         }
 
         #endregion

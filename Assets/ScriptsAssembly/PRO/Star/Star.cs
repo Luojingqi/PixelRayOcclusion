@@ -32,22 +32,22 @@ public class Star
     /// </summary>
     public Vector3 GetAcceleration(Vector2Int gloabPos)
     {
-        Vector2Int D = gloabPos - GloabPos;
-        float angle = Mathf.Atan2(D.y, D.x) - Mathf.PI / 8;
-        if (angle < 0) angle += 2 * Mathf.PI;
-        int i = (int)(angle / (Mathf.PI / 4));
-        i = (8 - i + 1) % 8;
-        float d = D.magnitude;
-        if (d >= r)
-        {
-            //if ((2 * r - d) <= 0) return Vector3.zero;
-            return Mathf.Pow((2 * r - d) / r, 2) * normals[i] * g * Pixel.Size;
-        }
-        else if (d >= zeroGR)
-        {
-            return d / r * normals[i] * g * Pixel.Size;
-        }
-        else
+        //Vector2Int D = gloabPos - GloabPos;
+        //float angle = Mathf.Atan2(D.y, D.x) - Mathf.PI / 8;
+        //if (angle < 0) angle += 2 * Mathf.PI;
+        //int i = (int)(angle / (Mathf.PI / 4));
+        //i = (8 - i + 1) % 8;
+        //float d = D.magnitude;
+        //if (d >= r)
+        //{
+        //    //if ((2 * r - d) <= 0) return Vector3.zero;
+        //    return Mathf.Pow((2 * r - d) / r, 2) * normals[i] * g * Pixel.Size;
+        //}
+        //else if (d >= zeroGR)
+        //{
+        //    return d / r * normals[i] * g * Pixel.Size;
+        //}
+        //else
         {
             return Vector3.zero;
         }

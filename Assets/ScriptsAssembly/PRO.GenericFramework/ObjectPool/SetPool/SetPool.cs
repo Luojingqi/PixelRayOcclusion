@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace PRO.Tool
 {
@@ -44,6 +45,17 @@ namespace PRO.Tool
             var package = new HashSetPackage<T>();
             package.set = pool_HashSet.TakeOut();
             return package;
+        }
+
+        private static ObjectPool<List<Vector2Int>> pool_List_Vector2Int = new ObjectPool<List<Vector2Int>>();
+        public static List<Vector2Int> TakeOut_List_Vector2Int()
+        {
+            return pool_List_Vector2Int.TakeOut();
+        }
+        public static void PutIn(List<Vector2Int> list)
+        {
+            list.Clear();
+            pool_List_Vector2Int.PutIn(list);
         }
     }
 }

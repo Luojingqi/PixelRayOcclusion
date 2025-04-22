@@ -171,15 +171,15 @@ namespace PRO
         }
 
 
-        private static float pixelOffset = Pixel.Size * 0.99999f;
+        private static double pixelOffset = Pixel.Size * 0.99999;
         public void RotateTransform(Transform transform, Vector2Int globalOffset)
         {
             transform.rotation = GetQuaternion();
             globalOffset = RotatePos(globalOffset);
-            Vector3 position = Block.GlobalToWorld(MousePoint.globalPos - globalOffset);
+            Vector3 position = Block.GlobalToWorld(Block.WorldToGlobal(transform.position) - globalOffset);
             Vector2Int oneRotate = RotatePos(new Vector2Int(1, 1));
-            if (oneRotate.x < 0) position.x += pixelOffset;
-            if (oneRotate.y < 0) position.y += pixelOffset;
+            if (oneRotate.x < 0) position.x = (float)(position.x + pixelOffset);
+            if (oneRotate.y < 0) position.y = (float)(position.y + pixelOffset);
             transform.position = position;
         }
         public Vector3 GetAngle() => new Vector3(x180Num * 180f, y180Num * 180f, z90Num * 90f);

@@ -80,7 +80,7 @@ namespace PRO
             return pixel;
         }
 
-        private static void InitPixel(Pixel pixel, PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability)
+        public static void InitPixel(Pixel pixel, PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability)
         {
             pixel.pos = pixelPos;
             pixel.typeInfo = typeInfo;
@@ -103,7 +103,7 @@ namespace PRO
         private static Dictionary<string, PixelTypeInfo> name_pixelTypeInfo_Dic = new Dictionary<string, PixelTypeInfo>();
         private static Dictionary<string, List<PixelColorInfo>> tag_pixelTypeInfoList_Dic = new Dictionary<string, List<PixelColorInfo>>();
         #region ∂‘œÛ≥ÿ
-        public static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
+        public readonly static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
         public static void PutIn(Pixel pixel)
         {
             if (pixel == null) return;

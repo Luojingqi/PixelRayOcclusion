@@ -62,7 +62,7 @@ namespace PRO
         private SceneEntity _scene;
 
         public void UpdateRemainTime(int cutDown)
-        {
+        {            
             if (Scene.GetBlock(Block.WorldToBlock(transform.position)) == null)
             {
                 ParticleManager.Inst.GetPool(loadPath).PutIn(this);
@@ -92,6 +92,9 @@ namespace PRO
             RecyleState = false;
             _scene = scene;
         }
+        /// <summary>
+        /// 不可调用，请获取对应池然后使用池的PutIn
+        /// </summary>
         public virtual void PutIn()
         {
             transform.rotation = Quaternion.identity;
@@ -108,7 +111,7 @@ namespace PRO
             CollisionEnterEvent = null;
             CollisionExitEvent = null;
             RemainTimeIsZeroEvent = null;
-            RemainTime = int.MaxValue;
+            RemainTime = int.MinValue;
 
             if (Collider != null) Collider.enabled = true;
             gameObject.layer = (int)GameLayer.Particle_Block;
