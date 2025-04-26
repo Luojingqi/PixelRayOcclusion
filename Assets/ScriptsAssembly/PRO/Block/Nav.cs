@@ -11,7 +11,7 @@ namespace PRO
         /// </summary>
         public NavAgentMould AgentMould { get; private set; }
         /// <summary>
-        /// 检查盒子，角色模型的边框
+        /// 检查盒子，角色模型的内边框
         /// </summary>
         public Vector2Int[] chackBox { get; private set; }
         /// <summary>
@@ -88,6 +88,7 @@ namespace PRO
         public bool ChackCanNav(SceneEntity scene, Vector2Int globalPos)
         {
             Block block = null;
+            //检查角色的内边框是否有遮挡
             for (int i = 0; i < chackBox.Length; i++)
             {
                 var pos = globalPos + chackBox[i] - AgentMould.offset;
@@ -100,6 +101,7 @@ namespace PRO
                 Pixel pixel = block.GetPixel(Block.GlobalToPixel(pos));
                 if (pixel.typeInfo.collider) return false;
             }
+            //检查角色的脚下是否有至少一个方块
             for (int x = 0; x < AgentMould.size.x; x++)
             {
                 var pos = globalPos + new Vector2Int(x, -1) - AgentMould.offset;

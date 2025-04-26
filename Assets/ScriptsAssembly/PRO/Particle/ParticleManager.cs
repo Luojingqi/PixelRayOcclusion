@@ -57,8 +57,11 @@ namespace PRO
                 return pool;
             }
         }
+        public void GetPoolPutIn(Particle particle)
+        {
+            GetPool(particle.loadPath).PutIn(particle);
+        }
 
-        // private List<Particle> ReadyPutInList = new List<Particle>();
         public void Update()
         {
             int time = (int)(Time.deltaTime * 1000);
@@ -74,13 +77,6 @@ namespace PRO
                         GetPool(particle.loadPath).PutIn(particle);
                 }
             }
-            //foreach (var particle in ReadyPutInList)
-            //{
-            //    SceneManager.Inst.NowScene.ActiveParticle.Remove(particle);
-            //    if (particle.RecyleState == false)
-            //        GetPool(particle.loadPath).PutIn(particle);
-            //}
-            //ReadyPutInList.Clear();
         }
 
         public class ParticlePool

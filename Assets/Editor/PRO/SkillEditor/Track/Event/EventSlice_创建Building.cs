@@ -75,5 +75,15 @@ namespace PRO.SkillEditor
             Name = Name.Split('\n')[0];
             diskData.pixelList.Clear();
         }
+
+        public override void DrawGizmo(SkillPlayAgent agent)
+        {
+            
+        }
+
+        public override void DrawHandle(SkillPlayAgent agent)
+        {
+            
+        }
     }
 }

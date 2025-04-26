@@ -4,7 +4,27 @@
     "availableColors": [
       "空气色"
     ],
-    "hardness": -1
+    "hardness": -1,
+    "durability": 0,
+    "electricityPixle": [
+      "带电空气",
+      "带电空气色"
+    ]
+  },
+  {
+    "typeName": "带电空气",
+    "tags": [
+      "带电"
+    ],
+    "availableColors": [
+      "带电空气色"
+    ],
+    "hardness": -1,
+    "durability": 0,
+    "electricityPixle": [
+      "空气",
+      "空气色"
+    ]
   },
   {
     "typeName": "背景",
@@ -35,107 +55,117 @@
     "collider": true
   },
   {
-    "typeName": "木头",
-    "tags": [
-      null
-    ],
-    "availableColors": [
-      "木头色0",
-      "木头色1"
-    ],
-    "hardness": 0,
-    "durability": 10,
-    "collider": true,
-    "burnOdds": 10,
-    "burnTimeRange": {
-      "x": 3000,
-      "y": 5000
-    }
-  },
-  {
-    "typeName": "花朵茎秆",
-    "tags": [
-      null,
-      null
-    ],
-    "availableColors": [
-      "花朵茎秆色0",
-      "花朵茎秆色1"
-    ],
-    "hardness": 0,
-    "durability": 10,
-    "burnOdds": 25,
-    "burnTimeRange": {
-      "x": 1000,
-      "y": 2000
-    }
-  },
-  {
-    "typeName": "花朵花瓣",
-    "tags": [
-      null,
-      null
-    ],
-    "availableColors": [
-      "花朵花瓣色0",
-      "花朵花瓣色1",
-      "花朵花瓣_发光_色0",
-      "花朵花瓣_发光_色1"
-    ],
-    "hardness": 0,
-    "durability": 10,
-    "burnOdds": 20,
-    "burnTimeRange": {
-      "x": 500,
-      "y": 1250
-    }
-  },
-  {
     "typeName": "岩石",
     "tags": [
-      null
+      "土元素"
     ],
     "availableColors": [
       "岩石色0",
       "岩石色1"
     ],
-    "hardness": 0,
+    "hardness": 1000,
     "durability": 10,
     "collider": true
   },
   {
+    "typeName": "泥土",
+    "tags": [
+      "土元素"
+    ],
+    "availableColors": [
+      "泥土色0"
+    ],
+    "hardness": 750,
+    "durability": 10,
+    "collider": true
+  },
+  {
+    "typeName": "木头",
+    "tags": [
+      "木元素"
+    ],
+    "availableColors": [
+      "木头色0",
+      "木头色1"
+    ],
+    "hardness": 500,
+    "durability": 10,
+    "collider": true,
+    "burnOdds": 10,
+    "burnTimeRange": {
+      "x": 10000,
+      "y": 20000
+    }
+  },
+  {
     "typeName": "水",
     "tags": [
-      null
+      "水元素",
+      "导电"
     ],
     "availableColors": [
       "水色0"
     ],
-    "hardness": -1,
+    "hardness": 0,
+    "durability": 1,
     "fluidType": 1,
-    "fluidDensity": 10
+    "fluidDensity": 10,
+    "electricityPixle": [
+      "带电水",
+      "带电水色"
+    ]
+  },
+  {
+    "typeName": "带电水",
+    "tags": [
+      "水元素",
+      "带电"
+    ],
+    "availableColors": [
+      "带电水色"
+    ],
+    "hardness": 0,
+    "durability": 1,
+    "electricityPixle": [
+      "水",
+      "水色0"
+    ]
   },
   {
     "typeName": "水蒸气",
     "tags": [
-      null
+      "水元素"
     ],
     "availableColors": [
       "水蒸气色0"
     ],
-    "hardness": -1,
+    "hardness": 0,
+    "durability": 1,
     "fluidType": 2,
     "fluidDensity": 10
   },
   {
+    "typeName": "冰",
+    "tags": [
+      "冰元素"
+    ],
+    "availableColors": [
+      "冰色0"
+    ],
+    "hardness": 800,
+    "durability": 10,
+    "collider": true
+  },
+  {
     "typeName": "毒液",
     "tags": [
-      null
+      "毒元素"
     ],
     "availableColors": [
       "毒液色0"
     ],
-    "hardness": -1,
+    "hardness": 0,
+    "durability": 1,
     "fluidType": 1,
     "fluidDensity": 20,
     "burnOdds": 60
@@ -145,7 +175,8 @@
     "availableColors": [
       "油色0"
     ],
-    "hardness": -1,
+    "hardness": 0,
+    "durability": 1,
     "fluidType": 1,
     "fluidDensity": 6,
     "burnOdds": 90
@@ -155,7 +186,7 @@
     "availableColors": [
       "沙子色0"
     ],
-    "hardness": 0,
+    "hardness": 200,
     "durability": 10,
     "collider": true,
     "fluidType": 3,
@@ -166,7 +197,7 @@
     "availableColors": [
       "砂砾色0"
     ],
-    "hardness": 0,
+    "hardness": 700,
     "durability": 10,
     "collider": true,
     "fluidType": 3,
@@ -189,7 +220,7 @@
   {
     "typeName": "火焰",
     "tags": [
-      null
+      "火元素"
     ],
     "availableColors": [
       "火焰色0",
@@ -200,10 +231,17 @@
       "火焰色5",
       "火焰色6",
       "火焰色7",
-      "火焰色8"
+      "火焰色0_不发光",
+      "火焰色1_不发光",
+      "火焰色2_不发光",
+      "火焰色3_不发光",
+      "火焰色4_不发光",
+      "火焰色5_不发光",
+      "火焰色6_不发光",
+      "火焰色7_不发光"
     ],
     "hardness": 0,
-    "durability": -2000
+    "durability": -10000
   },
   {
     "typeName": "照明弹",
@@ -212,5 +250,44 @@
     ],
     "hardness": 0,
     "durability": 5
+  },
+  {
+    "typeName": "花朵茎秆",
+    "tags": [
+      "木元素",
+      "花朵"
+    ],
+    "availableColors": [
+      "花朵茎秆色0",
+      "花朵茎秆色1"
+    ],
+    "hardness": 200,
+    "durability": 10,
+    "collider": true,
+    "burnOdds": 25,
+    "burnTimeRange": {
+      "x": 1000,
+      "y": 2000
+    }
+  },
+  {
+    "typeName": "花朵花瓣",
+    "tags": [
+      "木元素",
+      "花朵"
+    ],
+    "availableColors": [
+      "花朵花瓣色0",
+      "花朵花瓣色1",
+      "花朵花瓣_发光_色0",
+      "花朵花瓣_发光_色1"
+    ],
+    "hardness": 50,
+    "durability": 10,
+    "burnOdds": 20,
+    "burnTimeRange": {
+      "x": 500,
+      "y": 1250
+    }
   }
 ]

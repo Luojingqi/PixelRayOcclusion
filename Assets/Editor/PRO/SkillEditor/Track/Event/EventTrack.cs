@@ -1,5 +1,6 @@
 using PROTool;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -7,11 +8,12 @@ namespace PRO.SkillEditor
 {
     internal class EventTrack : TrackBase
     {
+        private List<Type> EventSlice_List;
         public EventTrack(Track_Disk track_Disk) : base(track_Disk)
         {
             Heading.NameText.text = "事件轨道";
-            var list = ReflectionTool.GetDerivedClasses(typeof(EventSlice_DiskBase));
-            foreach (var item in list)
+            List<Type> EventDisk_Base_List = ReflectionTool.GetDerivedClasses(typeof(EventDisk_Base));
+            foreach (var item in EventDisk_Base_List)
             {
                 View.AddManipulator(new ContextualMenuManipulator(evt =>
                 {
@@ -35,13 +37,20 @@ namespace PRO.SkillEditor
 
         private EventSlice DiskToSlice(Slice_DiskBase sliceDisk)
         {
-            switch (sliceDisk)
+            if (sliceDisk is EventDisk_Base == false) return null;
+            if(EventSlice_List == null) EventSlice_List = ReflectionTool.GetDerivedClasses(typeof(EventSlice));
+            foreach (var item in EventSlice_List)
             {
-                case EventDisk_跳转播放 disk: return new EventSlice_跳转播放(disk);
-                case EventDisk_创建Building disk: return new EventSlice_创建Building(disk);
-                case EventSlice_DiskBase disk: return new EventSlice(disk);
+                var strings = item.Name.Split('_');
+                string name = "EventDisk";
+                for (int i = 1; i < strings.Length; i++)
+                    name += "_" + strings[i];
+                if (name == sliceDisk.GetType().Name)
+                {
+                    return Activator.CreateInstance(item, sliceDisk) as EventSlice;
+                }
             }
-            return null;
+            return new EventSlice(sliceDisk as EventDisk_Base);
         }
 
         protected override bool DragAssetTypeCheck(Type type)
@@ -56,9 +65,9 @@ namespace PRO.SkillEditor
                 MonoScript monoScript = objects[i] as MonoScript;
                 if (monoScript == null) continue;
                 Type type = monoScript.GetClass();
-                if (type.IsSubclassOf(typeof(EventSlice_DiskBase)) == false) continue;
-                EventSlice_DiskBase disk = Activator.CreateInstance(type) as EventSlice_DiskBase;
-                AddSlice(new EventSlice(disk));
+                if (type.IsSubclassOf(typeof(EventDisk_Base)) == false) continue;
+                EventDisk_Base disk = Activator.CreateInstance(type) as EventDisk_Base;
+                DiskToSlice(disk);
             }
         }
     }

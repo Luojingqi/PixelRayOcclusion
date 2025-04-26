@@ -4,7 +4,7 @@ namespace PRO.SkillEditor
 {
     internal class EventSlice : SliceBase
     {
-        public EventSlice(EventSlice_DiskBase sliceDisk) : base(sliceDisk)
+        public EventSlice(EventDisk_Base sliceDisk) : base(sliceDisk)
         {
             if (sliceDisk.startFrame == -1)
             {
@@ -14,12 +14,12 @@ namespace PRO.SkillEditor
 
         public override void DrawGizmo(SkillPlayAgent agent)
         {
-
+            
         }
 
         public override void DrawHandle(SkillPlayAgent agent)
         {
-
+            
         }
     }
 }

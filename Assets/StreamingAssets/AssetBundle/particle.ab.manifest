@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2568130898
+CRC: 512795497
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b41780ac6d6a8f4c2377bcd381f870ce
+    Hash: a7272930bb0841c00b63c5c985a870e3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 70a3cf6eefee27ef9c2a690dfd78f06e
+    Hash: 1e88dfac7e38fd04612f5e7b92a57995
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b41780ac6d6a8f4c2377bcd381f870ce
+    Hash: a7272930bb0841c00b63c5c985a870e3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,8 +28,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 62
   Script: {instanceID: 0}
-- Class: 70
-  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: e17c80cf19c757c4e991092e20965603, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 269f2b904029b1248a1fb18de2b3c3b3, type: 3}
 - Class: 114
@@ -37,7 +37,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f2e15769c3b63f0458b12fea415b3777, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: cf45416e3185c3d44963ffedf1e326df, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 759f41708e9c0ac4e9507861a983e536, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 212
@@ -48,9 +52,12 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Sirenix.Serialization
   ClassName: Sirenix.Serialization.SerializationData
 Assets:
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u706B\u82D7.prefab"
 - "Assets/ScriptsAssembly/PRO/Particle/Particle_\u901A\u75280.prefab"
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u6C34.prefab"
-- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u98DE\u884C\u7BAD\u5934\u70B8\u5F39/Particle_\u98DE\u884C\u7BAD\u5934\u70B8\u5F39.prefab"
+- "Assets/ScriptsAssembly/PRO/Particle/Particle_\u901A\u75281.prefab"
 - "Assets/ScriptsAssembly/PRO/Particle/Particle_\u5355\u50CF\u7D20.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u6CB9.prefab"
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u6BD2\u6DB2.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD/\u7279\u6B8A\u7C92\u5B50/\u706B\u7130.prefab"
 Dependencies: []

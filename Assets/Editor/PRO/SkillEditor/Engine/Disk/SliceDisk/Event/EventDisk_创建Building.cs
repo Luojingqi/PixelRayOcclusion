@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PRO.SkillEditor
 {
-    public class EventDisk_创建Building : EventSlice_DiskBase
+    public class EventDisk_创建Building : EventDisk_Base
     {
         public Type type;
 

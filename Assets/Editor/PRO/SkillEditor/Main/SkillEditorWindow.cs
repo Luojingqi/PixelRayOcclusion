@@ -95,6 +95,8 @@ namespace PRO.SkillEditor
         {
             SceneView.duringSceneGui -= DrawHandle;
             Save();
+            EditorUtility.SetDirty(Config);
+            AssetDatabase.SaveAssets();
         }
 
         public void Save()
@@ -102,10 +104,16 @@ namespace PRO.SkillEditor
             if (Config.Skill_Disk != null)
             {
                 EditorUtility.SetDirty(Config.Skill_Disk);
-                AssetDatabase.SaveAssetIfDirty(Config.Skill_Disk);
             }
-            EditorUtility.SetDirty(Config);
-            AssetDatabase.SaveAssetIfDirty(Config);
+            if (!Application.isPlaying)
+            {
+                AssetDatabase.SaveAssets();
+            }
+            else
+            {
+                Debug.Log("运行模式下不会保存，请退出运行模式后重新保存");
+            }
+            
         }
 
         /// <summary>

@@ -114,7 +114,7 @@ namespace PRO
             RemainTime = int.MinValue;
 
             if (Collider != null) Collider.enabled = true;
-            gameObject.layer = (int)GameLayer.Particle_Block;
+            gameObject.layer = (int)GameLayer.Particle;
 
             if (SkillPlayAgent != null)
             {
@@ -146,6 +146,7 @@ namespace PRO
         {
             CollisionExitEvent?.Invoke(this, collision);
         }
+
 
         private static float pixelSizeHalf = Pixel.Size / 2;
         public void SetGlobal(Vector2Int global)

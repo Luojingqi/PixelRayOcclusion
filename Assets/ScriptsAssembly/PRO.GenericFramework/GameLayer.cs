@@ -11,9 +11,10 @@
         Block = 11,
 
 
-
+        Particle = 14,
         Particle_Block = 15,
         Particle_Block_Role = 16,
+        Particle_Role = 17,
 
         NoPhysics = 31
     }

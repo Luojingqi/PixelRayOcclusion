@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3132154831165743482}
   - component: {fileID: -122658586236707096}
   - component: {fileID: 3925744354144651879}
-  m_Layer: 15
+  m_Layer: 31
   m_Name: "Particle_\u901A\u75280"
   m_TagString: Untagged
   m_Icon: {fileID: 0}

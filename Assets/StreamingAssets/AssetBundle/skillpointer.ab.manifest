@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1849454480
+CRC: 1886632469
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 87bf42fac83d063a70130db6c20a0190
+    Hash: bd6f7a72c75224032043cb735f818891
   TypeTreeHash:
     serializedVersion: 2
     Hash: 950e743f111ddafd2b0c51d31cee68c2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 87bf42fac83d063a70130db6c20a0190
+    Hash: bd6f7a72c75224032043cb735f818891
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -41,9 +41,6 @@ SerializeReferenceClassIdentifiers:
   ClassName: Sirenix.Serialization.SerializationData
 Assets:
 - "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u7BAD\u5934\u7C7B/SkillPointer_\u7BAD\u5934\u7C7B.prefab"
-- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r15.prefab"
-- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u5C04\u7EBF\u7C7B/r50_\u767D\u8272\u865A\u7EBF.prefab"
-- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r30.prefab"
-- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r50.prefab"
-- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/r5.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u5C04\u7EBF\u7C7B/\u767D\u8272\u865A\u7EBF.prefab"
+- "Assets/ScriptsAssembly/GamePlay/\u6280\u80FD\u6307\u793A\u5668/\u8303\u56F4\u5185\u9009\u62E9\u7C7B/\u901A\u7528.prefab"
 Dependencies: []

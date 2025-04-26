@@ -4,8 +4,17 @@ namespace PRO
 {
     public static class MousePoint
     {
+        /// <summary>
+        /// 鼠标坐标指向上一帧的向量
+        /// </summary>
         public static Vector2 mousePosD;
+        /// <summary>
+        /// 鼠标坐标上一帧
+        /// </summary>
         public static Vector2 mousePosLast;
+        /// <summary>
+        /// 鼠标坐标
+        /// </summary>
         public static Vector2 mousePos;
         public static Vector2 worldPos;
         public static Vector2Int blockPos;

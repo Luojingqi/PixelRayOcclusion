@@ -26,7 +26,9 @@ namespace PRO.SkillEditor
             Vector3 position = diskData.position;
             HandlePosition(agent, diskData.rotation, ref position);
             diskData.position = position;
-            HandleRotation(agent, diskData.position, ref diskData.rotation);
+            Quaternion rotation = diskData.rotation;
+            HandleRotation(agent, diskData.position, ref rotation);
+            diskData.rotation = rotation;
             Vector3 scale = diskData.scale;
             HandleScale(agent, diskData.position, diskData.rotation, ref scale);
             diskData.scale = scale;

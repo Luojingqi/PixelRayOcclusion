@@ -26,5 +26,15 @@ namespace PRO.SkillEditor
                 Name = $"Ìø×ª->{value}";
             }
         }
+
+        public override void DrawGizmo(SkillPlayAgent agent)
+        {
+            
+        }
+
+        public override void DrawHandle(SkillPlayAgent agent)
+        {
+            
+        }
     }
 }

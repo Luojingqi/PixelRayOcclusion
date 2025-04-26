@@ -9,6 +9,22 @@
     }
   },
   {
+    "colorName": "带电空气色",
+    "color": {
+      "r": 90,
+      "g": 138,
+      "b": 216,
+      "a": 235
+    },
+    "affectsLightIntensity": 0.8,
+    "luminousRadius": 6,
+    "luminousColor": {
+      "r": 90,
+      "g": 138,
+      "b": 216
+    }
+  },
+  {
     "colorName": "火焰色0",
     "color": {
       "r": 255,
@@ -16,7 +32,7 @@
       "b": 91,
       "a": 255
     },
-    "luminousRadius": 8,
+    "luminousRadius": 10,
     "luminousColor": {
       "r": 255,
       "g": 224,
@@ -27,41 +43,56 @@
     "colorName": "火焰色1",
     "color": {
       "r": 255,
-      "g": 127,
-      "b": 81,
+      "g": 209,
+      "b": 84,
       "a": 255
     },
-    "luminousRadius": 5,
+    "luminousRadius": 9,
     "luminousColor": {
       "r": 255,
-      "g": 127,
-      "b": 81
+      "g": 209,
+      "b": 84
     }
   },
   {
     "colorName": "火焰色2",
     "color": {
       "r": 255,
-      "g": 127,
-      "b": 81,
+      "g": 194,
+      "b": 77,
       "a": 255
     },
-    "luminousRadius": 3,
+    "luminousRadius": 8,
     "luminousColor": {
       "r": 255,
-      "g": 127,
-      "b": 81
+      "g": 194,
+      "b": 77
     }
   },
   {
     "colorName": "火焰色3",
     "color": {
       "r": 255,
+      "g": 178,
+      "b": 69,
+      "a": 255
+    },
+    "luminousRadius": 7,
+    "luminousColor": {
+      "r": 255,
+      "g": 178,
+      "b": 69
+    }
+  },
+  {
+    "colorName": "火焰色4",
+    "color": {
+      "r": 255,
       "g": 163,
       "b": 62,
       "a": 255
     },
-    "luminousRadius": 1,
+    "luminousRadius": 6,
     "luminousColor": {
       "r": 255,
       "g": 163,
@@ -69,14 +100,14 @@
     }
   },
   {
-    "colorName": "火焰色4",
+    "colorName": "火焰色5",
     "color": {
       "r": 255,
       "g": 148,
       "b": 55,
       "a": 255
     },
-    "luminousRadius": 1,
+    "luminousRadius": 5,
     "luminousColor": {
       "r": 255,
       "g": 148,
@@ -84,14 +115,14 @@
     }
   },
   {
-    "colorName": "火焰色5",
+    "colorName": "火焰色6",
     "color": {
       "r": 255,
       "g": 133,
       "b": 48,
       "a": 255
     },
-    "luminousRadius": 1,
+    "luminousRadius": 4,
     "luminousColor": {
       "r": 255,
       "g": 133,
@@ -99,14 +130,14 @@
     }
   },
   {
-    "colorName": "火焰色6",
+    "colorName": "火焰色7",
     "color": {
       "r": 255,
       "g": 117,
       "b": 40,
       "a": 255
     },
-    "luminousRadius": 1,
+    "luminousRadius": 3,
     "luminousColor": {
       "r": 255,
       "g": 117,
@@ -114,34 +145,92 @@
     }
   },
   {
-    "colorName": "火焰色7",
+    "colorName": "火焰色0_不发光",
     "color": {
       "r": 255,
-      "g": 102,
-      "b": 33,
+      "g": 224,
+      "b": 91,
       "a": 255
     },
-    "luminousRadius": 1,
-    "luminousColor": {
-      "r": 255,
-      "g": 102,
-      "b": 33
-    }
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
   },
   {
-    "colorName": "火焰色8",
+    "colorName": "火焰色1_不发光",
     "color": {
       "r": 255,
-      "g": 87,
-      "b": 26,
+      "g": 209,
+      "b": 84,
       "a": 255
     },
-    "luminousRadius": 1,
-    "luminousColor": {
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
+  },
+  {
+    "colorName": "火焰色2_不发光",
+    "color": {
       "r": 255,
-      "g": 87,
-      "b": 26
-    }
+      "g": 194,
+      "b": 77,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
+  },
+  {
+    "colorName": "火焰色3_不发光",
+    "color": {
+      "r": 255,
+      "g": 178,
+      "b": 69,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
+  },
+  {
+    "colorName": "火焰色4_不发光",
+    "color": {
+      "r": 255,
+      "g": 163,
+      "b": 62,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
+  },
+  {
+    "colorName": "火焰色5_不发光",
+    "color": {
+      "r": 255,
+      "g": 148,
+      "b": 55,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
+  },
+  {
+    "colorName": "火焰色6_不发光",
+    "color": {
+      "r": 255,
+      "g": 133,
+      "b": 48,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
+  },
+  {
+    "colorName": "火焰色7_不发光",
+    "color": {
+      "r": 255,
+      "g": 117,
+      "b": 40,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0,
+    "selfLuminous": 1.0
   },
   {
     "colorName": "木头色0",
@@ -254,6 +343,16 @@
     "affectsLightIntensity": 1.0
   },
   {
+    "colorName": "泥土色0",
+    "color": {
+      "r": 98,
+      "g": 91,
+      "b": 70,
+      "a": 255
+    },
+    "affectsLightIntensity": 1.0
+  },
+  {
     "colorName": "水色0",
     "color": {
       "r": 155,
@@ -265,6 +364,23 @@
     "affectsLightIntensity": 0.05
   },
   {
+    "colorName": "带电水色",
+    "color": {
+      "r": 155,
+      "g": 194,
+      "b": 230,
+      "a": 225
+    },
+    "lightPathColorMixing": 0.02,
+    "affectsLightIntensity": 0.8,
+    "luminousRadius": 6,
+    "luminousColor": {
+      "r": 155,
+      "g": 194,
+      "b": 230
+    }
+  },
+  {
     "colorName": "水蒸气色0",
     "color": {
       "r": 189,
@@ -274,6 +390,17 @@
     },
     "lightPathColorMixing": 0.01,
     "affectsLightIntensity": 0.025
+  },
+  {
+    "colorName": "冰色0",
+    "color": {
+      "r": 65,
+      "g": 139,
+      "b": 207,
+      "a": 255
+    },
+    "lightPathColorMixing": 0.03,
+    "affectsLightIntensity": 0.5
   },
   {
     "colorName": "毒液色0",
@@ -578,6 +705,48 @@
       "g": 0,
       "b": 0,
       "a": 255
+    }
+  },
+  {
+    "colorName": "test0",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "luminousRadius": 0,
+    "luminousColor": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    }
+  },
+  {
+    "colorName": "test1",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "luminousRadius": 1,
+    "luminousColor": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    }
+  },
+  {
+    "colorName": "test2",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "luminousRadius": 2,
+    "luminousColor": {
+      "r": 255,
+      "g": 255,
+      "b": 255
     }
   }
 ]
