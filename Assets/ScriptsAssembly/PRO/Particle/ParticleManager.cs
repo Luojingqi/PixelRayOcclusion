@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class ParticleManager : MonoBehaviour
+    public class ParticleManager : MonoScriptBase, ITime_Awake, ITime_Start, ITime_Update
     {
         public static ParticleManager Inst { get; private set; }
 
@@ -17,7 +17,7 @@ namespace PRO
         public Transform Node;
 
 
-        public void Awake()
+        public void TimeAwake()
         {
             Inst = this;
             Node = new GameObject("ParticleNode").transform;
@@ -30,7 +30,7 @@ namespace PRO
                 particlePoolDic.Add("通用0", new ParticlePool(particle.gameObject, Node, "通用0"));
             }
         }
-        public void Start()
+        public void TimeStart()
         {
             Node.parent = SceneManager.Inst.PoolNode;
         }
@@ -62,9 +62,9 @@ namespace PRO
             GetPool(particle.loadPath).PutIn(particle);
         }
 
-        public void Update()
+        public void TimeUpdate()
         {
-            int time = (int)(Time.deltaTime * 1000);
+            int time = (int)(TimeManager.deltaTime * 1000);
             for (int i = SceneManager.Inst.NowScene.ActiveParticle.Count - 1; i >= 0; i--)
             {
                 var particle = SceneManager.Inst.NowScene.ActiveParticle[i];

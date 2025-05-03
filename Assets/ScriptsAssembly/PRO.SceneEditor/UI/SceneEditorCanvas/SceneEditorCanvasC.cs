@@ -1,4 +1,3 @@
-using PRO.DataStructure;
 using PRO.Tool;
 using PROTool;
 using System;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace PRO.SceneEditor
 {
-    public class SceneEditorCanvasC : UIControllerBase
+    public class SceneEditorCanvasC : UIControllerBase, ITime_Start, ITime_Update
     {
         public override UIViewBase View => view;
         private SceneEditorCanvasV view = new SceneEditorCanvasV();
@@ -27,7 +26,7 @@ namespace PRO.SceneEditor
                 view.Dropdown.options.Add(new TMP_Dropdown.OptionData(DerivedBuildingBaseList[i].Name));
         }
 
-        public void Start()
+        public void TimeStart()
         {
             Init("123");
             gameObject.SetActive(false);
@@ -46,7 +45,7 @@ namespace PRO.SceneEditor
             view.HoldIcon.gameObject.SetActive(false);
             HoldEntity = null;
         }
-        void Update()
+        public void TimeUpdate()
         {
             if (HoldEntity == null) return;
             if (Input.GetKeyDown(KeyCode.Mouse1)) { ClearHold(); return; }

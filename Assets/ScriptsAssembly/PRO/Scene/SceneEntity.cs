@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace PRO
 {
@@ -16,6 +17,24 @@ namespace PRO
     /// </summary>
     public class SceneEntity
     {
+        private struct OneBlock
+        {
+            public Block Block;
+            public BackgroundBlock BackgroundBlock;
+            public BlockBase this[int index]
+            {
+                get
+                {
+                    switch (index)
+                    {
+                        default:
+                        case 0: return Block;
+                        case 1: return BackgroundBlock;
+                    }
+                }
+            }
+        }
+
         public SceneCatalog sceneCatalog { get; private set; }
         public SceneEntity(SceneCatalog sceneCatalog)
         {
@@ -23,32 +42,16 @@ namespace PRO
         }
         #region 获取已经实例化的对象
         public HashSet<Vector2Int> BlockBaseInRAM = new HashSet<Vector2Int>();
-        private CrossList<Block> BlockInRAM = new CrossList<Block>();
-        private CrossList<BackgroundBlock> BackgroundInRAM = new CrossList<BackgroundBlock>();
+        private CrossList<OneBlock> BlockBaseCrossList = new CrossList<OneBlock>();
         public List<Particle> ActiveParticle = new List<Particle>();
         /// <summary>
         /// key：guid  value：building
         /// </summary>
         public Dictionary<string, BuildingBase> BuildingInRAM = new Dictionary<string, BuildingBase>();
 
-        public Block GetBlock(Vector2Int blockPos)
-        {
-            return BlockInRAM[blockPos];
-        }
-        public BackgroundBlock GetBackground(Vector2Int blockPos)
-        {
-            return BackgroundInRAM[blockPos];
-        }
-
-        public BlockBase GetBlockBase(BlockBase.BlockType blockType, Vector2Int blockPos)
-        {
-            switch (blockType)
-            {
-                default:
-                case BlockBase.BlockType.Block: return GetBlock(blockPos);
-                case BlockBase.BlockType.BackgroundBlock: return GetBackground(blockPos);
-            }
-        }
+        public Block GetBlock(Vector2Int blockPos) => BlockBaseCrossList[blockPos].Block;
+        public BackgroundBlock GetBackground(Vector2Int blockPos) => BlockBaseCrossList[blockPos].BackgroundBlock;
+        public BlockBase GetBlockBase(BlockBase.BlockType blockType, Vector2Int blockPos) => BlockBaseCrossList[blockPos][(int)blockType];
 
         public BuildingBase GetBuilding(string guid)
         {
@@ -160,8 +163,7 @@ namespace PRO
         {
             Block.PutIn(GetBlock(blockPos));
             BackgroundBlock.PutIn(GetBackground(blockPos));
-            BlockInRAM[blockPos] = null;
-            BackgroundInRAM[blockPos] = null;
+            BlockBaseCrossList[blockPos] = new OneBlock();
             BlockBaseInRAM.Remove(blockPos);
             var list = SetPool.TakeOut_List<BuildingBase>();
             foreach (var building in BuildingInRAM.Values)
@@ -192,8 +194,7 @@ namespace PRO
             SaveBlockData(blockPos);
             Block.PutIn(GetBlock(blockPos));
             BackgroundBlock.PutIn(GetBackground(blockPos));
-            BlockInRAM[blockPos] = null;
-            BackgroundInRAM[blockPos] = null;
+            BlockBaseCrossList[blockPos] = new OneBlock();
             BlockBaseInRAM.Remove(blockPos);
         }
         /// <summary>
@@ -204,8 +205,15 @@ namespace PRO
         {
             string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
-            JsonTool.StoreText($@"{path}\block.txt", BlockToDiskEx.ToDisk(GetBlock(blockPos), this));
-            JsonTool.StoreText($@"{path}\background.txt", BlockToDiskEx.ToDisk(GetBackground(blockPos), this));
+            Profiler.BeginSample(blockPos.ToString());
+            Profiler.BeginSample("disk0");
+            string disk0 = BlockToDiskEx.ToDisk(GetBlock(blockPos));
+            Profiler.EndSample();
+            Profiler.BeginSample("text");
+            JsonTool.StoreText($@"{path}\block.txt", disk0);
+            Profiler.EndSample();
+            JsonTool.StoreText($@"{path}\background.txt", BlockToDiskEx.ToDisk(GetBackground(blockPos)));
+            Profiler.EndSample();
         }
 
         public void LoadBuilding(string guid)
@@ -263,7 +271,8 @@ namespace PRO
         {
             var block = Block.TakeOut(this);
             block.name = $"Block{blockPos}";
-            BlockInRAM[blockPos] = block;
+            var oneBlock = BlockBaseCrossList[blockPos];
+            BlockBaseCrossList[blockPos] = new OneBlock() { Block = block, BackgroundBlock = oneBlock.BackgroundBlock };
             block.transform.position = Block.BlockToWorld(blockPos);
             block.BlockPos = blockPos;
             return block;
@@ -276,7 +285,8 @@ namespace PRO
         public BackgroundBlock CreateBackground(Vector2Int blockPos)
         {
             var back = BackgroundBlock.TakeOut(this);
-            BackgroundInRAM[blockPos] = back;
+            var oneBlock = BlockBaseCrossList[blockPos];
+            BlockBaseCrossList[blockPos] = new OneBlock() { Block = oneBlock.Block, BackgroundBlock = back };
             back.transform.position = Block.BlockToWorld(blockPos);
             back.transform.parent = GetBlock(blockPos).transform;
             back.BlockPos = blockPos;

@@ -1,8 +1,7 @@
-using Sirenix.OdinInspector;
 using System;
 namespace PRO
 {
-    public abstract class UIControllerBase : SerializedMonoBehaviour
+    public abstract class UIControllerBase : MonoScriptBase
     {
 
         public abstract UIViewBase View { get; }

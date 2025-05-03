@@ -636,6 +636,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5628f7aa30281e45abea3da90d0d8fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   useTime: 1
 --- !u!1 &139655110
 GameObject:
@@ -1630,7 +1642,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   AgentSprice: {fileID: 320434039}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}
@@ -2760,7 +2775,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
 --- !u!1 &534240576
 GameObject:
   m_ObjectHideFlags: 0
@@ -4402,7 +4420,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   AgentSprice: {fileID: 841414619}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}
@@ -4489,6 +4510,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
     - Name: toward
       Entry: 3
       Data: 0
@@ -5080,7 +5104,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: 0
 --- !u!1 &945584696
 GameObject:
   m_ObjectHideFlags: 0
@@ -8121,12 +8148,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1283193037}
+  - component: {fileID: 1283193042}
   - component: {fileID: 1283193036}
-  - component: {fileID: 1283193035}
-  - component: {fileID: 1283193038}
   - component: {fileID: 1283193039}
   - component: {fileID: 1283193040}
   - component: {fileID: 1283193041}
+  - component: {fileID: 1283193038}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -8134,18 +8161,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1283193035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283193034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c395e422703f0c444bef5abe8fba592b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1283193036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8158,6 +8173,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9898acd76fde754408626caec1627791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
+    - Name: source
+      Entry: 6
+      Data: 
+    - Name: DrawGraphTaskQueue
+      Entry: 7
+      Data: 0|System.Collections.Generic.Queue`1[[PRO.Tool.DrawGraphTaskData, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: MainThreadUpdateLock
+      Entry: 7
+      Data: 1|System.Object, mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+  Text: {fileID: 0}
   PoolNode: {fileID: 0}
 --- !u!4 &1283193037
 Transform:
@@ -8186,6 +8236,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f4833268ad9224a81d2d3807be939f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
 --- !u!114 &1283193039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8198,6 +8260,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90bf31250dbc65c409286c76a8cd1f91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
 --- !u!114 &1283193040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8210,6 +8284,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa002561ffbc046489203680cb691e69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   roles:
   - {fileID: 841414625}
   - {fileID: 2112103786}
@@ -8226,6 +8312,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1697179f9e4ce4a9955c6e9d18ca83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
+--- !u!114 &1283193042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283193034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ec1f50e3ca1cb4aae21ab453519121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  priority: {fileID: 11400000, guid: 2f394249f320a6c43a36f36576ed1196, type: 2}
 --- !u!1 &1305003538
 GameObject:
   m_ObjectHideFlags: 0
@@ -9902,7 +10022,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   AgentSprice: {fileID: 1590746141}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}
@@ -9927,6 +10050,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
     - Name: toward
       Entry: 3
       Data: 1
@@ -10953,10 +11079,10 @@ RectTransform:
   - {fileID: 414653644}
   m_Father: {fileID: 1586342722958057422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 60, y: -60}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1705470186
 MonoBehaviour:
@@ -13140,7 +13266,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
 --- !u!225 &2023034950
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -13712,7 +13841,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   AgentSprice: {fileID: 2112103783}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}
@@ -13840,6 +13972,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
     - Name: toward
       Entry: 3
       Data: 1

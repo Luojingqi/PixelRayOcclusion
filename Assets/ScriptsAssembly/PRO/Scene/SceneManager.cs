@@ -9,7 +9,7 @@ using UnityEngine;
 namespace PRO
 {
 
-    public class SceneManager : MonoBehaviour
+    public class SceneManager : MonoScriptBase, ITime_Awake, ITime_Update, ITime_LateUpdate
     {
 
         public static SceneManager Inst;
@@ -17,6 +17,7 @@ namespace PRO
 
         private SceneEntity nowScene;
         public SceneEntity NowScene { get => nowScene; }
+
         private Dictionary<string, SceneEntity> scenes = new Dictionary<string, SceneEntity>();
         public Block GetBlock(Vector2Int blockPos, string sceneName) => scenes[sceneName].GetBlock(blockPos);
         public BackgroundBlock GetBackground(Vector2Int blockPos, string sceneName) => scenes[sceneName].GetBackground(blockPos);
@@ -32,7 +33,7 @@ namespace PRO
             //nowScene = toSceen;
             //BlockMaterial.UpdateBind();
         }
-        public void Awake()
+        public void TimeAwake()
         {
             Inst = this;
             DontDestroyOnLoad(this);
@@ -71,7 +72,10 @@ namespace PRO
             //}
             //list0.ForEach(b => Block.PutIn(b));
             //list1.ForEach(b => BackgroundBlock.PutIn(b));
+
+
         }
+        
         public FreelyLightSource source;
         public Transform PoolNode;
         float time0 = 0;
@@ -81,14 +85,15 @@ namespace PRO
 
         public static float updatetime = 0.2f;
 
-        public void Update()
+        public void TimeUpdate()
         {
             MousePoint.Update();
             var p = MousePoint.block.GetPixel(MousePoint.pixelPos);
-            if (p != null)
-                GameObject.Find("UI/GameMainCanvas/pixel").GetComponent<TMP_Text>().text = p.typeInfo.typeName + "|" + p.colorInfo.colorName + "|" + p.posG;
+            //if (p != null)
+            //Text.text = p.typeInfo.typeName + "|" + p.colorInfo.colorName + "|" + p.posG;
+
             if (source != null) source.GloabPos = MousePoint.globalPos;
-            time0 += Time.deltaTime;
+            time0 += TimeManager.deltaTime;
             while (time0 > updatetime)
             {
                 time0 -= updatetime;
@@ -99,7 +104,7 @@ namespace PRO
                         NowScene.GetBackground(new(x, y)).RandomUpdatePixelList((int)(updatetime * 1000));
                     }
             }
-            time1 += Time.deltaTime;
+            time1 += TimeManager.deltaTime;
             while (time1 > 0.25f)
             {
                 time1 -= 0.25f;
@@ -107,7 +112,7 @@ namespace PRO
                     for (int x = -l; x <= l; x++)
                         NowScene.GetBlock(new(x, y)).UpdateFluid1();
             }
-            time2 += Time.deltaTime;
+            time2 += TimeManager.deltaTime;
             while (time2 > 0.125f)
             {
                 time2 -= 0.125f;
@@ -133,7 +138,7 @@ namespace PRO
                 finally { Monitor.Exit(MainThreadUpdateLock); }
             }
         }
-        private void LateUpdate()
+        public void TimeLateUpdate()
         {
             if (Monitor.TryEnter(BlockMaterial.DrawApplyQueue))
             {

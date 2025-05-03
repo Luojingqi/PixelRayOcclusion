@@ -242,7 +242,7 @@ namespace PRO
         public void UpdateFluid1()
         {
             SceneEntity scene = SceneManager.Inst.NowScene;
-            Random.InitState((int)(Time.deltaTime * 1000000));
+            Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
                 _posList.Clear();
@@ -347,7 +347,7 @@ namespace PRO
         public void UpdateFluid2()
         {
             SceneEntity scene = SceneManager.Inst.NowScene;
-            Random.InitState((int)(Time.deltaTime * 1000000));
+            Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = fluidUpdateHash2.Length - 1; i >= 0; i--)
             {
                 _posList.Clear();
@@ -469,7 +469,7 @@ namespace PRO
                         goto end;
                     //根据概率来看优先向哪个方向移动
                     AddQueueHash(pixel.posG + Vector2Int.down);
-                    Random.InitState((int)(Time.deltaTime * 1000000));
+                    Random.InitState((int)(TimeManager.deltaTime * 1000000));
                     //if (Random.Range(0, 100) >= 50)
                     //{
                     //    AddQueueHash(g + Vector2Int.right);

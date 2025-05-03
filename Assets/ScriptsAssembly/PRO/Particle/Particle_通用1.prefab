@@ -134,7 +134,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
   AgentSprice: {fileID: 0}
   SpecialEffect2DSpriteList: []
   idle: {fileID: 0}
@@ -150,3 +153,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269f2b904029b1248a1fb18de2b3c3b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
