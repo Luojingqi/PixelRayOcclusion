@@ -1,6 +1,5 @@
 using PRO.Tool;
 using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static PRO.SkillEditor.Slice_DiskBase;
@@ -9,7 +8,7 @@ namespace PRO.SkillEditor
     /// <summary>
     /// 技能播放的执行人
     /// </summary>
-    public class SkillPlayAgent : SerializedMonoBehaviour, IScene
+    public class SkillPlayAgent : MonoScriptBase, IScene, ITime_Update
     {
         public SceneEntity Scene => _scene;
         private SceneEntity _scene;
@@ -82,13 +81,8 @@ namespace PRO.SkillEditor
         private int nowFrame;
 
 
-        private void Update()
-        {
-            UpdateFrame();
-        }
-        #region 迭代播放
         private float time;
-        private void UpdateFrame()
+        public void TimeUpdate()
         {
             if (Play == false || skill == null) return;
             if (UpdateFrameScript(Skill))
@@ -96,6 +90,7 @@ namespace PRO.SkillEditor
                 Skill = idle;
             }
         }
+        #region 迭代播放
         /// <summary>
         /// 不自动播放，使用手动api播放，需要每帧调用
         /// 返回为真代表播放完毕
@@ -106,7 +101,7 @@ namespace PRO.SkillEditor
         /// <returns></returns>
         public bool UpdateFrameScript(Skill_Disk playSkill, int playTrack = ~0, bool autoClear = true)
         {
-            time += Time.deltaTime * 1000;
+            time += TimeManager.deltaTime * 1000;
             while (time >= playSkill.FrameTime)
             {
                 time -= playSkill.FrameTime;

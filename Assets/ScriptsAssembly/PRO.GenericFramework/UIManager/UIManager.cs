@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace PRO
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoScriptBase, ITime_Awake
     {
         public static UIManager Inst { get; private set; }
-        public void Awake() => Inst = this;
+
+        public void TimeAwake() => Inst = this;
 
         /// <summary>
         /// 从UIConfigs.Json文件加载到的UI配置字典

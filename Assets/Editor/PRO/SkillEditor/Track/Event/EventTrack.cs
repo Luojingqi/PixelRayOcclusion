@@ -1,7 +1,6 @@
 using PROTool;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace PRO.SkillEditor
@@ -38,7 +37,7 @@ namespace PRO.SkillEditor
         private EventSlice DiskToSlice(Slice_DiskBase sliceDisk)
         {
             if (sliceDisk is EventDisk_Base == false) return null;
-            if(EventSlice_List == null) EventSlice_List = ReflectionTool.GetDerivedClasses(typeof(EventSlice));
+            if (EventSlice_List == null) EventSlice_List = ReflectionTool.GetDerivedClasses(typeof(EventSlice));
             foreach (var item in EventSlice_List)
             {
                 var strings = item.Name.Split('_');
@@ -55,14 +54,14 @@ namespace PRO.SkillEditor
 
         protected override bool DragAssetTypeCheck(Type type)
         {
-            return type == typeof(MonoScript);
+            return type == typeof(UnityEditor.MonoScript);
         }
 
         protected override void DragAssetExit(DragExitedEvent evt, object[] objects)
         {
             for (int i = 0; i < objects.Length; i++)
             {
-                MonoScript monoScript = objects[i] as MonoScript;
+                UnityEditor.MonoScript monoScript = objects[i] as UnityEditor.MonoScript;
                 if (monoScript == null) continue;
                 Type type = monoScript.GetClass();
                 if (type.IsSubclassOf(typeof(EventDisk_Base)) == false) continue;

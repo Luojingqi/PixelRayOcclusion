@@ -28,6 +28,7 @@ namespace PRO.Tool
         /// 是否可以直接在unity中Get组件
         /// </summary>
         bool canGet;
+
         protected override GameObject NewObject()
         {
             GameObject go = null;

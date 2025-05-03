@@ -4,11 +4,13 @@ namespace PRO
 {
     public class UIChildViewBase
     {
-        public RectTransform rectTransform {  get; private set; }
+        public RectTransform rectTransform { get; private set; }
         protected Transform transform;
-        public virtual void Init(Transform transform)
+        protected MonoScriptBase mono;
+        public virtual void Init(MonoScriptBase mono)
         {
-            this.transform = transform;
+            this.mono = mono;
+            transform = mono.transform;
             rectTransform = transform.GetComponent<RectTransform>();
         }
     }

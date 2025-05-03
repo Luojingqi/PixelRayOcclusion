@@ -19,12 +19,12 @@ namespace PRO
         public static Vector2Int WorldToBlock(Vector2 worldPos) => GlobalToBlock(WorldToGlobal(worldPos));
         public static Vector2Int WorldToGlobal(Vector2 worldPos)
         {
-           // float absX = Mathf.Abs(worldPos.x);
-           // float absY = Mathf.Abs(worldPos.y);
+            // float absX = Mathf.Abs(worldPos.x);
+            // float absY = Mathf.Abs(worldPos.y);
             int x = (int)Mathf.Floor((int)(worldPos.x * 100) / 100f / Pixel.Size);
             int y = (int)Mathf.Floor((int)(worldPos.y * 100) / 100f / Pixel.Size);
-          //  if (worldPos.x < 0 && absX % Pixel.Size > 0) x = -x - 1;
-          //  if (worldPos.y < 0 && absY % Pixel.Size > 0) y = -y - 1;
+            //  if (worldPos.x < 0 && absX % Pixel.Size > 0) x = -x - 1;
+            //  if (worldPos.y < 0 && absY % Pixel.Size > 0) y = -y - 1;
             return new Vector2Int(x, y);
         }
         /// <summary>
@@ -242,7 +242,7 @@ namespace PRO
         public void UpdateFluid1()
         {
             SceneEntity scene = SceneManager.Inst.NowScene;
-            Random.InitState((int)(Time.deltaTime * 1000000));
+            Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
                 _posList.Clear();
@@ -347,7 +347,7 @@ namespace PRO
         public void UpdateFluid2()
         {
             SceneEntity scene = SceneManager.Inst.NowScene;
-            Random.InitState((int)(Time.deltaTime * 1000000));
+            Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = fluidUpdateHash2.Length - 1; i >= 0; i--)
             {
                 _posList.Clear();
@@ -469,7 +469,7 @@ namespace PRO
                         goto end;
                     //根据概率来看优先向哪个方向移动
                     AddQueueHash(pixel.posG + Vector2Int.down);
-                    Random.InitState((int)(Time.deltaTime * 1000000));
+                    Random.InitState((int)(TimeManager.deltaTime * 1000000));
                     //if (Random.Range(0, 100) >= 50)
                     //{
                     //    AddQueueHash(g + Vector2Int.right);

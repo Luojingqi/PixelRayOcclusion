@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class Particle : MonoBehaviour, IScene
+    public class Particle : MonoScriptBase, IScene
     {
         public SpriteRenderer Renderer { get; private set; }
         public Rigidbody2D Rig2D { get; private set; }
@@ -62,7 +62,7 @@ namespace PRO
         private SceneEntity _scene;
 
         public void UpdateRemainTime(int cutDown)
-        {            
+        {
             if (Scene.GetBlock(Block.WorldToBlock(transform.position)) == null)
             {
                 ParticleManager.Inst.GetPool(loadPath).PutIn(this);
@@ -153,5 +153,7 @@ namespace PRO
         {
             transform.position = Block.GlobalToWorld(global) + new Vector3(pixelSizeHalf, pixelSizeHalf);
         }
+
+
     }
 }

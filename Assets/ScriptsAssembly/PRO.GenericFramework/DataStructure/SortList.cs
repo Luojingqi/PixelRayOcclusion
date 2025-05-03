@@ -1,0 +1,48 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace PRO
+{
+    public class SortList<T> : IEnumerable<HashSet<T>>
+    {
+        private readonly List<int> costList = new List<int>();
+        private readonly List<HashSet<T>> valueList = new List<HashSet<T>>();
+
+        public void Add(T value, int cost)
+        {
+            // 使用二分查找确定插入位置
+            int index = costList.BinarySearch(cost);
+            if (index < 0)
+            {
+                //未找到时返回大于目标值的下一个值的补码
+                // 计算实际插入位置（取补码）
+                index = ~index;
+                valueList.Insert(index, new HashSet<T>());
+                costList.Insert(index, cost);
+            }
+            valueList[index].Add(value);
+        }
+        public void Remove(T value, int cost)
+        {
+            int index = costList.BinarySearch(cost);
+            if (index < 0) return;
+            valueList[index].Remove(value);
+            costList.RemoveAt(index);
+        }
+
+        public int Count => valueList.Count;
+
+        public HashSet<T> FormIndex(int index) => valueList[index];
+        public HashSet<T> FormCost(int cost)
+        {
+            int index = costList.BinarySearch(cost);
+            if (index < 0) return null;
+            return valueList[index];
+        }
+
+        public IEnumerator<HashSet<T>> GetEnumerator() => valueList.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    }
+}

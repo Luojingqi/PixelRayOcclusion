@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 namespace PRO
 {
-    public class GameSaveManager : MonoBehaviour
+    public class GameSaveManager : MonoScriptBase, ITime_Awake, ITime_Update
     {
         public static GameSaveManager Inst { get; private set; }
 
@@ -17,13 +17,13 @@ namespace PRO
         /// </summary>
         public static string SavePath;
 
-        private void Awake()
+        public void TimeAwake()
         {
             Inst = this;
             SavePath = @$"{Application.streamingAssetsPath}\GameSaveFiles\";
         }
 
-        public void Update()
+        public void TimeUpdate()
         {
             if (Input.GetKeyDown(KeyCode.G))
             {

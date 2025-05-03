@@ -10,7 +10,7 @@ namespace PRO.Disk.Scene
     /// </summary>
     public static class BlockToDiskEx
     {
-        public static string ToDisk(BlockBase block, SceneEntity sceneEntity)
+        public static string ToDisk(BlockBase block)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append('|');

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PRO.GenericFramework
+namespace PRO.Tool
 {
     public interface IFSMState<T> where T : Enum
     {

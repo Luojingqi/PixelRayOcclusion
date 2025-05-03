@@ -8,7 +8,7 @@ namespace PRO.SkillEditor
     /// <summary>
     /// 一个技能存在磁盘中的数据
     /// </summary>
-    [CreateAssetMenu(menuName = "创建一个技能配置")]
+    [CreateAssetMenu(menuName = "创建一个技能轨道")]
     public class Skill_Disk : SerializedScriptableObject
     {
         [LabelText("最大帧")]

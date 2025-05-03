@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PRO.GenericFramework
+namespace PRO.Tool
 {
     public abstract class FSMManager<T> where T : Enum
     {
