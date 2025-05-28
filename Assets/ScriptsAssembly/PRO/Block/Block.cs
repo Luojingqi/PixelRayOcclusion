@@ -1,5 +1,7 @@
 using PRO.DataStructure;
 using PRO.Disk;
+using PRO.Proto;
+using PRO.Proto.Block;
 using PRO.Renderer;
 using PRO.Tool;
 using System.Collections.Generic;
@@ -570,6 +572,44 @@ namespace PRO
             else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
         }
 
+
+
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
+
+        public override void ToDisk(ref BlockBaseData diskData)
+        {
+            diskData.Block = new BlockBaseData.Types.BlockData();
+            var data = diskData.Block;
+
+            foreach (var hash in fluidUpdateHash1)
+                foreach (var pos in hash)
+                    data.FluidUpdateHash1.Add(pos.ToDisk());
+
+            foreach (var hash in fluidUpdateHash2)
+                foreach (var pos in hash)
+                    data.FluidUpdateHash2.Add(pos.ToDisk());
+
+            foreach (var hash in fluidUpdateHash3)
+                foreach (var pos in hash)
+                    data.FluidUpdateHash3.Add(pos.ToDisk());
+
+        }
+
+        public override void ToRAM(BlockBaseData data)
+        {
+            foreach (var pos in data.Block.FluidUpdateHash1)
+                AddHashSet(fluidUpdateHash1[pos.Y], pos.ToRAM());
+            foreach (var pos in data.Block.FluidUpdateHash2)
+                AddHashSet(fluidUpdateHash2[pos.Y], pos.ToRAM());
+            foreach (var pos in data.Block.FluidUpdateHash3)
+                AddHashSet(fluidUpdateHash3[pos.Y], pos.ToRAM());
+
+            var colliderDataList = GreedyCollider.CreateColliderDataList(this, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
+            SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() =>
+            {
+                GreedyCollider.CreateColliderAction(this, colliderDataList);
+                BlockMaterial.SetBlock(this);
+            });
+        }
     }
 }

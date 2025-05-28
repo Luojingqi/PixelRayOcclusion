@@ -1,148 +1,92 @@
 ﻿using PRO.DataStructure;
-using PRO.Tool;
+using PRO.Disk;
+using PRO.Proto.Block;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace PRO.Disk.Scene
+namespace PRO
 {
     /// <summary>
     /// 块数据存储到磁盘与从磁盘中加载的类
     /// </summary>
-    public static class BlockToDiskEx
+    public abstract partial class BlockBase
     {
-        public static string ToDisk(BlockBase block)
+        public abstract void ToDisk(ref BlockBaseData data);
+
+        public abstract void ToRAM(BlockBaseData data);
+
+        public BlockBaseData ToDisk()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append('|');
-            Dictionary<string, int> typeNameDic = new Dictionary<string, int>();
-            Dictionary<string, int> colorNameDic = new Dictionary<string, int>();
-            Dictionary<string, int> buildingGuidDic = new Dictionary<string, int>();
+            var diskData = new BlockBaseData();
             for (int y = 0; y < Block.Size.y; y++)
                 for (int x = 0; x < Block.Size.x; x++)
                 {
-                    Pixel pixel = block.GetPixel(new Vector2Byte(x, y));
-                    if (typeNameDic.TryGetValue(pixel.typeInfo.typeName, out int typeNameIndex) == false)
+                    Pixel pixel = GetPixel(new Vector2Byte(x, y));
+                    if (diskData.TypeNameIndexDic.TryGetValue(pixel.typeInfo.typeName, out int typeNameIndex) == false)
                     {
-                        typeNameIndex = typeNameDic.Count;
-                        typeNameDic.Add(pixel.typeInfo.typeName, typeNameIndex);
+                        typeNameIndex = diskData.TypeNameIndexDic.Count;
+                        diskData.TypeNameIndexDic.Add(pixel.typeInfo.typeName, typeNameIndex);
                     }
-                    if (colorNameDic.TryGetValue(pixel.colorInfo.colorName, out int colorNameIndex) == false)
+                    if (diskData.ColorNameIndexDic.TryGetValue(pixel.colorInfo.colorName, out int colorNameIndex) == false)
                     {
-                        colorNameIndex = colorNameDic.Count;
-                        colorNameDic.Add(pixel.colorInfo.colorName, colorNameIndex);
+                        colorNameIndex = diskData.ColorNameIndexDic.Count;
+                        diskData.ColorNameIndexDic.Add(pixel.colorInfo.colorName, colorNameIndex);
                     }
-                    int buildingIndex = 0;
+                    var pixelData = new BlockBaseData.Types.PixelData();
+                    pixelData.TypeIndex = typeNameIndex;
+                    pixelData.ColorIndex = colorNameIndex;
+                    pixelData.Durability = pixel.durability;
+                    pixelData.AffectsTransparency = pixel.affectsTransparency;
+
                     foreach (var building in pixel.buildingSet)
                     {
-                        if (buildingGuidDic.TryGetValue(building.GUID, out buildingIndex) == false)
+                        if (diskData.BuildingGuidIndexDic.TryGetValue(building.GUID, out int buildingIndex) == false)
                         {
-                            buildingIndex = buildingGuidDic.Count + 1;
-                            buildingGuidDic.Add(building.GUID, buildingIndex);
+                            buildingIndex = diskData.BuildingGuidIndexDic.Count + 1;
+                            diskData.BuildingGuidIndexDic.Add(building.GUID, buildingIndex);
                         }
-                        sb.Append($"{buildingIndex}:");
+                        pixelData.BuildingList.Add(buildingIndex);
                     }
-                    sb.Append($"{typeNameIndex}:{colorNameIndex},");
+                    diskData.AllPixel.Add(pixelData);
                 }
-            sb[sb.Length - 1] = '|';
-            foreach (var kv in typeNameDic)
-                sb.Append($"{kv.Value}:{kv.Key},");
-            sb[sb.Length - 1] = '|';
-            foreach (var kv in colorNameDic)
-                sb.Append($"{kv.Value}:{kv.Key},");
-            sb[sb.Length - 1] = '|';
-            foreach (var kv in buildingGuidDic)
-                sb.Append($"{kv.Value}:{kv.Key},");
-            if (sb[sb.Length - 1] == ',') sb.Remove(sb.Length - 1, 1);
-
-            return sb.ToString();
+            ToDisk(ref diskData);
+            return diskData;
         }
-
-        public static void ToRAM(string blockText, BlockBase block, SceneEntity sceneEntity)
+        public void ToRAM(BlockBaseData diskData, SceneEntity sceneEntity)
         {
-            Stack<char> stack = new Stack<char>();
-            StringBuilder sb = new StringBuilder();
-            Dictionary<int, string> buildingGuidDic = new Dictionary<int, string>();
-            Dictionary<int, string> colorNameDic = new Dictionary<int, string>();
-            Dictionary<int, string> typeNameDic = new Dictionary<int, string>();
-            int lastDelimiter = blockText.Length;
-            int index = 0;
-            #region buildingGuidDic
-            string buildingGuid = null;
-            JsonTool.Deserialize_Data(blockText, (num) =>
-            {
-                if (num == 0) buildingGuid = JsonTool.StackToString(stack, ref sb);
-                else if (num == 1) index = JsonTool.StackToInt(stack);
-            },
-            () =>
-            {
-                if (buildingGuid != null && buildingGuid.Length > 0)
-                {
-                    buildingGuidDic.Add(index, buildingGuid);
-                    if (sceneEntity.GetBuilding(buildingGuid) == null)
-                        SceneManager.Inst.AddMainThreadEvent_Clear_WaitInvoke_Lock(() => sceneEntity.LoadBuilding(buildingGuid));
-                }
-            },
-            ref lastDelimiter, ref stack);
-            #endregion
-            #region colorNameDic  typeNameDic
-            string typeName = null;
-            string colorName = null;
-            JsonTool.Deserialize_Data(blockText, (num) =>
-            {
-                if (num == 0) colorName = JsonTool.StackToString(stack, ref sb);
-                else if (num == 1) index = JsonTool.StackToInt(stack);
-            },
-            () => { colorNameDic.Add(index, colorName); },
-            ref lastDelimiter, ref stack);
-            JsonTool.Deserialize_Data(blockText, (num) =>
-            {
-                if (num == 0) typeName = JsonTool.StackToString(stack, ref sb);
-                else if (num == 1) index = JsonTool.StackToInt(stack);
-            },
-            () => { typeNameDic.Add(index, typeName); },
-            ref lastDelimiter, ref stack);
-            #endregion
-            List<BuildingBase> buildingList = new List<BuildingBase>();
-            int pixelNum = Block.Size.x * Block.Size.y - 1;
+            Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>();
+            Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>();
+            Dictionary<int, BuildingBase> buildingDic = new Dictionary<int, BuildingBase>();
 
-            ListPackage<Pixel> list = default;
-            lock (SceneManager.Inst.MainThreadUpdateLock)
+            foreach (var kv in diskData.TypeNameIndexDic)
+                typeNameDic.Add(kv.Value, Pixel.GetPixelTypeInfo(kv.Key));
+            foreach (var kv in diskData.ColorNameIndexDic)
+                colorNameDic.Add(kv.Value, BlockMaterial.GetPixelColorInfo(kv.Key));
+            foreach (var kv in diskData.BuildingGuidIndexDic)
             {
-                list = SetPool.TakeOut_List<Pixel>();
-                for (int i = 0; i <= pixelNum; i++)
-                    list.Add(Pixel.pixelPool.TakeOut());
+                var building = sceneEntity.GetBuilding(kv.Key);
+                if (building == null)
+                    SceneManager.Inst.AddMainThreadEvent_Clear_WaitInvoke_Lock(() => sceneEntity.LoadBuilding(kv.Key));
+                buildingDic.Add(kv.Value, sceneEntity.GetBuilding(kv.Key));
             }
-            JsonTool.Deserialize_Data(blockText, (num) =>
+
+            for (int i = 0; i < diskData.AllPixel.Count; i++)
             {
-                int dicIndex = JsonTool.StackToInt(stack);
-                if (num == 0) colorName = colorNameDic[dicIndex];
-                else if (num == 1) typeName = typeNameDic[dicIndex];
-                else
+                var pixelData = diskData.AllPixel[i];
+                Pixel pixel = null;
+                lock (Pixel.pixelPool)
+                    pixel = Pixel.pixelPool.TakeOut();
+                Pixel.InitPixel(pixel, typeNameDic[pixelData.TypeIndex], colorNameDic[pixelData.ColorIndex], new(i % Block.Size.y, i / Block.Size.y), pixelData.Durability);
+                pixel.affectsTransparency = pixelData.AffectsTransparency;
+                foreach (var buildingIndex in pixelData.BuildingList)
                 {
-                    var building = sceneEntity.GetBuilding(buildingGuidDic[dicIndex]);
-                    if (building != null) buildingList.Add(building);
-                }
-            },
-            () =>
-            {
-                int x = pixelNum % Block.Size.x;
-                int y = pixelNum / Block.Size.y;
-                Pixel pixel = list[pixelNum];
-                Pixel.InitPixel(pixel, Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), new(x, y), 0);
-                block.SetPixel(pixel, true, false, false);
-                foreach (var building in buildingList)
-                {
+                    var building = buildingDic[buildingIndex];
                     pixel.buildingSet.Add(building);
                     building.Deserialize_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType), pixel);
                 }
-                buildingList.Clear();
-                --pixelNum;
-            },
-            ref lastDelimiter, ref stack);
-            lock (SceneManager.Inst.MainThreadUpdateLock)
-            {
-                SetPool.PutIn(list);
+                SetPixel(pixel, false, false, false);
             }
+            ToRAM(diskData);
         }
     }
 }

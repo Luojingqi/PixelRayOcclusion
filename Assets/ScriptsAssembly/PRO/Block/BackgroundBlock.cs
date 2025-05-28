@@ -1,5 +1,7 @@
+using PRO.Proto.Block;
 using PRO.Renderer;
 using PRO.Tool;
+using System.Text;
 using UnityEngine;
 
 namespace PRO
@@ -60,6 +62,19 @@ namespace PRO
             spriteRenderer.sortingOrder = -10;
 
             _blockType = BlockType.BackgroundBlock;
+        }
+
+        public override void ToDisk(ref BlockBaseData data)
+        {
+
+        }
+
+        public override void ToRAM(BlockBaseData data)
+        {
+            SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() =>
+            {
+                BlockMaterial.SetBackgroundBlock(this);
+            });
         }
     }
 }

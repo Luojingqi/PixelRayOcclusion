@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +20,7 @@ namespace PRO.Tool
                 else
                 {
                     string excelToolPath = Application.streamingAssetsPath + @"\Excel\ExcelTool\";
-                    JsonTool.LoadText(excelToolPath + "path.json", out string pathText);
+                    IOTool.LoadText(excelToolPath + "path.json", out string pathText);
                     excelToolSaveJsonPath = excelToolPath + (string)JsonTool.ToObject<JObject>(pathText)["jsonPath"];
                     return excelToolSaveJsonPath;
                 }

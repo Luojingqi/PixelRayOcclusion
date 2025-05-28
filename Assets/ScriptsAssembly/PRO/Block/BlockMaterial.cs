@@ -1,6 +1,8 @@
 using PRO.Disk;
 using PRO.Renderer;
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -57,7 +59,7 @@ namespace PRO
         public static void Init()
         {
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-            if (!JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
+            if (!IOTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
             {
                 Debug.Log("PROconfig.json加载失败，BlockMaterial无法初始化");
                 return;
@@ -91,7 +93,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelColorInfo") continue;
-                JsonTool.LoadText(fileInfo.FullName, out string infoText);
+                IOTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelColorInfo[]>(infoText);
@@ -194,15 +196,7 @@ namespace PRO
                 for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
                 {
                     var block = SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y));
-                    if (block == null) SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y),
-                        (blockBase) =>
-                        {
-                            switch (blockBase)
-                            {
-                                case Block block: SetBlock(block); break;
-                                case BackgroundBlock background: SetBackgroundBlock(background); break;
-                            }
-                        });
+                    if (block == null) SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
                 }
 
             blockShareMaterialManager.ClearLastBind();

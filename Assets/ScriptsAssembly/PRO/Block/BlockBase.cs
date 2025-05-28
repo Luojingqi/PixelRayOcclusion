@@ -10,7 +10,7 @@ using UnityEngine;
 using static PRO.Renderer.ComputeShaderManager;
 namespace PRO
 {
-    public class BlockBase : MonoBehaviour, IScene
+    public partial class BlockBase : MonoBehaviour, IScene
     {
         #region 坐标转换
         /// <summary>
@@ -246,19 +246,15 @@ namespace PRO
         #endregion
 
         #region 燃烧
-        int kk = 0;
 
-        public void RandomUpdatePixelList(int time)
+        public void Update_火焰燃烧(int time)
         {
             int num = queue_火焰.Count;
             while (num-- > 0)
             {
                 var v = queue_火焰.Dequeue();
-                //Debug.Log(kk + "|" + v);
-
                 UpdatePixel_燃烧(GetPixel(v), time);
             }
-            kk++;
         }
         private static Vector2Int[] ring = new Vector2Int[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1), new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
         private Queue<Vector2Byte> queue_火焰 = new Queue<Vector2Byte>();
@@ -317,7 +313,7 @@ namespace PRO
                 }
 
 
-                //模拟正态分布火焰强度变化
+                //简单模拟正态分布火焰强度变化
                 int length = pixel.typeInfo.availableColors.Length / 2;
                 float p = Mathf.Clamp(Mathf.Abs((float)pixel.durability / pixel.typeInfo.durability), 0, 1);
                 int colorIndex = length + 1 - (int)(p / (1f / length));

@@ -1,0 +1,76 @@
+﻿syntax = "proto3";
+
+package PRO.Proto.DataStructure;
+
+message Vector2
+{
+	float x = 1;
+	float y = 2;
+}
+message Vector3
+{
+	float x = 1;
+	float y = 2;
+	float z = 3;
+}
+
+
+message Vector2Int
+{
+	sint32 x = 1;
+	sint32 y = 2;
+}
+message Vector3Int
+{
+	sint32 x = 1;
+	sint32 y = 2;
+	sint32 z = 3;
+}
+
+
+message Quaternion
+{
+	float x = 1;
+	float y = 2;
+	float z = 3;
+	float w = 4;
+}
+
+message Vector2Byte
+{
+	int32 x = 1;
+	int32 y = 2;
+}
+
+
+message Color32
+{
+	int32 r = 1;
+	int32 g = 2;
+	int32 b = 3;
+	int32 a = 4;
+}
+
+
+message Transform
+{
+	Vector3 position = 1;
+	Quaternion rotation = 2;
+	Vector3 localScale = 3;
+}
+
+message Rigidbody2D
+{
+	Vector2 velocity = 1;
+	float angularVelocity = 2;
+	bool simulated = 3;
+}
+
+message RaycastHit2D
+{
+	Vector2 centroid = 1;
+	float distance = 2;
+	float fraction = 3;
+	Vector2 normal = 4;
+	Vector2 point = 5;
+}

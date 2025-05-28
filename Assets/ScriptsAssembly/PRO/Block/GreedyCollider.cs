@@ -54,13 +54,22 @@ namespace PRO
             /// </summary>
             public Vector2Byte length;
         }
+
+        private static ObjectPool<HashSet<Vector2Int>> pool_set = new ObjectPool<HashSet<Vector2Int>>();
+        private static ObjectPool<List<ColliderData>> pool_list = new ObjectPool<List<ColliderData>>();
         /// <summary>
         /// 返回用于创建碰撞箱的数据集合
         /// </summary>
         public static List<ColliderData> CreateColliderDataList(this Block block, Vector2Byte min, Vector2Byte max)
         {
-            HashSet<Vector2Int> hash = new HashSet<Vector2Int>();
-            List<ColliderData> colliderDataList = new List<ColliderData>();
+            HashSet<Vector2Int> hash;
+            List<ColliderData> colliderDataList;
+            lock (pool_list)
+            {
+                hash = pool_set.TakeOut();
+                colliderDataList = pool_list.TakeOut();
+            }
+
             for (int y = max.y; y >= min.y; y--)
                 for (int x = min.x; x <= max.x; x++)
                     if (!hash.Contains(new Vector2Int(x, y)) && block.GetPixelRelocation(x, y).typeInfo.collider)
@@ -104,6 +113,11 @@ namespace PRO
                         colliderData.pos = new Vector2Byte(x, yShifting);
                         colliderDataList.Add(colliderData);
                     }
+            lock (pool_list)
+            {
+                pool_set.PutIn(hash);
+                pool_list.PutIn(colliderDataList);
+            }
             return colliderDataList;
         }
 
@@ -125,7 +139,7 @@ namespace PRO
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
                         block.allCollider[x, y] = box;
-                    
+
             }
         }
         /// <summary>

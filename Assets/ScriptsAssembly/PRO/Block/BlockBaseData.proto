@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
+
+package PRO.Proto.Block;
+
+message BlockBaseData
+{
+	// 像素索引与类型字典
+	map<string,int32> TypeNameIndexDic = 1;
+	// 像素索引与颜色字典
+	map<string,int32> ColorNameIndexDic = 2;
+	// 建筑索引与guid字典
+	map<string,int32> BuildingGuidIndexDic = 3;
+
+	message PixelData
+	{
+		int32 TypeIndex = 1;
+		int32 ColorIndex = 2;
+		int32 Durability = 3;
+		float AffectsTransparency = 4;
+		repeated int32 BuildingList = 5;
+	}
+	repeated PixelData AllPixel = 10;
+		
+
+	message BlockData
+	{
+		repeated PRO.Proto.DataStructure.Vector2Byte FluidUpdateHash1 = 1;
+		repeated PRO.Proto.DataStructure.Vector2Byte FluidUpdateHash2 = 2;
+		repeated PRO.Proto.DataStructure.Vector2Byte FluidUpdateHash3 = 3;
+	}
+	message BackgroundData
+	{
+
+	}
+
+	oneof Added
+	{
+		BlockData Block = 11;
+		BackgroundData Background = 12;
+	}
+}

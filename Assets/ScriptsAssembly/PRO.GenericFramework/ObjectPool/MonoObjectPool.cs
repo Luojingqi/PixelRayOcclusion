@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.Tool
 {
+    /// <summary>
+    /// 对象池：存储继承MonoScriptBase的对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MonoObjectPool<T> : ObjectPoolBase<T> where T : MonoScriptBase
     {
         private MonoScriptBase holdPrefab;
