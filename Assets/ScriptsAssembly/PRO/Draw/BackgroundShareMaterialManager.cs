@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static PRO.BlockMaterial;
 namespace PRO.Renderer
 {
@@ -36,7 +37,18 @@ namespace PRO.Renderer
         {
             shareMaterial.SetBuffer("AllPixelColorInfo", pixelColorInfoToShaderBufffer);
 
-            UpdateBind();
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
+                {
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    int lightIndex = x + y * LightResultBufferBlockSize.x;
+                    //Debug.Log($"±³¾°×ø±ê{background.BlockPos}  µÚÒ»´Î°ó¶¨  ±³¾°»º´æË÷Òý{lightIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
+                    materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", backgroundBufferArray[lightIndex]);
+                    materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
+                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
+                    background.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
+                }
         }
         public void ClearLastBind()
         {

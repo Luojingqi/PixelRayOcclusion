@@ -1258,6 +1258,11 @@ Durability = 0;
 AffectsTransparency = 0;
 BuildingList.Clear();
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
+}
 }
 public partial class BlockData
 {
@@ -1282,13 +1287,28 @@ item.PutIn();
 }
 FluidUpdateHash3.Clear();
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
+}
 }
 public partial class BackgroundData
 {
 public void Clear()
 {
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
+}
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 

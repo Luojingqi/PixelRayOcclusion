@@ -1,9 +1,10 @@
-﻿using PRO.Disk.Scene;
-using PRO.Tool;
+﻿using Newtonsoft.Json;
+using PRO.Disk.Scene;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 
 namespace PRO
 {
@@ -60,7 +61,7 @@ namespace PRO
             //创建一个场景
             SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog, sceneRoot);
             gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
-            JsonTool.StoreText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
+            IOTool.SaveText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
             return gameSaveCatalog;
         }
 
@@ -71,7 +72,7 @@ namespace PRO
         /// <returns></returns>
         public static GameSaveCatalog LoadGameSaveInfo(DirectoryInfo saveDirectoryInfo)
         {
-            if (JsonTool.LoadText(@$"{saveDirectoryInfo.FullName}\GameSaveCatalog.json", out string GameSaveInfoText))
+            if (IOTool.LoadText(@$"{saveDirectoryInfo.FullName}\GameSaveCatalog.json", out string GameSaveInfoText))
             {
                 //加载存档的目录文件
                 GameSaveCatalog gameSaveCatalog = JsonTool.ToObject<GameSaveCatalog>(GameSaveInfoText);

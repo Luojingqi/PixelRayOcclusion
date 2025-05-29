@@ -131,7 +131,7 @@ namespace PRO
 
         public static void PutIn(Block block)
         {
-            block.gameObject.SetActive(false);
+            HashSet<BoxCollider2D> boxHash = new HashSet<BoxCollider2D>(10);
             for (int y = 0; y < Block.Size.y; y++)
             {
                 for (int x = 0; x < Block.Size.x; x++)
@@ -144,16 +144,20 @@ namespace PRO
                     BoxCollider2D box = block.allCollider[x, y];
                     if (box != null)
                     {
+                        boxHash.Add(box);
                         block.allCollider[x, y] = null;
-                        GreedyCollider.PutIn(box);
                     }
                 }
             }
-            block.name = "Block(Clone)";
-            block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-
             block._screen = null;
-            BlockPool.PutIn(block.gameObject);
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+            {
+                block.name = "Block(Clone)";
+                block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+                BlockPool.PutIn(block.gameObject);
+                foreach (var box in boxHash)
+                    GreedyCollider.PutIn(box);
+            });
         }
         #endregion 
         public override void Init()
@@ -572,8 +576,11 @@ namespace PRO
             else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
         }
 
+        public HashSet<BuildingBase> buildingHash = new HashSet<BuildingBase>();
 
-
+        /// <summary>
+        /// 自由光源
+        /// </summary>
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
 
         public override void ToDisk(ref BlockBaseData diskData)
@@ -605,7 +612,7 @@ namespace PRO
                 AddHashSet(fluidUpdateHash3[pos.Y], pos.ToRAM());
 
             var colliderDataList = GreedyCollider.CreateColliderDataList(this, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-            SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() =>
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 GreedyCollider.CreateColliderAction(this, colliderDataList);
                 BlockMaterial.SetBlock(this);

@@ -38,7 +38,6 @@ namespace PRO
 
         public static void PutIn(BackgroundBlock background)
         {
-            background.gameObject.SetActive(false);
             for (int y = 0; y < Block.Size.y; y++)
             {
                 for (int x = 0; x < Block.Size.x; x++)
@@ -48,11 +47,13 @@ namespace PRO
                     Pixel.PutIn(pixel);
                 }
             }
-            background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-
             background._screen = null;
 
-            BackgroundPool.PutIn(background.gameObject);
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+            {
+                background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+                BackgroundPool.PutIn(background.gameObject);
+            });
         }
         #endregion
 
@@ -71,7 +72,7 @@ namespace PRO
 
         public override void ToRAM(BlockBaseData data)
         {
-            SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() =>
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 BlockMaterial.SetBackgroundBlock(this);
             });

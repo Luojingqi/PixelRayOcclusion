@@ -223,6 +223,12 @@ namespace PRO.Proto.ProtocTool
                     sb.Append(type.ToString());
                 sb.AppendLine("}");
             }
+
+            sb.AppendLine("public void ClearPutIn()");
+            sb.AppendLine("{");
+            sb.AppendLine("Clear();");
+            sb.AppendLine("this.PutIn();");
+            sb.AppendLine("}");
             sb.AppendLine("}");
             return sb.ToString();
         }

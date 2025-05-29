@@ -102,70 +102,70 @@ namespace PRO.Renderer
                     if (background != null) foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                 }
         }
-            public void UpdateFreelyLightSource()
-            {
-                ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
-                Vector2Int blockMinPos = Block.PixelToGlobal(globalBlockPos, new(0, 0));
-                Vector2Int blockMaxPos = blockMinPos + (Vector2Int)Block.Size - new Vector2Int(1, 1);
-                for (int ey = 0; ey < EachBlockReceiveLightSize.y; ey++)
-                    for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
-                    {
-                        Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
-                        Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
-                        if (block != null)
-                            foreach (var value in block.FreelyLightSourceHash)
-                            {
-                                LightSourceToShader lightSource = new LightSourceToShader() { gloabPos = value.GloabPos.Value, color = value.color };
-                                int r = value.Radius;
-                                Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(r, r);
-                                Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(r, r);
-
-                                Vector2Int beMixed_Min = new Vector2Int(Mathf.Max(blockMinPos.x, lightMinRadius.x), Mathf.Max(blockMinPos.y, lightMinRadius.y));
-                                Vector2Int beMixed_Max = new Vector2Int(Mathf.Min(blockMaxPos.x, lightMaxRadius.x), Mathf.Min(blockMaxPos.y, lightMaxRadius.y));
-                                if (beMixed_Min.x <= beMixed_Max.x && beMixed_Min.y <= beMixed_Max.y)
-                                {
-                                    lightSourceArray[0] = lightSource;
-                                    LightSourceBuffer.SetData(lightSourceArray);
-                                    SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
-                                    SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
-
-                                    SetLightBufferCS.Dispatch(value.Radius - 1, 1, 1, 1);
-
-                                    ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
-                                }
-                            }
-                    }
-            }
-
-
-            public void Reset()
-            {
-                ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
-            }
-
-            public void SubtractionFreelyLightResultBuffer()
-            {
-                ResetLightBufferCS.Dispatch(3, Block.Size.x / 8, Block.Size.y / 8, 1);
-            }
-
-            private void DrawLightSource(int radius, LightSourceToShader lightSource, Vector2Int blockMinPos, Vector2Int blockMaxPos)
-            {
-                Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(radius, radius);
-                Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(radius, radius);
-
-                Vector2Int beMixed_Min = new Vector2Int(Mathf.Max(blockMinPos.x, lightMinRadius.x), Mathf.Max(blockMinPos.y, lightMinRadius.y));
-                Vector2Int beMixed_Max = new Vector2Int(Mathf.Min(blockMaxPos.x, lightMaxRadius.x), Mathf.Min(blockMaxPos.y, lightMaxRadius.y));
-                if (beMixed_Min.x <= beMixed_Max.x && beMixed_Min.y <= beMixed_Max.y)
+        public void UpdateFreelyLightSource()
+        {
+            ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
+            Vector2Int blockMinPos = Block.PixelToGlobal(globalBlockPos, new(0, 0));
+            Vector2Int blockMaxPos = blockMinPos + (Vector2Int)Block.Size - new Vector2Int(1, 1);
+            for (int ey = 0; ey < EachBlockReceiveLightSize.y; ey++)
+                for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
                 {
-                    lightSourceArray[0] = lightSource;
-                    LightSourceBuffer.SetData(lightSourceArray);
-                    SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
-                    SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
+                    Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
+                    Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
+                    if (block != null)
+                        foreach (var value in block.FreelyLightSourceHash)
+                        {
+                            LightSourceToShader lightSource = new LightSourceToShader() { gloabPos = value.GloabPos.Value, color = value.color };
+                            int r = value.Radius;
+                            Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(r, r);
+                            Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(r, r);
 
-                    SetLightBufferCS.Dispatch(radius - 1, 1, 1, 1);
-                    ResetLightBufferCS.Dispatch(1, Block.Size.x / 8, Block.Size.y / 8, 1);
+                            Vector2Int beMixed_Min = new Vector2Int(Mathf.Max(blockMinPos.x, lightMinRadius.x), Mathf.Max(blockMinPos.y, lightMinRadius.y));
+                            Vector2Int beMixed_Max = new Vector2Int(Mathf.Min(blockMaxPos.x, lightMaxRadius.x), Mathf.Min(blockMaxPos.y, lightMaxRadius.y));
+                            if (beMixed_Min.x <= beMixed_Max.x && beMixed_Min.y <= beMixed_Max.y)
+                            {
+                                lightSourceArray[0] = lightSource;
+                                LightSourceBuffer.SetData(lightSourceArray);
+                                SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
+                                SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
+
+                                SetLightBufferCS.Dispatch(value.Radius - 1, 1, 1, 1);
+
+                                ResetLightBufferCS.Dispatch(2, Block.Size.x / 8, Block.Size.y / 8, 1);
+                            }
+                        }
                 }
+        }
 
+
+        public void Reset()
+        {
+            ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
+        }
+
+        public void SubtractionFreelyLightResultBuffer()
+        {
+            ResetLightBufferCS.Dispatch(3, Block.Size.x / 8, Block.Size.y / 8, 1);
+        }
+
+        private void DrawLightSource(int radius, LightSourceToShader lightSource, Vector2Int blockMinPos, Vector2Int blockMaxPos)
+        {
+            Vector2Int lightMinRadius = lightSource.gloabPos - new Vector2Int(radius, radius);
+            Vector2Int lightMaxRadius = lightSource.gloabPos + new Vector2Int(radius, radius);
+
+            Vector2Int beMixed_Min = new Vector2Int(Mathf.Max(blockMinPos.x, lightMinRadius.x), Mathf.Max(blockMinPos.y, lightMinRadius.y));
+            Vector2Int beMixed_Max = new Vector2Int(Mathf.Min(blockMaxPos.x, lightMaxRadius.x), Mathf.Min(blockMaxPos.y, lightMaxRadius.y));
+            if (beMixed_Min.x <= beMixed_Max.x && beMixed_Min.y <= beMixed_Max.y)
+            {
+                lightSourceArray[0] = lightSource;
+                LightSourceBuffer.SetData(lightSourceArray);
+                SetLightBufferCS.SetInts("beMixed_Min", beMixed_Min.x, beMixed_Min.y);
+                SetLightBufferCS.SetInts("beMixed_Max", beMixed_Max.x, beMixed_Max.y);
+
+                SetLightBufferCS.Dispatch(radius - 1, 1, 1, 1);
+                ResetLightBufferCS.Dispatch(1, Block.Size.x / 8, Block.Size.y / 8, 1);
             }
+
         }
     }
+}

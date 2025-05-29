@@ -1,5 +1,6 @@
 ﻿using PRO.DataStructure;
 using PRO.Disk;
+using PRO.Proto;
 using PRO.Proto.Block;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace PRO
 
         public BlockBaseData ToDisk()
         {
-            var diskData = new BlockBaseData();
+            var diskData = ProtoPool.TakeOut<BlockBaseData>();
             for (int y = 0; y < Block.Size.y; y++)
                 for (int x = 0; x < Block.Size.x; x++)
                 {
@@ -32,7 +33,7 @@ namespace PRO
                         colorNameIndex = diskData.ColorNameIndexDic.Count;
                         diskData.ColorNameIndexDic.Add(pixel.colorInfo.colorName, colorNameIndex);
                     }
-                    var pixelData = new BlockBaseData.Types.PixelData();
+                    var pixelData = ProtoPool.TakeOut<BlockBaseData.Types.PixelData>();
                     pixelData.TypeIndex = typeNameIndex;
                     pixelData.ColorIndex = colorNameIndex;
                     pixelData.Durability = pixel.durability;
@@ -54,9 +55,9 @@ namespace PRO
         }
         public void ToRAM(BlockBaseData diskData, SceneEntity sceneEntity)
         {
-            Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>();
-            Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>();
-            Dictionary<int, BuildingBase> buildingDic = new Dictionary<int, BuildingBase>();
+            Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>(diskData.TypeNameIndexDic.Count);
+            Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>(diskData.ColorNameIndexDic.Count);
+            Dictionary<int, BuildingBase> buildingDic = new Dictionary<int, BuildingBase>(diskData.BuildingGuidIndexDic.Count);
 
             foreach (var kv in diskData.TypeNameIndexDic)
                 typeNameDic.Add(kv.Value, Pixel.GetPixelTypeInfo(kv.Key));
@@ -66,7 +67,7 @@ namespace PRO
             {
                 var building = sceneEntity.GetBuilding(kv.Key);
                 if (building == null)
-                    SceneManager.Inst.AddMainThreadEvent_Clear_WaitInvoke_Lock(() => sceneEntity.LoadBuilding(kv.Key));
+                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => sceneEntity.LoadBuilding(kv.Key));
                 buildingDic.Add(kv.Value, sceneEntity.GetBuilding(kv.Key));
             }
 
@@ -82,7 +83,7 @@ namespace PRO
                 {
                     var building = buildingDic[buildingIndex];
                     pixel.buildingSet.Add(building);
-                    building.Deserialize_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType), pixel);
+                    building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType), pixel);
                 }
                 SetPixel(pixel, false, false, false);
             }

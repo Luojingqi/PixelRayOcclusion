@@ -36,8 +36,22 @@ namespace PRO.Renderer
         public void FirstBind()
         {
             shareMaterial.SetBuffer("AllPixelColorInfo", pixelColorInfoToShaderBufffer);
+            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
 
-            UpdateBind();
+            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
+                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
+                {
+                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
+                    int lightIndex = x + y * LightResultBufferBlockSize.x;
+                    //Debug.Log($"¿é×ø±ê{block.BlockPos}  ¸üÐÂ°ó¶¨ ¿é»º´æË÷Òý{blockIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
+                    materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", blockBufferArray[blockIndex]);
+                    materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
+                    Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
+                    block.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
+                }
         }
 
         public void ClearLastBind()

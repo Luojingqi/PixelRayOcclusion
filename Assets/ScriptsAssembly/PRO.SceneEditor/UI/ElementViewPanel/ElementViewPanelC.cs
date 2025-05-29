@@ -1,4 +1,6 @@
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System.Collections.Generic;
 using System.IO;
 
@@ -39,7 +41,7 @@ namespace PRO.SceneEditor
         private Element_Disk TryGetEntity(FileInfo info)
         {
             if (info.Extension != ".json") return null;
-            if (JsonTool.LoadText(info.FullName, out string text) == false) return null;
+            if (IOTool.LoadText(info.FullName, out string text) == false) return null;
             else
             {
                 Element_Disk entity = JsonTool.ToObject<Element_Disk>(text);

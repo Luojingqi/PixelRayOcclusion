@@ -43,7 +43,7 @@ namespace PRO
 
         public static int BlockBufferLength { get; private set; }
         public static int LightResultBufferLength { get; private set; }
-        private static PROconfig proConfig;
+        public static PROconfig proConfig;
         /// <summary>
         /// 为空的材质区块
         /// </summary>
@@ -177,16 +177,8 @@ namespace PRO
 
         public static void FirstBind()
         {
-            blockShareMaterialManager.FirstBind();
-            backgroundShareMaterialManager.FirstBind();
-            computeShaderManager.FirstBind();
-
-            Update();
-        }
-        public static void UpdateBind()
-        {
-            LastCameraCenterBlockPos = CameraCenterBlockPos;
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
+            LastCameraCenterBlockPos = CameraCenterBlockPos;
 
             Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
             Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
@@ -195,9 +187,18 @@ namespace PRO
             for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
                 for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
                 {
-                    var block = SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y));
-                    if (block == null) SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
+                    if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
+                        SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
                 }
+
+            blockShareMaterialManager.FirstBind();
+            backgroundShareMaterialManager.FirstBind();
+            computeShaderManager.FirstBind();
+        }
+        public static void UpdateBind()
+        {
+            LastCameraCenterBlockPos = CameraCenterBlockPos;
+            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
 
             blockShareMaterialManager.ClearLastBind();
             backgroundShareMaterialManager.ClearLastBind();
@@ -225,13 +226,27 @@ namespace PRO
                         }
                     }
                 }
-                finally
-                {
-                    Monitor.Exit(DrawApplyQueue);
-                }
+                finally { Monitor.Exit(DrawApplyQueue); }
             }
 
             Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
+
+            Vector2Int minLightBufferBlockPos = nowCameraPos - LightResultBufferBlockSize / 2;
+            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
+            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
+
+            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
+                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+                {
+                    if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
+                        SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
+                    else
+                    {
+                        SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
+                        SceneManager.Inst.NowScene.GetBackground(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
+                    }
+                }
+
             if (nowCameraPos != CameraCenterBlockPos)
             {
                 UpdateBind();

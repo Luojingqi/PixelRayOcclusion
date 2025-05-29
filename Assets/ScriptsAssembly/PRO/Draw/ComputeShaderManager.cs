@@ -35,7 +35,7 @@ namespace PRO.Renderer
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
                     Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    //指的是提交到cpu的区块里的本地坐标，总左下角开始算起
+                    //指的是提交到cpu的区块里的本地坐标，从左下角开始算起
                     Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
 

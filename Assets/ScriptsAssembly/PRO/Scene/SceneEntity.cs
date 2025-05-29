@@ -1,14 +1,13 @@
 using PRO.DataStructure;
 using PRO.Disk.Scene;
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace PRO
 {
@@ -69,7 +68,6 @@ namespace PRO
 
         #region 从磁盘中加载与保存
 
-        #region 同步与多线程加载
         /// <summary>
         /// 使用多线程加载一个区块，区块文件不存在时会创建一个空区块
         /// </summary>
@@ -77,152 +75,131 @@ namespace PRO
         /// <param name="blockPos"></param>
         /// <param name="endActionUnity">每次加载完成一个区块都会传递方法让主线程执行</param>
         /// <param name="endAction">每次加载完成一个区块都会执行</param>
-        public void ThreadLoadOrCreateBlock(Vector2Int blockPos, Action<BlockBase> endActionUnity = null, Action<BlockBase> endAction = null)
+        public void ThreadLoadOrCreateBlock(Vector2Int blockPos)
         {
             BlockBaseInRAM.Add(blockPos);
-
             var block = CreateBlock(blockPos);
             var background = CreateBackground(blockPos);
-
+            block.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
+            background.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
             ThreadPool.QueueUserWorkItem((obj) =>
             {
-                if (JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block.txt", out string blockText)
-                    && JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background.txt", out string backgroundText))
+                if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block", Proto.Block.BlockBaseData.Parser, out var blockData)
+                && IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background", Proto.Block.BlockBaseData.Parser, out var backgroundData))
                 {
+
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
                         try
                         {
-                            BlockToDiskEx.ToRAM(blockText, block, this);
-                            var colliderDataList = GreedyCollider.CreateColliderDataList(block, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
-
-                            SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => { GreedyCollider.CreateColliderAction(block, colliderDataList); endActionUnity?.Invoke(block); });
-                            endAction?.Invoke(block);
+                            block.ToRAM(blockData, this);
                         }
-                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
+                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
                     });
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
                         try
                         {
-                            BlockToDiskEx.ToRAM(backgroundText, background, this);
-                            if (endActionUnity != null)
-                                SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => endActionUnity.Invoke(background));
-                            endAction?.Invoke(background);
+                            background.ToRAM(backgroundData, this);
                         }
-                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
+                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
                     });
                 }
                 else
                 {
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
-                        BlockBase blockBase = obj as BlockBase;
+                        var block_ = obj as Block;
                         try
                         {
                             for (int x = 0; x < Block.Size.x; x++)
                                 for (int y = 0; y < Block.Size.y; y++)
                                 {
-                                    Pixel pixel = Pixel.空气.CloneTo(new Pixel(), new Vector2Byte(x, y));
-                                    blockBase.SetPixel(pixel, false, false, false);
-                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+
+                                    Pixel pixel;
+                                    lock (Pixel.pixelPool)
+                                        pixel = Pixel.pixelPool.TakeOut();
+                                    Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
+                                    block_.SetPixel(pixel, false, false, false);
+                                    block_.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                                 }
-                            if (endActionUnity != null)
-                                SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => endActionUnity.Invoke(blockBase));
-                            endAction?.Invoke(block);
+                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => BlockMaterial.SetBlock(block_));
                         }
-                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
+                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
                     }, block);
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
-                        BlockBase blockBase = obj as BlockBase;
+                        var background_ = obj as BackgroundBlock;
                         try
                         {
                             for (int x = 0; x < Block.Size.x; x++)
                                 for (int y = 0; y < Block.Size.y; y++)
                                 {
-                                    Pixel pixel = Pixel.New("背景", "背景色2", new(x, y));
-                                    blockBase.SetPixel(pixel, false, false, false);
-                                    blockBase.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                                    Pixel pixel;
+                                    lock (Pixel.pixelPool)
+                                        pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
+                                    background_.SetPixel(pixel, false, false, false);
+                                    background_.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
                                 }
-                            if (endActionUnity != null)
-                                SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => endActionUnity.Invoke(blockBase));
-                            endAction?.Invoke(block);
+                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => BlockMaterial.SetBackgroundBlock(background_));
                         }
-                        catch (Exception e) { SceneManager.Inst.AddMainThreadEvent_Clear_Lock(() => Log.Print($"线程报错：{e}", Color.red)); }
+                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
                     }, background);
                 }
             });
         }
-        #endregion
         /// <summary>
         /// 卸载一个区块，上方的建筑也会被一并卸载
         /// </summary>
         /// <param name="blockPos"></param>
         public void UnloadBlockData(Vector2Int blockPos)
         {
-            Block.PutIn(GetBlock(blockPos));
-            BackgroundBlock.PutIn(GetBackground(blockPos));
-            BlockBaseCrossList[blockPos] = new OneBlock();
-            BlockBaseInRAM.Remove(blockPos);
-            var list = SetPool.TakeOut_List<BuildingBase>();
-            foreach (var building in BuildingInRAM.Values)
-                if (building.AllUnloadPixel.Count == building.AllPixel.Count)
-                    list.Add(building);
-
-            foreach (var building in list)
-                BuildingInRAM.Remove(building.GUID);
-            SetPool.PutIn(list);
-        }
-        /// <summary>
-        /// 卸载并且保存一个区块，上方的建筑也会被一并保存
-        /// </summary>
-        /// <param name="blockPos"></param>
-        public void UnloadAndSaveBlockData(Vector2Int blockPos)
-        {
-            var list = SetPool.TakeOut_List<BuildingBase>();
-            foreach (var building in BuildingInRAM.Values)
-                if (building.AllUnloadPixel.Count == building.AllPixel.Count)
-                    list.Add(building);
-            foreach (var building in list)
+            try
             {
-                SaveBuilding(building.GUID);
-                BuildingInRAM.Remove(building.GUID);
+                BlockBaseInRAM.Remove(blockPos);
+                var block = GetBlock(blockPos);
+                var background = GetBackground(blockPos);
+                BlockBaseCrossList[blockPos] = new OneBlock();
+                Block.PutIn(block);
+                BackgroundBlock.PutIn(background);
             }
-            SetPool.PutIn(list);
-
-            SaveBlockData(blockPos);
-            Block.PutIn(GetBlock(blockPos));
-            BackgroundBlock.PutIn(GetBackground(blockPos));
-            BlockBaseCrossList[blockPos] = new OneBlock();
-            BlockBaseInRAM.Remove(blockPos);
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
         }
+
         /// <summary>
-        /// 只保存一个区块，上方的建筑不会被保存
+        /// 保存一个区块
         /// </summary>
-        /// <param name="blockPos"></param>
-        public void SaveBlockData(Vector2Int blockPos)
+        /// <param name="blockPos">区块坐标</param>
+        /// <param name="SaveBuilding">是否保存上方的建筑</param>
+        public void SaveBlockData(Vector2Int blockPos, bool isSaveBuilding)
         {
             string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
-            Profiler.BeginSample(blockPos.ToString());
-            Profiler.BeginSample("disk0");
-            string disk0 = BlockToDiskEx.ToDisk(GetBlock(blockPos));
-            Profiler.EndSample();
-            Profiler.BeginSample("text");
-            JsonTool.StoreText($@"{path}\block.txt", disk0);
-            Profiler.EndSample();
-            JsonTool.StoreText($@"{path}\background.txt", BlockToDiskEx.ToDisk(GetBackground(blockPos)));
-            Profiler.EndSample();
-        }
+            var blockData = GetBlock(blockPos).ToDisk();
+            var backgroundData = GetBackground(blockPos).ToDisk();
 
+            if (isSaveBuilding)
+            {
+                foreach (string guid in blockData.BuildingGuidIndexDic.Keys)
+                    SaveBuilding(guid);
+                foreach (string guid in backgroundData.BuildingGuidIndexDic.Keys)
+                    SaveBuilding(guid);
+            }
+            IOTool.SaveProto($@"{path}\block", blockData);
+            IOTool.SaveProto($@"{path}\background", backgroundData);
+            blockData.ClearPutIn();
+            backgroundData.ClearPutIn();
+        }
+        public static Dictionary<string, Type> BuildingTypeDic = new Dictionary<string, Type>();
         public void LoadBuilding(string guid)
         {
-            if (sceneCatalog.buildingTypeDic.TryGetValue(guid, out Type type) &&
-                JsonTool.LoadText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", out string buildingText))
+            if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Building\{guid}", Proto.Building.BuildingBaseData.Parser, out var diskData))
             {
-                BuildingBase building = BuildingBase.New(type, guid, this);
-                building.Deserialize(buildingText, buildingText.Length);
+                BuildingBase building = BuildingBase.New(BuildingTypeDic[diskData.Name], guid, this);
+                building.ToRAM(diskData);
                 BuildingInRAM.Add(guid, building);
             }
             else
@@ -232,7 +209,13 @@ namespace PRO
         }
         public void SaveBuilding(string guid)
         {
-            JsonTool.StoreText($@"{sceneCatalog.directoryInfo}\Building\{guid}.txt", GetBuilding(guid).Serialize());
+            SaveBuilding(BuildingInRAM[guid]);
+        }
+        public void SaveBuilding(BuildingBase buiding)
+        {
+            var diskData = buiding.ToDisk();
+            IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Building\{buiding.GUID}", diskData);
+            diskData.ClearPutIn();
         }
         #endregion
 
@@ -241,26 +224,10 @@ namespace PRO
         /// </summary>
         public void Unload()
         {
-            foreach (var blockPos in BlockBaseInRAM)
+            foreach (var blockPos in BlockBaseInRAM.ToArray())
                 UnloadBlockData(blockPos);
         }
 
-
-        public void DeleteBuilding(string guid)
-        {
-            if (BuildingInRAM.TryGetValue(guid, out var building))
-            {
-                BuildingInRAM.Remove(guid);
-                sceneCatalog.buildingTypeDic.Remove(guid);
-                File.Delete(@$"{sceneCatalog.directoryInfo.FullName}/Building/{guid}.txt");
-                foreach (var item in building.AllPixel.Values)
-                {
-                    item.pixel.buildingSet.Remove(building);
-                    item.pixel = null;
-                }
-                GameObject.Destroy(building.gameObject);
-            }
-        }
         #region 创建区块的空游戏物体
         /// <summary>
         /// 创建一个块的游戏物体，内部像素点数据为空

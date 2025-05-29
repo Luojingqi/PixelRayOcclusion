@@ -2,7 +2,9 @@
 using PRO.Tool;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -50,6 +52,17 @@ namespace PRO
             if (enableUpdate == false) return;
 
             ScriptUpdate(Time.deltaTime);
+
+            if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))
+            {
+                try { event_AddTo_MainThreadUpdateQueue_UnClear?.Invoke(); }
+                finally { Monitor.Exit(mainThreadUpdateEventLock_UnClear); }
+            }
+            if (Monitor.TryEnter(mainThreadUpdateEventLock_Clear))
+            {
+                try { mainThreadUpdateEvent_Clear?.Invoke(); mainThreadUpdateEvent_Clear = null; }
+                finally { Monitor.Exit(mainThreadUpdateEventLock_Clear); }
+            }
         }
 
         public void ScriptUpdate(float deltaTime)
@@ -114,6 +127,60 @@ namespace PRO
         public void MonoQueueAdd(MonoScriptBase mono) => addQueue.Enqueue(mono);
         public void MonoQueueRemove(MonoScriptBase mono) => removeQueue.Enqueue(mono);
 
+
+
+        #region 任务队列与线程锁
+
+        #region 主线程更新事件_UnClear
+        private readonly object mainThreadUpdateEventLock_UnClear = new object();
+        private event Action event_AddTo_MainThreadUpdateQueue_UnClear;
+        /// <summary>
+        /// 添加事件到主线程更新队列中，更新完后不被清除
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddToQueue_MainThreadUpdate_UnClear(Action action)
+        {
+            lock (mainThreadUpdateEventLock_UnClear)
+            {
+                event_AddTo_MainThreadUpdateQueue_UnClear += action;
+            }
+        }
+        #endregion
+
+        #region 主线程更新事件_Clear
+
+        private readonly object mainThreadUpdateEventLock_Clear = new object();
+        private event Action mainThreadUpdateEvent_Clear;
+        /// <summary>
+        /// 添加事件到主线程更新队列中，更新完后被清除
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddToQueue_MainThreadUpdate_Clear(Action action)
+        {
+            lock (mainThreadUpdateEventLock_Clear)
+            {
+                mainThreadUpdateEvent_Clear += action;
+            }
+        }
+        private ObjectPoolArbitrary<AutoResetEvent> resetEventPool = new ObjectPoolArbitrary<AutoResetEvent>(() => new AutoResetEvent(false));
+        /// <summary>
+        /// 添加事件到主线程更新队列中，更新完后被清除，并等待执行完毕，静止Unity线程调用，会死锁
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddToQueue_MainThreadUpdate_Clear_WaitInvoke(Action action)
+        {
+            var manual = resetEventPool.TakeOut();
+            lock (mainThreadUpdateEventLock_Clear)
+            {
+                mainThreadUpdateEvent_Clear += action;
+                mainThreadUpdateEvent_Clear += () => manual.Set();
+            }
+            manual.WaitOne();
+            resetEventPool.PutIn(manual);
+        }
+        #endregion
+
+        #endregion
     }
 
     public abstract class MonoScriptBase : SerializedMonoBehaviour, ITime

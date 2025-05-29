@@ -1,9 +1,15 @@
-﻿using PRO.Tool;
+﻿using PRO.Disk;
+using PRO.Disk.Scene;
+using PRO.Proto;
+using PRO.Proto.Building;
+using PRO.Tool;
+using PRO.Tool.Serialize.IO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
-using static PRO.Tool.JsonTool;
 
 namespace PRO
 {
@@ -25,7 +31,7 @@ namespace PRO
         }
 
         public SceneEntity Scene => _scene;
-        public SceneEntity _scene;
+        protected SceneEntity _scene;
         public string GUID;
         public string Name;
         public Dictionary<Index, Building_Pixel> AllPixel = new Dictionary<Index, Building_Pixel>();
@@ -33,7 +39,7 @@ namespace PRO
         public HashSet<Index> AllDeathPixel = new HashSet<Index>();
         public HashSet<Index> AllUnloadPixel = new HashSet<Index>();
 
-        public Vector2Int global;
+        public Vector2Int Global;
         public Vector2Int Size;
         public BoxCollider2D TriggerCollider;
 
@@ -44,7 +50,7 @@ namespace PRO
 
 
         /// <summary>
-        /// 这个蓝图位置的像素点被更改，将这个蓝图点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
+        /// 这个蓝图位置的像素点被更改，将这个蓝图点(已加载)从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
         /// </summary>
         public void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
@@ -70,13 +76,12 @@ namespace PRO
         }
         protected abstract void PixelSwitch_Death(Building_Pixel pixelB);
         protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
-        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - global), blockType));
+        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - Global), blockType));
         public abstract void Init();
         public static BuildingBase New(Type type, string guid, SceneEntity scene)
         {
-            if (typeof(BuildingBase).IsAssignableFrom(type) == false) return null;
             GameObject go = new GameObject(type.Name);
-            BuildingBase building = (BuildingBase)go.AddComponent(type);
+            var building = go.AddComponent(type) as BuildingBase;
             building.Name = type.Name;
             building.GUID = guid;
             building.TriggerCollider = go.AddComponent<BoxCollider2D>();
@@ -88,9 +93,9 @@ namespace PRO
         }
         #region 序列化与反序列化
         /// <summary>
-        /// 反序列化过程1：添加一个蓝图点到建筑中
+        /// 反序列化过程1：添加一个蓝图点到建筑中(未加载状态)
         /// </summary>
-        public virtual void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel)
+        public virtual void ToRAM_AddBuilding_Pixel(Building_Pixel building_Pixel)
         {
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
             AllPixel.Add(index, building_Pixel);
@@ -99,7 +104,7 @@ namespace PRO
         /// <summary>
         /// 反序列化过程2：将一个蓝图点由未加载状态改为已加载状态
         /// </summary>
-        public virtual void Deserialize_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        public virtual void ToRAM_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
             AllUnloadPixel.Remove(index);
@@ -122,110 +127,66 @@ namespace PRO
             else AllDeathPixel.Remove(index);
             building_Pixel.pixel = null;
             AllUnloadPixel.Add(index);
+            if (AllUnloadPixel.Count == AllPixel.Count)
+            {
+                _scene.BuildingInRAM.Remove(GUID);
+                foreach (var item in AllPixel.Values)
+                {
+                    item.pixel.buildingSet.Remove(this);
+                    item.pixel = null;
+                    Building_Pixel.PutIn(item);
+                }
+                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => GameObject.Destroy(gameObject));
+            }
         }
-        public virtual string Serialize()
+        public virtual BuildingBaseData ToDisk()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"|{Name}|{global.x}:{global.y}|{Size.x}:{Size.y}");
-            sb.Append($"|{(CanByBroken ? 'T' : 'F')}|");
-            Dictionary<string, int> typeNameDic = new Dictionary<string, int>();
-            Dictionary<string, int> colorNameDic = new Dictionary<string, int>();
-            // |类型索引:颜色索引,类型索引:颜色索引| 
+            var diskData = ProtoPool.TakeOut<BuildingBaseData>();
+            diskData.TypeName = GetType().Name;
+            diskData.Name = Name;
+            diskData.Global = Global.ToDisk();
+            diskData.Size = Size.ToDisk();
+            diskData.CanByBroken = CanByBroken;
+
             foreach (var building_Pixel in AllPixel.Values)
             {
-                if (typeNameDic.TryGetValue(building_Pixel.typeInfo.typeName, out int typeNameIndex) == false)
+                if (diskData.TypeNameIndexDic.TryGetValue(building_Pixel.typeInfo.typeName, out int typeNameIndex) == false)
                 {
-                    typeNameIndex = typeNameDic.Count;
-                    typeNameDic.Add(building_Pixel.typeInfo.typeName, typeNameIndex);
+                    typeNameIndex = diskData.TypeNameIndexDic.Count;
+                    diskData.TypeNameIndexDic.Add(building_Pixel.typeInfo.typeName, typeNameIndex);
                 }
-                if (colorNameDic.TryGetValue(building_Pixel.colorInfo.colorName, out int colorNameIndex) == false)
+                if (diskData.ColorNameIndexDic.TryGetValue(building_Pixel.colorInfo.colorName, out int colorNameIndex) == false)
                 {
-                    colorNameIndex = colorNameDic.Count;
-                    colorNameDic.Add(building_Pixel.colorInfo.colorName, colorNameIndex);
+                    colorNameIndex = diskData.ColorNameIndexDic.Count;
+                    diskData.ColorNameIndexDic.Add(building_Pixel.colorInfo.colorName, colorNameIndex);
                 }
-                sb.Append($"{typeNameIndex}:{colorNameIndex}:{building_Pixel.offset.x}:{building_Pixel.offset.y}:{(int)building_Pixel.blockType},");
+                var pixelData = ProtoPool.TakeOut<BuildingBaseData.Types.Bulding_Pixel>();
+                pixelData.TypeIndex = typeNameIndex;
+                pixelData.ColorIndex = colorNameIndex;
+                pixelData.Offset = building_Pixel.offset.ToDisk();
+                pixelData.BlockType = (int)building_Pixel.blockType;
+                diskData.AllPixel.Add(pixelData);
             }
-            if (sb[sb.Length - 1] == '|') sb.Append('|');
-            else sb[sb.Length - 1] = '|';
-            // |类型索引,类型|
-            foreach (var kv in typeNameDic)
-            {
-                sb.Append($"{kv.Value}:{kv.Key},");
-            }
-            if (sb[sb.Length - 1] == '|') sb.Append('|');
-            else sb[sb.Length - 1] = '|';
-            // |颜色索引,颜色|
-            foreach (var kv in colorNameDic)
-            {
-                sb.Append($"{kv.Value}:{kv.Key},");
-            }
-            //sb[sb.Length - 1] = '|';
-            sb.Remove(sb.Length - 1, 1);
-            return sb.ToString();
+            return diskData;
         }
-        public virtual void Deserialize(string text, int lastDelimiter)
+        public virtual void ToRAM(BuildingBaseData diskData)
         {
-            Stack<char> stack = new Stack<char>();
-            StringBuilder sb = new StringBuilder();
-            Dictionary<int, string> colorNameDic = new Dictionary<int, string>();
-            Dictionary<int, string> typeNameDic = new Dictionary<int, string>();
-            int index = -1;
-            string typeName = null;
-            string colorName = null;
-            #region 使用的颜色和类型
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) colorName = StackToString(stack, ref sb);
-                else if (num == 1) index = StackToInt(stack);
-            },
-            () => { colorNameDic.Add(index, colorName); },
-                ref lastDelimiter, ref stack);
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) typeName = StackToString(stack, ref sb);
-                else if (num == 1) index = StackToInt(stack);
-            },
-            () => { typeNameDic.Add(index, typeName); },
-            ref lastDelimiter, ref stack);
-            #endregion
-            #region AllPixel
-            Vector2Int offset = new Vector2Int();
-            BlockBase.BlockType blockType = BlockBase.BlockType.Block;
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) blockType = (BlockBase.BlockType)StackToInt(stack);
-                else if (num == 1) offset.y = StackToInt(stack);
-                else if (num == 2) offset.x = StackToInt(stack);
-                else if (num == 3) colorName = colorNameDic[StackToInt(stack)];
-                else if (num == 4) typeName = typeNameDic[StackToInt(stack)];
-            },
-            () => { Deserialize_AddBuilding_Pixel(Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), offset, blockType)); },
-            ref lastDelimiter, ref stack);
-            #endregion
-            #region CanByBroken
-            Deserialize_Data(text, (num) => { CanByBroken = stack.Peek() == 'T' ? true : false; }, null, ref lastDelimiter, ref stack);
-            #endregion
-            #region Size  global  Name
-            Vector2Int vector2Int = new Vector2Int();
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) vector2Int.y = StackToInt(stack);
-                else if (num == 1) vector2Int.x = StackToInt(stack);
-            },
-            () => { Size = vector2Int; }, ref lastDelimiter, ref stack);
+            Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>(diskData.TypeNameIndexDic.Count);
+            Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>(diskData.ColorNameIndexDic.Count);
 
-            Deserialize_Data(text, (num) =>
+            foreach (var kv in diskData.TypeNameIndexDic)
+                typeNameDic.Add(kv.Value, Pixel.GetPixelTypeInfo(kv.Key));
+            foreach (var kv in diskData.ColorNameIndexDic)
+                colorNameDic.Add(kv.Value, BlockMaterial.GetPixelColorInfo(kv.Key));
+            for (int i = 0; i < diskData.AllPixel.Count; i++)
             {
-                if (num == 0) vector2Int.y = StackToInt(stack);
-                else if (num == 1) vector2Int.x = StackToInt(stack);
-            },
-            () => { global = vector2Int; }, ref lastDelimiter, ref stack);
-
-            Deserialize_Data(text, (num) => { Name = StackToString(stack, ref sb); }, null, ref lastDelimiter, ref stack);
-            TriggerCollider.size = (Vector2)Size * Pixel.Size;
-            TriggerCollider.offset = TriggerCollider.size / 2f;
-            TriggerCollider.transform.position = Block.GlobalToWorld(global);
-            #endregion
+                var pixelData = diskData.AllPixel[i];
+                Building_Pixel pixel = null;
+                lock (Building_Pixel.pool)
+                    pixel = Building_Pixel.TakeOut();
+                pixel.Init(typeNameDic[pixelData.TypeIndex], colorNameDic[pixelData.ColorIndex], pixelData.Offset.ToRAM(), (Block.BlockType)pixelData.BlockType);
+                ToRAM_AddBuilding_Pixel(pixel);
+            }
         }
         #endregion
 
@@ -240,7 +201,7 @@ namespace PRO
             texture.Apply();
             SpriteRenderer spriteRenderer = Texture2DPool.TakeOutSpriteRenderer();
             spriteRenderer.sprite = Texture2DPool.GetOnlySprite(texture);
-            spriteRenderer.transform.position = Block.GlobalToWorld(global - Vector2Int.one);
+            spriteRenderer.transform.position = Block.GlobalToWorld(Global - Vector2Int.one);
             return spriteRenderer;
         }
 
@@ -259,7 +220,15 @@ namespace PRO
 
         public void Delete()
         {
-            Scene.DeleteBuilding(GUID);
+            _scene.BuildingInRAM.Remove(GUID);
+            File.Delete(@$"{_scene.sceneCatalog.directoryInfo.FullName}/Building/{GUID}{IOTool.protoExtension}");
+            foreach (var item in AllPixel.Values)
+            {
+                item.pixel.buildingSet.Remove(this);
+                item.pixel = null;
+                Building_Pixel.PutIn(item);
+            }
+            GameObject.Destroy(gameObject);
         }
     }
 }

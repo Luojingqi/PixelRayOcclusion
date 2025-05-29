@@ -1,6 +1,8 @@
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -117,8 +119,8 @@ namespace PRO
             foreach (var building in pixel.buildingSet)
                 building.UnloadPixel(pixel);
             pixel.buildingSet.Clear();
-
-            pixelPool.PutIn(pixel);
+            lock (pixelPool)
+                pixelPool.PutIn(pixel);
         }
         public static Pixel TakeOut(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability = 0)
         {
@@ -239,7 +241,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelTypeInfo") continue;
-                JsonTool.LoadText(fileInfo.FullName, out string infoText);
+                IOTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelTypeInfo[]>(infoText);

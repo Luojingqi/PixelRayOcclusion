@@ -61,11 +61,10 @@ namespace PRO.SceneEditor
                     building.TriggerCollider.size = new Vector2(HoldEntity.width, HoldEntity.height) * Pixel.Size;
                     building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
                     building.transform.position = Block.GlobalToWorld(global);
-                    building.global = global;
+                    building.Global = global;
                     building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
 
                     building.Scene.BuildingInRAM.Add(building.GUID, building);
-                    building.Scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
                 }
 
                 for (int y = 0; y < HoldEntity.height; y++)
@@ -82,8 +81,8 @@ namespace PRO.SceneEditor
                         if (building != null)
                         {
                             Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(pixel, new(x, y));
-                            building.Deserialize_AddBuilding_Pixel(building_Pixel);
-                            building.Deserialize_PixelSwitch(building_Pixel, pixel);
+                            building.ToRAM_AddBuilding_Pixel(building_Pixel);
+                            building.ToRAM_PixelSwitch(building_Pixel, pixel);
                         }
                     }
                 if (building != null)

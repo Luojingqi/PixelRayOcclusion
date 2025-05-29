@@ -29,7 +29,7 @@
             return ret;
         }
 
-        public static UnityEngine.Vector2 IntToRAM(this PRO.Proto.DataStructure.Vector2Int value) => new UnityEngine.Vector2Int(value.X, value.Y);
+        public static UnityEngine.Vector2Int ToRAM(this PRO.Proto.DataStructure.Vector2Int value) => new UnityEngine.Vector2Int(value.X, value.Y);
         public static PRO.Proto.DataStructure.Vector2Int ToDisk(this UnityEngine.Vector2Int value)
         {
             var ret = ProtoPool.TakeOut<PRO.Proto.DataStructure.Vector2Int>();

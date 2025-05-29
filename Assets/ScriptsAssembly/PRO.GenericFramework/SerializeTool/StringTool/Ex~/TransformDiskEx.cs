@@ -5,7 +5,6 @@ namespace PRO.Proto
 {
     public static class TransformDiskEx
     {
-        public  
 
         //public static StringBuilder ToDisk(this Transform transform)
         //{

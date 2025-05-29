@@ -109,6 +109,11 @@ namespace PRO
 
         #endregion
 
+        /// <summary>
+        /// 卸载倒计时
+        /// </summary>
+        public float UnLoadCountdown;
+
         #region 光源集合
 
         public readonly Dictionary<Vector2Byte, LightSource> lightSourceDic = new Dictionary<Vector2Byte, LightSource>();

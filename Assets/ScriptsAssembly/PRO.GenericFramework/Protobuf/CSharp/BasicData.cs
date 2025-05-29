@@ -2896,6 +2896,11 @@ public void Clear()
 X = 0;
 Y = 0;
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
+}
 }
 
 public partial class Vector3
@@ -2906,6 +2911,11 @@ X = 0;
 Y = 0;
 Z = 0;
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
+}
 }
 
 public partial class Vector2Int
@@ -2914,6 +2924,11 @@ public void Clear()
 {
 X = 0;
 Y = 0;
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 
@@ -2924,6 +2939,11 @@ public void Clear()
 X = 0;
 Y = 0;
 Z = 0;
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 
@@ -2936,6 +2956,11 @@ Y = 0;
 Z = 0;
 W = 0;
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
+}
 }
 
 public partial class Vector2Byte
@@ -2944,6 +2969,11 @@ public void Clear()
 {
 X = 0;
 Y = 0;
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 
@@ -2955,6 +2985,11 @@ R = 0;
 G = 0;
 B = 0;
 A = 0;
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 
@@ -2981,6 +3016,11 @@ LocalScale.PutIn();
 LocalScale = null;
 }
 }
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
+}
 }
 
 public partial class Rigidbody2D
@@ -2995,6 +3035,11 @@ Velocity = null;
 }
 AngularVelocity = 0;
 Simulated = false;
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 
@@ -3022,6 +3067,11 @@ Point.Clear();
 Point.PutIn();
 Point = null;
 }
+}
+public void ClearPutIn()
+{
+Clear();
+this.PutIn();
 }
 }
 

@@ -1,33 +1,18 @@
 using Cysharp.Threading.Tasks;
 using PRO.Tool;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using static PRO.BlockMaterial;
 namespace PRO
 {
     public static class DrawThread
     {
-        public static void Init(SceneEntity scene)
-        {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
-
-            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
-                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
-                    scene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
-
-            Thread thread = new Thread(LoopDraw);
-            thread.Start();
-        }
 
         /// <summary>
         /// 消费者线程
         /// </summary>
         /// <param name="blocks"></param>
-        private static void LoopDraw(object obj)
+        public static void LoopDraw()
         {
             Debug.Log("消费者线程" + Thread.CurrentThread.ManagedThreadId);
             while (true)

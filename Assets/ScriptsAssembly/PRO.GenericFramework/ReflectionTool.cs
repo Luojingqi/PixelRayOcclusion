@@ -11,7 +11,7 @@ namespace PROTool
         /// </summary>
         public static List<Type> GetDerivedClasses(this Type type)
         {
-            List<Type> derivedClasses = new List<Type>();
+            List<Type> derivedClasses = new List<Type>(10);
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {

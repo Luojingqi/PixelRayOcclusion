@@ -62,12 +62,14 @@ namespace PRO
             return State.Death;
         }
 
-        private static ObjectPool<Building_Pixel> pool = new ObjectPool<Building_Pixel>();
+        public static ObjectPool<Building_Pixel> pool = new ObjectPool<Building_Pixel>();
         public static void PutIn(Building_Pixel building_Pixel)
         {
             building_Pixel._typeInfo = null;
             building_Pixel._colorInfo = null;
             building_Pixel.pixel = null;
+            lock(pool)
+                pool.PutIn(building_Pixel);
         }
         public static Building_Pixel TakeOut()
         {

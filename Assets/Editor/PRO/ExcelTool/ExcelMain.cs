@@ -1,5 +1,6 @@
 using OfficeOpenXml;
-using PRO.Tool;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +20,7 @@ namespace ExcelTool
             #region 加载路径配置文件
             //string exePath = Directory.GetCurrentDirectory();
             string exePath = Application.streamingAssetsPath + @"\Excel\ExcelTool";
-            JsonTool.LoadText(exePath + @"\path.json", out string pathText);
+            IOTool.LoadText(exePath + @"\path.json", out string pathText);
             Console.WriteLine($"读取path文件：{exePath + @"\path.json"}");
             var path = JsonTool.ToObject<JsonOnPath>(pathText);
             string xlsxPath = exePath + path.xlsxPath;

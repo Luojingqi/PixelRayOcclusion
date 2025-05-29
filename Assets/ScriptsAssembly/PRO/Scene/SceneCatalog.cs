@@ -1,8 +1,9 @@
-﻿using PRO.Tool;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PRO.Disk.Scene
 {
@@ -11,9 +12,6 @@ namespace PRO.Disk.Scene
     /// </summary>
     public class SceneCatalog
     {
-
-        public Dictionary<string, Type> buildingTypeDic;
-
         /// <summary>
         /// 场景文件夹的目录/{GameSave}/Scene/{SceneName}
         /// </summary>
@@ -24,7 +22,7 @@ namespace PRO.Disk.Scene
 
         public void Save()
         {
-            JsonTool.StoreText(@$"{directoryInfo.FullName}\SceneCatalog.json", JsonTool.ToJson(this));
+            IOTool.SaveText(@$"{directoryInfo.FullName}\SceneCatalog.json", JsonTool.ToJson(this));
         }
 
 
@@ -45,8 +43,6 @@ namespace PRO.Disk.Scene
             Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
-            info.buildingTypeDic = new Dictionary<string, Type>();
-            // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(BuildingBase));
             info.Save();
             return info;
         }
@@ -58,7 +54,7 @@ namespace PRO.Disk.Scene
         /// <returns></returns>
         public static SceneCatalog LoadSceneInfo(DirectoryInfo saveDirectoryInfo)
         {
-            if (JsonTool.LoadText(@$"{saveDirectoryInfo.FullName}\SceneCatalog.json", out string sceneInfoText))
+            if (IOTool.LoadText(@$"{saveDirectoryInfo.FullName}\SceneCatalog.json", out string sceneInfoText))
             {
                 SceneCatalog sceneCatalog = JsonTool.ToObject<SceneCatalog>(sceneInfoText);
                 if (sceneCatalog != null)

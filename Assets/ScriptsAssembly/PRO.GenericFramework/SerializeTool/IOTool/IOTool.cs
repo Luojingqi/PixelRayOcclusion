@@ -3,7 +3,6 @@ using Google.Protobuf;
 using PRO.Proto;
 using System;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using UnityEngine;
 using static PRO.Proto.ProtoPool;
@@ -63,7 +62,7 @@ namespace PRO.Tool.Serialize.IO
         //    ssstream.Read(new byte[10]);
         //}
 
-        private static string protoExtension = ".protobit";
+        public static string protoExtension = ".protobit";
 
         public static bool LoadProto<T>(string path, MessageParser<T> parser, out T protoData) where T : IMessage<T>
         {
@@ -78,15 +77,15 @@ namespace PRO.Tool.Serialize.IO
                     return true;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 protoData = default;
-              //  Debug.Log("加载protobit数据失败");
+                //  Debug.Log("加载protobit数据失败");
                 return false;
             }
         }
 
-        public static bool StoreProto<T>(string path, T protoData) where T : IMessage<T>
+        public static bool SaveProto<T>(string path, T protoData) where T : IMessage<T>
         {
             Span<byte> bytes = stackalloc byte[protoData.CalculateSize()];
             protoData.WriteTo(bytes);
@@ -105,12 +104,6 @@ namespace PRO.Tool.Serialize.IO
                 return false;
             }
         }
-        public static bool StoreProtoPutIn<T>(string path, T protoData) where T : IMessage<T>
-        {
-            bool ret = StoreProto(path, protoData);
-            protoData.PutIn();
-            return ret;
-        }
 
         /// <summary>
         /// 保存文本到磁盘，路径需要带后缀
@@ -118,7 +111,7 @@ namespace PRO.Tool.Serialize.IO
         /// <param name="path"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static bool StoreText(string path, string text)
+        public static bool SaveText(string path, string text)
         {
             try
             {

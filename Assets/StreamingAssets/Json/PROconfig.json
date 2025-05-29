@@ -2,5 +2,14 @@
   //每帧更新的区块数量，不能小于1，不能大于 EachBlockReceiveLightSize 的x*y
   "FrameUpdateBlockNum": 35,
   //是否提前编译着色器，提前编译后游戏内出现新的光源将不会再卡顿，但提前编译需要时间，并且产生的内存较大于动态编译(未实装)
-  "IsCompileShadersInAdvance" : false
+  "IsCompileShadersInAdvance": false,
+  //间隔多久自动卸载（保存）一次视野外区块（实际上花费两倍时间才会尝试卸载）
+  "AutoUnLoadBlockCountdownTime": 60,
+
+  //流体更新间隔
+  "UpdateTimeFluid1": 0.25,
+  "UpdateTimeFluid2": 0.125,
+  "UpdateTimeFluid3": 0.35,
+
+  "UpdateTime火焰" : 0.2
 }
