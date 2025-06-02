@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace PRO.Proto.DataStructure {
+namespace PRO.Proto {
 
   /// <summary>Holder for reflection information generated from BasicData.proto</summary>
   public static partial class BasicDataReflection {
@@ -24,38 +24,36 @@ namespace PRO.Proto.DataStructure {
     static BasicDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg9CYXNpY0RhdGEucHJvdG8SF1BSTy5Qcm90by5EYXRhU3RydWN0dXJlIh8K",
-            "B1ZlY3RvcjISCQoBeBgBIAEoAhIJCgF5GAIgASgCIioKB1ZlY3RvcjMSCQoB",
-            "eBgBIAEoAhIJCgF5GAIgASgCEgkKAXoYAyABKAIiIgoKVmVjdG9yMkludBIJ",
-            "CgF4GAEgASgREgkKAXkYAiABKBEiLQoKVmVjdG9yM0ludBIJCgF4GAEgASgR",
-            "EgkKAXkYAiABKBESCQoBehgDIAEoESI4CgpRdWF0ZXJuaW9uEgkKAXgYASAB",
-            "KAISCQoBeRgCIAEoAhIJCgF6GAMgASgCEgkKAXcYBCABKAIiIwoLVmVjdG9y",
-            "MkJ5dGUSCQoBeBgBIAEoBRIJCgF5GAIgASgFIjUKB0NvbG9yMzISCQoBchgB",
-            "IAEoBRIJCgFnGAIgASgFEgkKAWIYAyABKAUSCQoBYRgEIAEoBSKsAQoJVHJh",
-            "bnNmb3JtEjIKCHBvc2l0aW9uGAEgASgLMiAuUFJPLlByb3RvLkRhdGFTdHJ1",
-            "Y3R1cmUuVmVjdG9yMxI1Cghyb3RhdGlvbhgCIAEoCzIjLlBSTy5Qcm90by5E",
-            "YXRhU3RydWN0dXJlLlF1YXRlcm5pb24SNAoKbG9jYWxTY2FsZRgDIAEoCzIg",
-            "LlBSTy5Qcm90by5EYXRhU3RydWN0dXJlLlZlY3RvcjMibQoLUmlnaWRib2R5",
-            "MkQSMgoIdmVsb2NpdHkYASABKAsyIC5QUk8uUHJvdG8uRGF0YVN0cnVjdHVy",
-            "ZS5WZWN0b3IyEhcKD2FuZ3VsYXJWZWxvY2l0eRgCIAEoAhIRCglzaW11bGF0",
-            "ZWQYAyABKAgiyQEKDFJheWNhc3RIaXQyRBIyCghjZW50cm9pZBgBIAEoCzIg",
-            "LlBSTy5Qcm90by5EYXRhU3RydWN0dXJlLlZlY3RvcjISEAoIZGlzdGFuY2UY",
-            "AiABKAISEAoIZnJhY3Rpb24YAyABKAISMAoGbm9ybWFsGAQgASgLMiAuUFJP",
-            "LlByb3RvLkRhdGFTdHJ1Y3R1cmUuVmVjdG9yMhIvCgVwb2ludBgFIAEoCzIg",
-            "LlBSTy5Qcm90by5EYXRhU3RydWN0dXJlLlZlY3RvcjJiBnByb3RvMw=="));
+            "Cg9CYXNpY0RhdGEucHJvdG8SCVBSTy5Qcm90byIfCgdWZWN0b3IyEgkKAXgY",
+            "ASABKAISCQoBeRgCIAEoAiIqCgdWZWN0b3IzEgkKAXgYASABKAISCQoBeRgC",
+            "IAEoAhIJCgF6GAMgASgCIiIKClZlY3RvcjJJbnQSCQoBeBgBIAEoERIJCgF5",
+            "GAIgASgRIi0KClZlY3RvcjNJbnQSCQoBeBgBIAEoERIJCgF5GAIgASgREgkK",
+            "AXoYAyABKBEiOAoKUXVhdGVybmlvbhIJCgF4GAEgASgCEgkKAXkYAiABKAIS",
+            "CQoBehgDIAEoAhIJCgF3GAQgASgCIiMKC1ZlY3RvcjJCeXRlEgkKAXgYASAB",
+            "KAUSCQoBeRgCIAEoBSI1CgdDb2xvcjMyEgkKAXIYASABKAUSCQoBZxgCIAEo",
+            "BRIJCgFiGAMgASgFEgkKAWEYBCABKAUiggEKCVRyYW5zZm9ybRIkCghwb3Np",
+            "dGlvbhgBIAEoCzISLlBSTy5Qcm90by5WZWN0b3IzEicKCHJvdGF0aW9uGAIg",
+            "ASgLMhUuUFJPLlByb3RvLlF1YXRlcm5pb24SJgoKbG9jYWxTY2FsZRgDIAEo",
+            "CzISLlBSTy5Qcm90by5WZWN0b3IzIl8KC1JpZ2lkYm9keTJEEiQKCHZlbG9j",
+            "aXR5GAEgASgLMhIuUFJPLlByb3RvLlZlY3RvcjISFwoPYW5ndWxhclZlbG9j",
+            "aXR5GAIgASgCEhEKCXNpbXVsYXRlZBgDIAEoCCKfAQoMUmF5Y2FzdEhpdDJE",
+            "EiQKCGNlbnRyb2lkGAEgASgLMhIuUFJPLlByb3RvLlZlY3RvcjISEAoIZGlz",
+            "dGFuY2UYAiABKAISEAoIZnJhY3Rpb24YAyABKAISIgoGbm9ybWFsGAQgASgL",
+            "MhIuUFJPLlByb3RvLlZlY3RvcjISIQoFcG9pbnQYBSABKAsyEi5QUk8uUHJv",
+            "dG8uVmVjdG9yMmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Vector2), global::PRO.Proto.DataStructure.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Vector3), global::PRO.Proto.DataStructure.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Vector2Int), global::PRO.Proto.DataStructure.Vector2Int.Parser, new[]{ "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Vector3Int), global::PRO.Proto.DataStructure.Vector3Int.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Quaternion), global::PRO.Proto.DataStructure.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Vector2Byte), global::PRO.Proto.DataStructure.Vector2Byte.Parser, new[]{ "X", "Y" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Color32), global::PRO.Proto.DataStructure.Color32.Parser, new[]{ "R", "G", "B", "A" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Transform), global::PRO.Proto.DataStructure.Transform.Parser, new[]{ "Position", "Rotation", "LocalScale" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.Rigidbody2D), global::PRO.Proto.DataStructure.Rigidbody2D.Parser, new[]{ "Velocity", "AngularVelocity", "Simulated" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.DataStructure.RaycastHit2D), global::PRO.Proto.DataStructure.RaycastHit2D.Parser, new[]{ "Centroid", "Distance", "Fraction", "Normal", "Point" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Vector2), global::PRO.Proto.Vector2.Parser, new[]{ "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Vector3), global::PRO.Proto.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Vector2Int), global::PRO.Proto.Vector2Int.Parser, new[]{ "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Vector3Int), global::PRO.Proto.Vector3Int.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Quaternion), global::PRO.Proto.Quaternion.Parser, new[]{ "X", "Y", "Z", "W" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Vector2Byte), global::PRO.Proto.Vector2Byte.Parser, new[]{ "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Color32), global::PRO.Proto.Color32.Parser, new[]{ "R", "G", "B", "A" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Transform), global::PRO.Proto.Transform.Parser, new[]{ "Position", "Rotation", "LocalScale" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Rigidbody2D), global::PRO.Proto.Rigidbody2D.Parser, new[]{ "Velocity", "AngularVelocity", "Simulated" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.RaycastHit2D), global::PRO.Proto.RaycastHit2D.Parser, new[]{ "Centroid", "Distance", "Fraction", "Normal", "Point" }, null, null, null, null)
           }));
     }
     #endregion
@@ -77,7 +75,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[0]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -312,7 +310,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[1]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -584,7 +582,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[2]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -819,7 +817,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[3]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1091,7 +1089,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[4]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1400,7 +1398,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[5]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1635,7 +1633,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[6]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1944,7 +1942,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[7]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1978,10 +1976,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "position" field.</summary>
     public const int PositionFieldNumber = 1;
-    private global::PRO.Proto.DataStructure.Vector3 position_;
+    private global::PRO.Proto.Vector3 position_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector3 Position {
+    public global::PRO.Proto.Vector3 Position {
       get { return position_; }
       set {
         position_ = value;
@@ -1990,10 +1988,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "rotation" field.</summary>
     public const int RotationFieldNumber = 2;
-    private global::PRO.Proto.DataStructure.Quaternion rotation_;
+    private global::PRO.Proto.Quaternion rotation_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Quaternion Rotation {
+    public global::PRO.Proto.Quaternion Rotation {
       get { return rotation_; }
       set {
         rotation_ = value;
@@ -2002,10 +2000,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "localScale" field.</summary>
     public const int LocalScaleFieldNumber = 3;
-    private global::PRO.Proto.DataStructure.Vector3 localScale_;
+    private global::PRO.Proto.Vector3 localScale_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector3 LocalScale {
+    public global::PRO.Proto.Vector3 LocalScale {
       get { return localScale_; }
       set {
         localScale_ = value;
@@ -2125,19 +2123,19 @@ namespace PRO.Proto.DataStructure {
       }
       if (other.position_ != null) {
         if (position_ == null) {
-          Position = new global::PRO.Proto.DataStructure.Vector3();
+          Position = new global::PRO.Proto.Vector3();
         }
         Position.MergeFrom(other.Position);
       }
       if (other.rotation_ != null) {
         if (rotation_ == null) {
-          Rotation = new global::PRO.Proto.DataStructure.Quaternion();
+          Rotation = new global::PRO.Proto.Quaternion();
         }
         Rotation.MergeFrom(other.Rotation);
       }
       if (other.localScale_ != null) {
         if (localScale_ == null) {
-          LocalScale = new global::PRO.Proto.DataStructure.Vector3();
+          LocalScale = new global::PRO.Proto.Vector3();
         }
         LocalScale.MergeFrom(other.LocalScale);
       }
@@ -2162,21 +2160,21 @@ namespace PRO.Proto.DataStructure {
             break;
           case 10: {
             if (position_ == null) {
-              Position = new global::PRO.Proto.DataStructure.Vector3();
+              Position = new global::PRO.Proto.Vector3();
             }
             input.ReadMessage(Position);
             break;
           }
           case 18: {
             if (rotation_ == null) {
-              Rotation = new global::PRO.Proto.DataStructure.Quaternion();
+              Rotation = new global::PRO.Proto.Quaternion();
             }
             input.ReadMessage(Rotation);
             break;
           }
           case 26: {
             if (localScale_ == null) {
-              LocalScale = new global::PRO.Proto.DataStructure.Vector3();
+              LocalScale = new global::PRO.Proto.Vector3();
             }
             input.ReadMessage(LocalScale);
             break;
@@ -2202,21 +2200,21 @@ namespace PRO.Proto.DataStructure {
             break;
           case 10: {
             if (position_ == null) {
-              Position = new global::PRO.Proto.DataStructure.Vector3();
+              Position = new global::PRO.Proto.Vector3();
             }
             input.ReadMessage(Position);
             break;
           }
           case 18: {
             if (rotation_ == null) {
-              Rotation = new global::PRO.Proto.DataStructure.Quaternion();
+              Rotation = new global::PRO.Proto.Quaternion();
             }
             input.ReadMessage(Rotation);
             break;
           }
           case 26: {
             if (localScale_ == null) {
-              LocalScale = new global::PRO.Proto.DataStructure.Vector3();
+              LocalScale = new global::PRO.Proto.Vector3();
             }
             input.ReadMessage(LocalScale);
             break;
@@ -2243,7 +2241,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[8]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2277,10 +2275,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "velocity" field.</summary>
     public const int VelocityFieldNumber = 1;
-    private global::PRO.Proto.DataStructure.Vector2 velocity_;
+    private global::PRO.Proto.Vector2 velocity_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector2 Velocity {
+    public global::PRO.Proto.Vector2 Velocity {
       get { return velocity_; }
       set {
         velocity_ = value;
@@ -2424,7 +2422,7 @@ namespace PRO.Proto.DataStructure {
       }
       if (other.velocity_ != null) {
         if (velocity_ == null) {
-          Velocity = new global::PRO.Proto.DataStructure.Vector2();
+          Velocity = new global::PRO.Proto.Vector2();
         }
         Velocity.MergeFrom(other.Velocity);
       }
@@ -2455,7 +2453,7 @@ namespace PRO.Proto.DataStructure {
             break;
           case 10: {
             if (velocity_ == null) {
-              Velocity = new global::PRO.Proto.DataStructure.Vector2();
+              Velocity = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Velocity);
             break;
@@ -2489,7 +2487,7 @@ namespace PRO.Proto.DataStructure {
             break;
           case 10: {
             if (velocity_ == null) {
-              Velocity = new global::PRO.Proto.DataStructure.Vector2();
+              Velocity = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Velocity);
             break;
@@ -2524,7 +2522,7 @@ namespace PRO.Proto.DataStructure {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor.MessageTypes[9]; }
+      get { return global::PRO.Proto.BasicDataReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2560,10 +2558,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "centroid" field.</summary>
     public const int CentroidFieldNumber = 1;
-    private global::PRO.Proto.DataStructure.Vector2 centroid_;
+    private global::PRO.Proto.Vector2 centroid_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector2 Centroid {
+    public global::PRO.Proto.Vector2 Centroid {
       get { return centroid_; }
       set {
         centroid_ = value;
@@ -2596,10 +2594,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "normal" field.</summary>
     public const int NormalFieldNumber = 4;
-    private global::PRO.Proto.DataStructure.Vector2 normal_;
+    private global::PRO.Proto.Vector2 normal_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector2 Normal {
+    public global::PRO.Proto.Vector2 Normal {
       get { return normal_; }
       set {
         normal_ = value;
@@ -2608,10 +2606,10 @@ namespace PRO.Proto.DataStructure {
 
     /// <summary>Field number for the "point" field.</summary>
     public const int PointFieldNumber = 5;
-    private global::PRO.Proto.DataStructure.Vector2 point_;
+    private global::PRO.Proto.Vector2 point_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector2 Point {
+    public global::PRO.Proto.Vector2 Point {
       get { return point_; }
       set {
         point_ = value;
@@ -2757,7 +2755,7 @@ namespace PRO.Proto.DataStructure {
       }
       if (other.centroid_ != null) {
         if (centroid_ == null) {
-          Centroid = new global::PRO.Proto.DataStructure.Vector2();
+          Centroid = new global::PRO.Proto.Vector2();
         }
         Centroid.MergeFrom(other.Centroid);
       }
@@ -2769,13 +2767,13 @@ namespace PRO.Proto.DataStructure {
       }
       if (other.normal_ != null) {
         if (normal_ == null) {
-          Normal = new global::PRO.Proto.DataStructure.Vector2();
+          Normal = new global::PRO.Proto.Vector2();
         }
         Normal.MergeFrom(other.Normal);
       }
       if (other.point_ != null) {
         if (point_ == null) {
-          Point = new global::PRO.Proto.DataStructure.Vector2();
+          Point = new global::PRO.Proto.Vector2();
         }
         Point.MergeFrom(other.Point);
       }
@@ -2800,7 +2798,7 @@ namespace PRO.Proto.DataStructure {
             break;
           case 10: {
             if (centroid_ == null) {
-              Centroid = new global::PRO.Proto.DataStructure.Vector2();
+              Centroid = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Centroid);
             break;
@@ -2815,14 +2813,14 @@ namespace PRO.Proto.DataStructure {
           }
           case 34: {
             if (normal_ == null) {
-              Normal = new global::PRO.Proto.DataStructure.Vector2();
+              Normal = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Normal);
             break;
           }
           case 42: {
             if (point_ == null) {
-              Point = new global::PRO.Proto.DataStructure.Vector2();
+              Point = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Point);
             break;
@@ -2848,7 +2846,7 @@ namespace PRO.Proto.DataStructure {
             break;
           case 10: {
             if (centroid_ == null) {
-              Centroid = new global::PRO.Proto.DataStructure.Vector2();
+              Centroid = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Centroid);
             break;
@@ -2863,14 +2861,14 @@ namespace PRO.Proto.DataStructure {
           }
           case 34: {
             if (normal_ == null) {
-              Normal = new global::PRO.Proto.DataStructure.Vector2();
+              Normal = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Normal);
             break;
           }
           case 42: {
             if (point_ == null) {
-              Point = new global::PRO.Proto.DataStructure.Vector2();
+              Point = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(Point);
             break;
@@ -2887,7 +2885,7 @@ namespace PRO.Proto.DataStructure {
 }
 
 #endregion Designer generated code
-namespace PRO.Proto.DataStructure
+namespace PRO.Proto
 {
 public partial class Vector2
 {
@@ -2899,7 +2897,7 @@ Y = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -2914,7 +2912,7 @@ Z = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -2928,7 +2926,7 @@ Y = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -2943,7 +2941,7 @@ Z = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -2959,7 +2957,7 @@ W = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -2973,7 +2971,7 @@ Y = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -2989,7 +2987,7 @@ A = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -3000,26 +2998,26 @@ public void Clear()
 if(Position!=null)
 {
 Position.Clear();
-Position.PutIn();
+PRO.Proto.ProtoPool.PutIn(Position);
 Position = null;
 }
 if(Rotation!=null)
 {
 Rotation.Clear();
-Rotation.PutIn();
+PRO.Proto.ProtoPool.PutIn(Rotation);
 Rotation = null;
 }
 if(LocalScale!=null)
 {
 LocalScale.Clear();
-LocalScale.PutIn();
+PRO.Proto.ProtoPool.PutIn(LocalScale);
 LocalScale = null;
 }
 }
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -3030,7 +3028,7 @@ public void Clear()
 if(Velocity!=null)
 {
 Velocity.Clear();
-Velocity.PutIn();
+PRO.Proto.ProtoPool.PutIn(Velocity);
 Velocity = null;
 }
 AngularVelocity = 0;
@@ -3039,7 +3037,7 @@ Simulated = false;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 
@@ -3050,7 +3048,7 @@ public void Clear()
 if(Centroid!=null)
 {
 Centroid.Clear();
-Centroid.PutIn();
+PRO.Proto.ProtoPool.PutIn(Centroid);
 Centroid = null;
 }
 Distance = 0;
@@ -3058,20 +3056,20 @@ Fraction = 0;
 if(Normal!=null)
 {
 Normal.Clear();
-Normal.PutIn();
+PRO.Proto.ProtoPool.PutIn(Normal);
 Normal = null;
 }
 if(Point!=null)
 {
 Point.Clear();
-Point.PutIn();
+PRO.Proto.ProtoPool.PutIn(Point);
 Point = null;
 }
 }
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 

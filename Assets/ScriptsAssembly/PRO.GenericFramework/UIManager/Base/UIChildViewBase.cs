@@ -6,11 +6,9 @@ namespace PRO
     {
         public RectTransform rectTransform { get; private set; }
         protected Transform transform;
-        protected MonoScriptBase mono;
-        public virtual void Init(MonoScriptBase mono)
+        public virtual void Init(UIChildControllerBase controller)
         {
-            this.mono = mono;
-            transform = mono.transform;
+            this.transform = controller.transform;
             rectTransform = transform.GetComponent<RectTransform>();
         }
     }

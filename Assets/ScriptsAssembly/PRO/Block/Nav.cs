@@ -6,6 +6,7 @@ namespace PRO
 {
     public class Nav
     {
+        public string TypeName;
         /// <summary>
         /// 角色模型大小与偏移
         /// </summary>
@@ -18,8 +19,9 @@ namespace PRO
         /// 角色每次可以移动的下一个点的集合
         /// </summary>
         public Vector2Int[] walkRing { get; private set; }
-        public Nav(NavAgentMould NavAgentMould)
+        public Nav(string TypeName, NavAgentMould NavAgentMould)
         {
+            this.TypeName = TypeName;
             AgentMould = NavAgentMould;
             chackBox = new Vector2Int[AgentMould.size.x * 2 + AgentMould.size.y * 2 - 4];
             int index = 0;

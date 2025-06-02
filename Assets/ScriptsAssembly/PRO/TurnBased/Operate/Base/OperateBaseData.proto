@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+
+//import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
+//import "PRO/SkillEditor/Agent/SkillPlayerAgentData.proto";
+//import "RoleInfoData.proto";
+
+package PRO.Proto;
+
+message OperateBaseData
+{
+
+}

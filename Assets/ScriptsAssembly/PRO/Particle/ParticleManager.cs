@@ -1,5 +1,6 @@
 ﻿using PRO.Tool;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +9,6 @@ namespace PRO
     public class ParticleManager : MonoScriptBase, ITime_Awake, ITime_Start, ITime_Update
     {
         public static ParticleManager Inst { get; private set; }
-
-
 
         private Dictionary<string, ParticlePool> particlePoolDic = new Dictionary<string, ParticlePool>();
         [NonSerialized]
@@ -41,7 +40,7 @@ namespace PRO
         /// <summary>
         /// 获取一个粒子对象池
         /// 输入ab包内的解析路径 
-        /// Assets\ScriptsAssembly\GamePlay\技能\
+        /// Assets\ScriptsAssembly\PRO\技能\
         /// Assets\ScriptsAssembly\PRO\Particle\
         /// </summary>
         /// <param name="loadPath"></param>
@@ -51,7 +50,7 @@ namespace PRO
             if (particlePoolDic.TryGetValue(loadPath, out ParticlePool pool)) return pool;
             else
             {
-                GameObject go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\GamePlay\技能\{loadPath}");
+                GameObject go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\技能\{loadPath}");
                 if (go == null) go = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\{loadPath}");
                 if (go == null) return null;
                 Particle particle = go.GetComponent<Particle>();
@@ -60,7 +59,7 @@ namespace PRO
                 return pool;
             }
         }
-        public void GetPoolPutIn(Particle particle)
+        public void PutIn(Particle particle)
         {
             GetPool(particle.loadPath).PutIn(particle);
         }
@@ -88,11 +87,11 @@ namespace PRO
             public ParticlePool(Particle prefab, Transform parent, string loadPath)
             {
                 pool = new MonoObjectPool<Particle>(prefab, parent);
-                pool.CreateEvent += ( t) => t.Init(loadPath);
+                pool.CreateEvent += (t) => t.Init(loadPath);
             }
             public Particle TakeOut(SceneEntity scene)
             {
-                var particle = pool.TakeOutT();
+                var particle = pool.TakeOut();
                 particle.TakeOut(scene);
                 particle.SkillPlayAgent?.SetScene(scene);
                 scene.ActiveParticle.Add(particle);
@@ -110,6 +109,13 @@ namespace PRO
                 particle.SkillPlayAgent?.SetScene(null);
                 pool.PutIn(particle);
             }
+        }
+
+        public Particle ToRAM(Proto.ParticleData diskData, SceneEntity screen)
+        {
+             var particle = GetPool(diskData.LoadPath).TakeOut(screen);
+            particle.ToRAM(diskData);
+            return particle;
         }
     }
 }

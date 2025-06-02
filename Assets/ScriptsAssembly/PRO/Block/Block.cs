@@ -1,7 +1,6 @@
 using PRO.DataStructure;
+using PRO.Proto.Ex;
 using PRO.Disk;
-using PRO.Proto;
-using PRO.Proto.Block;
 using PRO.Renderer;
 using PRO.Tool;
 using System.Collections.Generic;
@@ -583,9 +582,9 @@ namespace PRO
         /// </summary>
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
 
-        public override void ToDisk(ref BlockBaseData diskData)
+        public override void ToDisk(ref Proto.BlockBaseData diskData)
         {
-            diskData.Block = new BlockBaseData.Types.BlockData();
+            diskData.Block = new Proto.BlockBaseData.Types.BlockData();
             var data = diskData.Block;
 
             foreach (var hash in fluidUpdateHash1)
@@ -602,7 +601,7 @@ namespace PRO
 
         }
 
-        public override void ToRAM(BlockBaseData data)
+        public override void ToRAM(Proto.BlockBaseData data)
         {
             foreach (var pos in data.Block.FluidUpdateHash1)
                 AddHashSet(fluidUpdateHash1[pos.Y], pos.ToRAM());

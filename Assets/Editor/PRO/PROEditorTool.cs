@@ -1,9 +1,7 @@
 using PRO;
-using PRO.Disk;
-using PRO.Tool;
+using PRO.Tool.Serialize.IO;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -61,7 +59,7 @@ return Index;
                 #endregion
             }
         }
-        JsonTool.StoreText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "GetLine.hlsl", autoGetLine);
+        IOTool.SaveText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "GetLine.hlsl", autoGetLine);
         #endregion
 
 
@@ -99,7 +97,7 @@ $"  int sourceIndex = GetLine_{r}(globalPos, source.globalPos, lineArray);\n" +
 @$"     float d = distance(lineArray[i], lineArray[sourceIndex]);
         if(d > {r}) return;
         float k = 0.1;
-        float attenuation = pow(({r} - d) / {r} , 1.5) ;" + "\n"+
+        float attenuation = pow(({r} - d) / {r} , 1.5) ;" + "\n" +
 $"      float weak =  pow(clamp(1 - d / (Line{r} - 1), 0, 1), 1);\n" +
 @"      
         int3 color = filterColor * 255 * attenuation * shadow;
@@ -122,7 +120,7 @@ $"      float weak =  pow(clamp(1 - d / (Line{r} - 1), 0, 1), 1);\n" +
 }" + "\n\n";
             #endregion
         }
-        JsonTool.StoreText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "SetLightBuffer.compute", autoSetLightbuffer);
+        IOTool.SaveText(Application.dataPath + @"\Resources\PixelRayOcclusion\Auto\" + "SetLightBuffer.compute", autoSetLightbuffer);
 
         #region 创建SetLightBuffer_Buffer.hlsl文件
         string autoSetLightBuffer_Buffer = "#include \"../StructData.hlsl\"\n";
@@ -246,9 +244,76 @@ int2 IDToGloabPos(int2 id)
     return ret;
 }";
         #endregion
-        JsonTool.StoreText(Application.dataPath + @"/Resources/PixelRayOcclusion/Auto/SetLightBuffer_Buffer.hlsl", autoSetLightBuffer_Buffer);
+        IOTool.SaveText(Application.dataPath + @"/Resources/PixelRayOcclusion/Auto/SetLightBuffer_Buffer.hlsl", autoSetLightBuffer_Buffer);
         #endregion
 
         Debug.Log("生成HLSL完成");
     }
+
+
+#if 写的一坨屎浪费老子一天时间反复调这个傻逼Proto的api
+    private static string[][] protoPath =
+    {
+        new string[]{@"\ScriptsAssembly\PRO.GenericFramework" , @"\ScriptsAssembly\PRO.GenericFramework\Protobuf\CSharp"},
+        new string[]{@"\ScriptsAssembly\PRO" , @"\ScriptsAssembly\PRO\Protobuf\CSharp"},
+        new string[]{@"\ScriptsAssembly\PRO" , @"\ScriptsAssembly\PRO\Protobuf\CSharp"},
+    };
+    [MenuItem("PRO/3.启动Proto.exe")]
+    public static void ProtoStart()
+    {
+        var array = new List<FileInfo>[protoPath.Length];
+        for (int i = 0; i < protoPath.Length; i++)
+        {
+            array[i] = new List<FileInfo>();
+            array[i].AddRange(FindProto(new DirectoryInfo(Application.dataPath + protoPath[i][0])));
+        }
+        StringBuilder bat = new StringBuilder();
+        bat.Append("chcp 65001\n");
+        bat.Append("@echo off\n");
+        bat.Append("protoc");
+        for (int i = 0; i < protoPath.Length; i++)
+        {
+            for (int a = 0; a < array[i].Count; a++)
+            {
+                var fileInfo = array[i][a];
+                foreach (var aa in array)
+                    foreach (var f in aa)
+                        bat.Append($"\0--proto_path={f.DirectoryName}");
+                bat.Append($"\0--csharp_out={Application.dataPath.Replace('/', '\\')}{protoPath[i][1]}");
+                bat.Append($"\0{fileInfo.Name}");
+                bat.Append('\n');
+            }
+        }
+        bat.AppendLine("pause");
+
+        string batPath = @$"{Application.dataPath}\ScriptsAssembly\PRO.GenericFramework\Protobuf\EXE\toC#.bat";
+        File.WriteAllText(batPath, bat.ToString(), Encoding.Default);
+        var processInfo = new System.Diagnostics.ProcessStartInfo()
+        {
+            FileName = batPath,
+            Arguments = bat.ToString(),
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+        using (var proto = new System.Diagnostics.Process())
+        {
+            proto.StartInfo = processInfo;
+            proto.Start();
+            proto.WaitForExit();
+            Debug.Log(proto.StandardError.ReadToEnd() + proto.StandardOutput.ReadToEnd());
+        }
+    }
+
+    private static List<FileInfo> FindProto(DirectoryInfo nowDirInfo)
+    {
+        var ret = new List<FileInfo>();
+        foreach (var fileInfo in nowDirInfo.GetFiles())
+            if (fileInfo.Extension == ".proto")
+                ret.Add(fileInfo);
+        foreach (var dirInfo in nowDirInfo.GetDirectories())
+            ret.AddRange(FindProto(dirInfo));
+        return ret;
+    }
+#endif
 }

@@ -9,7 +9,6 @@
 
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
-using PRO.Proto.DataStructure;
 using System;
 using System.Collections.Generic;
 

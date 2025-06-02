@@ -217,19 +217,19 @@ namespace PRO
         public bool IsInit { get; set; }
     }
 
-    public interface ITime_Awake : ITime
+    public interface ITime_Awake
     {
         public void TimeAwake();
     }
-    public interface ITime_Start : ITime
+    public interface ITime_Start
     {
         public void TimeStart();
     }
-    public interface ITime_Update : ITime
+    public interface ITime_Update
     {
         public void TimeUpdate();
     }
-    public interface ITime_LateUpdate : ITime
+    public interface ITime_LateUpdate
     {
         public void TimeLateUpdate();
     }

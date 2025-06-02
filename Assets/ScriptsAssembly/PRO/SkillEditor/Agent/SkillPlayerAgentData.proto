@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+//import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
+
+package PRO.Proto;
+
+message SkillPlayerAgentData
+{
+	bool Play = 1;
+	float Time = 2;
+	int32 NowFrame = 3;
+	string IdleLoadPath = 4;
+	string SkillLoadPath = 5;
+}

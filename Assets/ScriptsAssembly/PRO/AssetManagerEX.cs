@@ -1,0 +1,78 @@
+using PRO.SkillEditor;
+using PRO.Tool;
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
+
+namespace PRO
+{
+    /// <summary>
+    /// 资源加载扩展，用于路径相对固定，只存在
+    /// </summary>
+    public static class AssetManagerEX
+    {
+        /// <summary>
+        /// 技能文件夹的目录
+        /// </summary>
+        public static string SkillDirectoryPath = @"ScriptsAssembly\PRO\技能";
+        /// <summary>
+        /// 加载技能轨道数据
+        /// 
+        /// Asset\ScriptsAssembly\PRO\技能\
+        /// </summary>
+        public static Skill_Disk LoadSkillDisk(string path)
+        {
+            return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+        }
+        private static StringBuilder stringBuilder = new StringBuilder();
+        public static Skill_Disk LoadSkillDisk(OperateFSMBase SkillOperate)
+        {
+            string name = SkillOperate.GetType().Name;
+            int i = 0;
+            while (i < name.Length)
+                if (name[i++] == '_') break;
+            while (i < name.Length)
+                stringBuilder.Append(name[i++]);
+            stringBuilder.Append('\\');
+            stringBuilder.Append(name);
+            string path = stringBuilder.ToString();
+            stringBuilder.Clear();
+            return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+        }
+        public static SkillConfig LoadSkillConfig(OperateFSMBase SkillOperate)
+        {
+            string name = SkillOperate.GetType().Name;
+            int i = 0;
+            while (i < name.Length)
+                if (name[i++] == '_') break;
+            while (i < name.Length)
+                stringBuilder.Append(name[i++]);
+            stringBuilder.Append('\\');
+            stringBuilder.Append($"{name}_Config");
+            string path = stringBuilder.ToString();
+            stringBuilder.Clear();
+            return AssetManager.Load_A<SkillConfig>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+        }
+        /// <summary>
+        /// 加载技能指示器
+        /// 
+        /// Asset\ScriptsAssembly\PRO\技能指示器\
+        /// 
+        /// Asset\ScriptsAssembly\PRO\技能\
+        /// </summary>
+        public static T LoadSkillPointer<T>(string path) where T : SkillPointerBase
+        {
+            if (skillPointerInScene.TryGetValue(path, out SkillPointerBase ret) == false)
+            {
+                var assetInRAW = AssetManager.Load_A<GameObject>("skillpointer.ab", @$"ScriptsAssembly\PRO\技能指示器\{path}");
+                if (assetInRAW == null) assetInRAW = AssetManager.Load_A<GameObject>("skillpointer.ab", @$"{SkillDirectoryPath}\{path}.asset");
+                if (assetInRAW == null) return null;
+                ret = GameObject.Instantiate(assetInRAW).GetComponent<T>();
+                skillPointerInScene.Add(path, ret);
+                ret.Init();
+            }
+            return ret as T;
+        }
+        private static Dictionary<string, SkillPointerBase> skillPointerInScene = new Dictionary<string, SkillPointerBase>();
+    }
+}

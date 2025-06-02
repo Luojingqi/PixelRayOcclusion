@@ -1,12 +1,13 @@
 @echo off
 chcp 65001 &
+rem chcp 936 > nul
 set "rootPath=E:\Projects\Unity_P\PixelRayOcclusion\Assets\ScriptsAssembly\"
 set "outPath=Protobuf\CSharp\"
 
 
 set "inputPath0=PRO.GenericFramework\"
 set "outputPath0=%rootPath%%inputPath0%%outPath%"
-for /r "%rootPath%""%inputPath0%"  %%i in (*.proto) do (
+for /r %rootPath%%inputPath0%  %%i in (*.proto) do (
 	protoc	--proto_path=%rootPath%	--proto_path=%%~dpi	--csharp_out=%outputPath0%	%%~nxi
 	..\ProtocTool~\bin\Debug\ProtocTool  	%%~dpi%%~nxi	%outputPath0%	
 	echo %%i 生成完成
@@ -23,14 +24,6 @@ for /r %rootPath%%inputPath1%  %%i in (*.proto) do (
 )
 echo -----------------------------------------------------------------------
 
-
-set "inputPath2=GamePlay/"
-set "outputPath2=%rootPath%%inputPath2%%outPath%"
-for /r "%rootPath%""%inputPath2%"  %%i in ("%rootPath%"*.proto) do (
-	protoc	--proto_path=%rootPath%	--proto_path=%%~dpi	--csharp_out=%outputPath2%	%%~nxi
-	..\ProtocTool~\bin\Debug\ProtocTool  	%%~dpi%%~nxi	%outputPath2%
-	echo %%i 生成完成
-)
 pause
 
 rem echo 完整路径: "%%i"

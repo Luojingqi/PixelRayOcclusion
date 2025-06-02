@@ -1,0 +1,3021 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2362ee7c1d4867249919b6c045c44770, type: 3}
+  m_Name: Skill_8_0
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1360306927, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: -1112973410, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: 1676934316, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: -657677241, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: 810890028, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: -661570061, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: 1369251105, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    - {fileID: -864589566, guid: 5a66d3a3a707d6a468db5f87fcf2a889, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: AnimationTrack2DList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 3|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 1
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 2
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 3
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 4
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 5
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 6
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 7
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SpecialEffectTrack2DList
+      Entry: 7
+      Data: 11|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ParticleTrackList
+      Entry: 7
+      Data: 12|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AttackTestTrack2DList
+      Entry: 7
+      Data: 13|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SceneRuinTrackList
+      Entry: 7
+      Data: 14|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SceneCreateTrackList
+      Entry: 7
+      Data: 15|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 16|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 17|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 18|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f0\n\u70B9:4"
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 19|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 20|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f1\n\u70B9:3"
+    - Name: startFrame
+      Entry: 3
+      Data: 1
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 21|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 22|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f2\n\u70B9:5"
+    - Name: startFrame
+      Entry: 3
+      Data: 2
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 23|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 24|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f3\n\u70B9:3"
+    - Name: startFrame
+      Entry: 3
+      Data: 3
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 25|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 26|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f4\n\u70B9:3"
+    - Name: startFrame
+      Entry: 3
+      Data: 4
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 27|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 28|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f5\n\u70B9:3"
+    - Name: startFrame
+      Entry: 3
+      Data: 5
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 29|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3_\u53D1\u5149_\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 30|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f6\n\u70B9:9"
+    - Name: startFrame
+      Entry: 3
+      Data: 6
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 31|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 9
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 32|PRO.SkillEditor.SceneCreate_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f7\n\u70B9:18"
+    - Name: startFrame
+      Entry: 3
+      Data: 7
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: pixelList
+      Entry: 7
+      Data: 33|System.Collections.Generic.List`1[[PRO.SkillEditor.SceneCreate_Disk+PixelData,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 18
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3_\u53D1\u5149_\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3_\u53D1\u5149_\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: PRO.SkillEditor.SceneCreate_Disk+PixelData, PRO.Assembly
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: tryRuin
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: EventTrackList
+      Entry: 7
+      Data: 34|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 35|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 36|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: "37|PRO.SkillEditor.EventDisk_\u5B58\u50A8\u5207\u7247_Vector2Int, PRO.Assembly"
+    - Name: name
+      Entry: 1
+      Data: offset
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: -1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 38|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 39|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: "40|PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding, PRO.Assembly"
+    - Name: name
+      Entry: 1
+      Data: "\u521B\u5EFABuilding\n\u7C89\u8272\u82B1\u67350_\u4EFB\u610F_f7"
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 8
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: type
+      Entry: 6
+      Data: 
+    - Name: size
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 3
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: pixelList
+      Entry: 7
+      Data: "41|System.Collections.Generic.List`1[[PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData,
+        PRO.Assembly]], mscorlib"
+    - Name: 
+      Entry: 12
+      Data: 41
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3_\u53D1\u5149_\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u830E\u79C6\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3_\u53D1\u5149_\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82720"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "PRO.SkillEditor.EventDisk_\u521B\u5EFABuilding+PixelData, PRO.Assembly"
+    - Name: typeName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3"
+    - Name: colorName
+      Entry: 1
+      Data: "\u82B1\u6735\u82B1\u74E3\u82721"
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: blockType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 9
+      Data: 40
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  MaxFrame: 8
+  FrameTime: 100
+  loadPath: "ScriptsAssembly/GamePlay/\u6280\u80FD/8_0/Skill_8_0.asset"

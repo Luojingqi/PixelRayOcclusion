@@ -1,6 +1,7 @@
 ﻿using PRO.SkillEditor;
 using System;
 using UnityEngine;
+using PRO.Proto.Ex;
 
 namespace PRO
 {
@@ -49,7 +50,7 @@ namespace PRO
         /// 粒子池的加载路径
         /// </summary>
         public string loadPath { get; private set; }
-        /// <summary>
+        /// <summary> 
         /// 是否在场景中活跃
         /// </summary>
         public bool Active { get; set; }
@@ -154,6 +155,25 @@ namespace PRO
             transform.position = Block.GlobalToWorld(global) + new Vector3(pixelSizeHalf, pixelSizeHalf);
         }
 
+        public virtual Proto.ParticleData ToDisk()
+        {
+            var diskData = Proto.ProtoPool.TakeOut<Proto.ParticleData>();
+            diskData.LoadPath = loadPath;
+            diskData.Transform = transform.ToDisk();
+            diskData.Rigidbody2D = Rig2D.ToDisk();
+            diskData.SurviveTimeRange = surviveTimeRange.ToDisk();
+            diskData.RemainTime = remainTime;
+            diskData.ElapsedTime = elapsedTime;
+            return diskData;
+        }
 
+        public virtual void ToRAM(Proto.ParticleData diskData)
+        {
+            transform.ToRAM(diskData.Transform);
+            Rig2D.ToRAM(diskData.Rigidbody2D);
+            surviveTimeRange = diskData.SurviveTimeRange.ToRAM();
+            remainTime = diskData.RemainTime;
+            elapsedTime = diskData.ElapsedTime;
+        }
     }
 }

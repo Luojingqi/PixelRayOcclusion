@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+package PRO.Proto;
+
+message RoleInfoData
+{
+	int32 Value1 = 1;
+	int32 Value2 = 2;
+	int32 Value3 = 3;
+	repeated int32 Value4 = 4;
+	float value5 = 5;
+	float value6 = 6;
+	float value7 = 7;
+	float value8 = 8;
+	int32 value9 = 9;
+	int32 value10 = 10;
+	int32 value11 = 11;
+	int32 value12 = 12;
+}

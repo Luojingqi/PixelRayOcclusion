@@ -1,0 +1,25 @@
+﻿syntax = "proto3";
+
+import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
+import "PRO/SkillEditor/Agent/SkillPlayerAgentData.proto";
+import "RoleInfoData.proto";
+
+package PRO.Proto;
+
+message RoleData
+{
+	Transform TransFormData = 1;
+	Rigidbody2D Rigidbody2DData = 2;
+	SkillPlayerAgentData SkillPlayAgentData = 3;
+
+	string NavType = 4;
+	int32 Toward = 5;
+	string RoleTypeName = 6;
+	string GUID = 7;
+	string Name = 8;
+	RoleInfoData Info = 9;
+
+
+	repeated string AllCanUseOperate_Type = 15;
+	repeated string AllBuff_Type = 16;
+}

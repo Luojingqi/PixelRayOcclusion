@@ -7,10 +7,9 @@ namespace PRO.SceneEditor
         public FileDirectoryInfoListC FileDirectoryInfoList { get; private set; }
         public FileDirectoryInfoC FileDirectoryInfo { get; private set; }
 
-        public override void Init(MonoScriptBase mono)
+        public override void Init(UIChildControllerBase controller)
         {
-            base.Init(mono);
-
+            base.Init(controller);
 
             FileDirectoryInfoList = transform.Find("FileDirectoryInfoList").GetComponent<FileDirectoryInfoListC>();
             FileDirectoryInfo = transform.Find("FileDirectoryInfoList/FileDirectoryInfo").GetComponent<FileDirectoryInfoC>();

@@ -1,4 +1,4 @@
-using PRO.Tool;
+using PRO.Tool.Serialize.Json;
 using System;
 using System.IO;
 using UnityEditor;
@@ -51,7 +51,7 @@ namespace PRO.SkillEditor
                                 {
                                     typeName = typeName,
                                     colorName = colorName,
-                                    pos = new Vector2Int(x, y)
+                                    pos = new Vector2Int(x, y),
                                 });
                             }
                         disk.name = da.name;

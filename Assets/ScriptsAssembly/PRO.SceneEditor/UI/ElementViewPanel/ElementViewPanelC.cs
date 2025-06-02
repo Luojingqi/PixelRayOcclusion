@@ -66,6 +66,5 @@ namespace PRO.SceneEditor
             element.Clear();
             ElementPool.PutIn(element.gameObject);
         }
-
     }
 }

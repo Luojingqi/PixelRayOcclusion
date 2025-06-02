@@ -14,7 +14,7 @@ namespace PRO
     /// <summary>
     /// 场景实体类，在游戏运行时存储场景运行数据
     /// </summary>
-    public class SceneEntity
+    public class SceneEntity : ITime_Update
     {
         private struct OneBlock
         {
@@ -84,8 +84,8 @@ namespace PRO
             background.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
             ThreadPool.QueueUserWorkItem((obj) =>
             {
-                if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block", Proto.Block.BlockBaseData.Parser, out var blockData)
-                && IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background", Proto.Block.BlockBaseData.Parser, out var backgroundData))
+                if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block", Proto.BlockBaseData.Parser, out var blockData)
+                && IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background", Proto.BlockBaseData.Parser, out var backgroundData))
                 {
 
                     ThreadPool.QueueUserWorkItem((obj) =>
@@ -196,7 +196,7 @@ namespace PRO
         public static Dictionary<string, Type> BuildingTypeDic = new Dictionary<string, Type>();
         public void LoadBuilding(string guid)
         {
-            if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Building\{guid}", Proto.Building.BuildingBaseData.Parser, out var diskData))
+            if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Building\{guid}", Proto.BuildingBaseData.Parser, out var diskData))
             {
                 BuildingBase building = BuildingBase.New(BuildingTypeDic[diskData.Name], guid, this);
                 building.ToRAM(diskData);
@@ -260,5 +260,12 @@ namespace PRO
             return back;
         }
         #endregion
+
+
+        //public event SceneEntity
+        public void TimeUpdate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

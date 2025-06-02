@@ -1,8 +1,5 @@
 ﻿using PRO.DataStructure;
 using PRO.Disk;
-using PRO.Proto;
-using PRO.Proto.Block;
-using System;
 using System.Collections.Generic;
 
 namespace PRO
@@ -12,13 +9,13 @@ namespace PRO
     /// </summary>
     public abstract partial class BlockBase
     {
-        public abstract void ToDisk(ref BlockBaseData data);
+        public abstract void ToDisk(ref Proto.BlockBaseData data);
 
-        public abstract void ToRAM(BlockBaseData data);
+        public abstract void ToRAM(Proto.BlockBaseData data);
 
-        public BlockBaseData ToDisk()
+        public Proto.BlockBaseData ToDisk()
         {
-            var diskData = ProtoPool.TakeOut<BlockBaseData>();
+            var diskData = Proto.ProtoPool.TakeOut<Proto.BlockBaseData>();
             for (int y = 0; y < Block.Size.y; y++)
                 for (int x = 0; x < Block.Size.x; x++)
                 {
@@ -33,7 +30,7 @@ namespace PRO
                         colorNameIndex = diskData.ColorNameIndexDic.Count;
                         diskData.ColorNameIndexDic.Add(pixel.colorInfo.colorName, colorNameIndex);
                     }
-                    var pixelData = ProtoPool.TakeOut<BlockBaseData.Types.PixelData>();
+                    var pixelData = Proto.ProtoPool.TakeOut<Proto.BlockBaseData.Types.PixelData>();
                     pixelData.TypeIndex = typeNameIndex;
                     pixelData.ColorIndex = colorNameIndex;
                     pixelData.Durability = pixel.durability;
@@ -53,7 +50,7 @@ namespace PRO
             ToDisk(ref diskData);
             return diskData;
         }
-        public void ToRAM(BlockBaseData diskData, SceneEntity sceneEntity)
+        public void ToRAM(Proto.BlockBaseData diskData, SceneEntity sceneEntity)
         {
             Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>(diskData.TypeNameIndexDic.Count);
             Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>(diskData.ColorNameIndexDic.Count);

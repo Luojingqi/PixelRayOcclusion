@@ -142,12 +142,12 @@ namespace PRO.Proto.ProtocTool
                                 sb.AppendLine("{");
                                 if (v.type == "bytes")
                                 {
-                                    sb.AppendLine($"ByteString.PutIn(item);");
+                                    sb.AppendLine($"Google.Protobuf.ByteString.PutIn(item);");
                                 }
                                 else
                                 {
                                     sb.AppendLine($"item.Clear();");
-                                    sb.AppendLine($"item.PutIn();");
+                                    sb.AppendLine($"PRO.Proto.ProtoPool.PutIn(item);");
                                 }
                                 sb.AppendLine("}");
                                 sb.AppendLine($"{v.name}.Clear();");
@@ -170,12 +170,12 @@ namespace PRO.Proto.ProtocTool
                                 sb.AppendLine("{");
                                 if (v.valueType == "bytes")
                                 {
-                                    sb.AppendLine($"ByteString.PutIn(kv.Value);");
+                                    sb.AppendLine($"Google.Protobuf.ByteString.PutIn(item);");
                                 }
                                 else
                                 {
                                     sb.AppendLine($"kv.Value.Clear();");
-                                    sb.AppendLine($"kv.Value.PutIn();");
+                                    sb.AppendLine($"PRO.Proto.ProtoPool.PutIn(item);");
                                 }
                                 sb.AppendLine("}");
                                 sb.AppendLine($"{v.name}.Clear();");
@@ -188,7 +188,7 @@ namespace PRO.Proto.ProtocTool
                             {
                                 sb.AppendLine($"if({value.name}!=null)");
                                 sb.AppendLine("{");
-                                sb.AppendLine($"ByteString.PutIn({value.name});");
+                                sb.AppendLine($"Google.Protobuf.ByteString.PutIn({value.name});");
                                 sb.AppendLine($"{value.name} = null;");
                                 sb.AppendLine("}");
                             }
@@ -205,7 +205,7 @@ namespace PRO.Proto.ProtocTool
                                 sb.AppendLine($"if({value.name}!=null)");
                                 sb.AppendLine("{");
                                 sb.AppendLine($"{value.name}.Clear();");
-                                sb.AppendLine($"{value.name}.PutIn();");
+                                sb.AppendLine($"PRO.Proto.ProtoPool.PutIn({value.name});");
                                 sb.AppendLine($"{value.name} = null;");
                                 sb.AppendLine("}");
                             }
@@ -227,7 +227,7 @@ namespace PRO.Proto.ProtocTool
             sb.AppendLine("public void ClearPutIn()");
             sb.AppendLine("{");
             sb.AppendLine("Clear();");
-            sb.AppendLine("this.PutIn();");
+            sb.AppendLine("PRO.Proto.ProtoPool.PutIn(this);");
             sb.AppendLine("}");
             sb.AppendLine("}");
             return sb.ToString();

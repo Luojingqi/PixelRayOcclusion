@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace PRO.Proto.Block {
+namespace PRO.Proto {
 
   /// <summary>Holder for reflection information generated from BlockBaseData.proto</summary>
   public static partial class BlockBaseDataReflection {
@@ -24,37 +24,35 @@ namespace PRO.Proto.Block {
     static BlockBaseDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNCbG9ja0Jhc2VEYXRhLnByb3RvEg9QUk8uUHJvdG8uQmxvY2saO1BSTy5H",
-            "ZW5lcmljRnJhbWV3b3JrL1Byb3RvYnVmL0RhdGFTdHJ1Y3R1cmUvQmFzaWNE",
-            "YXRhLnByb3RvItkHCg1CbG9ja0Jhc2VEYXRhEk4KEFR5cGVOYW1lSW5kZXhE",
-            "aWMYASADKAsyNC5QUk8uUHJvdG8uQmxvY2suQmxvY2tCYXNlRGF0YS5UeXBl",
-            "TmFtZUluZGV4RGljRW50cnkSUAoRQ29sb3JOYW1lSW5kZXhEaWMYAiADKAsy",
-            "NS5QUk8uUHJvdG8uQmxvY2suQmxvY2tCYXNlRGF0YS5Db2xvck5hbWVJbmRl",
-            "eERpY0VudHJ5ElYKFEJ1aWxkaW5nR3VpZEluZGV4RGljGAMgAygLMjguUFJP",
-            "LlByb3RvLkJsb2NrLkJsb2NrQmFzZURhdGEuQnVpbGRpbmdHdWlkSW5kZXhE",
-            "aWNFbnRyeRI6CghBbGxQaXhlbBgKIAMoCzIoLlBSTy5Qcm90by5CbG9jay5C",
-            "bG9ja0Jhc2VEYXRhLlBpeGVsRGF0YRI5CgVCbG9jaxgLIAEoCzIoLlBSTy5Q",
-            "cm90by5CbG9jay5CbG9ja0Jhc2VEYXRhLkJsb2NrRGF0YUgAEkMKCkJhY2tn",
-            "cm91bmQYDCABKAsyLS5QUk8uUHJvdG8uQmxvY2suQmxvY2tCYXNlRGF0YS5C",
-            "YWNrZ3JvdW5kRGF0YUgAGjcKFVR5cGVOYW1lSW5kZXhEaWNFbnRyeRILCgNr",
-            "ZXkYASABKAkSDQoFdmFsdWUYAiABKAU6AjgBGjgKFkNvbG9yTmFtZUluZGV4",
-            "RGljRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgFOgI4ARo7ChlC",
-            "dWlsZGluZ0d1aWRJbmRleERpY0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1",
-            "ZRgCIAEoBToCOAEaeQoJUGl4ZWxEYXRhEhEKCVR5cGVJbmRleBgBIAEoBRIS",
-            "CgpDb2xvckluZGV4GAIgASgFEhIKCkR1cmFiaWxpdHkYAyABKAUSGwoTQWZm",
-            "ZWN0c1RyYW5zcGFyZW5jeRgEIAEoAhIUCgxCdWlsZGluZ0xpc3QYBSADKAUa",
-            "ywEKCUJsb2NrRGF0YRI+ChBGbHVpZFVwZGF0ZUhhc2gxGAEgAygLMiQuUFJP",
-            "LlByb3RvLkRhdGFTdHJ1Y3R1cmUuVmVjdG9yMkJ5dGUSPgoQRmx1aWRVcGRh",
-            "dGVIYXNoMhgCIAMoCzIkLlBSTy5Qcm90by5EYXRhU3RydWN0dXJlLlZlY3Rv",
-            "cjJCeXRlEj4KEEZsdWlkVXBkYXRlSGFzaDMYAyADKAsyJC5QUk8uUHJvdG8u",
-            "RGF0YVN0cnVjdHVyZS5WZWN0b3IyQnl0ZRoQCg5CYWNrZ3JvdW5kRGF0YUIH",
-            "CgVBZGRlZGIGcHJvdG8z"));
+            "ChNCbG9ja0Jhc2VEYXRhLnByb3RvEglQUk8uUHJvdG8aO1BSTy5HZW5lcmlj",
+            "RnJhbWV3b3JrL1Byb3RvYnVmL0RhdGFTdHJ1Y3R1cmUvQmFzaWNEYXRhLnBy",
+            "b3RvIosHCg1CbG9ja0Jhc2VEYXRhEkgKEFR5cGVOYW1lSW5kZXhEaWMYASAD",
+            "KAsyLi5QUk8uUHJvdG8uQmxvY2tCYXNlRGF0YS5UeXBlTmFtZUluZGV4RGlj",
+            "RW50cnkSSgoRQ29sb3JOYW1lSW5kZXhEaWMYAiADKAsyLy5QUk8uUHJvdG8u",
+            "QmxvY2tCYXNlRGF0YS5Db2xvck5hbWVJbmRleERpY0VudHJ5ElAKFEJ1aWxk",
+            "aW5nR3VpZEluZGV4RGljGAMgAygLMjIuUFJPLlByb3RvLkJsb2NrQmFzZURh",
+            "dGEuQnVpbGRpbmdHdWlkSW5kZXhEaWNFbnRyeRI0CghBbGxQaXhlbBgKIAMo",
+            "CzIiLlBSTy5Qcm90by5CbG9ja0Jhc2VEYXRhLlBpeGVsRGF0YRIzCgVCbG9j",
+            "axgLIAEoCzIiLlBSTy5Qcm90by5CbG9ja0Jhc2VEYXRhLkJsb2NrRGF0YUgA",
+            "Ej0KCkJhY2tncm91bmQYDCABKAsyJy5QUk8uUHJvdG8uQmxvY2tCYXNlRGF0",
+            "YS5CYWNrZ3JvdW5kRGF0YUgAGjcKFVR5cGVOYW1lSW5kZXhEaWNFbnRyeRIL",
+            "CgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAU6AjgBGjgKFkNvbG9yTmFtZUlu",
+            "ZGV4RGljRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgFOgI4ARo7",
+            "ChlCdWlsZGluZ0d1aWRJbmRleERpY0VudHJ5EgsKA2tleRgBIAEoCRINCgV2",
+            "YWx1ZRgCIAEoBToCOAEaeQoJUGl4ZWxEYXRhEhEKCVR5cGVJbmRleBgBIAEo",
+            "BRISCgpDb2xvckluZGV4GAIgASgFEhIKCkR1cmFiaWxpdHkYAyABKAUSGwoT",
+            "QWZmZWN0c1RyYW5zcGFyZW5jeRgEIAEoAhIUCgxCdWlsZGluZ0xpc3QYBSAD",
+            "KAUaoQEKCUJsb2NrRGF0YRIwChBGbHVpZFVwZGF0ZUhhc2gxGAEgAygLMhYu",
+            "UFJPLlByb3RvLlZlY3RvcjJCeXRlEjAKEEZsdWlkVXBkYXRlSGFzaDIYAiAD",
+            "KAsyFi5QUk8uUHJvdG8uVmVjdG9yMkJ5dGUSMAoQRmx1aWRVcGRhdGVIYXNo",
+            "MxgDIAMoCzIWLlBSTy5Qcm90by5WZWN0b3IyQnl0ZRoQCg5CYWNrZ3JvdW5k",
+            "RGF0YUIHCgVBZGRlZGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::PRO.Proto.BasicDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Block.BlockBaseData), global::PRO.Proto.Block.BlockBaseData.Parser, new[]{ "TypeNameIndexDic", "ColorNameIndexDic", "BuildingGuidIndexDic", "AllPixel", "Block", "Background" }, new[]{ "Added" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Block.BlockBaseData.Types.PixelData), global::PRO.Proto.Block.BlockBaseData.Types.PixelData.Parser, new[]{ "TypeIndex", "ColorIndex", "Durability", "AffectsTransparency", "BuildingList" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Block.BlockBaseData.Types.BlockData), global::PRO.Proto.Block.BlockBaseData.Types.BlockData.Parser, new[]{ "FluidUpdateHash1", "FluidUpdateHash2", "FluidUpdateHash3" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData), global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData.Parser, null, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BlockBaseData), global::PRO.Proto.BlockBaseData.Parser, new[]{ "TypeNameIndexDic", "ColorNameIndexDic", "BuildingGuidIndexDic", "AllPixel", "Block", "Background" }, new[]{ "Added" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BlockBaseData.Types.PixelData), global::PRO.Proto.BlockBaseData.Types.PixelData.Parser, new[]{ "TypeIndex", "ColorIndex", "Durability", "AffectsTransparency", "BuildingList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BlockBaseData.Types.BlockData), global::PRO.Proto.BlockBaseData.Types.BlockData.Parser, new[]{ "FluidUpdateHash1", "FluidUpdateHash2", "FluidUpdateHash3" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BlockBaseData.Types.BackgroundData), global::PRO.Proto.BlockBaseData.Types.BackgroundData.Parser, null, null, null, null, null)})
           }));
     }
     #endregion
@@ -76,7 +74,7 @@ namespace PRO.Proto.Block {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.Block.BlockBaseDataReflection.Descriptor.MessageTypes[0]; }
+      get { return global::PRO.Proto.BlockBaseDataReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -162,12 +160,12 @@ namespace PRO.Proto.Block {
 
     /// <summary>Field number for the "AllPixel" field.</summary>
     public const int AllPixelFieldNumber = 10;
-    private static readonly pb::FieldCodec<global::PRO.Proto.Block.BlockBaseData.Types.PixelData> _repeated_allPixel_codec
-        = pb::FieldCodec.ForMessage(82, global::PRO.Proto.Block.BlockBaseData.Types.PixelData.Parser);
-    private readonly pbc::RepeatedField<global::PRO.Proto.Block.BlockBaseData.Types.PixelData> allPixel_ = new pbc::RepeatedField<global::PRO.Proto.Block.BlockBaseData.Types.PixelData>();
+    private static readonly pb::FieldCodec<global::PRO.Proto.BlockBaseData.Types.PixelData> _repeated_allPixel_codec
+        = pb::FieldCodec.ForMessage(82, global::PRO.Proto.BlockBaseData.Types.PixelData.Parser);
+    private readonly pbc::RepeatedField<global::PRO.Proto.BlockBaseData.Types.PixelData> allPixel_ = new pbc::RepeatedField<global::PRO.Proto.BlockBaseData.Types.PixelData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::PRO.Proto.Block.BlockBaseData.Types.PixelData> AllPixel {
+    public pbc::RepeatedField<global::PRO.Proto.BlockBaseData.Types.PixelData> AllPixel {
       get { return allPixel_; }
     }
 
@@ -175,8 +173,8 @@ namespace PRO.Proto.Block {
     public const int BlockFieldNumber = 11;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.Block.BlockBaseData.Types.BlockData Block {
-      get { return addedCase_ == AddedOneofCase.Block ? (global::PRO.Proto.Block.BlockBaseData.Types.BlockData) added_ : null; }
+    public global::PRO.Proto.BlockBaseData.Types.BlockData Block {
+      get { return addedCase_ == AddedOneofCase.Block ? (global::PRO.Proto.BlockBaseData.Types.BlockData) added_ : null; }
       set {
         added_ = value;
         addedCase_ = value == null ? AddedOneofCase.None : AddedOneofCase.Block;
@@ -187,8 +185,8 @@ namespace PRO.Proto.Block {
     public const int BackgroundFieldNumber = 12;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData Background {
-      get { return addedCase_ == AddedOneofCase.Background ? (global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData) added_ : null; }
+    public global::PRO.Proto.BlockBaseData.Types.BackgroundData Background {
+      get { return addedCase_ == AddedOneofCase.Background ? (global::PRO.Proto.BlockBaseData.Types.BackgroundData) added_ : null; }
       set {
         added_ = value;
         addedCase_ = value == null ? AddedOneofCase.None : AddedOneofCase.Background;
@@ -343,13 +341,13 @@ namespace PRO.Proto.Block {
       switch (other.AddedCase) {
         case AddedOneofCase.Block:
           if (Block == null) {
-            Block = new global::PRO.Proto.Block.BlockBaseData.Types.BlockData();
+            Block = new global::PRO.Proto.BlockBaseData.Types.BlockData();
           }
           Block.MergeFrom(other.Block);
           break;
         case AddedOneofCase.Background:
           if (Background == null) {
-            Background = new global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData();
+            Background = new global::PRO.Proto.BlockBaseData.Types.BackgroundData();
           }
           Background.MergeFrom(other.Background);
           break;
@@ -391,7 +389,7 @@ namespace PRO.Proto.Block {
             break;
           }
           case 90: {
-            global::PRO.Proto.Block.BlockBaseData.Types.BlockData subBuilder = new global::PRO.Proto.Block.BlockBaseData.Types.BlockData();
+            global::PRO.Proto.BlockBaseData.Types.BlockData subBuilder = new global::PRO.Proto.BlockBaseData.Types.BlockData();
             if (addedCase_ == AddedOneofCase.Block) {
               subBuilder.MergeFrom(Block);
             }
@@ -400,7 +398,7 @@ namespace PRO.Proto.Block {
             break;
           }
           case 98: {
-            global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData subBuilder = new global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData();
+            global::PRO.Proto.BlockBaseData.Types.BackgroundData subBuilder = new global::PRO.Proto.BlockBaseData.Types.BackgroundData();
             if (addedCase_ == AddedOneofCase.Background) {
               subBuilder.MergeFrom(Background);
             }
@@ -444,7 +442,7 @@ namespace PRO.Proto.Block {
             break;
           }
           case 90: {
-            global::PRO.Proto.Block.BlockBaseData.Types.BlockData subBuilder = new global::PRO.Proto.Block.BlockBaseData.Types.BlockData();
+            global::PRO.Proto.BlockBaseData.Types.BlockData subBuilder = new global::PRO.Proto.BlockBaseData.Types.BlockData();
             if (addedCase_ == AddedOneofCase.Block) {
               subBuilder.MergeFrom(Block);
             }
@@ -453,7 +451,7 @@ namespace PRO.Proto.Block {
             break;
           }
           case 98: {
-            global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData subBuilder = new global::PRO.Proto.Block.BlockBaseData.Types.BackgroundData();
+            global::PRO.Proto.BlockBaseData.Types.BackgroundData subBuilder = new global::PRO.Proto.BlockBaseData.Types.BackgroundData();
             if (addedCase_ == AddedOneofCase.Background) {
               subBuilder.MergeFrom(Background);
             }
@@ -486,7 +484,7 @@ namespace PRO.Proto.Block {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::PRO.Proto.Block.BlockBaseData.Descriptor.NestedTypes[3]; }
+          get { return global::PRO.Proto.BlockBaseData.Descriptor.NestedTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -823,7 +821,7 @@ namespace PRO.Proto.Block {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::PRO.Proto.Block.BlockBaseData.Descriptor.NestedTypes[4]; }
+          get { return global::PRO.Proto.BlockBaseData.Descriptor.NestedTypes[4]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -857,34 +855,34 @@ namespace PRO.Proto.Block {
 
         /// <summary>Field number for the "FluidUpdateHash1" field.</summary>
         public const int FluidUpdateHash1FieldNumber = 1;
-        private static readonly pb::FieldCodec<global::PRO.Proto.DataStructure.Vector2Byte> _repeated_fluidUpdateHash1_codec
-            = pb::FieldCodec.ForMessage(10, global::PRO.Proto.DataStructure.Vector2Byte.Parser);
-        private readonly pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte> fluidUpdateHash1_ = new pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte>();
+        private static readonly pb::FieldCodec<global::PRO.Proto.Vector2Byte> _repeated_fluidUpdateHash1_codec
+            = pb::FieldCodec.ForMessage(10, global::PRO.Proto.Vector2Byte.Parser);
+        private readonly pbc::RepeatedField<global::PRO.Proto.Vector2Byte> fluidUpdateHash1_ = new pbc::RepeatedField<global::PRO.Proto.Vector2Byte>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte> FluidUpdateHash1 {
+        public pbc::RepeatedField<global::PRO.Proto.Vector2Byte> FluidUpdateHash1 {
           get { return fluidUpdateHash1_; }
         }
 
         /// <summary>Field number for the "FluidUpdateHash2" field.</summary>
         public const int FluidUpdateHash2FieldNumber = 2;
-        private static readonly pb::FieldCodec<global::PRO.Proto.DataStructure.Vector2Byte> _repeated_fluidUpdateHash2_codec
-            = pb::FieldCodec.ForMessage(18, global::PRO.Proto.DataStructure.Vector2Byte.Parser);
-        private readonly pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte> fluidUpdateHash2_ = new pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte>();
+        private static readonly pb::FieldCodec<global::PRO.Proto.Vector2Byte> _repeated_fluidUpdateHash2_codec
+            = pb::FieldCodec.ForMessage(18, global::PRO.Proto.Vector2Byte.Parser);
+        private readonly pbc::RepeatedField<global::PRO.Proto.Vector2Byte> fluidUpdateHash2_ = new pbc::RepeatedField<global::PRO.Proto.Vector2Byte>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte> FluidUpdateHash2 {
+        public pbc::RepeatedField<global::PRO.Proto.Vector2Byte> FluidUpdateHash2 {
           get { return fluidUpdateHash2_; }
         }
 
         /// <summary>Field number for the "FluidUpdateHash3" field.</summary>
         public const int FluidUpdateHash3FieldNumber = 3;
-        private static readonly pb::FieldCodec<global::PRO.Proto.DataStructure.Vector2Byte> _repeated_fluidUpdateHash3_codec
-            = pb::FieldCodec.ForMessage(26, global::PRO.Proto.DataStructure.Vector2Byte.Parser);
-        private readonly pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte> fluidUpdateHash3_ = new pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte>();
+        private static readonly pb::FieldCodec<global::PRO.Proto.Vector2Byte> _repeated_fluidUpdateHash3_codec
+            = pb::FieldCodec.ForMessage(26, global::PRO.Proto.Vector2Byte.Parser);
+        private readonly pbc::RepeatedField<global::PRO.Proto.Vector2Byte> fluidUpdateHash3_ = new pbc::RepeatedField<global::PRO.Proto.Vector2Byte>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public pbc::RepeatedField<global::PRO.Proto.DataStructure.Vector2Byte> FluidUpdateHash3 {
+        public pbc::RepeatedField<global::PRO.Proto.Vector2Byte> FluidUpdateHash3 {
           get { return fluidUpdateHash3_; }
         }
 
@@ -1062,7 +1060,7 @@ namespace PRO.Proto.Block {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::PRO.Proto.Block.BlockBaseData.Descriptor.NestedTypes[5]; }
+          get { return global::PRO.Proto.BlockBaseData.Descriptor.NestedTypes[5]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1218,7 +1216,7 @@ namespace PRO.Proto.Block {
 }
 
 #endregion Designer generated code
-namespace PRO.Proto.Block
+namespace PRO.Proto
 {
 public partial class BlockBaseData
 {
@@ -1230,19 +1228,19 @@ BuildingGuidIndexDic.Clear();
 foreach(var item in AllPixel)
 {
 item.Clear();
-item.PutIn();
+PRO.Proto.ProtoPool.PutIn(item);
 }
 AllPixel.Clear();
 if(Block!=null)
 {
 Block.Clear();
-Block.PutIn();
+PRO.Proto.ProtoPool.PutIn(Block);
 Block = null;
 }
 if(Background!=null)
 {
 Background.Clear();
-Background.PutIn();
+PRO.Proto.ProtoPool.PutIn(Background);
 Background = null;
 }
 }
@@ -1261,7 +1259,7 @@ BuildingList.Clear();
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 public partial class BlockData
@@ -1271,26 +1269,26 @@ public void Clear()
 foreach(var item in FluidUpdateHash1)
 {
 item.Clear();
-item.PutIn();
+PRO.Proto.ProtoPool.PutIn(item);
 }
 FluidUpdateHash1.Clear();
 foreach(var item in FluidUpdateHash2)
 {
 item.Clear();
-item.PutIn();
+PRO.Proto.ProtoPool.PutIn(item);
 }
 FluidUpdateHash2.Clear();
 foreach(var item in FluidUpdateHash3)
 {
 item.Clear();
-item.PutIn();
+PRO.Proto.ProtoPool.PutIn(item);
 }
 FluidUpdateHash3.Clear();
 }
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 public partial class BackgroundData
@@ -1301,14 +1299,14 @@ public void Clear()
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 }
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 

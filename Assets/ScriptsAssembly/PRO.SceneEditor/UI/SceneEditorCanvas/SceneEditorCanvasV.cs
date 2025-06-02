@@ -13,15 +13,12 @@ namespace PRO.SceneEditor
         public SpriteRenderer HoldIcon { get; private set; }
         public Toggle Toggle { get; private set; }
         public TMP_Dropdown Dropdown { get; private set; }
-        public override void Init(Transform transform)
+        public override void Init(UIControllerBase controller)
         {
-            base.Init(transform);
+            base.Init(controller);
 
             FileDirectoryInfoTree = transform.Find("FileDirectoryInfoTree").GetComponent<FileDirectoryInfoTreeC>();
             ElementViewPanel = transform.Find("ElementViewPanel").GetComponent<ElementViewPanelC>();
-
-            ElementViewPanel.Init();
-            FileDirectoryInfoTree.Init();
 
             HoldIcon = new GameObject("HoldIcon").AddComponent<SpriteRenderer>();
             HoldIcon.gameObject.SetActive(false);

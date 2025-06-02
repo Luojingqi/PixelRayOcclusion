@@ -1,15 +1,11 @@
 ﻿using PRO.Disk;
-using PRO.Disk.Scene;
-using PRO.Proto;
-using PRO.Proto.Building;
 using PRO.Tool;
 using PRO.Tool.Serialize.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using UnityEditor;
 using UnityEngine;
+using PRO.Proto.Ex;
 
 namespace PRO
 {
@@ -139,9 +135,9 @@ namespace PRO
                 TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => GameObject.Destroy(gameObject));
             }
         }
-        public virtual BuildingBaseData ToDisk()
+        public virtual Proto.BuildingBaseData ToDisk()
         {
-            var diskData = ProtoPool.TakeOut<BuildingBaseData>();
+            var diskData = Proto.ProtoPool.TakeOut<Proto.BuildingBaseData>();
             diskData.TypeName = GetType().Name;
             diskData.Name = Name;
             diskData.Global = Global.ToDisk();
@@ -160,7 +156,7 @@ namespace PRO
                     colorNameIndex = diskData.ColorNameIndexDic.Count;
                     diskData.ColorNameIndexDic.Add(building_Pixel.colorInfo.colorName, colorNameIndex);
                 }
-                var pixelData = ProtoPool.TakeOut<BuildingBaseData.Types.Bulding_Pixel>();
+                var pixelData = Proto.ProtoPool.TakeOut<Proto.BuildingBaseData.Types.Bulding_Pixel>();
                 pixelData.TypeIndex = typeNameIndex;
                 pixelData.ColorIndex = colorNameIndex;
                 pixelData.Offset = building_Pixel.offset.ToDisk();
@@ -169,7 +165,7 @@ namespace PRO
             }
             return diskData;
         }
-        public virtual void ToRAM(BuildingBaseData diskData)
+        public virtual void ToRAM(Proto.BuildingBaseData diskData)
         {
             Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>(diskData.TypeNameIndexDic.Count);
             Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>(diskData.ColorNameIndexDic.Count);

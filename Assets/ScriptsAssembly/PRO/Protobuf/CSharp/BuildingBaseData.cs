@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace PRO.Proto.Building {
+namespace PRO.Proto {
 
   /// <summary>Holder for reflection information generated from BuildingBaseData.proto</summary>
   public static partial class BuildingBaseDataReflection {
@@ -24,28 +24,26 @@ namespace PRO.Proto.Building {
     static BuildingBaseDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChZCdWlsZGluZ0Jhc2VEYXRhLnByb3RvEhJQUk8uUHJvdG8uQnVpbGRpbmca",
-            "O1BSTy5HZW5lcmljRnJhbWV3b3JrL1Byb3RvYnVmL0RhdGFTdHJ1Y3R1cmUv",
-            "QmFzaWNEYXRhLnByb3RvIpYFChBCdWlsZGluZ0Jhc2VEYXRhEhAKCFR5cGVO",
-            "YW1lGAEgASgJEgwKBE5hbWUYAiABKAkSMwoGR2xvYmFsGAMgASgLMiMuUFJP",
-            "LlByb3RvLkRhdGFTdHJ1Y3R1cmUuVmVjdG9yMkludBIxCgRTaXplGAQgASgL",
-            "MiMuUFJPLlByb3RvLkRhdGFTdHJ1Y3R1cmUuVmVjdG9yMkludBITCgtDYW5C",
-            "eUJyb2tlbhgFIAEoCBJUChBUeXBlTmFtZUluZGV4RGljGAogAygLMjouUFJP",
-            "LlByb3RvLkJ1aWxkaW5nLkJ1aWxkaW5nQmFzZURhdGEuVHlwZU5hbWVJbmRl",
-            "eERpY0VudHJ5ElYKEUNvbG9yTmFtZUluZGV4RGljGAsgAygLMjsuUFJPLlBy",
-            "b3RvLkJ1aWxkaW5nLkJ1aWxkaW5nQmFzZURhdGEuQ29sb3JOYW1lSW5kZXhE",
-            "aWNFbnRyeRJECghBbGxQaXhlbBgMIAMoCzIyLlBSTy5Qcm90by5CdWlsZGlu",
-            "Zy5CdWlsZGluZ0Jhc2VEYXRhLkJ1bGRpbmdfUGl4ZWwaNwoVVHlwZU5hbWVJ",
-            "bmRleERpY0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEa",
-            "OAoWQ29sb3JOYW1lSW5kZXhEaWNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFs",
-            "dWUYAiABKAU6AjgBGn4KDUJ1bGRpbmdfUGl4ZWwSEQoJVHlwZUluZGV4GAEg",
-            "ASgFEhIKCkNvbG9ySW5kZXgYAiABKAUSMwoGT2Zmc2V0GAMgASgLMiMuUFJP",
-            "LlByb3RvLkRhdGFTdHJ1Y3R1cmUuVmVjdG9yMkludBIRCglCbG9ja1R5cGUY",
-            "BCABKAViBnByb3RvMw=="));
+            "ChZCdWlsZGluZ0Jhc2VEYXRhLnByb3RvEglQUk8uUHJvdG8aO1BSTy5HZW5l",
+            "cmljRnJhbWV3b3JrL1Byb3RvYnVmL0RhdGFTdHJ1Y3R1cmUvQmFzaWNEYXRh",
+            "LnByb3RvIuUEChBCdWlsZGluZ0Jhc2VEYXRhEhAKCFR5cGVOYW1lGAEgASgJ",
+            "EgwKBE5hbWUYAiABKAkSJQoGR2xvYmFsGAMgASgLMhUuUFJPLlByb3RvLlZl",
+            "Y3RvcjJJbnQSIwoEU2l6ZRgEIAEoCzIVLlBSTy5Qcm90by5WZWN0b3IySW50",
+            "EhMKC0NhbkJ5QnJva2VuGAUgASgIEksKEFR5cGVOYW1lSW5kZXhEaWMYCiAD",
+            "KAsyMS5QUk8uUHJvdG8uQnVpbGRpbmdCYXNlRGF0YS5UeXBlTmFtZUluZGV4",
+            "RGljRW50cnkSTQoRQ29sb3JOYW1lSW5kZXhEaWMYCyADKAsyMi5QUk8uUHJv",
+            "dG8uQnVpbGRpbmdCYXNlRGF0YS5Db2xvck5hbWVJbmRleERpY0VudHJ5EjsK",
+            "CEFsbFBpeGVsGAwgAygLMikuUFJPLlByb3RvLkJ1aWxkaW5nQmFzZURhdGEu",
+            "QnVsZGluZ19QaXhlbBISCgpFeHRlbmREYXRhGA8gASgMGjcKFVR5cGVOYW1l",
+            "SW5kZXhEaWNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAU6AjgB",
+            "GjgKFkNvbG9yTmFtZUluZGV4RGljRW50cnkSCwoDa2V5GAEgASgJEg0KBXZh",
+            "bHVlGAIgASgFOgI4ARpwCg1CdWxkaW5nX1BpeGVsEhEKCVR5cGVJbmRleBgB",
+            "IAEoBRISCgpDb2xvckluZGV4GAIgASgFEiUKBk9mZnNldBgDIAEoCzIVLlBS",
+            "Ty5Qcm90by5WZWN0b3IySW50EhEKCUJsb2NrVHlwZRgEIAEoBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::PRO.Proto.DataStructure.BasicDataReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::PRO.Proto.BasicDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Building.BuildingBaseData), global::PRO.Proto.Building.BuildingBaseData.Parser, new[]{ "TypeName", "Name", "Global", "Size", "CanByBroken", "TypeNameIndexDic", "ColorNameIndexDic", "AllPixel" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel), global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel.Parser, new[]{ "TypeIndex", "ColorIndex", "Offset", "BlockType" }, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BuildingBaseData), global::PRO.Proto.BuildingBaseData.Parser, new[]{ "TypeName", "Name", "Global", "Size", "CanByBroken", "TypeNameIndexDic", "ColorNameIndexDic", "AllPixel", "ExtendData" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel), global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel.Parser, new[]{ "TypeIndex", "ColorIndex", "Offset", "BlockType" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -67,7 +65,7 @@ namespace PRO.Proto.Building {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PRO.Proto.Building.BuildingBaseDataReflection.Descriptor.MessageTypes[0]; }
+      get { return global::PRO.Proto.BuildingBaseDataReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -95,6 +93,7 @@ namespace PRO.Proto.Building {
       typeNameIndexDic_ = other.typeNameIndexDic_.Clone();
       colorNameIndexDic_ = other.colorNameIndexDic_.Clone();
       allPixel_ = other.allPixel_.Clone();
+      extendData_ = other.extendData_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -130,10 +129,10 @@ namespace PRO.Proto.Building {
 
     /// <summary>Field number for the "Global" field.</summary>
     public const int GlobalFieldNumber = 3;
-    private global::PRO.Proto.DataStructure.Vector2Int global_;
+    private global::PRO.Proto.Vector2Int global_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector2Int Global {
+    public global::PRO.Proto.Vector2Int Global {
       get { return global_; }
       set {
         global_ = value;
@@ -142,10 +141,10 @@ namespace PRO.Proto.Building {
 
     /// <summary>Field number for the "Size" field.</summary>
     public const int SizeFieldNumber = 4;
-    private global::PRO.Proto.DataStructure.Vector2Int size_;
+    private global::PRO.Proto.Vector2Int size_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PRO.Proto.DataStructure.Vector2Int Size {
+    public global::PRO.Proto.Vector2Int Size {
       get { return size_; }
       set {
         size_ = value;
@@ -188,13 +187,25 @@ namespace PRO.Proto.Building {
 
     /// <summary>Field number for the "AllPixel" field.</summary>
     public const int AllPixelFieldNumber = 12;
-    private static readonly pb::FieldCodec<global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel> _repeated_allPixel_codec
-        = pb::FieldCodec.ForMessage(98, global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel.Parser);
-    private readonly pbc::RepeatedField<global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel> allPixel_ = new pbc::RepeatedField<global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel>();
+    private static readonly pb::FieldCodec<global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel> _repeated_allPixel_codec
+        = pb::FieldCodec.ForMessage(98, global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel.Parser);
+    private readonly pbc::RepeatedField<global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel> allPixel_ = new pbc::RepeatedField<global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::PRO.Proto.Building.BuildingBaseData.Types.Bulding_Pixel> AllPixel {
+    public pbc::RepeatedField<global::PRO.Proto.BuildingBaseData.Types.Bulding_Pixel> AllPixel {
       get { return allPixel_; }
+    }
+
+    /// <summary>Field number for the "ExtendData" field.</summary>
+    public const int ExtendDataFieldNumber = 15;
+    private pb::ByteString extendData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString ExtendData {
+      get { return extendData_; }
+      set {
+        extendData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -220,6 +231,7 @@ namespace PRO.Proto.Building {
       if (!TypeNameIndexDic.Equals(other.TypeNameIndexDic)) return false;
       if (!ColorNameIndexDic.Equals(other.ColorNameIndexDic)) return false;
       if(!allPixel_.Equals(other.allPixel_)) return false;
+      if (ExtendData != other.ExtendData) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -235,6 +247,7 @@ namespace PRO.Proto.Building {
       hash ^= TypeNameIndexDic.GetHashCode();
       hash ^= ColorNameIndexDic.GetHashCode();
       hash ^= allPixel_.GetHashCode();
+      if (ExtendData.Length != 0) hash ^= ExtendData.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -276,6 +289,10 @@ namespace PRO.Proto.Building {
       typeNameIndexDic_.WriteTo(output, _map_typeNameIndexDic_codec);
       colorNameIndexDic_.WriteTo(output, _map_colorNameIndexDic_codec);
       allPixel_.WriteTo(output, _repeated_allPixel_codec);
+      if (ExtendData.Length != 0) {
+        output.WriteRawTag(122);
+        output.WriteBytes(ExtendData);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -309,6 +326,10 @@ namespace PRO.Proto.Building {
       typeNameIndexDic_.WriteTo(ref output, _map_typeNameIndexDic_codec);
       colorNameIndexDic_.WriteTo(ref output, _map_colorNameIndexDic_codec);
       allPixel_.WriteTo(ref output, _repeated_allPixel_codec);
+      if (ExtendData.Length != 0) {
+        output.WriteRawTag(122);
+        output.WriteBytes(ExtendData);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -337,6 +358,9 @@ namespace PRO.Proto.Building {
       size += typeNameIndexDic_.CalculateSize(_map_typeNameIndexDic_codec);
       size += colorNameIndexDic_.CalculateSize(_map_colorNameIndexDic_codec);
       size += allPixel_.CalculateSize(_repeated_allPixel_codec);
+      if (ExtendData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(ExtendData);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -357,13 +381,13 @@ namespace PRO.Proto.Building {
       }
       if (other.global_ != null) {
         if (global_ == null) {
-          Global = new global::PRO.Proto.DataStructure.Vector2Int();
+          Global = new global::PRO.Proto.Vector2Int();
         }
         Global.MergeFrom(other.Global);
       }
       if (other.size_ != null) {
         if (size_ == null) {
-          Size = new global::PRO.Proto.DataStructure.Vector2Int();
+          Size = new global::PRO.Proto.Vector2Int();
         }
         Size.MergeFrom(other.Size);
       }
@@ -373,6 +397,9 @@ namespace PRO.Proto.Building {
       typeNameIndexDic_.MergeFrom(other.typeNameIndexDic_);
       colorNameIndexDic_.MergeFrom(other.colorNameIndexDic_);
       allPixel_.Add(other.allPixel_);
+      if (other.ExtendData.Length != 0) {
+        ExtendData = other.ExtendData;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -402,14 +429,14 @@ namespace PRO.Proto.Building {
           }
           case 26: {
             if (global_ == null) {
-              Global = new global::PRO.Proto.DataStructure.Vector2Int();
+              Global = new global::PRO.Proto.Vector2Int();
             }
             input.ReadMessage(Global);
             break;
           }
           case 34: {
             if (size_ == null) {
-              Size = new global::PRO.Proto.DataStructure.Vector2Int();
+              Size = new global::PRO.Proto.Vector2Int();
             }
             input.ReadMessage(Size);
             break;
@@ -428,6 +455,10 @@ namespace PRO.Proto.Building {
           }
           case 98: {
             allPixel_.AddEntriesFrom(input, _repeated_allPixel_codec);
+            break;
+          }
+          case 122: {
+            ExtendData = input.ReadBytes();
             break;
           }
         }
@@ -459,14 +490,14 @@ namespace PRO.Proto.Building {
           }
           case 26: {
             if (global_ == null) {
-              Global = new global::PRO.Proto.DataStructure.Vector2Int();
+              Global = new global::PRO.Proto.Vector2Int();
             }
             input.ReadMessage(Global);
             break;
           }
           case 34: {
             if (size_ == null) {
-              Size = new global::PRO.Proto.DataStructure.Vector2Int();
+              Size = new global::PRO.Proto.Vector2Int();
             }
             input.ReadMessage(Size);
             break;
@@ -485,6 +516,10 @@ namespace PRO.Proto.Building {
           }
           case 98: {
             allPixel_.AddEntriesFrom(ref input, _repeated_allPixel_codec);
+            break;
+          }
+          case 122: {
+            ExtendData = input.ReadBytes();
             break;
           }
         }
@@ -512,7 +547,7 @@ namespace PRO.Proto.Building {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::PRO.Proto.Building.BuildingBaseData.Descriptor.NestedTypes[2]; }
+          get { return global::PRO.Proto.BuildingBaseData.Descriptor.NestedTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -571,10 +606,10 @@ namespace PRO.Proto.Building {
 
         /// <summary>Field number for the "Offset" field.</summary>
         public const int OffsetFieldNumber = 3;
-        private global::PRO.Proto.DataStructure.Vector2Int offset_;
+        private global::PRO.Proto.Vector2Int offset_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public global::PRO.Proto.DataStructure.Vector2Int Offset {
+        public global::PRO.Proto.Vector2Int Offset {
           get { return offset_; }
           set {
             offset_ = value;
@@ -725,7 +760,7 @@ namespace PRO.Proto.Building {
           }
           if (other.offset_ != null) {
             if (offset_ == null) {
-              Offset = new global::PRO.Proto.DataStructure.Vector2Int();
+              Offset = new global::PRO.Proto.Vector2Int();
             }
             Offset.MergeFrom(other.Offset);
           }
@@ -761,7 +796,7 @@ namespace PRO.Proto.Building {
               }
               case 26: {
                 if (offset_ == null) {
-                  Offset = new global::PRO.Proto.DataStructure.Vector2Int();
+                  Offset = new global::PRO.Proto.Vector2Int();
                 }
                 input.ReadMessage(Offset);
                 break;
@@ -799,7 +834,7 @@ namespace PRO.Proto.Building {
               }
               case 26: {
                 if (offset_ == null) {
-                  Offset = new global::PRO.Proto.DataStructure.Vector2Int();
+                  Offset = new global::PRO.Proto.Vector2Int();
                 }
                 input.ReadMessage(Offset);
                 break;
@@ -825,7 +860,7 @@ namespace PRO.Proto.Building {
 }
 
 #endregion Designer generated code
-namespace PRO.Proto.Building
+namespace PRO.Proto
 {
 public partial class BuildingBaseData
 {
@@ -836,13 +871,13 @@ Name = null;
 if(Global!=null)
 {
 Global.Clear();
-Global.PutIn();
+PRO.Proto.ProtoPool.PutIn(Global);
 Global = null;
 }
 if(Size!=null)
 {
 Size.Clear();
-Size.PutIn();
+PRO.Proto.ProtoPool.PutIn(Size);
 Size = null;
 }
 CanByBroken = false;
@@ -851,9 +886,14 @@ ColorNameIndexDic.Clear();
 foreach(var item in AllPixel)
 {
 item.Clear();
-item.PutIn();
+PRO.Proto.ProtoPool.PutIn(item);
 }
 AllPixel.Clear();
+if(ExtendData!=null)
+{
+Google.Protobuf.ByteString.PutIn(ExtendData);
+ExtendData = null;
+}
 }
 public partial class Types
 {
@@ -866,7 +906,7 @@ ColorIndex = 0;
 if(Offset!=null)
 {
 Offset.Clear();
-Offset.PutIn();
+PRO.Proto.ProtoPool.PutIn(Offset);
 Offset = null;
 }
 BlockType = 0;
@@ -874,14 +914,14 @@ BlockType = 0;
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 }
 public void ClearPutIn()
 {
 Clear();
-this.PutIn();
+PRO.Proto.ProtoPool.PutIn(this);
 }
 }
 

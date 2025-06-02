@@ -21,6 +21,8 @@ namespace PRO.SceneEditor
 
             Inst = this;
 
+            AddChildUI(view.ElementViewPanel);
+            AddChildUI(view.FileDirectoryInfoTree);
 
             for (int i = 0; i < DerivedBuildingBaseList.Count; i++)
                 view.Dropdown.options.Add(new TMP_Dropdown.OptionData(DerivedBuildingBaseList[i].Name));
@@ -45,8 +47,9 @@ namespace PRO.SceneEditor
             view.HoldIcon.gameObject.SetActive(false);
             HoldEntity = null;
         }
-        public void TimeUpdate()
+        public override void TimeUpdate()
         {
+            base.TimeUpdate();
             if (HoldEntity == null) return;
             if (Input.GetKeyDown(KeyCode.Mouse1)) { ClearHold(); return; }
             Vector2Int global = MousePoint.globalPos;

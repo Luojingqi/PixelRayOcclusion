@@ -1,7 +1,5 @@
-using PRO.Proto.Block;
 using PRO.Renderer;
 using PRO.Tool;
-using System.Text;
 using UnityEngine;
 
 namespace PRO
@@ -65,12 +63,12 @@ namespace PRO
             _blockType = BlockType.BackgroundBlock;
         }
 
-        public override void ToDisk(ref BlockBaseData data)
+        public override void ToDisk(ref Proto.BlockBaseData data)
         {
 
         }
 
-        public override void ToRAM(BlockBaseData data)
+        public override void ToRAM(Proto.BlockBaseData data)
         {
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {

@@ -2,14 +2,14 @@
 
 import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
 
-package PRO.Proto.Building;
+package PRO.Proto;
 
 message BuildingBaseData
 {
 	string TypeName = 1;
 	string Name = 2;
-	PRO.Proto.DataStructure.Vector2Int Global = 3;
-	PRO.Proto.DataStructure.Vector2Int Size = 4;
+	Vector2Int Global = 3;
+	Vector2Int Size = 4;
 	bool CanByBroken = 5;
 
 	map<string,int32> TypeNameIndexDic = 10;
@@ -19,8 +19,10 @@ message BuildingBaseData
 	{
 		int32 TypeIndex = 1;
 		int32 ColorIndex = 2;
-		PRO.Proto.DataStructure.Vector2Int Offset = 3;
+		Vector2Int Offset = 3;
 		int32 BlockType = 4;
 	}
 	repeated Bulding_Pixel AllPixel = 12;
+
+	bytes ExtendData = 15;
 }

@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
+
+package PRO.Proto;
+
+message ParticleData
+{
+	string LoadPath = 1;
+	Transform Transform = 2;
+	Rigidbody2D Rigidbody2D = 3;
+	Vector2Int SurviveTimeRange = 4;
+	int32 RemainTime = 5;
+	int32 ElapsedTime = 6;
+
+	bytes ExtendData = 15;
+}

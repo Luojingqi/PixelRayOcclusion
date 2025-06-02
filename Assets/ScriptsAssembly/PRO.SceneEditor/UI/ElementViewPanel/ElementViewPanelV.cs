@@ -7,9 +7,9 @@ namespace PRO.SceneEditor
         public Transform Content { get; private set; }
         public ElementC Element { get; private set; }
 
-        public override void Init(MonoScriptBase mono)
+        public override void Init(UIChildControllerBase controller)
         {
-            base.Init(mono);
+            base.Init(controller);
             Content = transform.Find("Viewport/Content");
             Element = transform.Find("Viewport/Content/Element").GetComponent<ElementC>();
         }

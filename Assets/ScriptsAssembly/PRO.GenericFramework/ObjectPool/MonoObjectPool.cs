@@ -25,7 +25,7 @@ namespace PRO.Tool
             return go.GetComponent<T>();
         }
 
-        public T TakeOutT()
+        public override T TakeOut()
         {
             T t = base.TakeOut();
             t.SetActive(true);

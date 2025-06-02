@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-package PRO.Proto.DataStructure;
+package PRO.Proto;
 
 message Vector2
 {

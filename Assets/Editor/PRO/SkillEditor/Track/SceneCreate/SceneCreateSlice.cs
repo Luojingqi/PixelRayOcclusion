@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using UnityEngine;
 using static PRO.SkillEditor.SceneCreate_Disk;
 
 namespace PRO.SkillEditor
@@ -23,7 +24,7 @@ namespace PRO.SkillEditor
 
         [LabelText("按照坚硬度先破坏再放置")]
         [ShowInInspector]
-        public bool tryRuin { get => diskData.tryRuin; set => diskData.tryRuin = value; }
+        public bool tryRuin { get => diskData.tryRuinOrForceRuin; set => diskData.tryRuinOrForceRuin = value; }
 
         [LabelText("创建的点集")]
         [ShowInInspector]
@@ -46,22 +47,48 @@ namespace PRO.SkillEditor
 
             QuickSort(sliceList, 0, sliceList.Count - 1);
 
-            HashSet<PixelData> hash = new HashSet<PixelData>();
-            foreach (var slice in sliceList)
             {
-                List<PixelData> newSet = new List<PixelData>();
-                foreach (var data in slice.pixelList)
+                //剔除掉相同点
+                HashSet<PixelData> hash = new HashSet<PixelData>();
+                foreach (var slice in sliceList)
                 {
-                    if (hash.Contains(data) == false)
+                    List<PixelData> newSet = new List<PixelData>();
+                    foreach (var data in slice.pixelList)
                     {
-                        newSet.Add(data);
-                        hash.Add(data);
+                        if (hash.Contains(data) == false)
+                        {
+                            newSet.Add(data);
+                            hash.Add(data);
+                        }
+                    }
+                    slice.pixelList = newSet;
+                    slice.Name = $"{slice.Name.Split('\n')[0]}\n点:{slice.pixelList.Count}";
+                }
+            }
+            {
+                //如果两个切片有两个点坐标相同但是像素不同，那么后面的像素点需要记录前一个像素点，好在放置的时候可以检查，如果是记录的点就直接放置
+                Dictionary<Vector2Int, PixelData>[] dicArray = new Dictionary<Vector2Int, PixelData>[2] { new(), new() };
+                foreach (var slice in sliceList)
+                {
+                    var dic = dicArray[(int)slice.diskData.blockType];
+
+                    for (int i = 0; i < slice.pixelList.Count; i++)
+                    {
+                        var data = slice.pixelList[i];
+                        if (dic.TryGetValue(data.pos, out var value))
+                        {
+                            data.lastTypeName = value.typeName;
+                            data.lastColorName = value.colorName;
+                            slice.pixelList[i] = data;
+                            dic[data.pos] = data;
+                        }
+                        else
+                        {
+                            dic.Add(data.pos, data);
+                        }
                     }
                 }
-                slice.pixelList = newSet;
-                slice.Name = $"{slice.Name.Split('\n')[0]}\n点:{slice.pixelList.Count}";
             }
-
         }
         #region 快速排序
         private static void QuickSort(List<SceneCreateSlice> list, int begin, int end)
