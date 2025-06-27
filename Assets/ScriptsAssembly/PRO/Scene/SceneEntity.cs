@@ -160,6 +160,8 @@ namespace PRO
                                 {
                                     Pixel pixel;
                                     lock (Pixel.pixelPool)
+                                        //  pixel = Pixel.pixelPool.TakeOut();
+                                        //Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
                                         pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
                                     background_.SetPixel(pixel, false, false, false);
                                     background_.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
@@ -187,6 +189,7 @@ namespace PRO
         }
         /// <summary>
         /// 卸载一个区块，上方的建筑也会被一并卸载
+        /// 直接调用，内部会使用多线程
         /// </summary>
         /// <param name="blockPos"></param>
         private void UnloadBlockData(Vector2Int blockPos)
@@ -194,11 +197,14 @@ namespace PRO
             try
             {
                 BlockBaseInRAM.Remove(blockPos);
-                var block = GetBlock(blockPos);
-                var background = GetBackground(blockPos);
-                BlockBaseCrossList[blockPos] = new OneBlock();
-                Block.PutIn(block);
-                BackgroundBlock.PutIn(background);
+                ThreadPool.QueueUserWorkItem((obj) =>
+                {
+                    var block = GetBlock(blockPos);
+                    var background = GetBackground(blockPos);
+                    BlockBaseCrossList[blockPos] = new OneBlock();
+                    Block.PutIn(block);
+                    BackgroundBlock.PutIn(background);
+                });
             }
             catch (Exception e)
             {
@@ -331,11 +337,8 @@ namespace PRO
             foreach (var particle in ActiveParticleSet)
                 ParticleManager.Inst.GetPool(particle.loadPath).PutIn(particle);
             ActiveParticleSet.Clear();
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                foreach (var blockPos in BlockBaseInRAM.ToArray())
-                    UnloadBlockData(blockPos);
-            });
+            foreach (var blockPos in BlockBaseInRAM.ToArray())
+                UnloadBlockData(blockPos);
         }
         #endregion
 
@@ -427,7 +430,7 @@ namespace PRO
                     foreach (var blockPos in BlockBaseInRAM)
                         activeBlockUpdateTempQueue.Enqueue(blockPos, -blockPos.y);
                     while (activeBlockUpdateTempQueue.Count > 0)
-                        GetBlock(activeBlockUpdateTempQueue.Dequeue()).UpdateFluid1();
+                        GetBlock(activeBlockUpdateTempQueue.Dequeue()).UpdateFluid2();
                 }
             }
             #endregion
@@ -507,25 +510,23 @@ namespace PRO
 
             #region 更新  区块卸载检查
             UnLoadBlockCountdownTime += TimeManager.deltaTime;
-            while (UnLoadBlockCountdownTime > 10)
+            float checkTime = 1f;
+            while (UnLoadBlockCountdownTime > checkTime)
             {
-                UnLoadBlockCountdownTime -= 10;
+                UnLoadBlockCountdownTime -= checkTime;
                 foreach (var blockPos in BlockBaseInRAM)
                 {
                     var block = GetBlock(blockPos);
-                    block.UnLoadCountdown -= 10;
+                    block.UnLoadCountdown -= checkTime;
                     if (block.UnLoadCountdown <= 0)
                         unLoadBlock.Add(blockPos);
                 }
                 var array = unLoadBlock.ToArray();
-                ThreadPool.QueueUserWorkItem((obj) =>
+                foreach (var blockPos in array)
                 {
-                    foreach (var blockPos in array)
-                    {
-                        SaveBlockData(blockPos, true);
-                        UnloadBlockData(blockPos);
-                    }
-                });
+                    ThreadPool.QueueUserWorkItem((obj) => SaveBlockData(blockPos, true));
+                    UnloadBlockData(blockPos);
+                }
                 unLoadBlock.Clear();
             }
             #endregion

@@ -250,7 +250,6 @@ namespace PRO
             Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
-                _posList.Clear();
                 foreach (var pos in fluidUpdateHash1[i])
                     _posList.Add(pos);
                 foreach (var pos in _posList)
@@ -346,7 +345,7 @@ namespace PRO
                         RemoveFluidUpdateHash(pos);
                     }
                 }
-
+                _posList.Clear();
             }
         }
         public void UpdateFluid2()
@@ -355,7 +354,6 @@ namespace PRO
             Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = fluidUpdateHash2.Length - 1; i >= 0; i--)
             {
-                _posList.Clear();
                 foreach (var pos in fluidUpdateHash2[i])
                     _posList.Add(pos);
                 foreach (var pos in _posList)
@@ -452,7 +450,7 @@ namespace PRO
                         RemoveFluidUpdateHash(pos);
                     }
                 }
-
+                _posList.Clear();
             }
         }
         public void UpdateFluid3()
@@ -460,7 +458,6 @@ namespace PRO
             SceneEntity scene = SceneManager.Inst.NowScene;
             for (int i = 0; i < fluidUpdateHash3.Length; i++)
             {
-                _posList.Clear();
                 foreach (var pos in fluidUpdateHash3[i])
                     _posList.Add(pos);
                 foreach (var pos in _posList)
@@ -531,7 +528,7 @@ namespace PRO
                         RemoveFluidUpdateHash(pos);
                     }
                 }
-
+                _posList.Clear();
             }
         }
 

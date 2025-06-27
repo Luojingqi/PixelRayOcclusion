@@ -94,18 +94,18 @@ namespace PRO.SkillEditor
         {
             SceneView.duringSceneGui -= DrawHandle;
             Save();
-            EditorUtility.SetDirty(Config);
-            AssetDatabase.SaveAssets();
         }
 
         public void Save()
         {
-            if (Config.Skill_Disk != null)
-            {
-                EditorUtility.SetDirty(Config.Skill_Disk);
-            }
+           
             if (!Application.isPlaying)
             {
+                EditorUtility.SetDirty(Config);
+                if (Config.Skill_Disk != null)
+                {
+                    EditorUtility.SetDirty(Config.Skill_Disk);
+                }
                 AssetDatabase.SaveAssets();
             }
             else

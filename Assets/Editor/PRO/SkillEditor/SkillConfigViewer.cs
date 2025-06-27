@@ -4,8 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using static PRO.SkillConfig;
-
-namespace PRO
+namespace PRO.SceneEditor
 {
     //[CreateAssetMenu(menuName = "创建")]
     internal class SkillConfigViewer : SerializedScriptableObject

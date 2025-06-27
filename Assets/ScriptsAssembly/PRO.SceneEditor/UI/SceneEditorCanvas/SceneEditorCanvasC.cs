@@ -31,7 +31,7 @@ namespace PRO.SceneEditor
         public void TimeStart()
         {
             Init("123");
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
 
         private Element_Disk HoldEntity;

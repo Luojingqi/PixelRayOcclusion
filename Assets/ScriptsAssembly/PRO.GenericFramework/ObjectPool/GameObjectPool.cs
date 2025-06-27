@@ -17,6 +17,7 @@ namespace PRO.Tool
         protected override T NewObject()
         {
             GameObject go = GameObject.Instantiate(holdPrefab.gameObject);
+            go.transform.parent = toolParent;
             return go.GetComponent<T>();
         }
         public override T TakeOut()

@@ -70,7 +70,7 @@ namespace PRO.Renderer
                 if (i < FrameUpdateBlockNum)
                 {
                     lightResultBufferCSArray[index].UpdateStaticLightSource();
-                  //  lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
                 }
                 else
                 {

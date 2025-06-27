@@ -54,9 +54,9 @@ Shader "PixelRayOcclusion/Background_Renderer"
                 BlockPixelInfo pixelInfo = GetBlockPixelInfo(index);
                 PixelColorInfo colorInfo = GetPixelColorInfo(pixelInfo.colorInfoId);
                 
-                float3 pixelColor = pow(colorInfo.color.xyz / 255.0, 2.2) * pow(pixelInfo.durability , 0.75);
+                float3 pixelColor = pow(colorInfo.color.xyz  / 255.0, 2.2) * pow(pixelInfo.durability , 0.75);
                 float3 lightColor = pow(LightResultBuffer[PixelToIndex(pixelPos)].xyz / 255.0  , 2.2);
-                return float4(lightColor.xyz *  pixelColor.xyz + pixelColor.xyz * (colorInfo.selfLuminous + 0.0125)  , 1);//max( colorInfo.color.w / 255.0 * pixelInfo.affectsTransparency , 0.75));
+                return float4(lightColor.xyz *  pixelColor.xyz + pixelColor.xyz * (colorInfo.selfLuminous + 0.0125)  , 1.0);//max( colorInfo.color.w / 255.0 * pixelInfo.affectsTransparency , 0.75));
             }
 
             ENDCG
