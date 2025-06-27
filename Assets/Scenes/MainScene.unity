@@ -7525,11 +7525,13 @@ GameObject:
   - component: {fileID: 1283193037}
   - component: {fileID: 1283193042}
   - component: {fileID: 1283193036}
-  - component: {fileID: 1283193041}
+  - component: {fileID: 1283193039}
   - component: {fileID: 1283193038}
   - component: {fileID: 1283193043}
   - component: {fileID: 1283193044}
   - component: {fileID: 1283193045}
+  - component: {fileID: 1283193040}
+  - component: {fileID: 1283193041}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -7547,8 +7549,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9898acd76fde754408626caec1627791, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -7564,6 +7564,8 @@ MonoBehaviour:
     - Name: source
       Entry: 6
       Data: 
+  m_Name: 
+  m_EditorClassIdentifier: 
   PoolNode: {fileID: 0}
 --- !u!4 &1283193037
 Transform:
@@ -7590,8 +7592,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8f4833268ad9224a81d2d3807be939f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -7652,6 +7652,8 @@ MonoBehaviour:
   priority: {fileID: 11400000, guid: 2f394249f320a6c43a36f36576ed1196, type: 2}
   Text: {fileID: 0}
 --- !u!114 &1283193043
+  m_EditorClassIdentifier: 
+--- !u!114 &1283193039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7661,8 +7663,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67f0ef40a5711ae438cd9154fa635716, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -7676,6 +7676,8 @@ MonoBehaviour:
       Entry: 3
       Data: -1
 --- !u!114 &1283193044
+  m_EditorClassIdentifier: 
+--- !u!114 &1283193040
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7685,8 +7687,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecf9b4c0eef5d4b43a764ee5c904bd8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -7703,6 +7703,8 @@ MonoBehaviour:
       Entry: 6
       Data: 
 --- !u!114 &1283193045
+  - {fileID: 1590746140}
+--- !u!114 &1283193041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7712,8 +7714,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c7b72cdce3015e46a81e7461e172d81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -7726,6 +7726,8 @@ MonoBehaviour:
     - Name: priority
       Entry: 3
       Data: -1
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1305003538
 GameObject:
   m_ObjectHideFlags: 0
@@ -9297,8 +9299,8 @@ CanvasRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1583362855}
-  m_CullTransparentMesh: 1
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1591009310
 GameObject:
   m_ObjectHideFlags: 0
@@ -10212,10 +10214,10 @@ RectTransform:
   - {fileID: 414653644}
   m_Father: {fileID: 1586342722958057422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 60, y: -60}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1705470186
 MonoBehaviour:
@@ -12820,8 +12822,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  Name: "\u89D2\u82721"
+  Icon: {fileID: -204980760, guid: ea9eca77030757e4596eda3e675b01cc, type: 3}
 --- !u!1 &2114831845
 GameObject:
   m_ObjectHideFlags: 0

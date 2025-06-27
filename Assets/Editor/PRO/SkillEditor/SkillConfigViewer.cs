@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using static PRO.SkillConfig;
 
-namespace PRO
 {
     //[CreateAssetMenu(menuName = "创建")]
     internal class SkillConfigViewer : SerializedScriptableObject
