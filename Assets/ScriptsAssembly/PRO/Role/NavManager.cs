@@ -1,18 +1,20 @@
-﻿using PRO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PRO
 {
-    public static class NavManager
+    public class NavManager : MonoScriptBase, ITime_Start
     {
-        private static Dictionary<string, Nav> NavDic = new Dictionary<string, Nav>();
+        public static NavManager Inst { get; private set; }
+        private Dictionary<string, Nav> NavDic = new Dictionary<string, Nav>();
 
-        public static void AddNav(Nav nav) => NavDic.Add(nav.TypeName, nav);
+        public void AddNav(Nav nav) => NavDic.Add(nav.TypeName, nav);
 
-        public static Nav GetNav(string typeName) => NavDic[typeName];
+        public Nav GetNav(string typeName) => NavDic[typeName];
 
-        public static void Init()
+
+        public void TimeStart()
         {
+            Inst = this;
             AddNav(new Nav("默认", new NavAgentMould(new(2, 7), new(1, 0))));
         }
     }

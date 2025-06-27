@@ -17,22 +17,20 @@ namespace PRO
             GameObject boxCollider2DPoolGo = new GameObject("BoxCollider2DPool");
             boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
             BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
-            boxCollider.gameObject.SetActive(false);
             boxCollider.gameObject.layer = (int)GameLayer.Block;
-            boxCollider.transform.parent = boxCollider2DPoolGo.transform;
-            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform);
+            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider, boxCollider2DPoolGo.transform);
 
         }
         public static BoxCollider2D TakeOut()
         {
-            BoxCollider2D box = BoxCollider2DPool.TakeOutT();
+            BoxCollider2D box = BoxCollider2DPool.TakeOut();
 
             return box;
         }
         public static void PutIn(BoxCollider2D box)
         {
             box.isTrigger = false;
-            BoxCollider2DPool.PutIn(box.gameObject);
+            BoxCollider2DPool.PutIn(box);
         }
         #endregion
         public struct ColliderData

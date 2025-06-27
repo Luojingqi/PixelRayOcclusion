@@ -82,21 +82,21 @@ namespace PRO
 
             public void OnPointerEnter(PointerEventData eventData)
             {
-               
+
             }
 
             public void OnPointerExit(PointerEventData eventData)
             {
-               
+
             }
 
             #region 静态对象池
             public static GameObjectPool<GridObject> Pool;
             public static void InitPool(GridObject grid)
             {
-                Pool = new GameObjectPool<GridObject>(grid.gameObject, grid.transform.parent);
-                Pool.CreateEventT += (g, t) => { t.Init(); };
-                Pool.PutInEventT += (g, t) => { t.OnReset(); };
+                Pool = new GameObjectPool<GridObject>(grid, grid.transform.parent);
+                Pool.CreateEvent += t => { t.Init(); };
+                Pool.PutInEvent += t => { t.OnReset(); };
             }
             #endregion
         }
@@ -112,7 +112,7 @@ namespace PRO
                 Grids = new GridObject[valueNum];
                 for (int i = 0; i < valueNum; i++)
                 {
-                    Grids[i] = GridObject.Pool.TakeOutT();
+                    Grids[i] = GridObject.Pool.TakeOut();
                 }
             }
         }

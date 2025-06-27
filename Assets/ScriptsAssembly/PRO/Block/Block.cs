@@ -107,22 +107,17 @@ namespace PRO
             GameObject go = new GameObject("Block");
             SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
             renderer.sharedMaterial = BlockShareMaterialManager.ShareMaterial;
-            go.gameObject.SetActive(false);
-            go.AddComponent<Block>();
+            Block block = go.AddComponent<Block>();
             #endregion
             GameObject blockPoolGo = new GameObject("BlockPool");
             blockPoolGo.transform.parent = SceneManager.Inst.PoolNode;
-            BlockPool = new GameObjectPool<Block>(go, blockPoolGo.transform);
-            BlockPool.CreateEventT += (g, t) =>
-            {
-                t.Init();
-            };
-            go.transform.parent = blockPoolGo.transform;
+            BlockPool = new GameObjectPool<Block>(block, blockPoolGo.transform);
+            BlockPool.CreateEvent += t => t.Init();
         }
 
         public static Block TakeOut(SceneEntity scene)
         {
-            Block block = BlockPool.TakeOutT();
+            Block block = BlockPool.TakeOut();
             block.transform.parent = BlockNode;
             block._screen = scene;
             return block;
@@ -153,12 +148,17 @@ namespace PRO
             {
                 block.name = "Block(Clone)";
                 block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-                BlockPool.PutIn(block.gameObject);
+                BlockPool.PutIn(block);
                 foreach (var box in boxHash)
                     GreedyCollider.PutIn(box);
             });
         }
         #endregion 
+
+        /// <summary>
+        /// 卸载倒计时
+        /// </summary>
+        public float UnLoadCountdown;
         public override void Init()
         {
             base.Init();
@@ -575,39 +575,41 @@ namespace PRO
             else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
         }
 
-        public HashSet<BuildingBase> buildingHash = new HashSet<BuildingBase>();
-
         /// <summary>
         /// 自由光源
         /// </summary>
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
 
+
+        public HashSet<Particle> ActiveParticle = new HashSet<Particle>(20);
+        public HashSet<Role> ActiveRole = new HashSet<Role>();
+
+
         public override void ToDisk(ref Proto.BlockBaseData diskData)
         {
-            diskData.Block = new Proto.BlockBaseData.Types.BlockData();
-            var data = diskData.Block;
-
+            base.ToDisk(ref diskData);
             foreach (var hash in fluidUpdateHash1)
                 foreach (var pos in hash)
-                    data.FluidUpdateHash1.Add(pos.ToDisk());
+                    diskData.FluidUpdateHash1.Add(pos.ToDisk());
 
             foreach (var hash in fluidUpdateHash2)
                 foreach (var pos in hash)
-                    data.FluidUpdateHash2.Add(pos.ToDisk());
+                    diskData.FluidUpdateHash2.Add(pos.ToDisk());
 
             foreach (var hash in fluidUpdateHash3)
                 foreach (var pos in hash)
-                    data.FluidUpdateHash3.Add(pos.ToDisk());
+                    diskData.FluidUpdateHash3.Add(pos.ToDisk());
 
         }
 
-        public override void ToRAM(Proto.BlockBaseData data)
+        public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
         {
-            foreach (var pos in data.Block.FluidUpdateHash1)
+            base.ToRAM(diskData, scene);
+            foreach (var pos in diskData.FluidUpdateHash1)
                 AddHashSet(fluidUpdateHash1[pos.Y], pos.ToRAM());
-            foreach (var pos in data.Block.FluidUpdateHash2)
+            foreach (var pos in diskData.FluidUpdateHash2)
                 AddHashSet(fluidUpdateHash2[pos.Y], pos.ToRAM());
-            foreach (var pos in data.Block.FluidUpdateHash3)
+            foreach (var pos in diskData.FluidUpdateHash3)
                 AddHashSet(fluidUpdateHash3[pos.Y], pos.ToRAM());
 
             var colliderDataList = GreedyCollider.CreateColliderDataList(this, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
@@ -615,6 +617,7 @@ namespace PRO
             {
                 GreedyCollider.CreateColliderAction(this, colliderDataList);
                 BlockMaterial.SetBlock(this);
+                diskData.ClearPutIn();
             });
         }
     }

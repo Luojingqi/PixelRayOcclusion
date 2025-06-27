@@ -1,79 +1,75 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 namespace PRO.Tool
 {
-    public class GameObjectPool<T> : ObjectPoolBase<GameObject>
+    public class GameObjectPool<T> : ObjectPoolBase<T> where T : Component
+    {
+        private T holdPrefab;
+        public readonly Transform toolParent;
+
+        public GameObjectPool(T prefab, Transform parent)
+        {
+            prefab.gameObject.SetActive(false);
+            prefab.transform.parent = parent;
+            holdPrefab = prefab;
+            toolParent = parent;
+        }
+        protected override T NewObject()
+        {
+            GameObject go = GameObject.Instantiate(holdPrefab.gameObject);
+            return go.GetComponent<T>();
+        }
+        public override T TakeOut()
+        {
+            var ret = base.TakeOut();
+            ret.gameObject.SetActive(true);
+            return ret;
+        }
+        public override void PutIn(T item)
+        {
+            base.PutIn(item);
+            item.gameObject.SetActive(false);
+            item.transform.parent = toolParent;
+        }
+    }
+
+    public class GameObjectPool_NoMono<T> : ObjectPoolBase<T> where T : class, IGameObjectPool_NoMono, new()
     {
         private GameObject holdPrefab;
         public readonly Transform toolParent;
-        public Dictionary<GameObject, T> goToTDic = new Dictionary<GameObject, T>();
-        public GameObjectPool(GameObject prefab, Transform parent)
+
+        public GameObjectPool_NoMono(GameObject prefab, Transform parent)
         {
+            prefab.SetActive(false);
+            prefab.transform.parent = parent;
             holdPrefab = prefab;
             toolParent = parent;
-
-            base.CreateEvent += CreateAction;
-            base.PutInEvent += PutInAction;
-            base.TakeOutEvent += TakeOutAction;
-            Type type = typeof(T);
-            if (type.IsClass)
-                canGet = type.IsSubclassOf(typeof(Component));
-            else if (type.IsInterface)
-                canGet = true;
-            else
-                canGet = false;
         }
-        /// <summary>
-        /// 是否可以直接在unity中Get组件
-        /// </summary>
-        bool canGet;
-
-        protected override GameObject NewObject()
+        protected override T NewObject()
         {
-            GameObject go = null;
-            if (holdPrefab != null)
-                go = GameObject.Instantiate(holdPrefab);
-            if (canGet)
-                goToTDic.Add(go, go.GetComponent<T>());
-            else
-                goToTDic.Add(go, (T)Activator.CreateInstance(typeof(T)));
-            return go;
+            GameObject go = GameObject.Instantiate(holdPrefab.gameObject);
+            var t = new T();
+            t.gameObject = go;
+            t.transform = go.transform;
+            t.transform.parent = toolParent;
+            return t;
         }
-
-        public T TakeOutT()
+        public override T TakeOut()
         {
-            GameObject go = base.TakeOut();
-            return goToTDic[go];
+            var ret = base.TakeOut();
+            ret.gameObject.SetActive(true);
+            return ret;
         }
-
-        public override void Clear()
+        public override void PutIn(T item)
         {
-            base.Clear();
-            goToTDic.Clear();
+            base.PutIn(item);
+            item.gameObject.SetActive(false);
+            item.transform.parent = toolParent;
         }
+    }
 
-        public event Action<GameObject, T> CreateEventT;
-        public event Action<GameObject, T> PutInEventT;
-        public event Action<GameObject, T> TakeOutEventT;
-
-        private void CreateAction(GameObject go)
-        {
-            go.transform.SetParent(toolParent);
-            CreateEventT?.Invoke(go, goToTDic[go]);
-        }
-
-        private void PutInAction(GameObject go)
-        {
-            go.transform.SetParent(toolParent);
-            go.SetActive(false);
-            PutInEventT?.Invoke(go, goToTDic[go]);
-        }
-
-        private void TakeOutAction(GameObject go)
-        {
-            go.SetActive(true);
-            TakeOutEventT?.Invoke(go, goToTDic[go]);
-        }
+    public interface IGameObjectPool_NoMono
+    {
+        public Transform transform { get; set; }
+        public GameObject gameObject { get; set; }
     }
 }

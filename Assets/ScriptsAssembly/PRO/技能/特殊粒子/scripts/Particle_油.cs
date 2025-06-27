@@ -19,34 +19,34 @@ namespace PRO
 
         }
 
-        private void UpdateEventAction(Particle p)
+        private void UpdateEventAction()
         {
-            Vector2Int global = Block.WorldToGlobal(p.transform.position);
-            Pixel pixel = p.Scene.GetPixel(BlockBase.BlockType.Block, global);
+            Vector2Int global = Block.WorldToGlobal(transform.position);
+            Pixel pixel = Scene.GetPixel(BlockBase.BlockType.Block, global);
             if (pixel.typeInfo.fluidType == 1)
             {
 
                 for (int i = 1; i <= 25; i++)
                 {
-                    Pixel upPixel = p.Scene.GetPixel(BlockBase.BlockType.Block, global + new Vector2Int(0, i));
+                    Pixel upPixel = Scene.GetPixel(BlockBase.BlockType.Block, global + new Vector2Int(0, i));
                     if (upPixel.typeInfo.typeName == "空气")
                     {
                         upPixel.blockBase.SetPixel(Pixel.TakeOut("油", 0, upPixel.pos));
                         break;
                     }
                 }
-                ParticleManager.Inst.GetPool(p.loadPath).PutIn(p);
+                ParticleManager.Inst.GetPool(loadPath).PutIn(this);
             }
         }
 
-        private void CollisionEnterEventAction(Particle p, Collision2D c)
+        private void CollisionEnterEventAction(Collision2D c)
         {
-            Pixel upPixel = p.Scene.GetPixel(BlockBase.BlockType.Block, Block.WorldToGlobal(p.transform.position));
+            Pixel upPixel = Scene.GetPixel(BlockBase.BlockType.Block, Block.WorldToGlobal(transform.position));
             if (upPixel.typeInfo.typeName == "空气")
             {
                 upPixel.blockBase.SetPixel(Pixel.TakeOut("油", 0, upPixel.pos));
             }
-            ParticleManager.Inst.GetPool(p.loadPath).PutIn(p);
+            ParticleManager.Inst.GetPool(loadPath).PutIn(this);
         }
     }
 }

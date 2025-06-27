@@ -68,6 +68,14 @@ namespace PRO
         public void ScriptUpdate(float deltaTime)
         {
             TimeManager.deltaTime = deltaTime;
+
+            physicsUpdateTime += deltaTime;
+            while (physicsUpdateTime > physicsDeltaTime)
+            {
+                physicsUpdateTime -= physicsDeltaTime;
+                Physics2D.Simulate(physicsDeltaTime);
+            }
+
             for (int i = 0; i < time_Update.Count; i++)
                 foreach (var mono in time_Update.FormIndex(i))
                     mono.TimeUpdate();
@@ -75,9 +83,11 @@ namespace PRO
                 foreach (var mono in time_LastUpdate.FormIndex(i))
                     mono.TimeLateUpdate();
 
+            #region 添加mono组件
             while (addQueue.Count > 0)
                 AddMono(addQueue.Dequeue());
-
+            #endregion
+            #region 初始化mono组件
             if (initQueue.Count > 0)
             {
                 while (initQueue.Count > 0)
@@ -91,21 +101,17 @@ namespace PRO
 
                 initQueueTemp.Clear();
             }
+            #endregion
+            #region 移除mono组件
             while (removeQueue.Count > 0)
                 RemoveMono(removeQueue.Dequeue());
-
-            physicsUpdateTime += deltaTime;
-            while (physicsUpdateTime > physicsDeltaTime)
-            {
-                physicsUpdateTime -= physicsDeltaTime;
-                Physics2D.Simulate(physicsDeltaTime);
-            }
+            #endregion
         }
 
 
-        private SortList<ITime_Update> time_Update = new SortList<ITime_Update>();
-        private SortList<ITime_LateUpdate> time_LastUpdate = new SortList<ITime_LateUpdate>();
-        private PriorityQueue<MonoScriptBase> initQueue = new PriorityQueue<MonoScriptBase>();
+        private SortList<ITime_Update> time_Update = new SortList<ITime_Update>(20);
+        private SortList<ITime_LateUpdate> time_LastUpdate = new SortList<ITime_LateUpdate>(20);
+        private PriorityQueue<MonoScriptBase> initQueue = new PriorityQueue<MonoScriptBase>(20);
         private List<MonoScriptBase> initQueueTemp = new List<MonoScriptBase>();
         private void AddMono(MonoScriptBase mono)
         {
@@ -197,16 +203,15 @@ namespace PRO
         {
             if (priority == -1 && TimeManager.Inst.priority.typeDic.TryGetValue(this.GetType(), out var item))
                 priority = item.priority;
-            TimeManager.Inst.MonoQueueAdd(this);
         }
 
-        public bool GetActive() => gameObject.activeSelf;
-
-        public void SetActive(bool active)
+        private void OnEnable()
         {
-            gameObject.SetActive(active);
-            if (active) TimeManager.Inst.MonoQueueAdd(this);
-            else TimeManager.Inst.MonoQueueRemove(this);
+            TimeManager.Inst.MonoQueueAdd(this);
+        }
+        private void OnDisable()
+        {
+            TimeManager.Inst.MonoQueueRemove(this);
         }
     }
 

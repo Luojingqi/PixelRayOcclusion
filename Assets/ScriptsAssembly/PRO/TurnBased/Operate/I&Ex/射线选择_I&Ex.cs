@@ -1,4 +1,5 @@
 ﻿using PRO.Proto.Ex;
+using System.Collections.Generic;
 using UnityEngine;
 using static PRO.OperateFSMBase;
 
@@ -76,7 +77,8 @@ namespace PRO.Skill.Proto
                1 << (int)GameLayer.Role | 1 << (int)GameLayer.Block);
             if (hit.collider != null)
             {
-                if (PROMain.Inst.GetRole(hit.transform, out Role byRole))
+                var byRole = operate.Turn.Agent.Scene.GetRole(hit.transform);
+                if (byRole != null)
                 {
                     //record.byRolelist.Add(byRole);
                     operate.context.AddByAgent(byRole, true);

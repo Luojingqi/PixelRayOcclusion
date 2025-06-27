@@ -5,8 +5,14 @@ namespace PRO
 {
     public class SortList<T> : IEnumerable<HashSet<T>>
     {
-        private readonly List<int> costList = new List<int>();
-        private readonly List<HashSet<T>> valueList = new List<HashSet<T>>();
+        public SortList(int size)
+        {
+            costList = new List<int>(size);
+            valueList = new List<HashSet<T>>(size);
+        }
+
+        private readonly List<int> costList;
+        private readonly List<HashSet<T>> valueList;
 
         public void Add(T value, int cost)
         {

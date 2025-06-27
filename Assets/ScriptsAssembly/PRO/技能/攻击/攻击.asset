@@ -421,4 +421,4 @@ MonoBehaviour:
       Data: 
   MaxFrame: 7
   FrameTime: 20
-  loadPath: "ScriptsAssembly/GamePlay/\u6280\u80FD/\u653B\u51FB/\u653B\u51FB.asset"
+  loadPath: "ScriptsAssembly/PRO/\u6280\u80FD/\u653B\u51FB/\u653B\u51FB.asset"

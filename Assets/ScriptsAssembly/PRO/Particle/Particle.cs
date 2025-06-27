@@ -50,10 +50,6 @@ namespace PRO
         /// 粒子池的加载路径
         /// </summary>
         public string loadPath { get; private set; }
-        /// <summary> 
-        /// 是否在场景中活跃
-        /// </summary>
-        public bool Active { get; set; }
         /// <summary>
         /// 当前是否已被回收
         /// </summary>
@@ -64,16 +60,11 @@ namespace PRO
 
         public void UpdateRemainTime(int cutDown)
         {
-            if (Scene.GetBlock(Block.WorldToBlock(transform.position)) == null)
-            {
-                ParticleManager.Inst.GetPool(loadPath).PutIn(this);
-                return;
-            }
             // transform.rotation = Quaternion.FromToRotation(Vector3.up, Rig2D.velocity);
             remainTime -= cutDown;
             elapsedTime += cutDown;
-            UpdateEvent?.Invoke(this);
-            if (RemainTime <= 0) RemainTimeIsZeroEvent?.Invoke(this);
+            UpdateEvent?.Invoke();
+            if (RemainTime <= 0) RemainTimeIsZeroEvent?.Invoke();
         }
 
         public virtual void Init(string loadPath)
@@ -89,7 +80,6 @@ namespace PRO
         public virtual void TakeOut(SceneEntity scene)
         {
             RemainTime = UnityEngine.Random.Range(SurviveTimeRange.x, SurviveTimeRange.y);
-            Active = true;
             RecyleState = false;
             _scene = scene;
         }
@@ -123,29 +113,28 @@ namespace PRO
                 SkillPlayAgent.Skill = null;
                 SkillPlayAgent.ClearTimeAndBuffer();
             }
-            Active = false;
             RecyleState = true;
         }
-        public event Action<Particle> UpdateEvent;
+        public event Action UpdateEvent;
         /// <summary>
         /// 发生碰撞事件
         /// </summary>
-        public event Action<Particle, Collision2D> CollisionEnterEvent;
+        public event Action<Collision2D> CollisionEnterEvent;
         /// <summary>
         /// 碰撞退出事件
         /// </summary>
-        public event Action<Particle, Collision2D> CollisionExitEvent;
+        public event Action<Collision2D> CollisionExitEvent;
         /// <summary>
         /// 存活事件结束事件
         /// </summary>
-        public event Action<Particle> RemainTimeIsZeroEvent;
+        public event Action RemainTimeIsZeroEvent;
         protected void OnCollisionEnter2D(Collision2D collision)
         {
-            CollisionEnterEvent?.Invoke(this, collision);
+            CollisionEnterEvent?.Invoke(collision);
         }
         protected void OnCollisionExit2D(Collision2D collision)
         {
-            CollisionExitEvent?.Invoke(this, collision);
+            CollisionExitEvent?.Invoke(collision);
         }
 
 

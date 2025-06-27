@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
+//import "PRO/Particle/ParticleData.proto";
+//import "PRO/Role/RoleData.proto";
 
 package PRO.Proto;
 
@@ -21,23 +23,20 @@ message BlockBaseData
 		float AffectsTransparency = 4;
 		repeated int32 BuildingList = 5;
 	}
-	repeated PixelData AllPixel = 10;
-		
+	
+	//Block数据
+	//
+	repeated PixelData BlockPixelArray = 10;
 
-	message BlockData
-	{
-		repeated Vector2Byte FluidUpdateHash1 = 1;
-		repeated Vector2Byte FluidUpdateHash2 = 2;
-		repeated Vector2Byte FluidUpdateHash3 = 3;
-	}
-	message BackgroundData
-	{
+	repeated Vector2Byte FluidUpdateHash1 = 11;
+	repeated Vector2Byte FluidUpdateHash2 = 12;
+	repeated Vector2Byte FluidUpdateHash3 = 13;
+	//
 
-	}
 
-	oneof Added
-	{
-		BlockData Block = 11;
-		BackgroundData Background = 12;
-	}
+
+	//Background数据
+	//
+	repeated PixelData BackgroundPixelArray = 30;
+	//
 }

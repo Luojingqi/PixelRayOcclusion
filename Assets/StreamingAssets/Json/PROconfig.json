@@ -3,7 +3,7 @@
   "FrameUpdateBlockNum": 35,
   //是否提前编译着色器，提前编译后游戏内出现新的光源将不会再卡顿，但提前编译需要时间，并且产生的内存较大于动态编译(未实装)
   "IsCompileShadersInAdvance": false,
-  //间隔多久自动卸载（保存）一次视野外区块（实际上花费两倍时间才会尝试卸载）
+  //间隔多久自动卸载（保存）一次视野外区块
   "AutoUnLoadBlockCountdownTime": 60,
 
   //流体更新间隔

@@ -20,8 +20,8 @@ namespace PRO.SceneEditor
             base.Init();
             Inst = this;
 
-            ElementPool = new GameObjectPool<ElementC>(view.Element.gameObject, view.Content);
-            ElementPool.CreateEventT += (g, t) => t.Init();
+            ElementPool = new GameObjectPool<ElementC>(view.Element, view.Content);
+            ElementPool.CreateEvent += t => t.Init();
         }
         private List<ElementC> showElementList = new List<ElementC>();
         public void ShowFiles(FileInfo[] infos)
@@ -58,13 +58,13 @@ namespace PRO.SceneEditor
 
         private ElementC TakeOut()
         {
-            return ElementPool.TakeOutT();
+            return ElementPool.TakeOut();
         }
 
         private void PutIn(ElementC element)
         {
             element.Clear();
-            ElementPool.PutIn(element.gameObject);
+            ElementPool.PutIn(element);
         }
     }
 }

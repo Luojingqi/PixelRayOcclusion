@@ -1,4 +1,3 @@
-using PRO;
 using PRO.Tool;
 using UnityEngine;
 namespace PRO
@@ -28,8 +27,8 @@ namespace PRO
 
         public static void InitPool(InjuryEstimationPanelC panel)
         {
-            pool = new GameObjectPool<InjuryEstimationPanelC>(panel.gameObject, GameMainUIC.Inst.transform);
-            pool.CreateEventT += (g, t) => t.Init();
+            pool = new GameObjectPool<InjuryEstimationPanelC>(panel, GameMainUIC.Inst.transform);
+            pool.CreateEvent += t => t.Init();
         }
     }
 }

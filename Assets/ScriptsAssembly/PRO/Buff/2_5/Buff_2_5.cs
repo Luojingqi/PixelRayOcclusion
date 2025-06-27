@@ -30,7 +30,7 @@ namespace PRO.Buff
                     int num = 0;
                     foreach (var hit in hits)
                     {
-                        var nextRole = PROMain.Inst.GetRole(hit.transform);
+                        var nextRole = Agent.Scene.GetRole(hit.transform);
                         var nextRole_buff = nextRole.GetBuff<Buff_2_5>();
 
                         if (nextRole_buff != null && nextRole_buff.GetActive())

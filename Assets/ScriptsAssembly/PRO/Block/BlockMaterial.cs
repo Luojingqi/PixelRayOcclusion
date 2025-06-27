@@ -11,10 +11,28 @@ namespace PRO
 {
     public static class BlockMaterial
     {
+        private static Vector2Int _CameraCenterBlockPos;
         /// <summary>
         /// 相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int CameraCenterBlockPos { get; set; }
+        public static Vector2Int CameraCenterBlockPos
+        {
+            get { return _CameraCenterBlockPos; }
+            private set
+            {
+                LastCameraCenterBlockPos = _CameraCenterBlockPos;
+                _CameraCenterBlockPos = value;
+                MinLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+                MaxLightBufferBlockPos = MinLightBufferBlockPos + LightResultBufferBlockSize;
+                MinBlockBufferPos = MinLightBufferBlockPos - EachBlockReceiveLightSize / 2;
+                MaxBlockBufferPos = MinBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
+            }
+        }
+        public static Vector2Int MinLightBufferBlockPos { get; private set; }
+        public static Vector2Int MaxLightBufferBlockPos { get; private set; }
+        public static bool IsInLightBufferBlock(Vector2Int blockPos) => !(blockPos.x > MaxLightBufferBlockPos.x || blockPos.y > MaxLightBufferBlockPos.y || blockPos.x < MinLightBufferBlockPos.x || blockPos.y < MinLightBufferBlockPos.y);
+        public static Vector2Int MinBlockBufferPos { get; private set; }
+        public static Vector2Int MaxBlockBufferPos { get; private set; }
         /// <summary>
         /// 上一帧相机中心所在的块坐标
         /// </summary>
@@ -178,14 +196,9 @@ namespace PRO
         public static void FirstBind()
         {
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-            LastCameraCenterBlockPos = CameraCenterBlockPos;
 
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
-
-            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
-                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+            for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
+                for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                 {
                     if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
                         SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
@@ -197,9 +210,6 @@ namespace PRO
         }
         public static void UpdateBind()
         {
-            LastCameraCenterBlockPos = CameraCenterBlockPos;
-            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-
             blockShareMaterialManager.ClearLastBind();
             backgroundShareMaterialManager.ClearLastBind();
 
@@ -208,8 +218,20 @@ namespace PRO
             computeShaderManager.UpdateBind();
         }
 
-
         public static void Update()
+        {
+            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
+            for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
+                for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
+                {
+                    if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
+                        SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
+                    else
+                        SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
+                }
+        }
+
+        public static void LastUpdate()
         {
             if (Monitor.TryEnter(DrawApplyQueue))
             {
@@ -229,25 +251,7 @@ namespace PRO
                 finally { Monitor.Exit(DrawApplyQueue); }
             }
 
-            Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
-
-            Vector2Int minLightBufferBlockPos = nowCameraPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
-
-            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
-                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
-                {
-                    if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
-                        SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
-                    else
-                    {
-                        SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
-                        SceneManager.Inst.NowScene.GetBackground(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
-                    }
-                }
-
-            if (nowCameraPos != CameraCenterBlockPos)
+            if (CameraCenterBlockPos != LastCameraCenterBlockPos)
             {
                 UpdateBind();
                 return;

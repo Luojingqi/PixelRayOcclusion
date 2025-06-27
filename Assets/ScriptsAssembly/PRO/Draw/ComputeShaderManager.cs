@@ -44,14 +44,11 @@ namespace PRO.Renderer
         }
         public void UpdateBind()
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    Vector2Int globalBlockPos = MinLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int localBlockBufferPos = globalBlockPos - MinBlockBufferPos;
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
 
                     lightResultBufferCSArray[lightIndex].UpdateBind(globalBlockPos, localBlockBufferPos);

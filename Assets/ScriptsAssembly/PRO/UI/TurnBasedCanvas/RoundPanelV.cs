@@ -14,8 +14,6 @@ namespace PRO
             base.Init(controller);
             afoot = transform.Find("TurnList/afoot").GetComponent<TurnImage>();
             wait = transform.Find("TurnList/wait").GetComponent<TurnImage>();
-            afoot.gameObject.SetActive(false);
-            wait.gameObject.SetActive(false);
             ImageNode = transform.Find("TurnList");
         }
     }

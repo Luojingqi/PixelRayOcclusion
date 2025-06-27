@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace PRO
 {
-    public class Role : MonoScriptBase, IScene, ITime_Start, ITime_Update
+    public class Role : MonoScriptBase, IScene, ITime_Update
     {
         public SpriteRenderer SpriteRenderer { get; private set; }
         public SkillPlayAgent SkillPlayAgent { get; private set; }
@@ -46,10 +46,8 @@ namespace PRO
         public Sprite Icon;
         [NonSerialized]
         public RoleInfo Info = new RoleInfo();
-        public void TimeStart()
+        public void Init()
         {
-            _scene = SceneManager.Inst.NowScene;
-
             for (int i = 0; i < AllBuff.Length; i++)
                 AllBuff[i] = new List<IBuffBase>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -59,7 +57,7 @@ namespace PRO
 
             Rig2D = GetComponent<Rigidbody2D>();
 
-            nav = NavManager.GetNav("д╛хо");
+            nav = NavManager.Inst.GetNav("д╛хо");
 
             Guid = System.Guid.NewGuid().ToString();
 
@@ -98,10 +96,17 @@ namespace PRO
             AddBuff(new Buff_2_9());
             AddBuff(new Buff_2_10());
             AddBuff(new Buff_2_11());
+        }
+        public void TakeOut(SceneEntity scene)
+        {
+            _scene = scene;
             source = FreelyLightSource.New(_scene, new Color32(200, 200, 200, 255), 15);
-
-
-            PROMain.Inst.AddRole(this);
+        }
+        public void PutIn()
+        {
+            source.GloabPos = null;
+            source = null;
+            _scene = null;
         }
         public void TimeUpdate()
         {
@@ -214,7 +219,7 @@ namespace PRO
             transform.ToRAM(diskData.TransFormData);
             Rig2D.ToRAM(diskData.Rigidbody2DData);
             SkillPlayAgent.ToRAM(diskData.SkillPlayAgentData);
-            nav = NavManager.GetNav(diskData.NavType);
+            nav = NavManager.Inst.GetNav(diskData.NavType);
             Toward = (Toward)diskData.Toward;
             Guid = diskData.GUID;
             Name = diskData.Name;

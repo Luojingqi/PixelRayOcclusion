@@ -15,3 +15,8 @@ message ParticleData
 
 	bytes ExtendData = 15;
 }
+
+message BlockParticleData
+{
+	repeated ParticleData Value = 1;
+}

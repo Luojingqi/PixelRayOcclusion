@@ -68,15 +68,11 @@ namespace PRO.Renderer
 
         public void UpdateBind()
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
-
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    Vector2Int globalBlockPos = MinLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int localBlockBufferPos = globalBlockPos - MinBlockBufferPos;
                     int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
                     Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
@@ -85,8 +81,8 @@ namespace PRO.Renderer
                     materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
                     block.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
                 }
-            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
-                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+            for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
+                for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                     SetBlock(SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)));
         }
 

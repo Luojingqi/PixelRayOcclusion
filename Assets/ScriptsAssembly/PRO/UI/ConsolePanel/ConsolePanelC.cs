@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using PRO;
 using System;
 using UnityEngine;
 using static PRO.Console.ConsolePanelV;
@@ -15,7 +14,7 @@ namespace PRO.Console
         {
             base.Init(name);
 
-            OneLog.InitPool(view.OneLogPrefab.gameObject, this);
+            OneLog.InitPool(view.OneLogPrefab, this);
             view.InputField.onEndEdit.AddListener(InputFieldOnEndEdit);
 
             view.ClearButton.onClick.AddListener(ClearLog);
@@ -48,7 +47,7 @@ namespace PRO.Console
 
         private async UniTask AddLogAsync(string logText)
         {
-            var log = OneLog.pool.TakeOutT();
+            var log = OneLog.pool.TakeOut();
             var dataTime = DateTime.Now;
             log.time = $"{dataTime.Hour:D2}:{dataTime.Minute:D2}:{dataTime.Second:D2}:  ";
             log.content = logText;
@@ -61,7 +60,7 @@ namespace PRO.Console
         {
             while (OneLog.queue.Count > 0)
             {
-                OneLog.pool.PutIn(OneLog.queue.Dequeue().transform.gameObject);
+                OneLog.pool.PutIn(OneLog.queue.Dequeue());
             }
         }
 

@@ -1,16 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace PRO.DataStructure
 {
+    /// <summary>
+    /// 优先队列，优先取出代价小的
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PriorityQueue<T> : IEnumerable<T>
     {
-        private List<T> elements = new List<T>();
-        private List<float> costs = new List<float>();
+        private List<T> elements;
+        private List<float> costs;
 
-
+        public PriorityQueue() { elements = new List<T>(); costs = new List<float>(); }
+        public PriorityQueue(int count) { elements = new List<T>(count); costs = new List<float>(count); }
 
         public int Count
         {

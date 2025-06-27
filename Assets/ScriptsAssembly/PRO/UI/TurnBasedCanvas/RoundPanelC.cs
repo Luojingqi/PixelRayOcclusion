@@ -1,6 +1,5 @@
-using PRO.TurnBased;
-using PRO;
 using PRO.Tool;
+using PRO.TurnBased;
 using System.Collections.Generic;
 namespace PRO
 {
@@ -22,10 +21,10 @@ namespace PRO
             base.Init();
             Inst = this;
 
-            AfootPool = new GameObjectPool<TurnImage>(view.afoot.gameObject, view.ImageNode.parent);
-            WaitPool = new GameObjectPool<TurnImage>(view.wait.gameObject, view.ImageNode.parent);
-            AfootPool.CreateEventT += (g, t) => t.Init();
-            WaitPool.CreateEventT += (g, t) => t.Init();
+            AfootPool = new GameObjectPool<TurnImage>(view.afoot, view.ImageNode.parent);
+            WaitPool = new GameObjectPool<TurnImage>(view.wait, view.ImageNode.parent);
+            AfootPool.CreateEvent += t => t.Init();
+            WaitPool.CreateEvent += t => t.Init();
         }
         public List<TurnImage> TurnImageList = new List<TurnImage>();
         public void SetTurn(List<TurnFSM> list, int nowTurn)
@@ -36,10 +35,10 @@ namespace PRO
                 var turn = list[i];
                 TurnImage ti = null;
                 if (i == nowTurn)
-                    ti = AfootPool.TakeOutT();
+                    ti = AfootPool.TakeOut();
                 else
 
-                    ti = WaitPool.TakeOutT();
+                    ti = WaitPool.TakeOut();
                 ti.transform.parent = view.ImageNode;
                 ti.Icon.sprite = turn.Agent.Icon;
                 ti.SetTurn(turn);
@@ -53,8 +52,8 @@ namespace PRO
             {
                 var ti = TurnImageList[i];
                 ti.Clear();
-                if (ti.name[0] == 'a') AfootPool.PutIn(ti.gameObject);
-                else if (ti.name[0] == 'w') WaitPool.PutIn(ti.gameObject);
+                if (ti.name[0] == 'a') AfootPool.PutIn(ti);
+                else if (ti.name[0] == 'w') WaitPool.PutIn(ti);
             }
             TurnImageList.Clear();
         }

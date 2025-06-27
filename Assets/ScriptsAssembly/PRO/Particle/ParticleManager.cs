@@ -1,12 +1,11 @@
 ﻿using PRO.Tool;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO
 {
-    public class ParticleManager : MonoScriptBase, ITime_Awake, ITime_Start, ITime_Update
+    public class ParticleManager : MonoScriptBase, ITime_Awake, ITime_Start
     {
         public static ParticleManager Inst { get; private set; }
 
@@ -18,7 +17,7 @@ namespace PRO
         public void TimeAwake()
         {
             Inst = this;
-            Node = new GameObject("ParticleNode").transform;
+            Node = new GameObject("ParticlePool").transform;
             {
                 Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_单像素").GetComponent<Particle>();
                 particlePoolDic.Add("单像素", new ParticlePool(particle, Node, "单像素"));
@@ -59,42 +58,22 @@ namespace PRO
                 return pool;
             }
         }
-        public void PutIn(Particle particle)
-        {
-            GetPool(particle.loadPath).PutIn(particle);
-        }
 
-        public void TimeUpdate()
-        {
-            int time = (int)(TimeManager.deltaTime * 1000);
-            for (int i = SceneManager.Inst.NowScene.ActiveParticle.Count - 1; i >= 0; i--)
-            {
-                var particle = SceneManager.Inst.NowScene.ActiveParticle[i];
-                if (particle.Active)
-                    particle.UpdateRemainTime(time);
-                if (particle.RemainTime <= 0 || particle.Active == false)
-                {
-                    SceneManager.Inst.NowScene.ActiveParticle.RemoveAt(i);
-                    if (particle.RecyleState == false)
-                        GetPool(particle.loadPath).PutIn(particle);
-                }
-            }
-        }
 
         public class ParticlePool
         {
-            private MonoObjectPool<Particle> pool;
+            private GameObjectPool<Particle> pool;
             public ParticlePool(Particle prefab, Transform parent, string loadPath)
             {
-                pool = new MonoObjectPool<Particle>(prefab, parent);
-                pool.CreateEvent += (t) => t.Init(loadPath);
+                pool = new GameObjectPool<Particle>(prefab, parent);
+                pool.CreateEvent += t => t.Init(loadPath);
             }
             public Particle TakeOut(SceneEntity scene)
             {
                 var particle = pool.TakeOut();
                 particle.TakeOut(scene);
                 particle.SkillPlayAgent?.SetScene(scene);
-                scene.ActiveParticle.Add(particle);
+                scene.ActiveParticleSet.Add(particle);
                 return particle;
             }
 
@@ -113,7 +92,7 @@ namespace PRO
 
         public Particle ToRAM(Proto.ParticleData diskData, SceneEntity screen)
         {
-             var particle = GetPool(diskData.LoadPath).TakeOut(screen);
+            var particle = GetPool(diskData.LoadPath).TakeOut(screen);
             particle.ToRAM(diskData);
             return particle;
         }

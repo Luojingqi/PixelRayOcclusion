@@ -228,14 +228,7 @@ namespace PRO.Console
         #region
         public static string Method_1_0(string[] values)
         {
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                foreach (var blockPos in SceneManager.Inst.NowScene.BlockBaseInRAM)
-                    ThreadPool.QueueUserWorkItem((obj) => SceneManager.Inst.NowScene.SaveBlockData(blockPos, false));
-                foreach (var building in SceneManager.Inst.NowScene.BuildingInRAM.Values)
-                    SceneManager.Inst.NowScene.SaveBuilding(building);
-                SceneManager.Inst.NowScene.sceneCatalog.Save();
-            });
+            SceneManager.Inst.NowScene.SaveAll();
             return "/保存";
         }
         #endregion
@@ -245,7 +238,7 @@ namespace PRO.Console
         #region
         public static string Method_1_1(string[] values)
         {
-            SceneManager.Inst.NowScene.Unload();
+            SceneManager.Inst.NowScene.UnLoadAll();
             return "卸载";
         }
         #endregion
@@ -255,12 +248,13 @@ namespace PRO.Console
         #region
         public static string Method_1_2(string[] values)
         {
-            for (int x = -3; x <= 3; x++)
-                for (int y = -3; y <= 3; y++)
-                {
-                    SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new(x, y));
-                }
-            BlockMaterial.UpdateBind();
+            //    for (int x = -3; x <= 3; x++)
+            //        for (int y = -3; y <= 3; y++)
+            //        {
+            //            SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new(x, y));
+            //        }
+            //    BlockMaterial.UpdateBind();
+            SceneManager.Inst.NowScene.LoadAll();
             return "加载";
         }
         #endregion

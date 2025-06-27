@@ -1,4 +1,5 @@
 ﻿syntax = "proto3";
+
 package PRO.Proto;
 
 message RoleInfoData

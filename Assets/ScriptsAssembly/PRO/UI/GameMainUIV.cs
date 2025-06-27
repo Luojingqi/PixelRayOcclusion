@@ -1,5 +1,3 @@
-using PRO;
-using UnityEngine;
 namespace PRO
 {
     public class GameMainUIV : UIViewBase
@@ -28,7 +26,6 @@ namespace PRO
             BottomBag = transform.Find("BottomBag").GetComponent<BottomBagC>();
             RoleInfoPanel = transform.Find("RoleInfoPanel").GetComponent<RoleInfoPanelC>();
             InjuryEstimationPrefab = transform.Find("InjuryEstimationPanel").GetComponent<InjuryEstimationPanelC>();
-            InjuryEstimationPrefab.gameObject.SetActive(false);
         }
 
     }

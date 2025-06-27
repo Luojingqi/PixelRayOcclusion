@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using static PRO.BlockMaterial;
+using static UnityEngine.ParticleSystem;
 
 namespace PRO
 {
@@ -40,10 +42,20 @@ namespace PRO
             this.sceneCatalog = sceneCatalog;
         }
         #region 获取已经实例化的对象
-        public HashSet<Vector2Int> BlockBaseInRAM = new HashSet<Vector2Int>();
+        public HashSet<Vector2Int> BlockBaseInRAM = new HashSet<Vector2Int>(50);
         private CrossList<OneBlock> BlockBaseCrossList = new CrossList<OneBlock>();
-        public List<Particle> ActiveParticle = new List<Particle>();
+
+        public Dictionary<string, Role> Role_Guid_Dic = new Dictionary<string, Role>(20);
+        public Dictionary<Transform, Role> Role_Trans_Dic = new Dictionary<Transform, Role>(20);
+        private List<Role> RemoveActiveRoleList = new List<Role>(4);
+        private Dictionary<Vector2Int, List<Role>> JumpOutSceneRoleDic = new Dictionary<Vector2Int, List<Role>>();
+
+
+        public HashSet<Particle> ActiveParticleSet = new HashSet<Particle>(100);
+        private List<Particle> RemoveActiveParticleList = new List<Particle>(30);
+        private Dictionary<Vector2Int, List<Particle>> JumpOutSceneParticleDic = new Dictionary<Vector2Int, List<Particle>>();
         /// <summary>
+        /// 在内存中的区块
         /// key：guid  value：building
         /// </summary>
         public Dictionary<string, BuildingBase> BuildingInRAM = new Dictionary<string, BuildingBase>();
@@ -64,10 +76,22 @@ namespace PRO
             if (blockBase != null) return blockBase.GetPixel(Block.GlobalToPixel(globalPos));
             return null;
         }
+
+        public Role GetRole(string guid)
+        {
+            Role role = null;
+            Role_Guid_Dic.TryGetValue(guid, out role);
+            return role;
+        }
+        public Role GetRole(Transform transform)
+        {
+            Role role = null;
+            Role_Trans_Dic.TryGetValue(transform, out role);
+            return role;
+        }
         #endregion
 
         #region 从磁盘中加载与保存
-
         /// <summary>
         /// 使用多线程加载一个区块，区块文件不存在时会创建一个空区块
         /// </summary>
@@ -80,8 +104,7 @@ namespace PRO
             BlockBaseInRAM.Add(blockPos);
             var block = CreateBlock(blockPos);
             var background = CreateBackground(blockPos);
-            block.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
-            background.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime * 2;
+            block.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
             ThreadPool.QueueUserWorkItem((obj) =>
             {
                 if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block", Proto.BlockBaseData.Parser, out var blockData)
@@ -147,12 +170,26 @@ namespace PRO
                     }, background);
                 }
             });
+            if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockParticleData", Proto.BlockParticleData.Parser, out var BlockParticleData))
+            {
+                foreach (var particleData in BlockParticleData.Value)
+                {
+                    ParticleManager.Inst.GetPool(particleData.LoadPath).TakeOut(this).ToRAM(particleData);
+                }
+            }
+            if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockRoleData", Proto.BlockRoleData.Parser, out var BlockRoleData))
+            {
+                foreach (var roleData in BlockRoleData.Value)
+                {
+                    RoleManager.Inst.TakeOut(roleData.RoleTypeName, this).ToRAM(roleData);
+                }
+            }
         }
         /// <summary>
         /// 卸载一个区块，上方的建筑也会被一并卸载
         /// </summary>
         /// <param name="blockPos"></param>
-        public void UnloadBlockData(Vector2Int blockPos)
+        private void UnloadBlockData(Vector2Int blockPos)
         {
             try
             {
@@ -173,26 +210,23 @@ namespace PRO
         /// 保存一个区块
         /// </summary>
         /// <param name="blockPos">区块坐标</param>
-        /// <param name="SaveBuilding">是否保存上方的建筑</param>
-        public void SaveBlockData(Vector2Int blockPos, bool isSaveBuilding)
+        /// <param name="isSaveBuilding">是否保存上方的建筑</param>
+        private void SaveBlockData(Vector2Int blockPos, bool isSaveBuilding)
         {
             string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
-            var blockData = GetBlock(blockPos).ToDisk();
-            var backgroundData = GetBackground(blockPos).ToDisk();
-
+            var diskData = Proto.ProtoPool.TakeOut<Proto.BlockBaseData>();
+            GetBlock(blockPos).ToDisk(ref diskData);
+            GetBackground(blockPos).ToDisk(ref diskData);
             if (isSaveBuilding)
-            {
-                foreach (string guid in blockData.BuildingGuidIndexDic.Keys)
+                foreach (string guid in diskData.BuildingGuidIndexDic.Keys)
                     SaveBuilding(guid);
-                foreach (string guid in backgroundData.BuildingGuidIndexDic.Keys)
-                    SaveBuilding(guid);
-            }
-            IOTool.SaveProto($@"{path}\block", blockData);
-            IOTool.SaveProto($@"{path}\background", backgroundData);
-            blockData.ClearPutIn();
-            backgroundData.ClearPutIn();
+            IOTool.SaveProto($@"{path}\BlockData", diskData);
+            File.Delete($@"{path}\BlockParticleData.proto");
+            diskData.ClearPutIn();
         }
+
+        #region Building
         public static Dictionary<string, Type> BuildingTypeDic = new Dictionary<string, Type>();
         public void LoadBuilding(string guid)
         {
@@ -207,26 +241,93 @@ namespace PRO
                 Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
             }
         }
-        public void SaveBuilding(string guid)
+        private void SaveBuilding(string guid)
         {
             SaveBuilding(BuildingInRAM[guid]);
         }
-        public void SaveBuilding(BuildingBase buiding)
+        private void SaveBuilding(BuildingBase building)
         {
-            var diskData = buiding.ToDisk();
-            IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Building\{buiding.GUID}", diskData);
+            var diskData = building.ToDisk();
+            IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Building\{building.GUID}", diskData);
             diskData.ClearPutIn();
         }
         #endregion
 
+        public void SaveAll()
+        {
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                foreach (var blockPos in BlockBaseInRAM)
+                    SaveBlockData(blockPos, false);
+                foreach (var building in BuildingInRAM.Values)
+                    SaveBuilding(building);
+
+
+                foreach (var particle in ActiveParticleSet)
+                {
+                    var blockPos = Block.WorldToGlobal(particle.transform.position);
+                    if (JumpOutSceneParticleDic.TryGetValue(blockPos, out var jumpList))
+                        jumpList.Add(particle);
+                    else
+                        JumpOutSceneParticleDic.Add(blockPos, new List<Particle>() { particle });
+                }
+                var blockParticleData = Proto.ProtoPool.TakeOut<Proto.BlockParticleData>();
+                foreach (var kv in JumpOutSceneParticleDic)
+                {
+                    foreach (var particle in kv.Value)
+                        if (particle.loadPath != "技能播放")
+                            blockParticleData.Value.Add(particle.ToDisk());
+                    IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockParticleData", blockParticleData);
+                    blockParticleData.Clear();
+                }
+                Proto.ProtoPool.PutIn(blockParticleData);
+                JumpOutSceneParticleDic.Clear();
+
+
+
+                foreach (var role in Role_Guid_Dic.Values)
+                {
+                    var blockPos = Block.WorldToGlobal(role.transform.position);
+                    if (JumpOutSceneRoleDic.TryGetValue(blockPos, out var jumpList))
+                        jumpList.Add(role);
+                    else
+                        JumpOutSceneRoleDic.Add(blockPos, new List<Role>() { role });
+                }
+                var blockRoleData = Proto.ProtoPool.TakeOut<Proto.BlockRoleData>();
+                foreach (var kv in JumpOutSceneRoleDic)
+                {
+                    foreach (var role in kv.Value)
+                        blockRoleData.Value.Add(role.ToDisk());
+                    IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockRoleData", blockRoleData);
+                    blockRoleData.Clear();
+                }
+                Proto.ProtoPool.PutIn(blockRoleData);
+                JumpOutSceneRoleDic.Clear();
+
+                sceneCatalog.Save();
+            });
+        }
+
+        public void LoadAll()
+        {
+
+        }
         /// <summary>
         /// 卸载所有已加载区块，上方的建筑也会被一并卸载
+        /// 卸载粒子
         /// </summary>
-        public void Unload()
+        public void UnLoadAll()
         {
-            foreach (var blockPos in BlockBaseInRAM.ToArray())
-                UnloadBlockData(blockPos);
+            foreach (var particle in ActiveParticleSet)
+                ParticleManager.Inst.GetPool(particle.loadPath).PutIn(particle);
+            ActiveParticleSet.Clear();
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                foreach (var blockPos in BlockBaseInRAM.ToArray())
+                    UnloadBlockData(blockPos);
+            });
         }
+        #endregion
 
         #region 创建区块的空游戏物体
         /// <summary>
@@ -261,11 +362,163 @@ namespace PRO
         }
         #endregion
 
+        float time火焰 = 0;
+        float timeFluid1 = 0;
+        float timeFluid2 = 0;
+        float timeFluid3 = 0;
 
-        //public event SceneEntity
+        float UnLoadBlockCountdownTime = 0;
+        List<Vector2Int> unLoadBlock = new List<Vector2Int>(20);
+
+        PriorityQueue<Vector2Int> activeBlockUpdateTempQueue = new PriorityQueue<Vector2Int>(50);
+
+
         public void TimeUpdate()
         {
-            throw new NotImplementedException();
+            #region 更新  火焰
+            {
+                time火焰 += TimeManager.deltaTime;
+                while (time火焰 > proConfig.UpdateTime火焰)
+                {
+                    time火焰 -= proConfig.UpdateTime火焰;
+                    int updateTime = (int)(proConfig.UpdateTime火焰 * 1000);
+                    foreach (var blockPos in BlockBaseInRAM)
+                        activeBlockUpdateTempQueue.Enqueue(blockPos, blockPos.y);
+                    while (activeBlockUpdateTempQueue.Count > 0)
+                    {
+                        var blockPos = activeBlockUpdateTempQueue.Dequeue();
+                        GetBlock(blockPos).Update_火焰燃烧(updateTime);
+                        GetBackground(blockPos).Update_火焰燃烧(updateTime);
+                    }
+                }
+            }
+            #endregion
+
+            #region 更新  流体1
+            {
+                timeFluid1 += TimeManager.deltaTime;
+                while (timeFluid1 > proConfig.UpdateTimeFluid1)
+                {
+                    timeFluid1 -= proConfig.UpdateTimeFluid1;
+                    foreach (var blockPos in BlockBaseInRAM)
+                        activeBlockUpdateTempQueue.Enqueue(blockPos, blockPos.y);
+                    while (activeBlockUpdateTempQueue.Count > 0)
+                        GetBlock(activeBlockUpdateTempQueue.Dequeue()).UpdateFluid1();
+                }
+            }
+            #endregion
+
+            #region 更新  流体2
+            {
+                timeFluid2 += TimeManager.deltaTime;
+                while (timeFluid2 > proConfig.UpdateTimeFluid2)
+                {
+                    timeFluid2 -= proConfig.UpdateTimeFluid2;
+                    foreach (var blockPos in BlockBaseInRAM)
+                        activeBlockUpdateTempQueue.Enqueue(blockPos, -blockPos.y);
+                    while (activeBlockUpdateTempQueue.Count > 0)
+                        GetBlock(activeBlockUpdateTempQueue.Dequeue()).UpdateFluid1();
+                }
+            }
+            #endregion
+
+            #region 更新  流体3
+            {
+                timeFluid3 += TimeManager.deltaTime;
+                while (timeFluid3 > proConfig.UpdateTimeFluid3)
+                {
+                    timeFluid3 -= proConfig.UpdateTimeFluid3;
+                    foreach (var blockPos in BlockBaseInRAM)
+                        activeBlockUpdateTempQueue.Enqueue(blockPos, blockPos.y);
+                    while (activeBlockUpdateTempQueue.Count > 0)
+                        GetBlock(activeBlockUpdateTempQueue.Dequeue()).UpdateFluid3();
+                }
+            }
+            #endregion
+
+            #region 更新  粒子
+            {
+                int deltaTime = (int)(TimeManager.deltaTime * 1000);
+                foreach (var particle in ActiveParticleSet)
+                {
+                    var blockPos = Block.WorldToBlock(particle.transform.position);
+                    if (BlockBaseInRAM.Contains(blockPos) == false)
+                    {
+                        particle.gameObject.SetActive(false);
+                        if (JumpOutSceneParticleDic.TryGetValue(blockPos, out var jumpList))
+                            jumpList.Add(particle);
+                        else
+                            JumpOutSceneParticleDic.Add(blockPos, new List<Particle>() { particle });
+                        RemoveActiveParticleList.Add(particle);
+                    }
+                    else
+                    {
+                        if (particle.RemainTime > 0)
+                            particle.UpdateRemainTime(deltaTime);
+                        if (particle.RemainTime <= 0)
+                        {
+                            RemoveActiveParticleList.Add(particle);
+                            if (particle.RecyleState == false)
+                                ParticleManager.Inst.GetPool(particle.loadPath).PutIn(particle);
+                        }
+                    }
+                }
+                for (int i = RemoveActiveParticleList.Count - 1; i >= 0; i--)
+                    ActiveParticleSet.Remove(RemoveActiveParticleList[i]);
+                RemoveActiveParticleList.Clear();
+            }
+
+            #endregion
+
+            #region 更新  角色
+            {
+                foreach (var role in Role_Guid_Dic.Values)
+                {
+                    var blockPos = Block.WorldToBlock(role.transform.position);
+                    if (BlockBaseInRAM.Contains(blockPos) == false)
+                    {
+                        role.gameObject.SetActive(false);
+                        if (JumpOutSceneRoleDic.TryGetValue(blockPos, out var jumpList))
+                            jumpList.Add(role);
+                        else
+                            JumpOutSceneRoleDic.Add(blockPos, new List<Role>() { role });
+                        RemoveActiveRoleList.Add(role);
+                    }
+                }
+                for (int i = RemoveActiveRoleList.Count - 1; i >= 0; i--)
+                {
+                    var role = RemoveActiveRoleList[i];
+                    Role_Guid_Dic.Remove(role.Guid);
+                    Role_Trans_Dic.Remove(role.transform);
+                }
+                RemoveActiveRoleList.Clear();
+            }
+            #endregion
+
+            #region 更新  区块卸载检查
+            UnLoadBlockCountdownTime += TimeManager.deltaTime;
+            while (UnLoadBlockCountdownTime > 10)
+            {
+                UnLoadBlockCountdownTime -= 10;
+                foreach (var blockPos in BlockBaseInRAM)
+                {
+                    var block = GetBlock(blockPos);
+                    block.UnLoadCountdown -= 10;
+                    if (block.UnLoadCountdown <= 0)
+                        unLoadBlock.Add(blockPos);
+                }
+                var array = unLoadBlock.ToArray();
+                ThreadPool.QueueUserWorkItem((obj) =>
+                {
+                    foreach (var blockPos in array)
+                    {
+                        SaveBlockData(blockPos, true);
+                        UnloadBlockData(blockPos);
+                    }
+                });
+                unLoadBlock.Clear();
+            }
+            #endregion
         }
     }
 }

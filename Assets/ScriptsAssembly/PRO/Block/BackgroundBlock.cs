@@ -15,21 +15,16 @@ namespace PRO
             GameObject go = new GameObject("BackgroundBlock");
             SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
             renderer.sharedMaterial = BackgroundShareMaterialManager.ShareMaterial;
-            go.gameObject.SetActive(false);
-            go.AddComponent<BackgroundBlock>();
+            BackgroundBlock background = go.AddComponent<BackgroundBlock>();
             #endregion
             GameObject backgroundPoolGo = new GameObject("BackgroundPool");
             backgroundPoolGo.transform.parent = SceneManager.Inst.PoolNode;
-            BackgroundPool = new GameObjectPool<BackgroundBlock>(go, backgroundPoolGo.transform);
-            BackgroundPool.CreateEventT += (g, t) =>
-            {
-                t.Init();
-            };
-            go.transform.parent = backgroundPoolGo.transform;
+            BackgroundPool = new GameObjectPool<BackgroundBlock>(background, backgroundPoolGo.transform);
+            BackgroundPool.CreateEvent += t => t.Init();
         }
         public static BackgroundBlock TakeOut(SceneEntity scene)
         {
-            var background = BackgroundPool.TakeOutT();
+            var background = BackgroundPool.TakeOut();
             background._screen = scene;
             return background;
         }
@@ -50,7 +45,7 @@ namespace PRO
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-                BackgroundPool.PutIn(background.gameObject);
+                BackgroundPool.PutIn(background);
             });
         }
         #endregion
@@ -63,13 +58,10 @@ namespace PRO
             _blockType = BlockType.BackgroundBlock;
         }
 
-        public override void ToDisk(ref Proto.BlockBaseData data)
+        public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
         {
-
-        }
-
-        public override void ToRAM(Proto.BlockBaseData data)
-        {
+            base.ToRAM(diskData, scene);
+            diskData.ClearPutIn();
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 BlockMaterial.SetBackgroundBlock(this);

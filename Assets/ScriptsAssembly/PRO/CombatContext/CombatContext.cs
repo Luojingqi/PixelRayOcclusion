@@ -1,6 +1,5 @@
-﻿using PRO.Buff.Base;
+﻿using PRO.Tool;
 using PRO.TurnBased;
-using PRO.Tool;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -58,7 +57,7 @@ namespace PRO
             public static CombatContext_ByAgentData TakeOut()
             {
                 var agentData = pool.TakeOut();
-               agentData.InjuryEstimation = InjuryEstimationPanelC.pool.TakeOutT();
+                agentData.InjuryEstimation = InjuryEstimationPanelC.pool.TakeOut();
                 return agentData;
             }
             public static void PutIn(CombatContext_ByAgentData agentData)
@@ -68,7 +67,7 @@ namespace PRO
                 agentData.StartCombatEffectDataList.Clear();
                 agentData.EndCombatEffectData = new EndCombatEffectData();
                 agentData.LogBuilder.Clear();
-                InjuryEstimationPanelC.pool.PutIn(agentData.InjuryEstimation.gameObject);
+                InjuryEstimationPanelC.pool.PutIn(agentData.InjuryEstimation);
                 agentData.InjuryEstimation = null;
                 agentData.PlayAffectedAnimation = true;
                 pool.PutIn(agentData);

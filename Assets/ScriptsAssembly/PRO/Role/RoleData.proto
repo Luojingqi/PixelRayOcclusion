@@ -2,7 +2,7 @@
 
 import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
 import "PRO/SkillEditor/Agent/SkillPlayerAgentData.proto";
-import "RoleInfoData.proto";
+import "PRO/Role/RoleInfoData.proto";
 
 package PRO.Proto;
 
@@ -22,4 +22,9 @@ message RoleData
 
 	repeated string AllCanUseOperate_Type = 15;
 	repeated string AllBuff_Type = 16;
+}
+
+message BlockRoleData
+{
+	repeated RoleData Value = 1;
 }

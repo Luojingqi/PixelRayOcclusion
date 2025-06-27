@@ -27,19 +27,21 @@ namespace PRO.Proto {
             "Cg5Sb2xlRGF0YS5wcm90bxIJUFJPLlByb3RvGjtQUk8uR2VuZXJpY0ZyYW1l",
             "d29yay9Qcm90b2J1Zi9EYXRhU3RydWN0dXJlL0Jhc2ljRGF0YS5wcm90bxow",
             "UFJPL1NraWxsRWRpdG9yL0FnZW50L1NraWxsUGxheWVyQWdlbnREYXRhLnBy",
-            "b3RvGhJSb2xlSW5mb0RhdGEucHJvdG8i1AIKCFJvbGVEYXRhEisKDVRyYW5z",
-            "Rm9ybURhdGEYASABKAsyFC5QUk8uUHJvdG8uVHJhbnNmb3JtEi8KD1JpZ2lk",
-            "Ym9keTJERGF0YRgCIAEoCzIWLlBSTy5Qcm90by5SaWdpZGJvZHkyRBI7ChJT",
-            "a2lsbFBsYXlBZ2VudERhdGEYAyABKAsyHy5QUk8uUHJvdG8uU2tpbGxQbGF5",
-            "ZXJBZ2VudERhdGESDwoHTmF2VHlwZRgEIAEoCRIOCgZUb3dhcmQYBSABKAUS",
-            "FAoMUm9sZVR5cGVOYW1lGAYgASgJEgwKBEdVSUQYByABKAkSDAoETmFtZRgI",
-            "IAEoCRIlCgRJbmZvGAkgASgLMhcuUFJPLlByb3RvLlJvbGVJbmZvRGF0YRId",
-            "ChVBbGxDYW5Vc2VPcGVyYXRlX1R5cGUYDyADKAkSFAoMQWxsQnVmZl9UeXBl",
-            "GBAgAygJYgZwcm90bzM="));
+            "b3RvGhtQUk8vUm9sZS9Sb2xlSW5mb0RhdGEucHJvdG8i1AIKCFJvbGVEYXRh",
+            "EisKDVRyYW5zRm9ybURhdGEYASABKAsyFC5QUk8uUHJvdG8uVHJhbnNmb3Jt",
+            "Ei8KD1JpZ2lkYm9keTJERGF0YRgCIAEoCzIWLlBSTy5Qcm90by5SaWdpZGJv",
+            "ZHkyRBI7ChJTa2lsbFBsYXlBZ2VudERhdGEYAyABKAsyHy5QUk8uUHJvdG8u",
+            "U2tpbGxQbGF5ZXJBZ2VudERhdGESDwoHTmF2VHlwZRgEIAEoCRIOCgZUb3dh",
+            "cmQYBSABKAUSFAoMUm9sZVR5cGVOYW1lGAYgASgJEgwKBEdVSUQYByABKAkS",
+            "DAoETmFtZRgIIAEoCRIlCgRJbmZvGAkgASgLMhcuUFJPLlByb3RvLlJvbGVJ",
+            "bmZvRGF0YRIdChVBbGxDYW5Vc2VPcGVyYXRlX1R5cGUYDyADKAkSFAoMQWxs",
+            "QnVmZl9UeXBlGBAgAygJIjMKDUJsb2NrUm9sZURhdGESIgoFVmFsdWUYASAD",
+            "KAsyEy5QUk8uUHJvdG8uUm9sZURhdGFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::PRO.Proto.BasicDataReflection.Descriptor, global::PRO.Proto.SkillPlayerAgentDataReflection.Descriptor, global::PRO.Proto.RoleInfoDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.RoleData), global::PRO.Proto.RoleData.Parser, new[]{ "TransFormData", "Rigidbody2DData", "SkillPlayAgentData", "NavType", "Toward", "RoleTypeName", "GUID", "Name", "Info", "AllCanUseOperateType", "AllBuffType" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.RoleData), global::PRO.Proto.RoleData.Parser, new[]{ "TransFormData", "Rigidbody2DData", "SkillPlayAgentData", "NavType", "Toward", "RoleTypeName", "GUID", "Name", "Info", "AllCanUseOperateType", "AllBuffType" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Proto.BlockRoleData), global::PRO.Proto.BlockRoleData.Parser, new[]{ "Value" }, null, null, null, null)
           }));
     }
     #endregion
@@ -628,6 +630,193 @@ namespace PRO.Proto {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class BlockRoleData : pb::IMessage<BlockRoleData>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<BlockRoleData> _parser = new pb::MessageParser<BlockRoleData>(() => new BlockRoleData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<BlockRoleData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::PRO.Proto.RoleDataReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockRoleData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockRoleData(BlockRoleData other) : this() {
+      value_ = other.value_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockRoleData Clone() {
+      return new BlockRoleData(this);
+    }
+
+    /// <summary>Field number for the "Value" field.</summary>
+    public const int ValueFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::PRO.Proto.RoleData> _repeated_value_codec
+        = pb::FieldCodec.ForMessage(10, global::PRO.Proto.RoleData.Parser);
+    private readonly pbc::RepeatedField<global::PRO.Proto.RoleData> value_ = new pbc::RepeatedField<global::PRO.Proto.RoleData>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::PRO.Proto.RoleData> Value {
+      get { return value_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as BlockRoleData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(BlockRoleData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!value_.Equals(other.value_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= value_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      value_.WriteTo(output, _repeated_value_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      value_.WriteTo(ref output, _repeated_value_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += value_.CalculateSize(_repeated_value_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(BlockRoleData other) {
+      if (other == null) {
+        return;
+      }
+      value_.Add(other.value_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            value_.AddEntriesFrom(input, _repeated_value_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            value_.AddEntriesFrom(ref input, _repeated_value_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   #endregion
 
 }
@@ -670,6 +859,24 @@ Info = null;
 }
 AllCanUseOperateType.Clear();
 AllBuffType.Clear();
+}
+public void ClearPutIn()
+{
+Clear();
+PRO.Proto.ProtoPool.PutIn(this);
+}
+}
+
+public partial class BlockRoleData
+{
+public void Clear()
+{
+foreach(var item in Value)
+{
+item.Clear();
+PRO.Proto.ProtoPool.PutIn(item);
+}
+Value.Clear();
 }
 public void ClearPutIn()
 {

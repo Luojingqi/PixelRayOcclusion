@@ -1,5 +1,4 @@
 ﻿using PRO.Buff.Base.IBuff;
-using PRO;
 using PRO.Tool;
 using System.Collections.Generic;
 
@@ -14,8 +13,8 @@ namespace PRO
         {
             base.Init();
             AddChildUI(view.buffInfoPanel);
-            pool = new GameObjectPool<BuffInfoC>(view.buffInfo.gameObject, view.buffInfoPanel.transform);
-            pool.CreateEventT += (g, t) => { t.Init(); };
+            pool = new GameObjectPool<BuffInfoC>(view.buffInfo, view.buffInfoPanel.transform);
+            pool.CreateEvent += t => { t.Init(); };
 
         }
 
@@ -40,14 +39,14 @@ namespace PRO
         }
         public BuffInfoC TakeOut()
         {
-            BuffInfoC info = pool.TakeOutT();
+            BuffInfoC info = pool.TakeOut();
             info.transform.parent = transform;
             return info;
         }
         public void PutIn(BuffInfoC info)
         {
             info.Clear();
-            pool.PutIn(info.gameObject);
+            pool.PutIn(info);
         }
     }
 }

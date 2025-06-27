@@ -5,6 +5,7 @@ using PRO.Tool.Serialize.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 namespace PRO
 {
@@ -54,7 +55,7 @@ namespace PRO
             gameSaveCatalog.saveTime = DateTime.Now;
 
             //创建存档的根目录
-            DirectoryInfo root = Directory.CreateDirectory(GameSaveManager.SavePath + name);
+            DirectoryInfo root = Directory.CreateDirectory(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}");
             gameSaveCatalog.directoryInfo = root;
             //创建场景的根目录
             DirectoryInfo sceneRoot = Directory.CreateDirectory(@$"{root.FullName}\Scene");
@@ -92,5 +93,44 @@ namespace PRO
             }
             return null;
         }
+
+
+        /// <summary>
+        /// 从SavePath中加载所有的存档文件目录
+        /// </summary>
+        /// <returns></returns>
+        public static List<GameSaveCatalog> LoadAllSaveCatalog()
+        {
+            List<GameSaveCatalog> ret = new List<GameSaveCatalog>();
+            DirectoryInfo root = new DirectoryInfo(@$"{Application.streamingAssetsPath}\GameSaveFiles\");
+            DirectoryInfo[] GameSaveDirectoryArray = root.GetDirectories();
+            foreach (DirectoryInfo info in GameSaveDirectoryArray)
+            {
+                //加载每个存档的目录文件
+                GameSaveCatalog gameSaveInfo = LoadGameSaveInfo(info);
+                if (gameSaveInfo != null)
+                {
+                    gameSaveInfo.directoryInfo = info;
+                    ret.Add(gameSaveInfo);
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 创建一个空存档文件，如果有，覆盖
+        /// </summary>
+        /// <param name="saveName"></param>
+        /// <returns></returns>
+        public static GameSaveCatalog CreateGameSaveFile(string saveName)
+        {
+            if (Directory.Exists(@$"{Application.streamingAssetsPath}\GameSaveFiles\{saveName}"))
+            {
+                Directory.Delete(@$"{Application.streamingAssetsPath}\GameSaveFiles\{saveName}", true);
+            }
+            GameSaveCatalog gameSave = GameSaveCatalog.CreatFile(saveName);
+            return gameSave;
+        }
+
     }
 }

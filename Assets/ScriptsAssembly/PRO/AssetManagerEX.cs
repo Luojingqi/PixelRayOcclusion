@@ -73,6 +73,9 @@ namespace PRO
             }
             return ret as T;
         }
+        /// <summary>
+        /// 已经加载到场景中的技能指示器
+        /// </summary>
         private static Dictionary<string, SkillPointerBase> skillPointerInScene = new Dictionary<string, SkillPointerBase>();
     }
 }

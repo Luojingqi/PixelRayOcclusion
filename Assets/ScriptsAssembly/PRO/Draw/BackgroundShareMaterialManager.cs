@@ -63,14 +63,10 @@ namespace PRO.Renderer
         }
         public void UpdateBind()
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
-
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int globalBlockPos = MinLightBufferBlockPos + new Vector2Int(x, y);
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
                     BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
                     //Debug.Log($"±³¾°×ø±ê{background.BlockPos}  µÚÒ»´Î°ó¶¨  ±³¾°»º´æË÷Òý{lightIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
@@ -80,8 +76,8 @@ namespace PRO.Renderer
 
                     SetBackgroundBlock(background);
                 }
-            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
-                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+            for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
+                for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                     SetBackgroundBlock(SceneManager.Inst.NowScene.GetBackground(new Vector2Int(x, y)));
         }
 

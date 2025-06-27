@@ -30,8 +30,8 @@ namespace PRO
             public 行动点Panel(Transform transform)
             {
                 Transform 行动点List = transform.Find("行动点List");
-                行动点_可用_Pool = new GameObjectPool<Transform>(行动点List.Find("行动点-可用").gameObject, 行动点List);
-                行动点_不可用_Pool = new GameObjectPool<Transform>(行动点List.Find("行动点-不可用").gameObject, 行动点List);
+                行动点_可用_Pool = new GameObjectPool<Transform>(行动点List.Find("行动点-可用"), 行动点List);
+                行动点_不可用_Pool = new GameObjectPool<Transform>(行动点List.Find("行动点-不可用"), 行动点List);
                 行动点_可用值 = 行动点List.Find("行动点-可用值");
                 行动点_不可用值 = 行动点List.Find("行动点-不可用值");
                 行动点_可用值_Text = 行动点_可用值.Find("Value").GetComponent<TMP_Text>();
@@ -46,8 +46,8 @@ namespace PRO
             public void SetValue(int 可用行动点, int 全部行动点)
             {
                 if (可用行动点 < 0 || 全部行动点 < 0 || 可用行动点 > 全部行动点) return;
-                foreach (var t in 行动点_可用_ActiveList) 行动点_可用_Pool.PutIn(t.gameObject);
-                foreach (var t in 行动点_不可用_ActiveList) 行动点_不可用_Pool.PutIn(t.gameObject);
+                foreach (var t in 行动点_可用_ActiveList) 行动点_可用_Pool.PutIn(t);
+                foreach (var t in 行动点_不可用_ActiveList) 行动点_不可用_Pool.PutIn(t);
                 行动点_可用_ActiveList.Clear();
                 行动点_不可用_ActiveList.Clear();
 
@@ -55,8 +55,8 @@ namespace PRO
                 {
                     for (int i = 0; i < 全部行动点; i++)
                     {
-                        if (i < 可用行动点) 行动点_可用_ActiveList.Add(行动点_可用_Pool.TakeOutT());
-                        else 行动点_不可用_ActiveList.Add(行动点_不可用_Pool.TakeOutT());
+                        if (i < 可用行动点) 行动点_可用_ActiveList.Add(行动点_可用_Pool.TakeOut());
+                        else 行动点_不可用_ActiveList.Add(行动点_不可用_Pool.TakeOut());
                     }
                     行动点_可用值.gameObject.SetActive(false);
                     行动点_不可用值.gameObject.SetActive(false);

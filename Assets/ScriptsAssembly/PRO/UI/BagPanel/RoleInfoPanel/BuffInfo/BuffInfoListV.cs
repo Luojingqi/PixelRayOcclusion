@@ -13,7 +13,6 @@ namespace PRO
             base.Init(controller);
             buffInfoPanel = transform.Find("BuffInfoPanel").GetComponent<BuffInfoPanelC>();
             buffInfo = transform.Find("BuffInfo").GetComponent<BuffInfoC>();
-            buffInfo.gameObject.SetActive(false);
         }
     }
 }

@@ -20,11 +20,11 @@ namespace PRO.SceneEditor
             base.Init();
             Inst = this;
 
-            FileDirectoryInfoListPool = new GameObjectPool<FileDirectoryInfoListC>(view.FileDirectoryInfoList.gameObject, transform);
-            FileDirectoryInfoPool = new GameObjectPool<FileDirectoryInfoC>(view.FileDirectoryInfo.gameObject, view.FileDirectoryInfoList.transform);
+            FileDirectoryInfoListPool = new GameObjectPool<FileDirectoryInfoListC>(view.FileDirectoryInfoList, transform);
+            FileDirectoryInfoPool = new GameObjectPool<FileDirectoryInfoC>(view.FileDirectoryInfo, view.FileDirectoryInfoList.transform);
 
-            FileDirectoryInfoListPool.CreateEventT += (g, t) => t.Init();
-            FileDirectoryInfoPool.CreateEventT += (g, t) => t.Init();
+            FileDirectoryInfoListPool.CreateEvent += t => t.Init();
+            FileDirectoryInfoPool.CreateEvent += t => t.Init();
 
             root = new DirectoryInfo($@"{Application.streamingAssetsPath}\SceneEditorData");
 
@@ -98,21 +98,21 @@ namespace PRO.SceneEditor
         private void PutIn(FileDirectoryInfoListC infoList)
         {
             infoList.Clear();
-            FileDirectoryInfoListPool.PutIn(infoList.gameObject);
+            FileDirectoryInfoListPool.PutIn(infoList);
         }
         public void PutIn(FileDirectoryInfoC info)
         {
             info.Clear();
-            FileDirectoryInfoPool.PutIn(info.gameObject);
+            FileDirectoryInfoPool.PutIn(info);
         }
 
         public FileDirectoryInfoListC TakeOutInfoList()
         {
-            return FileDirectoryInfoListPool.TakeOutT();
+            return FileDirectoryInfoListPool.TakeOut();
         }
         public FileDirectoryInfoC TakeOutInfo()
         {
-            return FileDirectoryInfoPool.TakeOutT();
+            return FileDirectoryInfoPool.TakeOut();
         }
     }
 }

@@ -9,13 +9,8 @@ namespace PRO
     /// </summary>
     public abstract partial class BlockBase
     {
-        public abstract void ToDisk(ref Proto.BlockBaseData data);
-
-        public abstract void ToRAM(Proto.BlockBaseData data);
-
-        public Proto.BlockBaseData ToDisk()
+        public virtual void ToDisk(ref Proto.BlockBaseData diskData)
         {
-            var diskData = Proto.ProtoPool.TakeOut<Proto.BlockBaseData>();
             for (int y = 0; y < Block.Size.y; y++)
                 for (int x = 0; x < Block.Size.x; x++)
                 {
@@ -45,12 +40,14 @@ namespace PRO
                         }
                         pixelData.BuildingList.Add(buildingIndex);
                     }
-                    diskData.AllPixel.Add(pixelData);
+                    switch (blockType)
+                    {
+                        case BlockType.Block: diskData.BlockPixelArray.Add(pixelData); break;
+                        case BlockType.BackgroundBlock: diskData.BackgroundPixelArray.Add(pixelData); break;
+                    }
                 }
-            ToDisk(ref diskData);
-            return diskData;
         }
-        public void ToRAM(Proto.BlockBaseData diskData, SceneEntity sceneEntity)
+        public virtual void ToRAM(Proto.BlockBaseData diskData, SceneEntity sceneEntity)
         {
             Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>(diskData.TypeNameIndexDic.Count);
             Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>(diskData.ColorNameIndexDic.Count);
@@ -67,10 +64,15 @@ namespace PRO
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => sceneEntity.LoadBuilding(kv.Key));
                 buildingDic.Add(kv.Value, sceneEntity.GetBuilding(kv.Key));
             }
-
-            for (int i = 0; i < diskData.AllPixel.Count; i++)
+            Google.Protobuf.Collections.RepeatedField<Proto.BlockBaseData.Types.PixelData> pixelArray = null;
+            switch (blockType)
             {
-                var pixelData = diskData.AllPixel[i];
+                case BlockType.Block: pixelArray = diskData.BlockPixelArray; break;
+                case BlockType.BackgroundBlock:pixelArray = diskData.BackgroundPixelArray; break;
+            }
+            for (int i = 0; i < pixelArray.Count; i++)
+            {
+                var pixelData = pixelArray[i];
                 Pixel pixel = null;
                 lock (Pixel.pixelPool)
                     pixel = Pixel.pixelPool.TakeOut();
@@ -84,7 +86,6 @@ namespace PRO
                 }
                 SetPixel(pixel, false, false, false);
             }
-            ToRAM(diskData);
         }
     }
 }

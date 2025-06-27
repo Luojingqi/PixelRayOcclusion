@@ -14,9 +14,9 @@ namespace PRO
             gameObject.layer = (int)GameLayer.Particle;
         }
 
-        private void UpdateEventAction(Particle p)
+        private void UpdateEventAction()
         {
-            Renderer.sprite = spriteList[Mathf.Clamp((int)(Mathf.Pow((float)p.ElapsedTime / (p.ElapsedTime + p.RemainTime), 5) * spriteList.Count), 0, spriteList.Count - 1)];
+            Renderer.sprite = spriteList[Mathf.Clamp((int)(Mathf.Pow((float)ElapsedTime / (ElapsedTime + RemainTime), 5) * spriteList.Count), 0, spriteList.Count - 1)];
         }
 
 

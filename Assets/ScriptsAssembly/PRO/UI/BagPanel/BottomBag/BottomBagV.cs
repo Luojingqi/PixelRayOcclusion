@@ -23,7 +23,6 @@ namespace PRO
             EnlargeButton = transform.Find("TopInfo/EnlargeButton").GetComponent<Button>();
             NarrowButton = transform.Find("TopInfo/NarrowButton").GetComponent<Button>();
             GridObject = transform.Find("BagScrollView/Viewport/Content/GridObject").gameObject.AddComponent<GridObject>();
-            GridObject.gameObject.SetActive(false);
         }
         /// <summary>
         /// 可以容纳的最大列

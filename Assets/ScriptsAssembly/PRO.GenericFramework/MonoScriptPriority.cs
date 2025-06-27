@@ -17,13 +17,36 @@ namespace PRO.Tool
             public MonoScript script;
 #endif
             public int priority = -1;
+            [GUIColor("GetColor")]
+            [ReadOnly]
+            public bool Awake;
+            [GUIColor("GetColor")]
+            [ReadOnly]
+            public bool Start;
+            [GUIColor("GetColor")]
+            [ReadOnly]
+            public bool Update;
+            [GUIColor("GetColor")]
+            [ReadOnly]
+            public bool LateUpdate;
+
+            private static Color GetColor(bool b)
+            {
+                return b ? Color.green : Color.red;
+            }
         }
+        /// <summary>
+        /// 用于运行时通过type获取item
+        /// </summary>
         [HideInInspector]
         public Dictionary<Type, Item> typeDic = new Dictionary<Type, Item>();
 #if UNITY_EDITOR
+        /// <summary>
+        /// 用于编辑器时记录item防止丢失
+        /// </summary>
         [HideInInspector]
         public Dictionary<MonoScript, Item> assetDic = new Dictionary<MonoScript, Item>();
-        
+
         [TableList]
         public List<Item> list = new List<Item>();
         private PriorityQueue<Item> queue = new PriorityQueue<Item>();
@@ -55,7 +78,18 @@ namespace PRO.Tool
                             typeof(ITime_Start).IsAssignableFrom(type) |
                             typeof(ITime_Update).IsAssignableFrom(type) |
                             typeof(ITime_LateUpdate).IsAssignableFrom(type))
+                        {
+                            if (typeof(ITime_Awake).IsAssignableFrom(type))
+                                item.Awake = true;
+                            if (typeof(ITime_Start).IsAssignableFrom(type))
+                                item.Start = true;
+                            if (typeof(ITime_Update).IsAssignableFrom(type))
+                                item.Update = true;
+                            if (typeof(ITime_LateUpdate).IsAssignableFrom(type))
+                                item.LateUpdate = true;
+
                             queue.Enqueue(item, item.priority);
+                        }
                     }
                 }
             }
