@@ -193,20 +193,24 @@ namespace PRO
         }
         #endregion
 
+        /// <summary>
+        /// 初始化绑定数据
+        /// 加载相机周围区块
+        /// </summary>
         public static void FirstBind()
         {
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
 
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
-                {
                     if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
                         SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
-                }
 
             blockShareMaterialManager.FirstBind();
             backgroundShareMaterialManager.FirstBind();
             computeShaderManager.FirstBind();
+
+            new Thread(() => DrawThread.LoopDraw()).Start();
         }
         public static void UpdateBind()
         {
@@ -217,7 +221,9 @@ namespace PRO
             backgroundShareMaterialManager.UpdateBind();
             computeShaderManager.UpdateBind();
         }
-
+        /// <summary>
+        /// 更新相机位置，加载更新位置后的区块，延长视野内区块的卸载倒计时
+        /// </summary>
         public static void Update()
         {
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);

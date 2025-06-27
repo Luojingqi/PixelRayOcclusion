@@ -223,6 +223,7 @@ namespace PRO
                     SaveBuilding(guid);
             IOTool.SaveProto($@"{path}\BlockData", diskData);
             File.Delete($@"{path}\BlockParticleData.proto");
+            File.Delete($@"{path}\BlockRoleData.proto");
             diskData.ClearPutIn();
         }
 
@@ -257,12 +258,14 @@ namespace PRO
         {
             ThreadPool.QueueUserWorkItem((obj) =>
             {
+                #region 保存  Block  Building
                 foreach (var blockPos in BlockBaseInRAM)
                     SaveBlockData(blockPos, false);
                 foreach (var building in BuildingInRAM.Values)
                     SaveBuilding(building);
+                #endregion
 
-
+                #region 保存  Particle
                 foreach (var particle in ActiveParticleSet)
                 {
                     var blockPos = Block.WorldToGlobal(particle.transform.position);
@@ -277,14 +280,17 @@ namespace PRO
                     foreach (var particle in kv.Value)
                         if (particle.loadPath != "技能播放")
                             blockParticleData.Value.Add(particle.ToDisk());
+                    if (BlockBaseInRAM.Contains(kv.Key) == false)
+                        foreach (var particle in kv.Value)
+                            ParticleManager.Inst.PutIn(particle);
                     IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockParticleData", blockParticleData);
                     blockParticleData.Clear();
                 }
                 Proto.ProtoPool.PutIn(blockParticleData);
                 JumpOutSceneParticleDic.Clear();
+                #endregion
 
-
-
+                #region 保存  Role
                 foreach (var role in Role_Guid_Dic.Values)
                 {
                     var blockPos = Block.WorldToGlobal(role.transform.position);
@@ -298,11 +304,15 @@ namespace PRO
                 {
                     foreach (var role in kv.Value)
                         blockRoleData.Value.Add(role.ToDisk());
+                    if (BlockBaseInRAM.Contains(kv.Key) == false)
+                        foreach (var role in kv.Value)
+                            RoleManager.Inst.PutIn(role);
                     IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockRoleData", blockRoleData);
                     blockRoleData.Clear();
                 }
                 Proto.ProtoPool.PutIn(blockRoleData);
                 JumpOutSceneRoleDic.Clear();
+                #endregion
 
                 sceneCatalog.Save();
             });

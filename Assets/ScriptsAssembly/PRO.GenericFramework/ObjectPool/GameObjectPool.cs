@@ -9,7 +9,8 @@ namespace PRO.Tool
         public GameObjectPool(T prefab, Transform parent)
         {
             prefab.gameObject.SetActive(false);
-            prefab.transform.parent = parent;
+            if (prefab.gameObject.scene.IsValid())
+                prefab.transform.parent = parent;
             holdPrefab = prefab;
             toolParent = parent;
         }

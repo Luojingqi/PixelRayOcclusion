@@ -59,6 +59,8 @@ namespace PRO
             }
         }
 
+        public void PutIn(Particle particle) => GetPool(particle.loadPath).PutIn(particle);
+
 
         public class ParticlePool
         {

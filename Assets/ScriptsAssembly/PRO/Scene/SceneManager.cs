@@ -2,7 +2,6 @@ using PRO.Disk.Scene;
 using PRO.Tool;
 using PROTool;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 namespace PRO
 {
@@ -17,8 +16,7 @@ namespace PRO
         public SceneEntity NowScene { get => nowScene; }
 
         private Dictionary<string, SceneEntity> scenes = new Dictionary<string, SceneEntity>();
-        public Block GetBlock(Vector2Int blockPos, string sceneName) => scenes[sceneName].GetBlock(blockPos);
-        public BackgroundBlock GetBackground(Vector2Int blockPos, string sceneName) => scenes[sceneName].GetBackground(blockPos);
+
         public SceneEntity GetScene(string sceneName) => scenes[sceneName];
 
         public void SwitchScene(string toSceneName)
@@ -36,6 +34,7 @@ namespace PRO
             Inst = this;
             DontDestroyOnLoad(this);
             PoolNode = new GameObject("PoolNode").transform;
+            DontDestroyOnLoad (PoolNode);
             BlockMaterial.Init();
             Pixel.LoadPixelTypeInfo();
             Pixel.¿ÕÆø = Pixel.TakeOut("¿ÕÆø", 0, new());
@@ -56,7 +55,6 @@ namespace PRO
             SceneEntity scene = new SceneEntity(sceneCatalog);
             scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
-            new Thread(() => DrawThread.LoopDraw()).Start();
             BlockMaterial.FirstBind();
 
 

@@ -38,9 +38,9 @@ namespace PRO
 
         public void PutIn(Role role)
         {
+            role.Scene.Role_Guid_Dic.Remove(role.Guid);
+            role.Scene.Role_Trans_Dic.Remove(role.transform);
             rolePoolDic[role.RoleTypeName].PutIn(role);
-            //role.Scene.Role_Guid_Dic.Remove(role.Guid);
-            //role.Scene.Role_Trans_Dic.Remove(role.transform);
             role.PutIn();
         }
     }
