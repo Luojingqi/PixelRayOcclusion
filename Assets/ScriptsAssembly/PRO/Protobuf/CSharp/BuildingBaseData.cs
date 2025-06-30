@@ -866,8 +866,8 @@ public partial class BuildingBaseData
 {
 public void Clear()
 {
-TypeName = null;
-Name = null;
+TypeName = string.Empty;
+Name = string.Empty;
 if(Global!=null)
 {
 Global.Clear();
@@ -889,11 +889,7 @@ item.Clear();
 PRO.Proto.ProtoPool.PutIn(item);
 }
 AllPixel.Clear();
-if(ExtendData!=null)
-{
-Google.Protobuf.ByteString.PutIn(ExtendData);
-ExtendData = null;
-}
+ExtendData = Google.Protobuf.ByteString.Empty;
 }
 public partial class Types
 {

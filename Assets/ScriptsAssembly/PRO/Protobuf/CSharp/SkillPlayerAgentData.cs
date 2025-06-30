@@ -398,8 +398,8 @@ public void Clear()
 Play = false;
 Time = 0;
 NowFrame = 0;
-IdleLoadPath = null;
-SkillLoadPath = null;
+IdleLoadPath = string.Empty;
+SkillLoadPath = string.Empty;
 }
 public void ClearPutIn()
 {

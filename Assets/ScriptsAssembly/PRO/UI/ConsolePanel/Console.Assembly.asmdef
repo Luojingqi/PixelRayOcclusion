@@ -2,12 +2,11 @@
     "name": "Console.Assembly",
     "rootNamespace": "",
     "references": [
-        "GUID:d8f27b8ecd23e014ba4799bdcd51db0b",
-        "GUID:a18fa1473a314c141976737dc103df70",
-        "GUID:ec61fd18fc4ead0498c60958d20a4931",
-        "GUID:bef43168d0c5a5b43ba94dcd70dcced8",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:4fcb97b18a27a96448d941093379c834",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:ec61fd18fc4ead0498c60958d20a4931",
+        "GUID:a18fa1473a314c141976737dc103df70",
+        "GUID:bef43168d0c5a5b43ba94dcd70dcced8"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

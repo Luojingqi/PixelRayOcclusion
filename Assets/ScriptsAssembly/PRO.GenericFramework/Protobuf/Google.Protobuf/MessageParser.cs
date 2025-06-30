@@ -242,9 +242,11 @@ namespace Google.Protobuf
         {
             //this.factory = factory;
             var pool = new ProtoPool.Pool<T>();
-            ProtoPool.poolDic.Add(typeof(T), pool);
+            lock (ProtoPool.poolDic)
+                ProtoPool.poolDic.Add(typeof(T), pool);
             pool.createObjectAction = factory;
             this.factory = () => pool.TakeOut();
+
         }
 
         /// <summary>

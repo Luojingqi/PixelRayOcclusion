@@ -846,11 +846,11 @@ SkillPlayAgentData.Clear();
 PRO.Proto.ProtoPool.PutIn(SkillPlayAgentData);
 SkillPlayAgentData = null;
 }
-NavType = null;
+NavType = string.Empty;
 Toward = 0;
-RoleTypeName = null;
-GUID = null;
-Name = null;
+RoleTypeName = string.Empty;
+GUID = string.Empty;
+Name = string.Empty;
 if(Info!=null)
 {
 Info.Clear();

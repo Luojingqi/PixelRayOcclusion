@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class ParticleManager : MonoScriptBase, ITime_Awake, ITime_Start
+    public class ParticleManager : MonoScriptBase, ITime_Awake
     {
         public static ParticleManager Inst { get; private set; }
 
@@ -18,6 +18,7 @@ namespace PRO
         {
             Inst = this;
             Node = new GameObject("ParticlePool").transform;
+            Node.parent = SceneManager.Inst.PoolNode;
             {
                 Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_单像素").GetComponent<Particle>();
                 particlePoolDic.Add("单像素", new ParticlePool(particle, Node, "单像素"));
@@ -30,10 +31,6 @@ namespace PRO
                 Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_技能播放").GetComponent<Particle>();
                 particlePoolDic.Add("技能播放", new ParticlePool(particle, Node, "技能播放"));
             }
-        }
-        public void TimeStart()
-        {
-            Node.parent = SceneManager.Inst.PoolNode;
         }
 
         /// <summary>

@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class RoleManager : MonoScriptBase, ITime_Start
+    public class RoleManager : MonoScriptBase, ITime_Awake
     {
         public static RoleManager Inst { get; private set; }
         private Dictionary<string, GameObjectPool<Role>> rolePoolDic = new Dictionary<string, GameObjectPool<Role>>();
 
         private Transform roleNode;
-        public void TimeStart()
+        public void TimeAwake()
         {
             Inst = this;
             roleNode = new GameObject("RolePool").transform;

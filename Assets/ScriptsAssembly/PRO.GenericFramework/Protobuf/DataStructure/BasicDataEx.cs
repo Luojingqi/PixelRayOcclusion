@@ -77,6 +77,7 @@
         }
         public static Transform ToDisk(this UnityEngine.Transform transform)
         {
+            var p = Transform.Parser;
             var ret = ProtoPool.TakeOut<PRO.Proto.Transform>();
             ret.Position = transform.position.ToDisk();
             ret.Rotation = transform.rotation.ToDisk();

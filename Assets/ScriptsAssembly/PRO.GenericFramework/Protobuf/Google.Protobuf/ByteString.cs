@@ -28,27 +28,6 @@ namespace Google.Protobuf
     [DebuggerTypeProxy(typeof(ByteStringDebugView))]
     public sealed class ByteString : IEnumerable<byte>, IEquatable<ByteString>
     {
-        #region ∂‘œÛ≥ÿ¿©’π
-        private static Queue<ByteString> pool = new Queue<ByteString>();
-        private static ByteString TakeOut(ReadOnlyMemory<byte> bytes)
-        {
-            lock (pool)
-            {
-                if (pool.Count > 0)
-                    return pool.Dequeue();
-                else
-                    return new ByteString(bytes);
-            }
-        }
-        public static void PutIn(ByteString byteString)
-        {
-            byteString.bytes = null;
-            lock (pool)
-            {
-                pool.Enqueue(byteString);
-            }
-        }
-        #endregion
 
         private static readonly ByteString empty = new ByteString(new byte[0]);
 
@@ -59,7 +38,7 @@ namespace Google.Protobuf
         /// </summary>
         internal static ByteString AttachBytes(ReadOnlyMemory<byte> bytes)
         {
-            return ByteString.TakeOut(bytes);
+            return new ByteString(bytes);
         }
 
         /// <summary>
@@ -162,7 +141,7 @@ namespace Google.Protobuf
         {
             // By handling the empty string explicitly, we not only optimize but we fix a
             // problem on CF 2.0. See issue 61 for details.
-            return bytes == "" ? Empty :  ByteString.TakeOut(Convert.FromBase64String(bytes));
+            return bytes == "" ? Empty :  new ByteString(Convert.FromBase64String(bytes));
         }
 
         /// <summary>
@@ -210,7 +189,7 @@ namespace Google.Protobuf
         /// </summary>
         public static ByteString CopyFrom(params byte[] bytes)
         {
-            return ByteString.TakeOut((byte[])bytes.Clone());
+            return new ByteString((byte[])bytes.Clone());
         }
 
         /// <summary>
@@ -220,7 +199,7 @@ namespace Google.Protobuf
         {
             byte[] portion = new byte[count];
             ByteArray.Copy(bytes, offset, portion, 0, count);
-            return ByteString.TakeOut(portion);
+            return new ByteString(portion);
         }
 
         /// <summary>
@@ -230,7 +209,7 @@ namespace Google.Protobuf
         /// </summary>
         public static ByteString CopyFrom(ReadOnlySpan<byte> bytes)
         {
-            return ByteString.TakeOut(bytes.ToArray());
+            return new ByteString(bytes.ToArray());
         }
 
         /// <summary>
@@ -239,7 +218,7 @@ namespace Google.Protobuf
         /// </summary>
         public static ByteString CopyFrom(string text, Encoding encoding)
         {
-            return ByteString.TakeOut(encoding.GetBytes(text));
+            return new ByteString(encoding.GetBytes(text));
         }
 
         /// <summary>

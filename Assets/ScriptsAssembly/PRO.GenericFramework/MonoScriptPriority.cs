@@ -13,10 +13,6 @@ namespace PRO.Tool
         public class Item
         {
 #if UNITY_EDITOR
-            [ReadOnly]
-            public MonoScript script;
-#endif
-            public int priority = -1;
             [GUIColor("GetColor")]
             [ReadOnly]
             public bool Awake;
@@ -29,6 +25,12 @@ namespace PRO.Tool
             [GUIColor("GetColor")]
             [ReadOnly]
             public bool LateUpdate;
+
+
+            [ReadOnly]
+            public MonoScript script;
+#endif
+            public int priority = -1;
 
             private static Color GetColor(bool b)
             {
@@ -74,22 +76,13 @@ namespace PRO.Tool
                             item = new Item();
                             item.script = script;
                         }
-                        if (typeof(ITime_Awake).IsAssignableFrom(type) |
-                            typeof(ITime_Start).IsAssignableFrom(type) |
-                            typeof(ITime_Update).IsAssignableFrom(type) |
-                            typeof(ITime_LateUpdate).IsAssignableFrom(type))
-                        {
-                            if (typeof(ITime_Awake).IsAssignableFrom(type))
-                                item.Awake = true;
-                            if (typeof(ITime_Start).IsAssignableFrom(type))
-                                item.Start = true;
-                            if (typeof(ITime_Update).IsAssignableFrom(type))
-                                item.Update = true;
-                            if (typeof(ITime_LateUpdate).IsAssignableFrom(type))
-                                item.LateUpdate = true;
 
-                            queue.Enqueue(item, item.priority);
-                        }
+                        item.Awake = typeof(ITime_Awake).IsAssignableFrom(type);
+                        item.Start = typeof(ITime_Start).IsAssignableFrom(type);
+                        item.Update = typeof(ITime_Update).IsAssignableFrom(type);
+                        item.LateUpdate = typeof(ITime_LateUpdate).IsAssignableFrom(type);
+
+                        queue.Enqueue(item, item.priority);
                     }
                 }
             }

@@ -61,7 +61,6 @@ namespace PRO
         public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
         {
             base.ToRAM(diskData, scene);
-            diskData.ClearPutIn();
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 BlockMaterial.SetBackgroundBlock(this);

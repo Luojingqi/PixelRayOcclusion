@@ -23,7 +23,7 @@ namespace PRO.Proto.ProtocTool
             {
                 var line = lines[i];
 
-                var strs = Trim(lines[i].Split( ' ', ';' ));
+                var strs = Trim(lines[i].Split(' ', ';'));
                 switch (strs[0])
                 {
                     case "message":
@@ -61,14 +61,14 @@ namespace PRO.Proto.ProtocTool
             {
                 if (strs[0] == "repeated")
                 {
-                    return new ValueList() { type = strs[1], name = strs[2].Pascalize() };
+                    return new ValueList() { type = "list", valueType = strs[1], name = strs[2].Pascalize() };
                 }
                 else
                 {
                     if (strs[0].Substring(0, 3) == "map")
                     {
                         var dic = Trim(strs[0].Split('<', '>', ',', ' '));
-                        return new ValueMap() { type = dic[0], valueType = dic[1], name = strs[1].Pascalize() };
+                        return new ValueMap() { type = "dic", keyType = dic[0], valueType = dic[1], name = strs[1].Pascalize() };
                     }
                     else
                     {
@@ -78,8 +78,8 @@ namespace PRO.Proto.ProtocTool
             }
 
         }
-        public class ValueList : Value { }
-        public class ValueMap : Value { public string valueType; }
+        public class ValueList : Value { public string valueType; }
+        public class ValueMap : Value { public string keyType; public string valueType; }
 
         public static OneOf StartOneOf(string[] lines, string oneOfName, ref int i)
         {
@@ -128,27 +128,21 @@ namespace PRO.Proto.ProtocTool
                 {
                     case ValueList v:
                         {
-                            if (BasicTypeDic.ContainsKey(v.type))
+                            if (BasicTypeDic.ContainsKey(v.valueType))
                             {
                                 sb.AppendLine($"{v.name}.Clear();");
                             }
-                            else if (EnumSet.Contains(v.type))
+                            else if (EnumSet.Contains(v.valueType))
                             {
                                 sb.AppendLine($"{v.name}.Clear();");
                             }
                             else
                             {
+
                                 sb.AppendLine($"foreach(var item in {v.name})");
                                 sb.AppendLine("{");
-                                if (v.type == "bytes")
-                                {
-                                    sb.AppendLine($"Google.Protobuf.ByteString.PutIn(item);");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"item.Clear();");
-                                    sb.AppendLine($"PRO.Proto.ProtoPool.PutIn(item);");
-                                }
+                                sb.AppendLine($"item.Clear();");
+                                sb.AppendLine($"PRO.Proto.ProtoPool.PutIn(item);");
                                 sb.AppendLine("}");
                                 sb.AppendLine($"{v.name}.Clear();");
                             }
@@ -166,17 +160,10 @@ namespace PRO.Proto.ProtocTool
                             }
                             else
                             {
-                                sb.AppendLine($"foreach(var kv in {value.name})");
+                                sb.AppendLine($"foreach(var kv in {v.name})");
                                 sb.AppendLine("{");
-                                if (v.valueType == "bytes")
-                                {
-                                    sb.AppendLine($"Google.Protobuf.ByteString.PutIn(item);");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"kv.Value.Clear();");
-                                    sb.AppendLine($"PRO.Proto.ProtoPool.PutIn(item);");
-                                }
+                                sb.AppendLine($"kv.Value.Clear();");
+                                sb.AppendLine($"PRO.Proto.ProtoPool.PutIn(kv.Value);");
                                 sb.AppendLine("}");
                                 sb.AppendLine($"{v.name}.Clear();");
                             }
@@ -184,15 +171,7 @@ namespace PRO.Proto.ProtocTool
                         }
                     default:
                         {
-                            if (value.type == "bytes")
-                            {
-                                sb.AppendLine($"if({value.name}!=null)");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"Google.Protobuf.ByteString.PutIn({value.name});");
-                                sb.AppendLine($"{value.name} = null;");
-                                sb.AppendLine("}");
-                            }
-                            else if (EnumSet.Contains(value.type))
+                            if (EnumSet.Contains(value.type))
                             {
                                 sb.AppendLine($"{value.name} = (Types.{value.type})0;");
                             }
@@ -248,7 +227,8 @@ namespace PRO.Proto.ProtocTool
             {"sfixed32" , "0"},
             {"sfixed64" , "0"},
             {"bool" , "false"},
-            {"string" , "null"},
+            {"string" , "string.Empty"},
+            {"bytes" , "Google.Protobuf.ByteString.Empty"},
         };
 
         public static string[] Trim(string[] strs)

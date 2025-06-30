@@ -2,15 +2,15 @@ using PRO.TurnBased;
 using UnityEngine;
 namespace PRO
 {
-    public class GamePlayMain : MonoScriptBase, ITime_Start, ITime_Update
+    public class GamePlayMain : MonoScriptBase, ITime_Awake, ITime_Update
     {
         public static GamePlayMain Inst { get; private set; }
 
 
-        public void TimeStart()
+        public void TimeAwake()
         {
             Inst = this;
-            RoleManager.Inst.TakeOut("д╛хо", SceneManager.Inst.NowScene);
+          
             round = new RoundFSM();
         }
         public RoundFSM round;
@@ -29,6 +29,7 @@ namespace PRO
 
             if (Input.GetKeyDown(KeyCode.M))
             {
+                RoleManager.Inst.TakeOut("д╛хо", SceneManager.Inst.NowScene);
                 // MCTS.Main();
             }
         }
