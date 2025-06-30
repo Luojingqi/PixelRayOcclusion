@@ -139,9 +139,9 @@ namespace PRO.SkillEditor
             play = diskData.Play;
             time = diskData.Time;
             nowFrame = diskData.NowFrame;
-            if (diskData.IdleLoadPath != null)
+            if (diskData.IdleLoadPath != string.Empty)
                 idle = AssetManager.Load_A<Skill_Disk>("skill.ab", @$"ScriptsAssembly\PRO\技能\{diskData.IdleLoadPath}.asset");
-            if (diskData.SkillLoadPath != null)
+            if (diskData.SkillLoadPath != string.Empty)
                 skill = AssetManager.Load_A<Skill_Disk>("skill.ab", @$"ScriptsAssembly\PRO\技能\{diskData.SkillLoadPath}.asset");
             skill?.UpdateFrame(this, nowFrame, (int)(Skill_Disk.PlayTrack.AnimationTrack2D | Skill_Disk.PlayTrack.SpecialEffectTrack2D));
         }

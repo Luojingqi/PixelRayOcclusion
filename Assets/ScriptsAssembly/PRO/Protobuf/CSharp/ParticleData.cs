@@ -689,7 +689,7 @@ public partial class ParticleData
 {
 public void Clear()
 {
-LoadPath = null;
+LoadPath = string.Empty;
 if(Transform!=null)
 {
 Transform.Clear();
@@ -710,11 +710,7 @@ SurviveTimeRange = null;
 }
 RemainTime = 0;
 ElapsedTime = 0;
-if(ExtendData!=null)
-{
-Google.Protobuf.ByteString.PutIn(ExtendData);
-ExtendData = null;
-}
+ExtendData = Google.Protobuf.ByteString.Empty;
 }
 public void ClearPutIn()
 {

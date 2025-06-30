@@ -21,18 +21,24 @@ namespace PRO.Tool.Serialize.IO
         {
             try
             {
-                //读取文件
-                using (StreamReader sr = File.OpenText(path))
+                if (File.Exists(path))
                 {
-                    //数据保存
-                    text = sr.ReadToEnd();
-                    sr.Close();
+                    using (StreamReader sr = File.OpenText(path))
+                    {
+                        text = sr.ReadToEnd();
+                        sr.Close();
+                    }
+                    return true;
                 }
-                return true;
+                else
+                {
+                    text = null;
+                    return false;
+                }
             }
             catch (Exception e)
             {
-                //Debug.Log("加载磁盘中文本数据失败" + e);
+                Debug.Log("加载磁盘中文本数据失败" + e);
                 text = null;
                 return false;
             }
@@ -69,18 +75,26 @@ namespace PRO.Tool.Serialize.IO
             string protoPath = path + protoExtension;
             try
             {
-                using (var stream = File.OpenRead(protoPath))
+                if (File.Exists(protoPath))
                 {
-                    Span<byte> bytes = stackalloc byte[(int)stream.Length];
-                    stream.Read(bytes);
-                    protoData = parser.ParseFrom(bytes);
-                    return true;
+                    using (var stream = File.OpenRead(protoPath))
+                    {
+                        Span<byte> bytes = stackalloc byte[(int)stream.Length];
+                        stream.Read(bytes);
+                        protoData = parser.ParseFrom(bytes);
+                        return true;
+                    }
+                }
+                else
+                {
+                    protoData = default;
+                    return false;
                 }
             }
             catch (Exception e)
             {
                 protoData = default;
-                //  Debug.Log("加载protobit数据失败");
+                Debug.Log("加载protobit数据失败");
                 return false;
             }
         }
@@ -104,6 +118,7 @@ namespace PRO.Tool.Serialize.IO
                 return false;
             }
         }
+
 
         /// <summary>
         /// 保存文本到磁盘，路径需要带后缀

@@ -5,7 +5,7 @@ using PRO.Proto.Ex;
 
 namespace PRO
 {
-    public class Particle : MonoScriptBase, IScene
+    public class Particle : MonoBehaviour, IScene
     {
         public SpriteRenderer Renderer { get; private set; }
         public Rigidbody2D Rig2D { get; private set; }

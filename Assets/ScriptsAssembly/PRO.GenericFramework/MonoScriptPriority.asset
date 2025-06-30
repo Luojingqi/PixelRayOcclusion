@@ -18,12 +18,13 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 11500000, guid: 9898acd76fde754408626caec1627791, type: 3}
     - {fileID: 11500000, guid: 0f1697179f9e4ce4a9955c6e9d18ca83, type: 3}
-    - {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
     - {fileID: 11500000, guid: 4c7b72cdce3015e46a81e7461e172d81, type: 3}
     - {fileID: 11500000, guid: 67f0ef40a5711ae438cd9154fa635716, type: 3}
-    - {fileID: 11500000, guid: ecf9b4c0eef5d4b43a764ee5c904bd8f, type: 3}
+    - {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
     - {fileID: 11500000, guid: 796c57d1e104827418747c59e2eb6325, type: 3}
+    - {fileID: 11500000, guid: ecf9b4c0eef5d4b43a764ee5c904bd8f, type: 3}
     - {fileID: 11500000, guid: f8f4833268ad9224a81d2d3807be939f, type: 3}
+    - {fileID: 11500000, guid: 0d6929ef1001b1a44b19fe4b0420ffeb, type: 3}
     - {fileID: 11500000, guid: 9f298382a4b9c314380f46bb18a6c85b, type: 3}
     - {fileID: 11500000, guid: 3a9fb90987e605b488950b1b037c5b34, type: 3}
     - {fileID: 11500000, guid: 12710e868416da745b36c8d9ca9e0a99, type: 3}
@@ -45,7 +46,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 11
+      Data: 12
     - Name: 
       Entry: 7
       Data: 
@@ -61,24 +62,24 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 3|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 0
-    - Name: priority
-      Entry: 3
-      Data: 20
     - Name: Awake
       Entry: 5
       Data: true
     - Name: Start
       Entry: 5
-      Data: false
+      Data: true
     - Name: Update
       Entry: 5
       Data: true
     - Name: LateUpdate
       Entry: 5
       Data: true
+    - Name: script
+      Entry: 10
+      Data: 0
+    - Name: priority
+      Entry: 3
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
@@ -100,24 +101,24 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 5|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 1
-    - Name: priority
-      Entry: 3
-      Data: 30
     - Name: Awake
       Entry: 5
       Data: true
     - Name: Start
       Entry: 5
-      Data: true
+      Data: false
     - Name: Update
       Entry: 5
       Data: false
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 1
+    - Name: priority
+      Entry: 3
+      Data: 20
     - Name: 
       Entry: 8
       Data: 
@@ -132,31 +133,31 @@ MonoBehaviour:
       Data: 6|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.SkillEditor.SkillPlayAgent, PRO.Assembly
+      Data: PRO.NavManager, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 7|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 2
-    - Name: priority
-      Entry: 3
-      Data: 50
     - Name: Awake
       Entry: 5
-      Data: false
+      Data: true
     - Name: Start
       Entry: 5
       Data: false
     - Name: Update
       Entry: 5
-      Data: true
+      Data: false
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 2
+    - Name: priority
+      Entry: 3
+      Data: 20
     - Name: 
       Entry: 8
       Data: 
@@ -171,31 +172,31 @@ MonoBehaviour:
       Data: 8|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.NavManager, PRO.Assembly
+      Data: PRO.RoleManager, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 9|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 3
-    - Name: priority
-      Entry: 3
-      Data: 60
     - Name: Awake
       Entry: 5
-      Data: false
+      Data: true
     - Name: Start
       Entry: 5
-      Data: true
+      Data: false
     - Name: Update
       Entry: 5
       Data: false
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 3
+    - Name: priority
+      Entry: 3
+      Data: 20
     - Name: 
       Entry: 8
       Data: 
@@ -210,31 +211,31 @@ MonoBehaviour:
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.RoleManager, PRO.Assembly
+      Data: PRO.SkillEditor.SkillPlayAgent, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 11|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 4
-    - Name: priority
-      Entry: 3
-      Data: 61
     - Name: Awake
       Entry: 5
       Data: false
     - Name: Start
       Entry: 5
-      Data: true
+      Data: false
     - Name: Update
       Entry: 5
-      Data: false
+      Data: true
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 4
+    - Name: priority
+      Entry: 3
+      Data: 25
     - Name: 
       Entry: 8
       Data: 
@@ -249,31 +250,31 @@ MonoBehaviour:
       Data: 12|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.GamePlayMain, PRO.Assembly
+      Data: PRO.Role, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 13|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 5
-    - Name: priority
-      Entry: 3
-      Data: 70
     - Name: Awake
       Entry: 5
       Data: false
     - Name: Start
       Entry: 5
-      Data: true
+      Data: false
     - Name: Update
       Entry: 5
       Data: true
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 5
+    - Name: priority
+      Entry: 3
+      Data: 40
     - Name: 
       Entry: 8
       Data: 
@@ -288,22 +289,16 @@ MonoBehaviour:
       Data: 14|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.Role, PRO.Assembly
+      Data: PRO.GamePlayMain, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 15|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 6
-    - Name: priority
-      Entry: 3
-      Data: 71
     - Name: Awake
       Entry: 5
-      Data: false
+      Data: true
     - Name: Start
       Entry: 5
       Data: false
@@ -313,6 +308,12 @@ MonoBehaviour:
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 6
+    - Name: priority
+      Entry: 3
+      Data: 50
     - Name: 
       Entry: 8
       Data: 
@@ -334,12 +335,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 17|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 7
-    - Name: priority
-      Entry: 3
-      Data: 100
     - Name: Awake
       Entry: 5
       Data: true
@@ -352,6 +347,12 @@ MonoBehaviour:
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 7
+    - Name: priority
+      Entry: 3
+      Data: 100
     - Name: 
       Entry: 8
       Data: 
@@ -366,31 +367,31 @@ MonoBehaviour:
       Data: 18|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.SceneEditor.SceneEditorCanvasC, PRO.SceneEditor.Assembly
+      Data: PRO.LogPanelC, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 19|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
+    - Name: Awake
+      Entry: 5
+      Data: true
+    - Name: Start
+      Entry: 5
+      Data: false
+    - Name: Update
+      Entry: 5
+      Data: false
+    - Name: LateUpdate
+      Entry: 5
+      Data: false
     - Name: script
       Entry: 10
       Data: 8
     - Name: priority
       Entry: 3
-      Data: 102
-    - Name: Awake
-      Entry: 5
-      Data: false
-    - Name: Start
-      Entry: 5
-      Data: true
-    - Name: Update
-      Entry: 5
-      Data: true
-    - Name: LateUpdate
-      Entry: 5
-      Data: false
+      Data: 101
     - Name: 
       Entry: 8
       Data: 
@@ -405,31 +406,31 @@ MonoBehaviour:
       Data: 20|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.GameMainUIC, PRO.Assembly
+      Data: PRO.SceneEditor.SceneEditorCanvasC, PRO.SceneEditor.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 21|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
-    - Name: script
-      Entry: 10
-      Data: 9
-    - Name: priority
-      Entry: 3
-      Data: 104
     - Name: Awake
       Entry: 5
-      Data: true
+      Data: false
     - Name: Start
       Entry: 5
-      Data: false
+      Data: true
     - Name: Update
       Entry: 5
       Data: true
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 9
+    - Name: priority
+      Entry: 3
+      Data: 101
     - Name: 
       Entry: 8
       Data: 
@@ -444,19 +445,52 @@ MonoBehaviour:
       Data: 22|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: PRO.Console.ConsolePanelC, Console.Assembly
+      Data: PRO.GameMainUIC, PRO.Assembly
     - Name: 
       Entry: 8
       Data: 
     - Name: $v
       Entry: 7
       Data: 23|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
+    - Name: Awake
+      Entry: 5
+      Data: true
+    - Name: Start
+      Entry: 5
+      Data: false
+    - Name: Update
+      Entry: 5
+      Data: true
+    - Name: LateUpdate
+      Entry: 5
+      Data: false
     - Name: script
       Entry: 10
       Data: 10
     - Name: priority
       Entry: 3
-      Data: 500
+      Data: 101
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 7
+      Data: 24|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: PRO.Console.ConsolePanelC, Console.Assembly
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: $v
+      Entry: 7
+      Data: 25|PRO.Tool.MonoScriptPriority+Item, PRO.GenericFramework.Assembly
     - Name: Awake
       Entry: 5
       Data: false
@@ -469,6 +503,12 @@ MonoBehaviour:
     - Name: LateUpdate
       Entry: 5
       Data: false
+    - Name: script
+      Entry: 10
+      Data: 11
+    - Name: priority
+      Entry: 3
+      Data: 500
     - Name: 
       Entry: 8
       Data: 
@@ -483,18 +523,18 @@ MonoBehaviour:
       Data: 
     - Name: assetDic
       Entry: 7
-      Data: 24|System.Collections.Generic.Dictionary`2[[UnityEditor.MonoScript, UnityEditor.CoreModule],[PRO.Tool.MonoScriptPriority+Item,
+      Data: 26|System.Collections.Generic.Dictionary`2[[UnityEditor.MonoScript, UnityEditor.CoreModule],[PRO.Tool.MonoScriptPriority+Item,
         PRO.GenericFramework.Assembly]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 25|System.Collections.Generic.ObjectEqualityComparer`1[[UnityEditor.MonoScript,
+      Data: 27|System.Collections.Generic.ObjectEqualityComparer`1[[UnityEditor.MonoScript,
         UnityEditor.CoreModule]], mscorlib
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 12
-      Data: 11
+      Data: 12
     - Name: 
       Entry: 7
       Data: 
@@ -628,6 +668,18 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 11
+    - Name: $v
+      Entry: 9
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -635,11 +687,11 @@ MonoBehaviour:
       Data: 
     - Name: list
       Entry: 7
-      Data: 26|System.Collections.Generic.List`1[[PRO.Tool.MonoScriptPriority+Item,
+      Data: 28|System.Collections.Generic.List`1[[PRO.Tool.MonoScriptPriority+Item,
         PRO.GenericFramework.Assembly]], mscorlib
     - Name: 
       Entry: 12
-      Data: 11
+      Data: 12
     - Name: 
       Entry: 9
       Data: 3
@@ -673,6 +725,9 @@ MonoBehaviour:
     - Name: 
       Entry: 9
       Data: 23
+    - Name: 
+      Entry: 9
+      Data: 25
     - Name: 
       Entry: 13
       Data: 

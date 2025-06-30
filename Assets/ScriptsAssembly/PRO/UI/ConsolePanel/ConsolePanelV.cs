@@ -46,6 +46,7 @@ namespace PRO.Console
 
             public static void InitPool(GameObject prefab, ConsolePanelC panel)
             {
+                var content = prefab.transform.parent;
                 pool = new GameObjectPool_NoMono<OneLog>(prefab, panel.transform);
                 pool.CreateEvent += t =>
                 {
@@ -60,7 +61,7 @@ namespace PRO.Console
                 pool.TakeOutEvent += t =>
                 {
                     queue.Enqueue(t);
-                    t.transform.parent = prefab.transform.parent;
+                    t.transform.parent = content;
                 };
             }
         }

@@ -3,7 +3,7 @@ using System;
 using static PRO.LogPanelM;
 namespace PRO
 {
-    public class LogPanelC : UIControllerBase
+    public class LogPanelC : UIControllerBase, ITime_Awake
     {
         public static LogPanelC Inst { get; private set; }
         public override UIViewBase View => view;
@@ -15,7 +15,7 @@ namespace PRO
             base.Init(uiName);
             OneLog.InitPool(view.LogPrefab, transform);
         }
-        void Awake()
+        public void TimeAwake()
         {
             Init("");
         }

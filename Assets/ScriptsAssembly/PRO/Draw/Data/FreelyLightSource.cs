@@ -1,5 +1,6 @@
 ﻿using PRO.Disk;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace PRO
 {
@@ -17,6 +18,7 @@ namespace PRO
             get { return gloabPos; }
             set
             {
+                Profiler.BeginSample("123");
                 if (value == null)
                 {
                     if (gloabPos != null)
@@ -38,7 +40,7 @@ namespace PRO
                     }
                 }
                 gloabPos = value;
-
+                Profiler.EndSample();
             }
         }
         public int Radius

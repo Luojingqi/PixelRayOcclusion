@@ -17,7 +17,7 @@ namespace PRO
         /// <summary>
         /// 上一帧更新花费的时间
         /// </summary>
-        public static float deltaTime;
+        public static float deltaTime { get; private set; }
         /// <summary>
         /// 是否启用更新
         /// </summary>
@@ -34,7 +34,6 @@ namespace PRO
         {
             Inst = this;
             Physics2D.simulationMode = SimulationMode2D.Script;
-            Text = GameObject.Find("UI/GameMainCanvas/pixel").GetComponent<TMP_Text>();
         }
         private float a = 0;
         private void Update()
@@ -53,6 +52,7 @@ namespace PRO
 
             ScriptUpdate(Time.deltaTime);
 
+            #region 主线程事件轮训
             if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))
             {
                 try { event_AddTo_MainThreadUpdateQueue_UnClear?.Invoke(); }
@@ -63,6 +63,7 @@ namespace PRO
                 try { mainThreadUpdateEvent_Clear?.Invoke(); mainThreadUpdateEvent_Clear = null; }
                 finally { Monitor.Exit(mainThreadUpdateEventLock_Clear); }
             }
+            #endregion
         }
 
         public void ScriptUpdate(float deltaTime)
@@ -78,56 +79,63 @@ namespace PRO
 
             for (int i = 0; i < time_Update.Count; i++)
                 foreach (var mono in time_Update.FormIndex(i))
-                    mono.TimeUpdate();
+                    if (mono.isActiveAndEnabled)
+                        mono.TimeUpdate();
             for (int i = 0; i < time_LastUpdate.Count; i++)
                 foreach (var mono in time_LastUpdate.FormIndex(i))
-                    mono.TimeLateUpdate();
+                    if (mono.isActiveAndEnabled)
+                        mono.TimeLateUpdate();
 
             #region 添加mono组件
             while (addQueue.Count > 0)
-                AddMono(addQueue.Dequeue());
+            {
+                var mono = addQueue.Dequeue();
+                if (mono.isActiveAndEnabled == false) continue;
+                if (mono.IsInit == false)
+                {
+                    initAwakeQueue.Enqueue(mono, mono.Priority);
+                    mono.IsInit = true;
+                }
+                { if (mono is ITime_Update i) time_Update.Add(i, mono.Priority); }
+                { if (mono is ITime_LateUpdate i) time_LastUpdate.Add(i, mono.Priority); }
+            }
             #endregion
             #region 初始化mono组件
-            if (initQueue.Count > 0)
+            if (initAwakeQueue.Count > 0)
             {
-                while (initQueue.Count > 0)
+                while (initAwakeQueue.Count > 0)
                 {
-                    var mono = initQueue.Dequeue();
-                    initQueueTemp.Add(mono);
+                    var mono = initAwakeQueue.Dequeue();
+                    if (mono.isActiveAndEnabled == false) continue;
+                    initStartList.Add(mono);
                     { if (mono is ITime_Awake i) i.TimeAwake(); }
                 }
-                foreach (var mono in initQueueTemp)
+                foreach (var mono in initStartList)
                 { if (mono is ITime_Start i) i.TimeStart(); }
 
-                initQueueTemp.Clear();
+                initStartList.Clear();
             }
             #endregion
             #region 移除mono组件
             while (removeQueue.Count > 0)
-                RemoveMono(removeQueue.Dequeue());
+            {
+                var mono = removeQueue.Dequeue();
+                if (mono.isActiveAndEnabled == true) continue;
+                { if (mono is ITime_Update i) time_Update.Remove(i, mono.Priority); }
+                { if (mono is ITime_LateUpdate i) time_LastUpdate.Remove(i, mono.Priority); }
+            }
             #endregion
         }
 
 
         private SortList<ITime_Update> time_Update = new SortList<ITime_Update>(20);
         private SortList<ITime_LateUpdate> time_LastUpdate = new SortList<ITime_LateUpdate>(20);
-        private PriorityQueue<MonoScriptBase> initQueue = new PriorityQueue<MonoScriptBase>(20);
-        private List<MonoScriptBase> initQueueTemp = new List<MonoScriptBase>();
-        private void AddMono(MonoScriptBase mono)
-        {
-            if (mono.IsInit == false)
-            {
-                initQueue.Enqueue(mono, mono.Priority);
-                mono.IsInit = true;
-            }
-            { if (mono is ITime_Update i) time_Update.Add(i, mono.Priority); }
-            { if (mono is ITime_LateUpdate i) time_LastUpdate.Add(i, mono.Priority); }
-        }
-        private void RemoveMono(MonoScriptBase mono)
-        {
-            { if (mono is ITime_Update i) time_Update.Remove(i, mono.Priority); }
-            { if (mono is ITime_LateUpdate i) time_LastUpdate.Remove(i, mono.Priority); }
-        }
+
+
+        private PriorityQueue<MonoScriptBase> initAwakeQueue = new PriorityQueue<MonoScriptBase>(20);
+        private List<MonoScriptBase> initStartList = new List<MonoScriptBase>();
+
+
         private Queue<MonoScriptBase> addQueue = new Queue<MonoScriptBase>();
         private Queue<MonoScriptBase> removeQueue = new Queue<MonoScriptBase>();
         public void MonoQueueAdd(MonoScriptBase mono) => addQueue.Enqueue(mono);
@@ -178,8 +186,7 @@ namespace PRO
             var manual = resetEventPool.TakeOut();
             lock (mainThreadUpdateEventLock_Clear)
             {
-                mainThreadUpdateEvent_Clear += action;
-                mainThreadUpdateEvent_Clear += () => manual.Set();
+                mainThreadUpdateEvent_Clear += () => { action(); manual.Set(); };
             }
             manual.WaitOne();
             resetEventPool.PutIn(manual);
@@ -220,21 +227,23 @@ namespace PRO
     {
         public int Priority { get; }
         public bool IsInit { get; set; }
+
+        public bool isActiveAndEnabled { get; }
     }
 
-    public interface ITime_Awake
+    public interface ITime_Awake : ITime
     {
         public void TimeAwake();
     }
-    public interface ITime_Start
+    public interface ITime_Start : ITime
     {
         public void TimeStart();
     }
-    public interface ITime_Update
+    public interface ITime_Update : ITime
     {
         public void TimeUpdate();
     }
-    public interface ITime_LateUpdate
+    public interface ITime_LateUpdate : ITime
     {
         public void TimeLateUpdate();
     }

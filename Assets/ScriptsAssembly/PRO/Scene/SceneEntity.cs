@@ -9,14 +9,13 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using static PRO.BlockMaterial;
-using static UnityEngine.ParticleSystem;
 
 namespace PRO
 {
     /// <summary>
     /// 场景实体类，在游戏运行时存储场景运行数据
     /// </summary>
-    public class SceneEntity : ITime_Update
+    public class SceneEntity
     {
         private struct OneBlock
         {
@@ -107,69 +106,51 @@ namespace PRO
             block.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
             ThreadPool.QueueUserWorkItem((obj) =>
             {
-                if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\block", Proto.BlockBaseData.Parser, out var blockData)
-                && IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\background", Proto.BlockBaseData.Parser, out var backgroundData))
+                if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockData", Proto.BlockBaseData.Parser, out var blockBaseData))
                 {
-
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
                         try
                         {
-                            block.ToRAM(blockData, this);
+                            block.ToRAM(blockBaseData, this);
+                            background.ToRAM(blockBaseData, this);
+                            blockBaseData.ClearPutIn();
                         }
-                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
-                    });
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        try
-                        {
-                            background.ToRAM(backgroundData, this);
-                        }
-                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
+                        catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
                     });
                 }
                 else
                 {
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
-                        var block_ = obj as Block;
-                        try
-                        {
-                            for (int x = 0; x < Block.Size.x; x++)
-                                for (int y = 0; y < Block.Size.y; y++)
-                                {
-
-                                    Pixel pixel;
-                                    lock (Pixel.pixelPool)
-                                        pixel = Pixel.pixelPool.TakeOut();
-                                    Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
-                                    block_.SetPixel(pixel, false, false, false);
-                                    block_.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                                }
-                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => BlockMaterial.SetBlock(block_));
-                        }
-                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
-                    }, block);
-                    ThreadPool.QueueUserWorkItem((obj) =>
+                    try
                     {
-                        var background_ = obj as BackgroundBlock;
-                        try
-                        {
-                            for (int x = 0; x < Block.Size.x; x++)
-                                for (int y = 0; y < Block.Size.y; y++)
-                                {
-                                    Pixel pixel;
-                                    lock (Pixel.pixelPool)
+                        for (int x = 0; x < Block.Size.x; x++)
+                            for (int y = 0; y < Block.Size.y; y++)
+                            {
+
+                                Pixel pixel;
+                                lock (Pixel.pixelPool)
+                                    pixel = Pixel.pixelPool.TakeOut();
+                                Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
+                                block.SetPixel(pixel, false, false, false);
+                                block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+
+                                lock (Pixel.pixelPool)
                                         //  pixel = Pixel.pixelPool.TakeOut();
                                         //Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
-                                        pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
-                                    background_.SetPixel(pixel, false, false, false);
-                                    background_.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                                }
-                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => BlockMaterial.SetBackgroundBlock(background_));
-                        }
-                        catch (Exception e) { TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => Log.Print($"线程报错：{e}", Color.red)); }
-                    }, background);
+                                    pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
+                                background.SetPixel(pixel, false, false, false);
+                                background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                            }
+                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+                        {
+                            BlockMaterial.SetBlock(block);
+                            BlockMaterial.SetBackgroundBlock(background);
+                        });
+                    }
+                    catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
+                });
                 }
             });
             if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockParticleData", Proto.BlockParticleData.Parser, out var BlockParticleData))
@@ -228,8 +209,8 @@ namespace PRO
                 foreach (string guid in diskData.BuildingGuidIndexDic.Keys)
                     SaveBuilding(guid);
             IOTool.SaveProto($@"{path}\BlockData", diskData);
-            File.Delete($@"{path}\BlockParticleData.proto");
-            File.Delete($@"{path}\BlockRoleData.proto");
+            File.Delete($@"{path}\BlockParticleData{IOTool.protoExtension}");
+            File.Delete($@"{path}\BlockRoleData{IOTool.protoExtension}");
             diskData.ClearPutIn();
         }
 
@@ -262,66 +243,79 @@ namespace PRO
 
         public void SaveAll()
         {
+
             ThreadPool.QueueUserWorkItem((obj) =>
             {
-                #region 保存  Block  Building
-                foreach (var blockPos in BlockBaseInRAM)
-                    SaveBlockData(blockPos, false);
-                foreach (var building in BuildingInRAM.Values)
-                    SaveBuilding(building);
-                #endregion
+                try
+                {
+                    #region 保存  Block  Building
+                    foreach (var blockPos in BlockBaseInRAM)
+                        SaveBlockData(blockPos, false);
+                    foreach (var building in BuildingInRAM.Values)
+                        SaveBuilding(building);
+                    #endregion
 
-                #region 保存  Particle
-                foreach (var particle in ActiveParticleSet)
-                {
-                    var blockPos = Block.WorldToGlobal(particle.transform.position);
-                    if (JumpOutSceneParticleDic.TryGetValue(blockPos, out var jumpList))
-                        jumpList.Add(particle);
-                    else
-                        JumpOutSceneParticleDic.Add(blockPos, new List<Particle>() { particle });
-                }
-                var blockParticleData = Proto.ProtoPool.TakeOut<Proto.BlockParticleData>();
-                foreach (var kv in JumpOutSceneParticleDic)
-                {
-                    foreach (var particle in kv.Value)
-                        if (particle.loadPath != "技能播放")
-                            blockParticleData.Value.Add(particle.ToDisk());
-                    if (BlockBaseInRAM.Contains(kv.Key) == false)
-                        foreach (var particle in kv.Value)
-                            ParticleManager.Inst.PutIn(particle);
-                    IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockParticleData", blockParticleData);
-                    blockParticleData.Clear();
-                }
-                Proto.ProtoPool.PutIn(blockParticleData);
-                JumpOutSceneParticleDic.Clear();
-                #endregion
+                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+                    {
+                        #region 保存  Particle
+                        //粒子分组
+                        foreach (var particle in ActiveParticleSet)
+                        {
+                            var blockPos = Block.WorldToBlock(particle.transform.position);
+                            if (JumpOutSceneParticleDic.TryGetValue(blockPos, out var jumpList))
+                                jumpList.Add(particle);
+                            else
+                                JumpOutSceneParticleDic.Add(blockPos, new List<Particle>() { particle });
+                        }
+                        var blockParticleData = Proto.ProtoPool.TakeOut<Proto.BlockParticleData>();
+                        foreach (var kv in JumpOutSceneParticleDic)
+                        {
+                            foreach (var particle in kv.Value)
+                                if (particle.loadPath != "技能播放")
+                                    blockParticleData.Value.Add(particle.ToDisk());
+                            if (BlockBaseInRAM.Contains(kv.Key) == false)
+                                foreach (var particle in kv.Value)
+                                    ParticleManager.Inst.PutIn(particle);
+                            IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockParticleData", blockParticleData);
+                            blockParticleData.Clear();
+                        }
+                        Proto.ProtoPool.PutIn(blockParticleData);
+                        JumpOutSceneParticleDic.Clear();
+                        #endregion
 
-                #region 保存  Role
-                foreach (var role in Role_Guid_Dic.Values)
-                {
-                    var blockPos = Block.WorldToGlobal(role.transform.position);
-                    if (JumpOutSceneRoleDic.TryGetValue(blockPos, out var jumpList))
-                        jumpList.Add(role);
-                    else
-                        JumpOutSceneRoleDic.Add(blockPos, new List<Role>() { role });
+                        #region 保存  Role
+                        foreach (var role in Role_Guid_Dic.Values)
+                        {
+                            var blockPos = Block.WorldToBlock(role.transform.position);
+                            if (JumpOutSceneRoleDic.TryGetValue(blockPos, out var jumpList))
+                                jumpList.Add(role);
+                            else
+                                JumpOutSceneRoleDic.Add(blockPos, new List<Role>() { role });
+                        }
+                        var blockRoleData = Proto.ProtoPool.TakeOut<Proto.BlockRoleData>();
+                        foreach (var kv in JumpOutSceneRoleDic)
+                        {
+                            foreach (var role in kv.Value)
+                                blockRoleData.Value.Add(role.ToDisk());
+                            if (BlockBaseInRAM.Contains(kv.Key) == false)
+                                foreach (var role in kv.Value)
+                                    RoleManager.Inst.PutIn(role);
+                            IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockRoleData", blockRoleData);
+                            blockRoleData.Clear();
+                            Debug.Log(kv.Key + "保存");
+                        }
+                        Proto.ProtoPool.PutIn(blockRoleData);
+                        JumpOutSceneRoleDic.Clear();
+                        #endregion
+                    });
                 }
-                var blockRoleData = Proto.ProtoPool.TakeOut<Proto.BlockRoleData>();
-                foreach (var kv in JumpOutSceneRoleDic)
-                {
-                    foreach (var role in kv.Value)
-                        blockRoleData.Value.Add(role.ToDisk());
-                    if (BlockBaseInRAM.Contains(kv.Key) == false)
-                        foreach (var role in kv.Value)
-                            RoleManager.Inst.PutIn(role);
-                    IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockRoleData", blockRoleData);
-                    blockRoleData.Clear();
-                }
-                Proto.ProtoPool.PutIn(blockRoleData);
-                JumpOutSceneRoleDic.Clear();
-                #endregion
-
-                sceneCatalog.Save();
+                catch (Exception e) { Debug.Log(e); }
             });
+
+        
+
+            sceneCatalog.Save();
+
         }
 
         public void LoadAll()
@@ -388,6 +382,9 @@ namespace PRO
 
         public void TimeUpdate()
         {
+            if (Input.GetKeyDown(KeyCode.U))
+                SaveAll();
+
             #region 更新  火焰
             {
                 time火焰 += TimeManager.deltaTime;

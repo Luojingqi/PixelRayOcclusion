@@ -6,7 +6,7 @@ using UnityEngine;
 namespace PRO
 {
 
-    public class SceneManager : MonoScriptBase, ITime_Awake, ITime_Update, ITime_LateUpdate
+    public class SceneManager : MonoScriptBase, ITime_Awake, ITime_Start, ITime_Update, ITime_LateUpdate
     {
 
         public static SceneManager Inst;
@@ -34,7 +34,7 @@ namespace PRO
             Inst = this;
             DontDestroyOnLoad(this);
             PoolNode = new GameObject("PoolNode").transform;
-            DontDestroyOnLoad (PoolNode);
+            DontDestroyOnLoad(PoolNode);
             BlockMaterial.Init();
             Pixel.LoadPixelTypeInfo();
             Pixel.¿ÕÆø = Pixel.TakeOut("¿ÕÆø", 0, new());
@@ -42,6 +42,9 @@ namespace PRO
             Block.InitPool();
             BackgroundBlock.InitPool();
             Texture2DPool.InitPool();
+        }
+        public void TimeStart()
+        { 
             foreach (var buildingType in ReflectionTool.GetDerivedClasses(typeof(BuildingBase)))
                 SceneEntity.BuildingTypeDic.Add(buildingType.Name, buildingType);
             //GameSaveManager.Inst.CreateGameSaveFile("testSave");

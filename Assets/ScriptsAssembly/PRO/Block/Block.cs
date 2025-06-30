@@ -614,7 +614,6 @@ namespace PRO
             {
                 GreedyCollider.CreateColliderAction(this, colliderDataList);
                 BlockMaterial.SetBlock(this);
-                diskData.ClearPutIn();
             });
         }
     }
