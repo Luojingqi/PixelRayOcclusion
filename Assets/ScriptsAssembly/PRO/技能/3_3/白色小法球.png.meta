@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 14cf2812872cd6e48b2dc2168c6d1340
+guid: 70927e99fe31ab641b69b5feea94cb98
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "QQ\u56FE\u724720250313100107_0"
+      name: "\u767D\u8272\u5C0F\u6CD5\u7403_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 200
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2df1ea78c592e945a908c5a8900eec2
-      internalID: -1686922539
+      spriteID: fd79d19aefee4294c8e6d2c4a86ddeb0
+      internalID: -394201461
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "QQ\u56FE\u724720250313100107_1"
+      name: "\u767D\u8272\u5C0F\u6CD5\u7403_1"
       rect:
         serializedVersion: 2
-        x: 200
+        x: 10
         y: 0
-        width: 200
-        height: 200
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d9846a0025865bf4a9774d7b59a3f4ee
-      internalID: -1468411228
+      spriteID: 4aecb43a26d688f43acb2f7b8ea489e2
+      internalID: -390673903
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "QQ\u56FE\u724720250313100107_2"
+      name: "\u767D\u8272\u5C0F\u6CD5\u7403_2"
       rect:
         serializedVersion: 2
-        x: 400
+        x: 20
         y: 0
-        width: 200
-        height: 200
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,71 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f6c8dadafa92252498657158a4f831e2
-      internalID: -920536997
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "QQ\u56FE\u724720250313100107_3"
-      rect:
-        serializedVersion: 2
-        x: 600
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8dacaef21a43c5a4ea28980ffcc0ab2f
-      internalID: -1612662304
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "QQ\u56FE\u724720250313100107_4"
-      rect:
-        serializedVersion: 2
-        x: 800
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 84edafe7fcbd1a1408358f36472ac0cf
-      internalID: -1588319477
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "QQ\u56FE\u724720250313100107_5"
-      rect:
-        serializedVersion: 2
-        x: 1000
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bd8ad9b7211380d4d8e757578f324e02
-      internalID: -1149423060
+      spriteID: 9e1e20d870bade1489c4302f43113d25
+      internalID: 1600883006
       vertices: []
       indices: 
       edges: []
@@ -246,12 +183,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "QQ\u56FE\u724720250313100107_0": -1686922539
-      "QQ\u56FE\u724720250313100107_1": -1468411228
-      "QQ\u56FE\u724720250313100107_2": -920536997
-      "QQ\u56FE\u724720250313100107_3": -1612662304
-      "QQ\u56FE\u724720250313100107_4": -1588319477
-      "QQ\u56FE\u724720250313100107_5": -1149423060
+      "\u767D\u8272\u5C0F\u6CD5\u7403_0": -394201461
+      "\u767D\u8272\u5C0F\u6CD5\u7403_1": -390673903
+      "\u767D\u8272\u5C0F\u6CD5\u7403_2": 1600883006
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

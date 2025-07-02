@@ -26,19 +26,23 @@ namespace PRO.Skill.Proto {
           string.Concat(
             "ChxPcGVyYXRlUmVjb3JkUmF5U2VsZWN0LnByb3RvEg9QUk8uU2tpbGwuUHJv",
             "dG8aO1BSTy5HZW5lcmljRnJhbWV3b3JrL1Byb3RvYnVmL0RhdGFTdHJ1Y3R1",
-            "cmUvQmFzaWNEYXRhLnByb3RvImIKFk9wZXJhdGVSZWNvcmRSYXlTZWxlY3QS",
+            "cmUvQmFzaWNEYXRhLnByb3RvInIKFk9wZXJhdGVSZWNvcmRSYXlTZWxlY3QS",
             "JAoIU3RhcnRQb3MYASABKAsyEi5QUk8uUHJvdG8uVmVjdG9yMhIiCgZFbmRQ",
-            "b3MYAiABKAsyEi5QUk8uUHJvdG8uVmVjdG9yMmIGcHJvdG8z"));
+            "b3MYAiABKAsyEi5QUk8uUHJvdG8uVmVjdG9yMhIOCgZCeVJvbGUYAyABKAli",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::PRO.Proto.BasicDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Skill.Proto.OperateRecordRaySelect), global::PRO.Skill.Proto.OperateRecordRaySelect.Parser, new[]{ "StartPos", "EndPos" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::PRO.Skill.Proto.OperateRecordRaySelect), global::PRO.Skill.Proto.OperateRecordRaySelect.Parser, new[]{ "StartPos", "EndPos", "ByRole" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
+  /// <summary>
+  ///操作消息：射线选择
+  /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class OperateRecordRaySelect : pb::IMessage<OperateRecordRaySelect>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -76,6 +80,7 @@ namespace PRO.Skill.Proto {
     public OperateRecordRaySelect(OperateRecordRaySelect other) : this() {
       startPos_ = other.startPos_ != null ? other.startPos_.Clone() : null;
       endPos_ = other.endPos_ != null ? other.endPos_.Clone() : null;
+      byRole_ = other.byRole_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -88,6 +93,9 @@ namespace PRO.Skill.Proto {
     /// <summary>Field number for the "StartPos" field.</summary>
     public const int StartPosFieldNumber = 1;
     private global::PRO.Proto.Vector2 startPos_;
+    /// <summary>
+    ///射线起点
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::PRO.Proto.Vector2 StartPos {
@@ -100,12 +108,30 @@ namespace PRO.Skill.Proto {
     /// <summary>Field number for the "EndPos" field.</summary>
     public const int EndPosFieldNumber = 2;
     private global::PRO.Proto.Vector2 endPos_;
+    /// <summary>
+    ///射线终点
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::PRO.Proto.Vector2 EndPos {
       get { return endPos_; }
       set {
         endPos_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "ByRole" field.</summary>
+    public const int ByRoleFieldNumber = 3;
+    private string byRole_ = "";
+    /// <summary>
+    ///射线目标
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ByRole {
+      get { return byRole_; }
+      set {
+        byRole_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -126,6 +152,7 @@ namespace PRO.Skill.Proto {
       }
       if (!object.Equals(StartPos, other.StartPos)) return false;
       if (!object.Equals(EndPos, other.EndPos)) return false;
+      if (ByRole != other.ByRole) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -135,6 +162,7 @@ namespace PRO.Skill.Proto {
       int hash = 1;
       if (startPos_ != null) hash ^= StartPos.GetHashCode();
       if (endPos_ != null) hash ^= EndPos.GetHashCode();
+      if (ByRole.Length != 0) hash ^= ByRole.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -161,6 +189,10 @@ namespace PRO.Skill.Proto {
         output.WriteRawTag(18);
         output.WriteMessage(EndPos);
       }
+      if (ByRole.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(ByRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -179,6 +211,10 @@ namespace PRO.Skill.Proto {
         output.WriteRawTag(18);
         output.WriteMessage(EndPos);
       }
+      if (ByRole.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(ByRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -194,6 +230,9 @@ namespace PRO.Skill.Proto {
       }
       if (endPos_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(EndPos);
+      }
+      if (ByRole.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ByRole);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -218,6 +257,9 @@ namespace PRO.Skill.Proto {
           EndPos = new global::PRO.Proto.Vector2();
         }
         EndPos.MergeFrom(other.EndPos);
+      }
+      if (other.ByRole.Length != 0) {
+        ByRole = other.ByRole;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -250,6 +292,10 @@ namespace PRO.Skill.Proto {
               EndPos = new global::PRO.Proto.Vector2();
             }
             input.ReadMessage(EndPos);
+            break;
+          }
+          case 26: {
+            ByRole = input.ReadString();
             break;
           }
         }
@@ -285,6 +331,10 @@ namespace PRO.Skill.Proto {
             input.ReadMessage(EndPos);
             break;
           }
+          case 26: {
+            ByRole = input.ReadString();
+            break;
+          }
         }
       }
     }
@@ -315,6 +365,7 @@ EndPos.Clear();
 PRO.Proto.ProtoPool.PutIn(EndPos);
 EndPos = null;
 }
+ByRole = string.Empty;
 }
 public void ClearPutIn()
 {

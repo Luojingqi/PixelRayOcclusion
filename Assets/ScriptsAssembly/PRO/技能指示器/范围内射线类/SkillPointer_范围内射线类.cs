@@ -1,14 +1,11 @@
-using PRO;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace PRO
+namespace PRO.Skill
 {
     public class SkillPointer_范围内射线类 : SkillPointer_范围内选择类
     {
-
-
         [OdinSerialize]
         [ShowInInspector]
         public float Density

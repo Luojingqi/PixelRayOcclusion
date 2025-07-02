@@ -8,7 +8,7 @@ namespace PRO.TurnBased
     /// <summary>
     /// T1阶段：技能目标选择
     /// </summary>
-    public abstract class OperateStateBase_T1 : IFSMState<OperateStateEnum>, MCTS.I
+    public abstract class OperateStateBase_T1 : IFSMState<OperateStateEnum>
     {
         public abstract OperateFSMBase Operate { get; set; }
         public FSMManager<OperateStateEnum> FSM { get => Operate; set => Operate = (OperateFSMBase)value; }
@@ -123,7 +123,7 @@ namespace PRO.TurnBased
         }
         public void RotateToMouse(Transform transform, Vector2Int center, Vector2Int offset) => RotateToMouse(transform, Block.GlobalToWorld(center), Block.GlobalToWorld(offset));
 
-        public abstract void 扩展节点(ref List<IOperateRecord> operateRecordList);
+        public abstract void 扩展节点(ref ReusableList<IOperateRecord> operateRecordList);
 
         public abstract void 节点执行(IOperateRecord operateRecord);
     }

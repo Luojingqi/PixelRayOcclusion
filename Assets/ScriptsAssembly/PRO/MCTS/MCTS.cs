@@ -1,11 +1,5 @@
-﻿using PRO.TurnBased;
-using PRO;
-using PRO.DataStructure;
+﻿using PRO.Skill;
 using PRO.Tool;
-using System.Collections.Generic;
-using UnityEngine;
-using static PRO.BlockMaterial;
-using PRO.Skill;
 
 namespace PRO
 {
@@ -160,11 +154,5 @@ namespace PRO
         //        now = next;
         //    }
         //}
-
-        public interface I
-        {
-            public void 扩展节点(ref List<IOperateRecord> operateRecordList);
-            public void 节点执行(IOperateRecord operateRecord);
-        }
     }
 }

@@ -85,6 +85,9 @@ namespace PRO.SkillEditor
 }
 namespace PRO
 {
+    /// <summary>
+    /// 像素坐标旋转类，像素坐标根据此类进行旋转，得到旋转后像素坐标
+    /// </summary>
     public struct PixelPosRotate
     {
         public int z90Num;

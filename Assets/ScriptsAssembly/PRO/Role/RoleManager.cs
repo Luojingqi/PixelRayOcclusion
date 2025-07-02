@@ -1,4 +1,5 @@
-﻿using PRO.Tool;
+﻿using PRO.Skill;
+using PRO.Tool;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,5 +44,8 @@ namespace PRO
             rolePoolDic[role.RoleTypeName].PutIn(role);
             role.PutIn();
         }
+
+
+        public readonly SkillPointerAsset SkillPointerAsset;
     }
 }

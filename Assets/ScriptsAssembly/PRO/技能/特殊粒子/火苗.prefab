@@ -122,23 +122,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6352315385668635298}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e17c80cf19c757c4e991092e20965603, type: 3}
+  m_Script: {fileID: 11500000, guid: bf445e94fc6f3e44e94cf8c0381ad89f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: priority
-      Entry: 3
-      Data: -1
   spriteList:
+  - {fileID: 717849658, guid: 760b2887a6c88f4489e1f540ed8dc996, type: 3}
   - {fileID: -1627140730, guid: 760b2887a6c88f4489e1f540ed8dc996, type: 3}
   - {fileID: -723014618, guid: 760b2887a6c88f4489e1f540ed8dc996, type: 3}
   - {fileID: -1417370779, guid: 760b2887a6c88f4489e1f540ed8dc996, type: 3}
-  - {fileID: 1912263255, guid: 760b2887a6c88f4489e1f540ed8dc996, type: 3}

@@ -1,7 +1,6 @@
-using PRO;
 using Sirenix.OdinInspector;
 using UnityEngine;
-namespace PRO
+namespace PRO.Skill
 {
     public abstract class SkillPointerBase : SerializedMonoBehaviour
     {

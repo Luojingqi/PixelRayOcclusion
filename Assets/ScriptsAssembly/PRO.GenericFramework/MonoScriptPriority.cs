@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace PRO.Tool
 {
-    [CreateAssetMenu(menuName = "创建")]
+    //[CreateAssetMenu(menuName = "创建")]
     public class MonoScriptPriority : SerializedScriptableObject
     {
         public class Item

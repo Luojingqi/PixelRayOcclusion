@@ -16,8 +16,10 @@ namespace PRO
         public 施法方式 施法type;
         public List<StartCombatEffectData> StartCombatEffectDataList = new List<StartCombatEffectData>();
 
+        public string SkillPointerLoadPath;
         public class Viewer
         {
+            [ReadOnly]
             public string id;
             [ReadOnly]
             public SkillConfig config;
@@ -33,6 +35,13 @@ namespace PRO
             [TableList]
             public List<StartCombatEffectData> 伤害 { get => config.StartCombatEffectDataList;set { config.StartCombatEffectDataList = value; } }
 
+            [ValueDropdown(nameof(Dropdown指示器加载路径))]
+            [ShowInInspector]
+            public string 指示器加载路径 { get => config.SkillPointerLoadPath; set => config.SkillPointerLoadPath = value; }
+            private string[] Dropdown指示器加载路径()
+            {
+                return new string[] { "123" };
+            }
 
             public Viewer(string id, SkillConfig config)
             {

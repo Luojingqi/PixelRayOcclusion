@@ -3,10 +3,13 @@
 import "PRO.GenericFramework/Protobuf/DataStructure/BasicData.proto";
 
 package PRO.Skill.Proto;
-
+//操作消息：射线选择
 message OperateRecordRaySelect
 {
+	//射线起点
 	PRO.Proto.Vector2 StartPos = 1;
+	//射线终点
 	PRO.Proto.Vector2 EndPos = 2;
-
+	//射线目标
+	string ByRole = 3;
 }

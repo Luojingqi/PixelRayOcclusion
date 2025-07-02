@@ -1,7 +1,6 @@
-using PRO;
 using UnityEngine;
 
-namespace PRO
+namespace PRO.Skill
 {
     public class SkillPointer_箭头类 : SkillPointerBase
     {
@@ -22,7 +21,7 @@ namespace PRO
             Center.rotation = Quaternion.identity;
         }
         public void UpdatePointer()
-        {            
+        {
             Center.rotation = Quaternion.FromToRotation(Vector3.up, MousePoint.mousePos);
         }
     }

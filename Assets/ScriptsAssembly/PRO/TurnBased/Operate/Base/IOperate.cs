@@ -1,7 +1,7 @@
-﻿namespace PRO
+﻿namespace PRO.Skill
 {
-    public interface IOperate_范围选择
+    public interface ISkillPointer
     {
-        public SkillPointer_范围内选择类 SkillPointer { get; set; }
+        public SkillPointerBase SkillPointer { get; set; }
     }
 }

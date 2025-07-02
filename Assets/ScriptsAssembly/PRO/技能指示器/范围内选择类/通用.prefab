@@ -158,115 +158,123 @@ MonoBehaviour:
   m_GameObject: {fileID: 6004400880972091283}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdd5ce2322d9294cb8551633e0f1100, type: 3}
+  m_Script: {fileID: 11500000, guid: 94ec4f31569a6db4a8ef1a5d5715f72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: -523463430, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1487607057, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1931733535, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1256608772, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 936333220, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1939856618, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 150536725, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 2042420615, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1199764855, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 895698026, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1720653818, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1559427548, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1459990057, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 568399471, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1464787167, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1403624040, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -573978146, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1072950590, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 910236181, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 641138019, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -2030803871, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -834249760, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -987671024, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1740933299, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1686220104, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 354240645, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1889816141, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 2026183623, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 401918961, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1166609492, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1857497457, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1659098638, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1485772859, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1553211043, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1173256685, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -181723369, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -890729037, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -35548148, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1455058310, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -385990981, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1803074492, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1430736370, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1277923391, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -158512119, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 27740532, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1581878383, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1009770624, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1270674563, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -2040943651, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -263690875, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 171840965, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1952124213, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 809550918, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -446502748, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -913569754, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 339640088, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1712403561, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 239326483, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -930983598, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 89101513, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 461029316, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -2006135289, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 883417684, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 268662286, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 232702005, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1374471916, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1891020360, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -2116357607, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1080131577, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -565313941, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 623413444, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -392568842, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -2070918637, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -933599327, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -115986234, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1780266410, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 755041127, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1313340531, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1685999204, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1789633701, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1609011103, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1207169929, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1208148748, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 667470216, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -193403216, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1265540535, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -765869637, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 216646629, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -774185556, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1886528403, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -710631831, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 1147395026, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -2001702094, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 712411953, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 410404630, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1733376510, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -314147714, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 2144390177, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1557387576, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -899872098, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: -1944235280, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
-    - {fileID: 912698572, guid: ac58708d071aea14fada2597ccea6b5b, type: 3}
+    - {fileID: -523463430, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1487607057, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1931733535, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1256608772, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 936333220, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1939856618, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 150536725, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 2042420615, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1199764855, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 895698026, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1720653818, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1559427548, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1459990057, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 568399471, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1464787167, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1403624040, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -573978146, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1072950590, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 910236181, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 641138019, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2030803871, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -834249760, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -987671024, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1740933299, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1686220104, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 354240645, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1889816141, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 2026183623, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 401918961, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1166609492, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1857497457, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1659098638, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1485772859, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1553211043, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1173256685, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -181723369, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -890729037, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -35548148, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1455058310, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -385990981, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1803074492, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1430736370, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1277923391, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -158512119, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 27740532, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1581878383, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1009770624, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1270674563, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2040943651, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -263690875, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 171840965, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1952124213, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 809550918, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -446502748, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -913569754, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 339640088, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1712403561, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 239326483, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -930983598, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 89101513, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 461029316, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2006135289, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 883417684, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 268662286, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 232702005, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1374471916, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1891020360, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2116357607, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1080131577, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -565313941, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 623413444, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -392568842, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2070918637, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -933599327, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -115986234, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1780266410, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 755041127, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1313340531, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1685999204, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1789633701, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1609011103, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1207169929, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1208148748, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 667470216, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -193403216, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1265540535, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -765869637, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 216646629, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -774185556, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1886528403, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -710631831, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1147395026, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2001702094, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 712411953, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 410404630, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1733376510, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -314147714, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 2144390177, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1557387576, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -899872098, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1944235280, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 912698572, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 517275202, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1707880144, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 894277047, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 228995210, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1251186446, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -448022806, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1899050569, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -769363653, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -274,1640 +282,1108 @@ MonoBehaviour:
     SerializationNodes:
     - Name: pointerList
       Entry: 7
-      Data: "0|System.Collections.Generic.List`1[[GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly]], mscorlib"
+      Data: "0|System.Collections.Generic.List`1[[PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly]], mscorlib"
     - Name: 
       Entry: 12
+      Data: 110
+    - Name: 
+      Entry: 7
+      Data: "1|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "2|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "3|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "4|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "5|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "6|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "7|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "8|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "9|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "10|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "11|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "12|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "13|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "14|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "15|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "16|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "17|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "18|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "19|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "20|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "21|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "22|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 21
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "23|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 22
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "24|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 23
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "25|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 24
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "26|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "27|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 26
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "28|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 27
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "29|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 28
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "30|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 29
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "31|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "32|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 31
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "33|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 32
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "34|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 33
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "35|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 34
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "36|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 35
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "37|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 36
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "38|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 37
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "39|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 38
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "40|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 39
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "41|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 40
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "42|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 41
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "43|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "44|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 43
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "45|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 44
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "46|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 45
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "47|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 46
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "48|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 47
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "49|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 48
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "50|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 49
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "51|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "52|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 51
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "53|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 52
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "54|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 53
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "55|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 54
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "56|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 55
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "57|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 56
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "58|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 57
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "59|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 58
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "60|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 59
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "61|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "62|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 61
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "63|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 62
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "64|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 63
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "65|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 64
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "66|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 65
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "67|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 66
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "68|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 67
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "69|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 68
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "70|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 69
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "71|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 70
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "72|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 71
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "73|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 72
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "74|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 73
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "75|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 74
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "76|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 75
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "77|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 76
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "78|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 77
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "79|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 78
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "80|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 79
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "81|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 80
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "82|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 81
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "83|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 82
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "84|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 83
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "85|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 84
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "86|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 85
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "87|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 86
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "88|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 87
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "89|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 88
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "90|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 89
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "91|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 90
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "92|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 91
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "93|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 92
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "94|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 93
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "95|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 94
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "96|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 95
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "97|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 96
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "98|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 97
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "99|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 98
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "100|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 99
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "101|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "102|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 101
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "103|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
       Data: 102
     - Name: 
-      Entry: 7
-      Data: "1|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0
-    - Name: radius_G
-      Entry: 3
-      Data: 0
-    - Name: sprite
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "2|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.05
-    - Name: radius_G
-      Entry: 3
-      Data: 1
-    - Name: sprite
-      Entry: 10
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "3|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.1
-    - Name: radius_G
-      Entry: 3
-      Data: 2
-    - Name: sprite
-      Entry: 10
-      Data: 2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "4|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.15
-    - Name: radius_G
-      Entry: 3
-      Data: 3
-    - Name: sprite
-      Entry: 10
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "5|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.2
-    - Name: radius_G
-      Entry: 3
-      Data: 4
-    - Name: sprite
-      Entry: 10
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "6|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.25
-    - Name: radius_G
-      Entry: 3
-      Data: 5
-    - Name: sprite
-      Entry: 10
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "7|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.3
-    - Name: radius_G
-      Entry: 3
-      Data: 6
-    - Name: sprite
-      Entry: 10
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "8|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.35
-    - Name: radius_G
-      Entry: 3
-      Data: 7
-    - Name: sprite
-      Entry: 10
-      Data: 7
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "9|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.4
-    - Name: radius_G
-      Entry: 3
-      Data: 8
-    - Name: sprite
-      Entry: 10
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "10|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.450000018
-    - Name: radius_G
-      Entry: 3
-      Data: 9
-    - Name: sprite
-      Entry: 10
-      Data: 9
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "11|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.5
-    - Name: radius_G
-      Entry: 3
-      Data: 10
-    - Name: sprite
-      Entry: 10
-      Data: 10
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "12|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.55
-    - Name: radius_G
-      Entry: 3
-      Data: 11
-    - Name: sprite
-      Entry: 10
-      Data: 11
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "13|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.6
-    - Name: radius_G
-      Entry: 3
-      Data: 12
-    - Name: sprite
-      Entry: 10
-      Data: 12
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "14|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.650000036
-    - Name: radius_G
-      Entry: 3
-      Data: 13
-    - Name: sprite
-      Entry: 10
-      Data: 13
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "15|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.7
-    - Name: radius_G
-      Entry: 3
-      Data: 14
-    - Name: sprite
-      Entry: 10
-      Data: 14
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "16|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.75
-    - Name: radius_G
-      Entry: 3
-      Data: 15
-    - Name: sprite
-      Entry: 10
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "17|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.8
-    - Name: radius_G
-      Entry: 3
-      Data: 16
-    - Name: sprite
-      Entry: 10
-      Data: 16
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "18|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.85
-    - Name: radius_G
-      Entry: 3
-      Data: 17
-    - Name: sprite
-      Entry: 10
-      Data: 17
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "19|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.900000036
-    - Name: radius_G
-      Entry: 3
-      Data: 18
-    - Name: sprite
-      Entry: 10
-      Data: 18
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "20|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 0.95
-    - Name: radius_G
-      Entry: 3
-      Data: 19
-    - Name: sprite
-      Entry: 10
-      Data: 19
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "21|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1
-    - Name: radius_G
-      Entry: 3
-      Data: 20
-    - Name: sprite
-      Entry: 10
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "22|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.05000007
-    - Name: radius_G
-      Entry: 3
-      Data: 21
-    - Name: sprite
-      Entry: 10
-      Data: 21
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "23|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.1
-    - Name: radius_G
-      Entry: 3
-      Data: 22
-    - Name: sprite
-      Entry: 10
-      Data: 22
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "24|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.15
-    - Name: radius_G
-      Entry: 3
-      Data: 23
-    - Name: sprite
-      Entry: 10
-      Data: 23
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "25|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.2
-    - Name: radius_G
-      Entry: 3
-      Data: 24
-    - Name: sprite
-      Entry: 10
-      Data: 24
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "26|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.25
-    - Name: radius_G
-      Entry: 3
-      Data: 25
-    - Name: sprite
-      Entry: 10
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "27|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.30000007
-    - Name: radius_G
-      Entry: 3
-      Data: 26
-    - Name: sprite
-      Entry: 10
-      Data: 26
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "28|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.35
-    - Name: radius_G
-      Entry: 3
-      Data: 27
-    - Name: sprite
-      Entry: 10
-      Data: 27
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "29|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.4
-    - Name: radius_G
-      Entry: 3
-      Data: 28
-    - Name: sprite
-      Entry: 10
-      Data: 28
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "30|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.45
-    - Name: radius_G
-      Entry: 3
-      Data: 29
-    - Name: sprite
-      Entry: 10
-      Data: 29
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "31|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.5
-    - Name: radius_G
-      Entry: 3
-      Data: 30
-    - Name: sprite
-      Entry: 10
-      Data: 30
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "32|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.55000007
-    - Name: radius_G
-      Entry: 3
-      Data: 31
-    - Name: sprite
-      Entry: 10
-      Data: 31
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "33|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.6
-    - Name: radius_G
-      Entry: 3
-      Data: 32
-    - Name: sprite
-      Entry: 10
-      Data: 32
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "34|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.65
-    - Name: radius_G
-      Entry: 3
-      Data: 33
-    - Name: sprite
-      Entry: 10
-      Data: 33
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "35|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.7
-    - Name: radius_G
-      Entry: 3
-      Data: 34
-    - Name: sprite
-      Entry: 10
-      Data: 34
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "36|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.75
-    - Name: radius_G
-      Entry: 3
-      Data: 35
-    - Name: sprite
-      Entry: 10
-      Data: 35
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "37|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.80000007
-    - Name: radius_G
-      Entry: 3
-      Data: 36
-    - Name: sprite
-      Entry: 10
-      Data: 36
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "38|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.85
-    - Name: radius_G
-      Entry: 3
-      Data: 37
-    - Name: sprite
-      Entry: 10
-      Data: 37
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "39|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.9
-    - Name: radius_G
-      Entry: 3
-      Data: 38
-    - Name: sprite
-      Entry: 10
-      Data: 38
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "40|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 1.95
-    - Name: radius_G
-      Entry: 3
-      Data: 39
-    - Name: sprite
-      Entry: 10
-      Data: 39
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "41|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2
-    - Name: radius_G
-      Entry: 3
-      Data: 40
-    - Name: sprite
-      Entry: 10
-      Data: 40
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "42|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.05
-    - Name: radius_G
-      Entry: 3
-      Data: 41
-    - Name: sprite
-      Entry: 10
-      Data: 41
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "43|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.10000014
-    - Name: radius_G
-      Entry: 3
-      Data: 42
-    - Name: sprite
-      Entry: 10
-      Data: 42
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "44|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.15
-    - Name: radius_G
-      Entry: 3
-      Data: 43
-    - Name: sprite
-      Entry: 10
-      Data: 43
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "45|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.2
-    - Name: radius_G
-      Entry: 3
-      Data: 44
-    - Name: sprite
-      Entry: 10
-      Data: 44
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "46|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.25
-    - Name: radius_G
-      Entry: 3
-      Data: 45
-    - Name: sprite
-      Entry: 10
-      Data: 45
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "47|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.3
-    - Name: radius_G
-      Entry: 3
-      Data: 46
-    - Name: sprite
-      Entry: 10
-      Data: 46
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "48|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.35000014
-    - Name: radius_G
-      Entry: 3
-      Data: 47
-    - Name: sprite
-      Entry: 10
-      Data: 47
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "49|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.4
-    - Name: radius_G
-      Entry: 3
-      Data: 48
-    - Name: sprite
-      Entry: 10
-      Data: 48
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "50|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.45
-    - Name: radius_G
-      Entry: 3
-      Data: 49
-    - Name: sprite
-      Entry: 10
-      Data: 49
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "51|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.5
-    - Name: radius_G
-      Entry: 3
-      Data: 50
-    - Name: sprite
-      Entry: 10
-      Data: 50
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "52|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.55
-    - Name: radius_G
-      Entry: 3
-      Data: 51
-    - Name: sprite
-      Entry: 10
-      Data: 51
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "53|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.60000014
-    - Name: radius_G
-      Entry: 3
-      Data: 52
-    - Name: sprite
-      Entry: 10
-      Data: 52
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "54|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.65
-    - Name: radius_G
-      Entry: 3
-      Data: 53
-    - Name: sprite
-      Entry: 10
-      Data: 53
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "55|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.7
-    - Name: radius_G
-      Entry: 3
-      Data: 54
-    - Name: sprite
-      Entry: 10
-      Data: 54
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "56|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.75
-    - Name: radius_G
-      Entry: 3
-      Data: 55
-    - Name: sprite
-      Entry: 10
-      Data: 55
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "57|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.8
-    - Name: radius_G
-      Entry: 3
-      Data: 56
-    - Name: sprite
-      Entry: 10
-      Data: 56
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "58|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.85000014
-    - Name: radius_G
-      Entry: 3
-      Data: 57
-    - Name: sprite
-      Entry: 10
-      Data: 57
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "59|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.9
-    - Name: radius_G
-      Entry: 3
-      Data: 58
-    - Name: sprite
-      Entry: 10
-      Data: 58
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "60|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 2.95
-    - Name: radius_G
-      Entry: 3
-      Data: 59
-    - Name: sprite
-      Entry: 10
-      Data: 59
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "61|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3
-    - Name: radius_G
-      Entry: 3
-      Data: 60
-    - Name: sprite
-      Entry: 10
-      Data: 60
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "62|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.05
-    - Name: radius_G
-      Entry: 3
-      Data: 61
-    - Name: sprite
-      Entry: 10
-      Data: 61
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "63|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.10000014
-    - Name: radius_G
-      Entry: 3
-      Data: 62
-    - Name: sprite
-      Entry: 10
-      Data: 62
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "64|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.15
-    - Name: radius_G
-      Entry: 3
-      Data: 63
-    - Name: sprite
-      Entry: 10
-      Data: 63
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "65|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.2
-    - Name: radius_G
-      Entry: 3
-      Data: 64
-    - Name: sprite
-      Entry: 10
-      Data: 64
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "66|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.25
-    - Name: radius_G
-      Entry: 3
-      Data: 65
-    - Name: sprite
-      Entry: 10
-      Data: 65
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "67|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.3
-    - Name: radius_G
-      Entry: 3
-      Data: 66
-    - Name: sprite
-      Entry: 10
-      Data: 66
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "68|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.35000014
-    - Name: radius_G
-      Entry: 3
-      Data: 67
-    - Name: sprite
-      Entry: 10
-      Data: 67
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "69|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.4
-    - Name: radius_G
-      Entry: 3
-      Data: 68
-    - Name: sprite
-      Entry: 10
-      Data: 68
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "70|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.45
-    - Name: radius_G
-      Entry: 3
-      Data: 69
-    - Name: sprite
-      Entry: 10
-      Data: 69
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "71|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.5
-    - Name: radius_G
-      Entry: 3
-      Data: 70
-    - Name: sprite
-      Entry: 10
-      Data: 70
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "72|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.55
-    - Name: radius_G
-      Entry: 3
-      Data: 71
-    - Name: sprite
-      Entry: 10
-      Data: 71
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "73|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.60000014
-    - Name: radius_G
-      Entry: 3
-      Data: 72
-    - Name: sprite
-      Entry: 10
-      Data: 72
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "74|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.65
-    - Name: radius_G
-      Entry: 3
-      Data: 73
-    - Name: sprite
-      Entry: 10
-      Data: 73
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "75|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.7
-    - Name: radius_G
-      Entry: 3
-      Data: 74
-    - Name: sprite
-      Entry: 10
-      Data: 74
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "76|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.75
-    - Name: radius_G
-      Entry: 3
-      Data: 75
-    - Name: sprite
-      Entry: 10
-      Data: 75
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "77|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.8
-    - Name: radius_G
-      Entry: 3
-      Data: 76
-    - Name: sprite
-      Entry: 10
-      Data: 76
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "78|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.85000014
-    - Name: radius_G
-      Entry: 3
-      Data: 77
-    - Name: sprite
-      Entry: 10
-      Data: 77
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "79|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.9
-    - Name: radius_G
-      Entry: 3
-      Data: 78
-    - Name: sprite
-      Entry: 10
-      Data: 78
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "80|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 3.95
-    - Name: radius_G
-      Entry: 3
-      Data: 79
-    - Name: sprite
-      Entry: 10
-      Data: 79
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "81|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4
-    - Name: radius_G
-      Entry: 3
-      Data: 80
-    - Name: sprite
-      Entry: 10
-      Data: 80
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "82|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.05
-    - Name: radius_G
-      Entry: 3
-      Data: 81
-    - Name: sprite
-      Entry: 10
-      Data: 81
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "83|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.1
-    - Name: radius_G
-      Entry: 3
-      Data: 82
-    - Name: sprite
-      Entry: 10
-      Data: 82
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "84|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.15
-    - Name: radius_G
-      Entry: 3
-      Data: 83
-    - Name: sprite
-      Entry: 10
-      Data: 83
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "85|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.20000029
-    - Name: radius_G
-      Entry: 3
-      Data: 84
-    - Name: sprite
-      Entry: 10
-      Data: 84
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "86|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.25
-    - Name: radius_G
-      Entry: 3
-      Data: 85
-    - Name: sprite
-      Entry: 10
-      Data: 85
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "87|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.3
-    - Name: radius_G
-      Entry: 3
-      Data: 86
-    - Name: sprite
-      Entry: 10
-      Data: 86
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "88|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.35
-    - Name: radius_G
-      Entry: 3
-      Data: 87
-    - Name: sprite
-      Entry: 10
-      Data: 87
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "89|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.4
-    - Name: radius_G
-      Entry: 3
-      Data: 88
-    - Name: sprite
-      Entry: 10
-      Data: 88
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "90|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.45000029
-    - Name: radius_G
-      Entry: 3
-      Data: 89
-    - Name: sprite
-      Entry: 10
-      Data: 89
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "91|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.5
-    - Name: radius_G
-      Entry: 3
-      Data: 90
-    - Name: sprite
-      Entry: 10
-      Data: 90
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "92|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.55
-    - Name: radius_G
-      Entry: 3
-      Data: 91
-    - Name: sprite
-      Entry: 10
-      Data: 91
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "93|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.6
-    - Name: radius_G
-      Entry: 3
-      Data: 92
-    - Name: sprite
-      Entry: 10
-      Data: 92
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "94|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.65
-    - Name: radius_G
-      Entry: 3
-      Data: 93
-    - Name: sprite
-      Entry: 10
-      Data: 93
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "95|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.70000029
-    - Name: radius_G
-      Entry: 3
-      Data: 94
-    - Name: sprite
-      Entry: 10
-      Data: 94
-    - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "96|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.75
-    - Name: radius_G
-      Entry: 3
-      Data: 95
+      Data: "104|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 95
+      Data: 103
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "97|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.8
-    - Name: radius_G
-      Entry: 3
-      Data: 96
+      Data: "105|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 96
+      Data: 104
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "98|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.85
-    - Name: radius_G
-      Entry: 3
-      Data: 97
+      Data: "106|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 97
+      Data: 105
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "99|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.9
-    - Name: radius_G
-      Entry: 3
-      Data: 98
+      Data: "107|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 98
+      Data: 106
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "100|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 4.95000029
-    - Name: radius_G
-      Entry: 3
-      Data: 99
+      Data: "108|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 99
+      Data: 107
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "101|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 5
-    - Name: radius_G
-      Entry: 3
-      Data: 100
+      Data: "109|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 100
+      Data: 108
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: "102|GamePlay.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
-        GamePlay.Assembly"
-    - Name: radius_W
-      Entry: 4
-      Data: 5.05
-    - Name: radius_G
-      Entry: 3
-      Data: 101
+      Data: "110|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
     - Name: sprite
       Entry: 10
-      Data: 101
+      Data: 109
     - Name: 
       Entry: 8
       Data: 

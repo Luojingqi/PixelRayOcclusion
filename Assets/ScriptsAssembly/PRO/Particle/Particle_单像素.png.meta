@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u6B630"
+      name: "Particle_\u5355\u50CF\u7D20_4x4"
       rect:
         serializedVersion: 2
         x: 0
@@ -131,7 +131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u5DE6\u53F30"
+      name: "Particle_\u5355\u50CF\u7D20_2x4"
       rect:
         serializedVersion: 2
         x: 5
@@ -152,7 +152,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u5DE6\u53F31"
+      name: "Particle_\u5355\u50CF\u7D20_1x4"
       rect:
         serializedVersion: 2
         x: 8
@@ -173,7 +173,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u5DE6\u53F32"
+      name: "Particle_\u5355\u50CF\u7D20_1x2"
       rect:
         serializedVersion: 2
         x: 10
@@ -194,7 +194,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u6B632"
+      name: "Particle_\u5355\u50CF\u7D20_1x1"
       rect:
         serializedVersion: 2
         x: 10
@@ -215,7 +215,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u6B631"
+      name: "Particle_\u5355\u50CF\u7D20_2x2"
       rect:
         serializedVersion: 2
         x: 17
@@ -236,7 +236,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u4E0A\u4E0B0"
+      name: "Particle_\u5355\u50CF\u7D20_4x2"
       rect:
         serializedVersion: 2
         x: 12
@@ -257,7 +257,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u4E0A\u4E0B1"
+      name: "Particle_\u5355\u50CF\u7D20_4x1"
       rect:
         serializedVersion: 2
         x: 12
@@ -278,7 +278,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Particle_\u5355\u50CF\u7D20_\u4E0A\u4E0B2"
+      name: "Particle_\u5355\u50CF\u7D20_2x1"
       rect:
         serializedVersion: 2
         x: 17
@@ -372,15 +372,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "Particle_\u5355\u50CF\u7D20_\u4E0A\u4E0B0": -1627140730
-      "Particle_\u5355\u50CF\u7D20_\u4E0A\u4E0B1": -723014618
-      "Particle_\u5355\u50CF\u7D20_\u4E0A\u4E0B2": -1417370779
-      "Particle_\u5355\u50CF\u7D20_\u5DE6\u53F30": 176688209
-      "Particle_\u5355\u50CF\u7D20_\u5DE6\u53F31": 1005725973
-      "Particle_\u5355\u50CF\u7D20_\u5DE6\u53F32": 1279452781
-      "Particle_\u5355\u50CF\u7D20_\u6B630": 717849658
-      "Particle_\u5355\u50CF\u7D20_\u6B631": 1501660857
-      "Particle_\u5355\u50CF\u7D20_\u6B632": 1912263255
+      "Particle_\u5355\u50CF\u7D20_1x1": 1912263255
+      "Particle_\u5355\u50CF\u7D20_1x2": 1279452781
+      "Particle_\u5355\u50CF\u7D20_1x4": 1005725973
+      "Particle_\u5355\u50CF\u7D20_2x1": -1417370779
+      "Particle_\u5355\u50CF\u7D20_2x2": 1501660857
+      "Particle_\u5355\u50CF\u7D20_2x4": 176688209
+      "Particle_\u5355\u50CF\u7D20_4x1": -723014618
+      "Particle_\u5355\u50CF\u7D20_4x2": -1627140730
+      "Particle_\u5355\u50CF\u7D20_4x4": 717849658
       "Particle_\u5355\u50CF\u7D20_\u6CA1\u75280": -1491002737
       "Particle_\u5355\u50CF\u7D20_\u6CA1\u75281": 339151866
       "Particle_\u5355\u50CF\u7D20_\u900F\u660E": -1999502955

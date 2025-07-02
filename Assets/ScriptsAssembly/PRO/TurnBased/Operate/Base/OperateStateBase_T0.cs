@@ -1,4 +1,4 @@
-﻿using PRO;
+﻿using PRO.Skill;
 using PRO.Tool;
 using UnityEngine;
 
@@ -37,12 +37,6 @@ namespace PRO.TurnBased
                 Operate.context.Calculate_战斗技能初始化(Operate.config.施法type, Operate.config.StartCombatEffectDataList);
 
                 Operate.Turn.Agent.gameObject.layer = (int)GameLayer.UnRole;
-
-                switch (Operate)
-                {
-                    case IOperate_范围选择 i: { i.SkillPointer = (SkillPointer_范围内选择类)CreatePointer(@"范围内选择类\通用"); i.SkillPointer.SetPointer(Operate.config.Radius_G); break; }
-                    case IOperate_射线选择 i: { i.SkillPointer = (SkillPointer_范围内射线类)CreatePointer(@"范围内射线类\白色虚线"); i.SkillPointer.SetPointer(Operate.config.Radius_G); break; }
-                }
 
                 Trigger();
                 Operate.SwitchState(OperateStateEnum.t1);
