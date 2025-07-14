@@ -1,5 +1,4 @@
-﻿using PRO.Buff.Base.IBuff;
-using PRO.Tool;
+﻿using PRO.Tool;
 using System.Collections.Generic;
 
 namespace PRO
@@ -22,14 +21,15 @@ namespace PRO
         public void SetRole(Role role)
         {
             Clear();
-            foreach (var buffList in role.AllBuff)
-                foreach (var buff in buffList)
-                    if (buff.GetActive() && buff is IBuff_UI)
-                    {
-                        BuffInfoC info = TakeOut();
-                        info.SetBuff(buff);
-                        InfoList.Add(info);
-                    }
+            foreach (var buffSortList in role.AllBuff)
+                foreach (var buffList in buffSortList)
+                    foreach (var buff in buffList)
+                        if (buff.Config.ui)
+                        {
+                            BuffInfoC info = TakeOut();
+                            info.SetBuff(buff);
+                            InfoList.Add(info);
+                        }
         }
         public void Clear()
         {

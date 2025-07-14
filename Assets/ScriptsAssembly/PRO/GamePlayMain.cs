@@ -10,8 +10,6 @@ namespace PRO
         public void TimeAwake()
         {
             Inst = this;
-          
-            round = new RoundFSM();
         }
         public RoundFSM round;
 
@@ -19,7 +17,6 @@ namespace PRO
 
         public void TimeUpdate()
         {
-            round.Update();
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (p) Time.timeScale = 1;
@@ -29,7 +26,7 @@ namespace PRO
 
             if (Input.GetKeyDown(KeyCode.M))
             {
-                RoleManager.Inst.TakeOut("д╛хо", SceneManager.Inst.NowScene);
+                RoleManager.Inst.TakeOut("д╛хо", SceneManager.Inst.NowScene, System.Guid.NewGuid().ToString());
                 // MCTS.Main();
             }
         }

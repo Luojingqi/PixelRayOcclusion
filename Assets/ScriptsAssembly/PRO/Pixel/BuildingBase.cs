@@ -125,11 +125,10 @@ namespace PRO
             AllUnloadPixel.Add(index);
             if (AllUnloadPixel.Count == AllPixel.Count)
             {
-                _scene.BuildingInRAM.Remove(GUID);
+                _scene.ActiveBuilding.Remove(GUID);
                 foreach (var item in AllPixel.Values)
                 {
                     item.pixel.buildingSet.Remove(this);
-                    item.pixel = null;
                     Building_Pixel.PutIn(item);
                 }
                 TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => GameObject.Destroy(gameObject));
@@ -214,9 +213,12 @@ namespace PRO
         //    return spriteRenderer;
         //}
 
+        /// <summary>
+        /// 彻底卸载并删除一个building
+        /// </summary>
         public void Delete()
         {
-            _scene.BuildingInRAM.Remove(GUID);
+            _scene.ActiveBuilding.Remove(GUID);
             File.Delete(@$"{_scene.sceneCatalog.directoryInfo.FullName}/Building/{GUID}{IOTool.protoExtension}");
             foreach (var item in AllPixel.Values)
             {

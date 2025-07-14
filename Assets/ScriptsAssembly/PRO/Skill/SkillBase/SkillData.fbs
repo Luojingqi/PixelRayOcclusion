@@ -1,0 +1,14 @@
+﻿
+namespace PRO.Skill.Flat;
+
+table SkillData
+{
+	type_name : string;
+	guid : string;
+	datas : [ubyte];
+}
+
+table RoleSkillData
+{
+	list : [SkillData];
+}

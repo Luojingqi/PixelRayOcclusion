@@ -1,5 +1,4 @@
 ﻿using PRO.Buff;
-using PRO;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.SceneEditor;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace PRO.Console
 {
@@ -228,7 +226,16 @@ namespace PRO.Console
         #region
         public static string Method_1_0(string[] values)
         {
-            SceneManager.Inst.NowScene.SaveAll();
+            var countdown = SceneManager.Inst.NowScene.SaveAll();
+            TimeManager.enableUpdate = false;
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                if (countdown.Wait(1000 * 15))
+                    Log.Print("保存完成");
+                else
+                    Log.Print("保存超时");
+                TimeManager.enableUpdate = true;
+            });
             return "/保存";
         }
         #endregion
@@ -316,7 +323,7 @@ namespace PRO.Console
                 string[] xy1 = values[2].Split(',', '，');
                 Vector2Int start = new Vector2Int(Convert.ToInt32(xy0[0]), Convert.ToInt32(xy0[1]));
                 Vector2Int end = new Vector2Int(Convert.ToInt32(xy1[0]), Convert.ToInt32(xy1[1]));
-                BuffEx.Set导电Path(SceneManager.Inst.NowScene, start, end, true, false);
+                //BuffEx.Set导电Path(SceneManager.Inst.NowScene, start, end, true, false);
                 return $"/导电  {xy0[0]},{xy0[1]} {xy1[0]},{xy1[1]}";
             }
             catch (Exception e)

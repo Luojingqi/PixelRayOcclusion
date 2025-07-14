@@ -1,6 +1,4 @@
 ﻿using PRO.Buff.Base;
-using PRO.Buff.Base.IBuff;
-using PRO;
 using UnityEngine.EventSystems;
 
 namespace PRO
@@ -13,8 +11,8 @@ namespace PRO
         public override UIChildViewBase View => view;
         private BuffInfoV view = new BuffInfoV();
 
-        private IBuffBase buff;
-        public void SetBuff(IBuffBase buff)
+        private BuffBase buff;
+        public void SetBuff(BuffBase buff)
         {
             this.buff = buff;
             BuffUpdate();
@@ -49,8 +47,8 @@ namespace PRO
         public void OnPointerEnter(PointerEventData eventData)
         {
             BuffInfoPanelC.Inst.Open();
-            BuffInfoPanelC.Inst.Name.text = buff.Name;
-            BuffInfoPanelC.Inst.Info.text = (buff as IBuff_UI).Info;
+            BuffInfoPanelC.Inst.Name.text = buff.Config.name;
+            BuffInfoPanelC.Inst.Info.text = buff.Config.说明文本;
         }
 
         public void OnPointerExit(PointerEventData eventData)

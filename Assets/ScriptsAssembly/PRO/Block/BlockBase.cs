@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Google.FlatBuffers;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Tool;
@@ -10,7 +11,7 @@ using UnityEngine;
 using static PRO.Renderer.ComputeShaderManager;
 namespace PRO
 {
-    public partial class BlockBase : MonoBehaviour, IScene
+    public abstract partial class BlockBase : MonoBehaviour, IScene
     {
         #region ×ø±ê×ª»»
         /// <summary>
@@ -358,10 +359,7 @@ namespace PRO
         }
 
 
-        public void Hide()
-        {
-            gameObject.SetActive(false);
-
-        }
+        public abstract System.Action ToDisk(FlatBufferBuilder builder);
+        public abstract void ToRAM(Flat.BlockBaseData blockDiskData);
     }
 }

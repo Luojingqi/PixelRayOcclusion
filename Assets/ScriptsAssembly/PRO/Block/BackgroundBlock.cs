@@ -1,5 +1,8 @@
+using Google.FlatBuffers;
 using PRO.Renderer;
 using PRO.Tool;
+using System;
+using System.Threading;
 using UnityEngine;
 
 namespace PRO
@@ -29,8 +32,9 @@ namespace PRO
             return background;
         }
 
-        public static void PutIn(BackgroundBlock background)
+        public static void PutIn(BackgroundBlock background, CountdownEvent countdown)
         {
+            countdown.AddCount();
             for (int y = 0; y < Block.Size.y; y++)
             {
                 for (int x = 0; x < Block.Size.x; x++)
@@ -46,6 +50,7 @@ namespace PRO
             {
                 background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
                 BackgroundPool.PutIn(background);
+                countdown.Signal();
             });
         }
         #endregion
@@ -58,9 +63,13 @@ namespace PRO
             _blockType = BlockType.BackgroundBlock;
         }
 
-        public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
+        public override Action ToDisk(FlatBufferBuilder builder)
         {
-            base.ToRAM(diskData, scene);
+            return null;
+        }
+
+        public override void ToRAM(Flat.BlockBaseData blockDiskData)
+        {
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 BlockMaterial.SetBackgroundBlock(this);

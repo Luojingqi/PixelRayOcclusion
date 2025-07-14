@@ -1,6 +1,6 @@
-﻿using PRO.Skill;
+﻿using Google.FlatBuffers;
+using PRO.Skill;
 using PRO.Tool;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.TurnBased
@@ -17,21 +17,22 @@ namespace PRO.TurnBased
 
 
         public virtual void Enter() { lastPixelPosRotate = PixelPosRotate.New(0, 0, 0); }
-        public void Exit() { Operate.Turn.Agent.gameObject.layer = (int)GameLayer.Role; DestroyPointer(); }
+        public void Exit() { Operate.Agent.gameObject.layer = (int)GameLayer.Role; DestroyPointer(); }
 
         public void Update()
         {
-            OperateFSMBase.TriggerState state = Trigger(out IOperateRecord operateRecord);
+            FlatBufferBuilder record = FlatBufferBuilder.TakeOut(1024 * 4);
+            OperateFSMBase.TriggerState state = Trigger(record);
 
             if (state == OperateFSMBase.TriggerState.toT2)
             {
                 //MCTS.Node node = MCTS.Node.TakeOut();
                 //node.operateRecord = operateRecord;
-
-                Operate.Turn.Agent.ForEachBuffApplyEffect(BuffTriggerType.技能释放前, Operate.context, -1);
+                节点执行(record , OperateFSMBase.Operator.Player);
+                Operate.Agent.ForEachBuffApplyEffect(BuffTriggerType.技能释放前, Operate.context, -1);
                 Operate.SwitchState(OperateStateEnum.t2);
-                Operate.T2.Enter(operateRecord);
-                //foreach (var item in Operate.Turn.Agent.AllCanUseOperate)
+                Operate.T2.Enter(record);
+                //foreach (var item in Operate.Agent.AllCanUseOperate)
                 //    if (item.GridUI != null) item.UpdateUI();
 
                 //MCTS.Node.PutIn(node);
@@ -40,45 +41,33 @@ namespace PRO.TurnBased
             {
                 if (state == OperateFSMBase.TriggerState.toT0)
                 {
-                    Operate.SwitchState(OperateStateEnum.t0);
-
-                    Operate.Turn.Agent.Toward = Operate.startToward;
-
+                    Operate.Agent.Toward = Operate.startToward;
                     CombatContext.PutIn(Operate.context);
                     Operate.context = null;
+                    Operate.SwitchState(OperateStateEnum.t0);
                 }
                 else
                 {
-                    Operate.lastToward = Operate.Turn.Agent.Toward;
+                    Operate.lastToward = Operate.Agent.Toward;
                 }
-
-                //operateRecord.PutIn();
             }
+            FlatBufferBuilder.PutIn(record);
         }
 
         /// <summary>
         /// 持续触发，一般用于技能指示器的更新
         /// </summary>
-        public abstract OperateFSMBase.TriggerState Trigger(out IOperateRecord operateRecord);
+        public abstract OperateFSMBase.TriggerState Trigger(FlatBufferBuilder record);
 
         /// <summary>
         /// 销毁技能指示器
         /// </summary>
         public virtual void DestroyPointer()
         {
+            if (Operate is ISkillPointer i)
             {
-                if (Operate is IOperate_射线选择 i)
-                {
-                    i.SkillPointer?.Close();
-                    i.SkillPointer = null;
-                }
-            }
-            {
-                if (Operate is IOperate_范围选择 i)
-                {
-                    i.SkillPointer?.Close();
-                    i.SkillPointer = null;
-                }
+                i.SkillPointerBase?.Close();
+                i.SkillPointerBase = null;
             }
         }
 
@@ -116,15 +105,15 @@ namespace PRO.TurnBased
             else return lastPixelPosRotate;
         }
 
-        public void RotateToMouse(Transform transform, UnityEngine.Vector2 center, UnityEngine.Vector2 offset)
+        public void RotateToMouse(Transform transform, Vector2 center, Vector2 offset)
         {
             transform.rotation = Quaternion.FromToRotation(Vector3.right, MousePoint.worldPos - center);
             transform.position = (Vector3)center - transform.rotation * offset;
         }
         public void RotateToMouse(Transform transform, Vector2Int center, Vector2Int offset) => RotateToMouse(transform, Block.GlobalToWorld(center), Block.GlobalToWorld(offset));
 
-        public abstract void 扩展节点(ref ReusableList<IOperateRecord> operateRecordList);
+        public abstract void 扩展节点(ref ReusableList<FlatBufferBuilder> recordList);
 
-        public abstract void 节点执行(IOperateRecord operateRecord);
+        public abstract void 节点执行(FlatBufferBuilder record, OperateFSMBase.Operator form);
     }
 }

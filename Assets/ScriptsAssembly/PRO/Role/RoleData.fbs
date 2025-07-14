@@ -1,0 +1,25 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+include "PRO/SkillEditor/Agent/SkillPlayerAgentData.fbs";
+include "PRO/Role/RoleInfoData.fbs";
+namespace PRO.Flat;
+
+table RoleData {
+  transform_data : Transform;
+  rigidbody_2_d_data : Rigidbody2D;
+  skill_play_agent_data : SkillPlayerAgentData;
+  
+  nav_type : string;
+  toward : int;
+  role_type_name : string;
+  guid : string;
+  name : string;
+  info : RoleInfoData;
+  
+  all_can_use_operate_type : [string];  
+  all_buff_type : [string];             
+}
+
+table BlockRoleData
+{
+	list : [string];
+}

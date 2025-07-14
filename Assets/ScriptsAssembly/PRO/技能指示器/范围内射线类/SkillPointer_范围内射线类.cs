@@ -73,5 +73,11 @@ namespace PRO.Skill
             Line = transform.GetComponent<LineRenderer>();
             Density = density;
         }
+
+        public override void SetPosition(Vector2Int global)
+        {
+            base.SetPosition(global);
+            StartPos = global;
+        }
     }
 }

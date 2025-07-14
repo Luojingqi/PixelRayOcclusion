@@ -1,9 +1,12 @@
-﻿using PRO.TurnBased;
+﻿using Google.FlatBuffers;
+using PRO.Skill.Base;
 using PRO.Tool;
+using PRO.TurnBased;
+using System;
 using UnityEngine;
 using static PRO.BottomBagM;
 
-namespace PRO
+namespace PRO.Skill
 {
     /// <summary>
     /// 操作状态机基类，回合制系统里最小的状态机，所有操作继承此类
@@ -15,6 +18,9 @@ namespace PRO
         /// </summary>
         public TurnFSM Turn { get; set; }
 
+        public Role Agent { get; set; }
+
+        public string GUID;
         /// <summary>
         /// 快捷键，使用按键按下触发时可以设置
         /// </summary>
@@ -34,7 +40,7 @@ namespace PRO
 
         public SkillConfig config { get; private set; }
 
-        public OperateFSMBase()
+        public OperateFSMBase(string GUID)
         {
             config = AssetManagerEX.LoadSkillConfig(this);
             InitState();
@@ -46,6 +52,8 @@ namespace PRO
                 Debug.Log("操作状态机未添加相应的三个状态");
             }
             SwitchState(OperateStateEnum.t0);
+            if (GUID == null) GUID = Guid.NewGuid().ToString();
+            this.GUID = GUID;
         }
         /// <summary>
         /// 为操作状态机添加三个状态
@@ -87,5 +95,38 @@ namespace PRO
             GridUI = grid;
         }
         public virtual void UpdateUI() { }
+
+        public enum Operator
+        {
+            Player,
+            AI,
+        }
+
+        public Offset<Flat.SkillData> ToDisk(FlatBufferBuilder builder)
+        {
+            var skillTypeNameOffset = builder.CreateString(GetType().Name);
+            var skillGuidOffset = builder.CreateString(GUID);
+            var t2Builder = FlatBufferBuilder.TakeOut(1024);
+            T2.ToDisk(t2Builder);
+            var datasOffset = builder.CreateVector_Data(t2Builder.DataBuffer.ToSpan(t2Builder.DataBuffer.Position, t2Builder.Offset));
+            FlatBufferBuilder.PutIn(t2Builder);
+            Flat.SkillData.StartSkillData(builder);
+            Flat.SkillData.AddTypeName(builder, skillTypeNameOffset);
+            Flat.SkillData.AddGuid(builder, skillGuidOffset);
+            Flat.SkillData.AddDatas(builder, datasOffset);
+            return Flat.SkillData.EndSkillData(builder);
+        }
+        public void ToRAM(Flat.SkillData diskData)
+        {
+            var builder = FlatBufferBuilder.TakeOut(diskData.DatasLength);
+            var datas = builder.DataBuffer.ToSpan(0, diskData.DatasLength);
+            for (int i = diskData.DatasLength - 1; i >= 0; i--)
+            {
+                datas[diskData.DatasLength - i - 1] = diskData.Datas(i);
+            }
+            builder.DataBuffer.Position = 0;
+            T2.ToRAM(builder);
+            FlatBufferBuilder.PutIn(builder);
+        }
     }
 }

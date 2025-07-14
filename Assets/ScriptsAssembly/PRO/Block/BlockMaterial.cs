@@ -203,7 +203,7 @@ namespace PRO
 
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
-                    if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
+                    if (SceneManager.Inst.NowScene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
                         SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
 
             blockShareMaterialManager.FirstBind();
@@ -230,7 +230,7 @@ namespace PRO
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                 {
-                    if (SceneManager.Inst.NowScene.BlockBaseInRAM.Contains(new Vector2Int(x, y)) == false)
+                    if (SceneManager.Inst.NowScene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
                         SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
                     else
                         SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;

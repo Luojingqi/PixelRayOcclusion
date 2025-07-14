@@ -1,4 +1,6 @@
-﻿using PRO.Tool;
+﻿using Google.FlatBuffers;
+using PRO.Tool;
+using System;
 using System.Collections.Generic;
 
 namespace PRO.TurnBased
@@ -84,6 +86,32 @@ namespace PRO.TurnBased
                 context.Calculate_最终结算();
                 LogPanelC.Inst.AddLog(context, true);
                 CombatContext.PutIn(context);
+            }
+        }
+
+        public Offset<Flat.RoundState3_TurnData> ToDisk(FlatBufferBuilder builder)
+        {
+            Span<int> turnFSMListOffsetArray = stackalloc int[TurnFSMList.Count];
+            for (int i = 0; i < turnFSMListOffsetArray.Length; i++)
+                turnFSMListOffsetArray[i] = TurnFSMList[i].ToDisk(builder).Value;
+            var turnFSMListOffset = builder.CreateVector_Offset(turnFSMListOffsetArray);
+            Flat.RoundState3_TurnData.StartRoundState3_TurnData(builder);
+            Flat.RoundState3_TurnData.AddNowRoundNum(builder, nowRoundNum);
+            Flat.RoundState3_TurnData.AddNowTurnIndex(builder, nowTurnIndex);
+            Flat.RoundState3_TurnData.AddTurnFsmList(builder, turnFSMListOffset);
+            return Flat.RoundState3_TurnData.EndRoundState3_TurnData(builder);
+        }
+        public void ToRAM(Flat.RoundState3_TurnData diskData)
+        {
+            nowRoundNum = diskData.NowRoundNum;
+            nowTurnIndex = diskData.NowTurnIndex;
+            for (int i = diskData.TurnFsmListLength - 1; i >= 0; i--)
+            {
+                var turnDiskData = diskData.TurnFsmList(i).Value;
+                var role = fsm.Scene.GetRole(turnDiskData.RoleGuid);
+                var turn = new TurnFSM(fsm, role, turnDiskData.Index);
+                turn.ToRAM(turnDiskData);
+                TurnFSMList.Add(turn);
             }
         }
     }

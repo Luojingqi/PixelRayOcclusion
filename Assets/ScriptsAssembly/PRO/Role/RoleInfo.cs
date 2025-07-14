@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.FlatBuffers;
+using System;
 
 namespace PRO
 {
@@ -95,31 +96,36 @@ namespace PRO
             to.行动点.Value = form.行动点.Value;
         }
 
-        public PRO.Proto.RoleInfoData ToDisk()
+        public Offset<Flat.RoleInfoData> ToDisk(FlatBufferBuilder builder)
         {
-            var diskData = Proto.ProtoPool.TakeOut<PRO.Proto.RoleInfoData>();
-            diskData.Value1 = 最大血量.Value;
-            diskData.Value2 = 血量.Value;
-            diskData.Value3 = 临时护甲.Value;
-            for (int i = 0; i < 抗性Array.Length; i++)
-                diskData.Value4.Add(抗性Array[i].Value);
-            diskData.Value5 = 闪避率.Value;
-            diskData.Value6 = 命中率.Value;
-            diskData.Value7 = 暴击率.Value;
-            diskData.Value8 = 暴击效果.Value;
-            diskData.Value9 = 行动点上限.Value;
-            diskData.Value10 = 行动点恢复.Value;
-            diskData.Value11 = 行动点初始.Value;
-            diskData.Value12 = 行动点.Value;
-            return diskData;
+            Span<int> 抗性Array = stackalloc int[this.抗性Array.Length];
+            for (int i = 0; i < this.抗性Array.Length; i++)
+                抗性Array[i] = this.抗性Array[i].Value;
+            var 抗性ArrayOffset = builder.CreateVector_Data(抗性Array);
+
+            Flat.RoleInfoData.StartRoleInfoData(builder);
+            Flat.RoleInfoData.AddValue1(builder, 最大血量.Value);
+            Flat.RoleInfoData.AddValue2(builder, 血量.Value);
+            Flat.RoleInfoData.AddValue3(builder, 临时护甲.Value);
+            Flat.RoleInfoData.AddValue4(builder, 抗性ArrayOffset);
+            Flat.RoleInfoData.AddValue5(builder, 闪避率.Value);
+            Flat.RoleInfoData.AddValue6(builder, 命中率.Value);
+            Flat.RoleInfoData.AddValue7(builder, 暴击率.Value);
+            Flat.RoleInfoData.AddValue8(builder, 暴击效果.Value);
+            Flat.RoleInfoData.AddValue9(builder, 行动点上限.Value);
+            Flat.RoleInfoData.AddValue10(builder, 行动点恢复.Value);
+            Flat.RoleInfoData.AddValue11(builder, 行动点初始.Value);
+            Flat.RoleInfoData.AddValue12(builder, 行动点.Value);
+            return Flat.RoleInfoData.EndRoleInfoData(builder);
         }
-        public void ToRAM(PRO.Proto.RoleInfoData diskData)
+
+        public void ToRAM(Flat.RoleInfoData diskData)
         {
             最大血量.Value = diskData.Value1;
             血量.Value = diskData.Value2;
             临时护甲.Value = diskData.Value3;
-            for (int i = 0; i < diskData.Value4.Count; i++)
-                抗性Array[i].Value = diskData.Value4[i];
+            for (int i = 0; i < 抗性Array.Length; i++)
+                抗性Array[i].Value = diskData.Value4(抗性Array.Length - i - 1);
             闪避率.Value = diskData.Value5;
             命中率.Value = diskData.Value6;
             暴击率.Value = diskData.Value7;

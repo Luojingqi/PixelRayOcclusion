@@ -2,6 +2,6 @@
 {
     public interface ISkillPointer
     {
-        public SkillPointerBase SkillPointer { get; set; }
+        public SkillPointerBase SkillPointerBase { get; set; }
     }
 }

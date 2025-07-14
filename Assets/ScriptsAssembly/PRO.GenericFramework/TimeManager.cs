@@ -48,9 +48,10 @@ namespace PRO
                 a -= 0.3f;
                 Text.text = (1f / Time.deltaTime).ToString();
             }
-            if (enableUpdate == false) return;
+            if (enableUpdate)
+                ScriptUpdate(Time.deltaTime);
 
-            ScriptUpdate(Time.deltaTime);
+
 
             #region 主线程事件轮训
             if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))

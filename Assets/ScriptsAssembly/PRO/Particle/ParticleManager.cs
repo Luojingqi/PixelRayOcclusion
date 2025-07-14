@@ -57,7 +57,12 @@ namespace PRO
         }
 
         public void PutIn(Particle particle) => GetPool(particle.loadPath).PutIn(particle);
-
+        public Particle ToRAM(SceneEntity scene, Flat.ParticleData diskData)
+        {
+            var ret = GetPool(diskData.LoadPath).TakeOut(scene);
+            ret.ToRAM(diskData);
+            return ret;
+        }
 
         public class ParticlePool
         {
@@ -72,7 +77,7 @@ namespace PRO
                 var particle = pool.TakeOut();
                 particle.TakeOut(scene);
                 particle.SkillPlayAgent?.SetScene(scene);
-                scene.ActiveParticleSet.Add(particle);
+                scene.ActiveParticle.Add(particle);
                 return particle;
             }
 
@@ -87,13 +92,6 @@ namespace PRO
                 particle.SkillPlayAgent?.SetScene(null);
                 pool.PutIn(particle);
             }
-        }
-
-        public Particle ToRAM(Proto.ParticleData diskData, SceneEntity screen)
-        {
-            var particle = GetPool(diskData.LoadPath).TakeOut(screen);
-            particle.ToRAM(diskData);
-            return particle;
         }
     }
 }

@@ -1,10 +1,13 @@
 using PRO.DataStructure;
-using PRO.Proto.Ex;
 using PRO.Disk;
 using PRO.Renderer;
 using PRO.Tool;
 using System.Collections.Generic;
 using UnityEngine;
+using Google.FlatBuffers;
+using Sirenix.OdinInspector;
+using PRO.Flat.Ex;
+using System.Threading;
 namespace PRO
 {
     public class Block : BlockBase
@@ -123,8 +126,9 @@ namespace PRO
             return block;
         }
 
-        public static void PutIn(Block block)
+        public static void PutIn(Block block, CountdownEvent countdown)
         {
+            countdown.AddCount();
             HashSet<BoxCollider2D> boxHash = new HashSet<BoxCollider2D>(10);
             for (int y = 0; y < Block.Size.y; y++)
             {
@@ -151,6 +155,7 @@ namespace PRO
                 BlockPool.PutIn(block);
                 foreach (var box in boxHash)
                     GreedyCollider.PutIn(box);
+                countdown.Signal();
             });
         }
         #endregion 
@@ -582,33 +587,54 @@ namespace PRO
         public HashSet<Role> ActiveRole = new HashSet<Role>();
 
 
-        public override void ToDisk(ref Proto.BlockBaseData diskData)
+
+        //public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
+        //{
+        //    base.ToRAM(diskData, scene);
+        //    
+        //}
+
+        public override System.Action ToDisk(FlatBufferBuilder builder)
         {
-            base.ToDisk(ref diskData);
+            var offset1 = AddFluidUpdateHash(builder, fluidUpdateHash1);
+            var offset2 = AddFluidUpdateHash(builder, fluidUpdateHash2);
+            var offset3 = AddFluidUpdateHash(builder, fluidUpdateHash3);
+            return () =>
+            {
+                Flat.BlockBaseData.AddFluidUpdateHash1(builder, offset1);
+                Flat.BlockBaseData.AddFluidUpdateHash2(builder, offset2);
+                Flat.BlockBaseData.AddFluidUpdateHash3(builder, offset3);
+            };
+        }
+        private VectorOffset AddFluidUpdateHash(FlatBufferBuilder builder, HashSet<Vector2Byte>[] fluidUpdateHash)
+        {
+            int length = 0;
+            foreach (var hash in fluidUpdateHash1)
+                length += hash.Count;
+            Flat.BlockBaseData.StartFluidUpdateHash1Vector(builder, length);
             foreach (var hash in fluidUpdateHash1)
                 foreach (var pos in hash)
-                    diskData.FluidUpdateHash1.Add(pos.ToDisk());
-
-            foreach (var hash in fluidUpdateHash2)
-                foreach (var pos in hash)
-                    diskData.FluidUpdateHash2.Add(pos.ToDisk());
-
-            foreach (var hash in fluidUpdateHash3)
-                foreach (var pos in hash)
-                    diskData.FluidUpdateHash3.Add(pos.ToDisk());
-
+                    pos.ToDisk(builder);
+            return builder.EndVector();
         }
 
-        public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
+        public override void ToRAM(Flat.BlockBaseData blockDiskData)
         {
-            base.ToRAM(diskData, scene);
-            foreach (var pos in diskData.FluidUpdateHash1)
-                AddHashSet(fluidUpdateHash1[pos.Y], pos.ToRAM());
-            foreach (var pos in diskData.FluidUpdateHash2)
-                AddHashSet(fluidUpdateHash2[pos.Y], pos.ToRAM());
-            foreach (var pos in diskData.FluidUpdateHash3)
-                AddHashSet(fluidUpdateHash3[pos.Y], pos.ToRAM());
-
+            for (int i = blockDiskData.FluidUpdateHash1Length - 1; i >= 0; i--)
+            {
+                var pos = blockDiskData.FluidUpdateHash1(i).Value.ToRAM();
+                AddHashSet(fluidUpdateHash1[pos.y], pos);
+            }
+            for (int i = blockDiskData.FluidUpdateHash2Length - 1; i >= 0; i--)
+            {
+                var pos = blockDiskData.FluidUpdateHash2(i).Value.ToRAM();
+                AddHashSet(fluidUpdateHash2[pos.y], pos);
+            }
+            for (int i = blockDiskData.FluidUpdateHash3Length - 1; i >= 0; i--)
+            {
+                var pos = blockDiskData.FluidUpdateHash3(i).Value.ToRAM();
+                AddHashSet(fluidUpdateHash3[pos.y], pos);
+            }
             var colliderDataList = GreedyCollider.CreateColliderDataList(this, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {

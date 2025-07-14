@@ -1,0 +1,10 @@
+﻿namespace PRO.Flat;
+
+table SkillPlayerAgentData
+{
+	play : bool;
+	time : float;
+	now_frame : int;
+	idle_load_path : string;
+	skill_load_path : string;
+}

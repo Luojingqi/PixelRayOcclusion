@@ -1,4 +1,4 @@
-﻿namespace PRO.Buff.Base.IBuff
+﻿namespace PRO.Buff.Base
 {
     public interface IBuff_叠加
     {
@@ -28,16 +28,5 @@
         /// 最大比例上限
         /// </summary>
         public float ProportionMax { get; set; }
-    }
-    public interface IBuff_UI
-    {
-        public string Info { get; }
-    }
-    /// <summary>
-    /// 代表此buff同时只能存在一个
-    /// </summary>
-    public interface IBuff_独有
-    {
-        
     }
 }

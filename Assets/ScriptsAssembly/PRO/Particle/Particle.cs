@@ -2,6 +2,9 @@
 using System;
 using UnityEngine;
 using PRO.Proto.Ex;
+using Google.FlatBuffers;
+using PRO.Flat.Ex;
+using Sirenix.OdinInspector;
 
 namespace PRO
 {
@@ -144,23 +147,31 @@ namespace PRO
             transform.position = Block.GlobalToWorld(global) + new Vector3(pixelSizeHalf, pixelSizeHalf);
         }
 
-        public virtual Proto.ParticleData ToDisk()
+        public Offset<Flat.ParticleData> ToDisk(FlatBufferBuilder builder)
         {
-            var diskData = Proto.ProtoPool.TakeOut<Proto.ParticleData>();
-            diskData.LoadPath = loadPath;
-            diskData.Transform = transform.ToDisk();
-            diskData.Rigidbody2D = Rig2D.ToDisk();
-            diskData.SurviveTimeRange = surviveTimeRange.ToDisk();
-            diskData.RemainTime = remainTime;
-            diskData.ElapsedTime = elapsedTime;
-            return diskData;
+            var loadPathOffset = builder.CreateString(loadPath);
+            var extendDataOffset = ExtendDataToDisk(builder);
+
+            Flat.ParticleData.StartParticleData(builder);
+            Flat.ParticleData.AddLoadPath(builder, loadPathOffset);
+            Flat.ParticleData.AddTransform(builder, transform.ToDisk(builder));
+            Flat.ParticleData.AddRigidbody(builder, Rig2D.ToDisk(builder));
+            Flat.ParticleData.AddSurviveTimeRange(builder, surviveTimeRange.ToDisk(builder));
+            Flat.ParticleData.AddRemainTime(builder, remainTime);
+            Flat.ParticleData.AddElapsedTime(builder, elapsedTime);
+            Flat.ParticleData.AddExtendData(builder, extendDataOffset);
+            return Flat.ParticleData.EndParticleData(builder);
+        }
+        public virtual int ExtendDataToDisk(FlatBufferBuilder builder)
+        {
+            return 0;
         }
 
-        public virtual void ToRAM(Proto.ParticleData diskData)
+        public virtual void ToRAM(Flat.ParticleData diskData)
         {
-            transform.ToRAM(diskData.Transform);
-            Rig2D.ToRAM(diskData.Rigidbody2D);
-            surviveTimeRange = diskData.SurviveTimeRange.ToRAM();
+            transform.ToRAM(diskData.Transform.Value);
+            Rig2D.ToRAM(diskData.Rigidbody.Value);
+            surviveTimeRange = diskData.SurviveTimeRange.Value.ToRAM();
             remainTime = diskData.RemainTime;
             elapsedTime = diskData.ElapsedTime;
         }

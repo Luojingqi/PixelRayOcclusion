@@ -28,41 +28,37 @@ namespace PRO.TurnBased
         {
             if (Operate.NowState.EnumName == OperateStateEnum.t0 && CheckUp())
             {
-                Operate.startToward = Operate.Turn.Agent.Toward;
+                Operate.startToward = Operate.Agent.Toward;
                 Operate.lastToward = Operate.startToward;
 
                 Operate.context = CombatContext.TakeOut();
-                Operate.context.SetAgent(Operate.Turn.Agent, Operate.Turn.RoundFSM, Operate.Turn);
+                Operate.context.SetAgent(Operate.Agent, Operate.Turn.RoundFSM, Operate.Turn);
                 Operate.context.LogBuilder.Append(Operate.config.Name);
                 Operate.context.Calculate_战斗技能初始化(Operate.config.施法type, Operate.config.StartCombatEffectDataList);
 
-                Operate.Turn.Agent.gameObject.layer = (int)GameLayer.UnRole;
+                Operate.Agent.gameObject.layer = (int)GameLayer.UnRole;
 
+                CreatePointer(Operate.config.SkillPointerLoadPath);
                 Trigger();
                 Operate.SwitchState(OperateStateEnum.t1);
             }
         }
 
-        protected SkillPointerBase CreatePointer(string loadPath)
+        protected void CreatePointer(string loadPath)
         {
-            SkillPointerBase skillPointer;
-            skillPointer = AssetManagerEX.LoadSkillPointer<SkillPointerBase>(loadPath);
+            if (Operate is ISkillPointer i == false) return;
+            SkillPointerBase skillPointer = AssetManagerEX.LoadSkillPointer<SkillPointerBase>(loadPath);
+            i.SkillPointerBase = skillPointer;
             skillPointer.Open();
-            Role agent = Operate.Turn.Agent;
-            skillPointer.SetPosition(agent.GlobalPos + agent.nav.AgentMould.center);
-
-            if (skillPointer is SkillPointer_范围内射线类 skillPointer_射线)
-            {
-                skillPointer_射线.StartPos = skillPointer_射线.transform.position;
-            }
-            return skillPointer;
+            Role agent = Operate.Agent;
+            skillPointer.SetPosition(agent.GlobalPos + agent.nav.AgentMould.center);   
         }
 
         /// <summary>
         /// 检查此操作是否达到了可执行条件
         /// </summary>
         /// <returns></returns>
-        public virtual bool CheckUp() { return Operate.Turn.Agent.Info.行动点.Value >= Operate.config.行动点; }
+        public virtual bool CheckUp() { return Operate.Agent.Info.行动点.Value >= Operate.config.行动点; }
         /// <summary>
         /// 触发一次
         /// </summary>

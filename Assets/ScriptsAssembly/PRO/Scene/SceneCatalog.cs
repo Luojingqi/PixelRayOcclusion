@@ -42,6 +42,8 @@ namespace PRO.Disk.Scene
             Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Block");
             //创建建筑文件夹
             Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
+            //创建角色文件夹
+            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Role");
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
             info.Save();

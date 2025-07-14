@@ -146,7 +146,7 @@ namespace PRO
         //        operate.T0.TrySwitchStateToT1();
         //        if (operate != TimeDelay)
         //        {
-        //            operate.Turn.Agent.ForEachBuffApplyEffect(BuffTriggerType.技能释放前, operate.context, -1);
+        //            operate.Agent.ForEachBuffApplyEffect(BuffTriggerType.技能释放前, operate.context, -1);
         //        }
         //        operate.T1.节点执行(next.operateRecord);
         //        operate.SwitchState(OperateStateEnum.t2);

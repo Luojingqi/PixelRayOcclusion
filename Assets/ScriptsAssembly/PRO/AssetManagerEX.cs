@@ -1,4 +1,6 @@
+using PRO.Buff.Base;
 using PRO.Skill;
+using PRO.Skill.Base;
 using PRO.SkillEditor;
 using PRO.Tool;
 using System.Collections.Generic;
@@ -15,7 +17,7 @@ namespace PRO
         /// <summary>
         /// 技能文件夹的目录
         /// </summary>
-        public static string SkillDirectoryPath = @"ScriptsAssembly\PRO\技能";
+        public static string SkillDirectoryPath = @"ScriptsAssembly\PRO\Skill";
         /// <summary>
         /// 加载技能轨道数据
         /// 
@@ -25,7 +27,7 @@ namespace PRO
         {
             return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
         }
-        private static StringBuilder stringBuilder = new StringBuilder();
+        private static StringBuilder stringBuilder = new StringBuilder(64);
         public static Skill_Disk LoadSkillDisk(OperateFSMBase SkillOperate)
         {
             string name = SkillOperate.GetType().Name;
@@ -75,8 +77,33 @@ namespace PRO
             return ret as T;
         }
         /// <summary>
-        /// 已经加载到场景中的技能指示器
+        /// 已经实例化到场景中的技能指示器
         /// </summary>
         private static Dictionary<string, SkillPointerBase> skillPointerInScene = new Dictionary<string, SkillPointerBase>();
+
+        /// <summary>
+        /// 技能文件夹的目录
+        /// </summary>
+        public static string BuffDirectoryPath = @"ScriptsAssembly\PRO\Buff";
+        public static BuffConfig LoadBuffConfig(BuffBase buff)
+        {
+            string name = buff.GetType().Name;
+            int i = 0;
+            while (i < name.Length)
+                if (name[i++] == '_') break;
+            int end = i;
+            while (end < name.Length)
+                if (name[end++] == '_') break;
+            while (end < name.Length)
+                if (name[end++] == '_') break;
+
+            while (i < end)
+                stringBuilder.Append(name[i++]);
+            stringBuilder.Append('\\');
+            stringBuilder.Append($"{name}_Config");
+            string path = stringBuilder.ToString();
+            stringBuilder.Clear();
+            return AssetManager.Load_A<BuffConfig>("skill.ab", @$"{BuffDirectoryPath}\{path}.asset");
+        }
     }
 }

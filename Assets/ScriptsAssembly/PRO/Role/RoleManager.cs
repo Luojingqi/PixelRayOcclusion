@@ -1,5 +1,6 @@
 ﻿using PRO.Skill;
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,33 +17,54 @@ namespace PRO
             Inst = this;
             roleNode = new GameObject("RolePool").transform;
             roleNode.parent = SceneManager.Inst.PoolNode;
-            AddRolePool(AssetManager.Load_A<GameObject>("role.ab", @$"ScriptsAssembly\PRO\Role\Role_默认").GetComponent<Role>());
+            {
+                var role = AssetManager.Load_A<GameObject>("role.ab", @$"ScriptsAssembly\PRO\Role\Role_默认").GetComponent<Role>();
+                var pool = AddRolePool(role);
+                pool.PutInEvent += t =>
+                {
+                    if (t.nav != null && t.nav.TypeName != "默认")
+                        t.nav = NavManager.Inst.GetNav("默认");
+                };
+            }
         }
 
-        private void AddRolePool(Role role)
+        private GameObjectPool<Role> AddRolePool(Role role)
         {
             var node = new GameObject(role.RoleTypeName + "PoolNode").transform;
             node.transform.parent = roleNode;
             var pool = new GameObjectPool<Role>(role, node);
             pool.CreateEvent += t => t.Init();
             rolePoolDic.Add(role.RoleTypeName, pool);
+            return pool;
         }
 
-        public Role TakeOut(string roleTypeName, SceneEntity scene)
+        public Role TakeOut(string roleTypeName, SceneEntity scene, string guid)
         {
             var role = rolePoolDic[roleTypeName].TakeOut();
-            role.TakeOut(scene);
-            scene.Role_Guid_Dic.Add(role.Guid, role);
-            scene.Role_Trans_Dic.Add(role.transform, role);
+            role.TakeOut(scene, guid);
+            scene.ActiveRole_Guid.Add(role.GUID, role);
+            scene.ActiveRole_Trans.Add(role.transform, role);
             return role;
         }
 
         public void PutIn(Role role)
         {
-            role.Scene.Role_Guid_Dic.Remove(role.Guid);
-            role.Scene.Role_Trans_Dic.Remove(role.transform);
+            role.Scene.ActiveRole_Guid.Remove(role.GUID);
+            role.Scene.ActiveRole_Trans.Remove(role.transform);
             rolePoolDic[role.RoleTypeName].PutIn(role);
             role.PutIn();
+        }
+
+        public Role Load(string guid, SceneEntity scene)
+        {
+            Role role = null;
+            if (IOTool.LoadFlat(@$"{scene.sceneCatalog.directoryInfo}\Role\{guid}", out var builder))
+            {
+                var diskData = Flat.RoleData.GetRootAsRoleData(builder.DataBuffer);
+                role = TakeOut(diskData.RoleTypeName, scene, guid);
+                role.ToRAM(diskData);
+            }
+            return role;
         }
 
 

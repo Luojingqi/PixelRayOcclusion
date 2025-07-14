@@ -10,6 +10,7 @@ namespace PRO
 {
     public class Pixel
     {
+        public override string ToString() => $"{pos} {posG} {typeInfo.typeName} {colorInfo.colorName} {blockBase?.BlockPos} {buildingSet.Count}";
         /// <summary>
         /// 在块内坐标，不可设置
         /// </summary>
@@ -122,6 +123,14 @@ namespace PRO
             lock (pixelPool)
                 pixelPool.PutIn(pixel);
         }
+        /// <summary>
+        /// 线程不安全
+        /// </summary>
+        /// <param name="typeInfo"></param>
+        /// <param name="colorInfo"></param>
+        /// <param name="pixelPos"></param>
+        /// <param name="durability"></param>
+        /// <returns></returns>
         public static Pixel TakeOut(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability = 0)
         {
             if (Block.Check(pixelPos))

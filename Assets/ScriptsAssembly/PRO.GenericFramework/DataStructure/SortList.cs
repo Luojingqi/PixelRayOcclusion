@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace PRO
+namespace PRO.Tool
 {
+    /// <summary>
+    /// 排序list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class SortList<T> : IEnumerable<HashSet<T>>
     {
         public SortList(int size)
@@ -27,15 +31,21 @@ namespace PRO
                 costList.Insert(index, cost);
             }
             valueList[index].Add(value);
+            allCount++;
         }
-        public void Remove(T value, int cost)
+        public bool Remove(T value, int cost)
         {
             int index = costList.BinarySearch(cost);
-            if (index < 0) return;
-            valueList[index].Remove(value);
-            costList.RemoveAt(index);
+            if (index < 0) return false;
+            var set = valueList[index];
+            bool ret = set.Remove(value);
+            if (set.Count == 0)
+                costList.RemoveAt(index);
+            allCount--;
+            return ret;
         }
-
+        public int AllCount => allCount;
+        private int allCount;
         public int Count => valueList.Count;
 
         public HashSet<T> FormIndex(int index) => valueList[index];

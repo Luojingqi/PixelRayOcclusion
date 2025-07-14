@@ -1,13 +1,15 @@
 using Cysharp.Threading.Tasks;
-using PRO.Buff;
+using Google.FlatBuffers;
 using PRO.Buff.Base;
-using PRO.Buff.Base.IBuff;
-using PRO.Proto.Ex;
+using PRO.Flat.Ex;
+using PRO.Skill;
 using PRO.SkillEditor;
+using PRO.Tool;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Contexts;
 using UnityEngine;
 namespace PRO
 {
@@ -17,7 +19,7 @@ namespace PRO
         public SkillPlayAgent SkillPlayAgent { get; private set; }
 
         public Rigidbody2D Rig2D { get; private set; }
-        public Dictionary<string, OperateFSMBase> AllCanUseOperate { get; } = new Dictionary<string, OperateFSMBase>();
+
 
         [NonSerialized]
         public FreelyLightSource source;
@@ -41,7 +43,8 @@ namespace PRO
             }
         }
         public string RoleTypeName;
-        public string Guid;
+        public string GUID => guid;
+        private string guid;
         public string Name;
         public Sprite Icon;
         [NonSerialized]
@@ -49,17 +52,12 @@ namespace PRO
         public void Init()
         {
             for (int i = 0; i < AllBuff.Length; i++)
-                AllBuff[i] = new List<IBuffBase>();
+                AllBuff[i] = new SortList<BuffBase>(8);
             SpriteRenderer = GetComponent<SpriteRenderer>();
             SkillPlayAgent = GetComponent<SkillPlayAgent>();
             SkillPlayAgent.Init();
-            SkillPlayAgent.SetScene(_scene);
 
             Rig2D = GetComponent<Rigidbody2D>();
-
-            nav = NavManager.Inst.GetNav("默认");
-
-            Guid = System.Guid.NewGuid().ToString();
 
             //CanUseOperateList.Add(new Skill_1_0());
             //CanUseOperateList.Add(new Skill_1_1());
@@ -86,36 +84,47 @@ namespace PRO
             //CanUseOperateList.Add(new Skill_7_0());
             //CanUseOperateList.Add(new Skill_7_1());
             //CanUseOperateList.Add(new Skill_8_0());
-            AddBuff(new Buff_1_0());
-            AddBuff(new Buff_2_0());
-            AddBuff(new Buff_2_1());
-            AddBuff(new Buff_2_3());
-            AddBuff(new Buff_2_5());
-            AddBuff(new Buff_2_7());
-            //AddBuff(new Buff_2_8());
-            AddBuff(new Buff_2_9());
-            AddBuff(new Buff_2_10());
-            AddBuff(new Buff_2_11());
+            //AddBuff(new Buff_1_0());
+            //AddBuff(new Buff_2_0());
+            //AddBuff(new Buff_2_1());
+            //AddBuff(new Buff_2_3());
+            //AddBuff(new Buff_2_5());
+            //AddBuff(new Buff_2_7());
+            ////AddBuff(new Buff_2_8());
+            //AddBuff(new Buff_2_9());
+            //AddBuff(new Buff_2_10());
+            //AddBuff(new Buff_2_11());
         }
-        public void TakeOut(SceneEntity scene)
+        public void TakeOut(SceneEntity scene,string guid)
         {
+            this.guid = guid;
             _scene = scene;
             source = FreelyLightSource.New(_scene, new Color32(200, 200, 200, 255), 15);
+            SkillPlayAgent.SetScene(_scene);
         }
         public void PutIn()
         {
+            guid = null;
             source.GloabPos = null;
             source = null;
             _scene = null;
+            SkillPlayAgent.SetScene(null);
         }
         public void TimeUpdate()
         {
             source.GloabPos = Block.WorldToGlobal(transform.position) + nav.AgentMould.center;
-            for (int i = 0; i < AllBuff.Length; i++)
+            for (int i = 0; i < (int)BuffTriggerType.end; i++)
             {
-                List<IBuffBase> buffList = AllBuff[i];
-                for (int j = 0; j < buffList.Count; j++)
-                    buffList[j].UpdateCheckAction();
+                var buffTriggerList = AllBuff[i];
+                for (int j = 0; j < buffTriggerList.Count; j++)
+                {
+                    var list = new ReusableList<BuffBase>();
+                    foreach (var buff in buffTriggerList.FormIndex(i))
+                        list.Add(buff);
+                    for(int k = 0;k<list.Count;k++)
+                        list[k].Update();
+                    list.Dispose();
+                }
             }
         }
         #region 选择方法等
@@ -148,82 +157,66 @@ namespace PRO
         public Vector2Int GlobalPos { get => Block.WorldToGlobal(transform.position); set => transform.position = Block.GlobalToWorld(value); }
         public Vector2Int CenterPos => GlobalPos + nav.AgentMould.center;
         #endregion
+        #region operate
+        /// <summary>
+        /// key：guid value：skill
+        /// </summary>
+        public Dictionary<string, OperateFSMBase> AllCanUseOperate { get; } = new Dictionary<string, OperateFSMBase>();
+        #endregion
 
         #region buff
-        public List<IBuffBase>[] AllBuff { get; } = new List<IBuffBase>[(int)BuffTriggerType.end];
-
-        public Dictionary<string, IBuffBase> BuffNameDic = new Dictionary<string, IBuffBase>();
-        public Dictionary<Type, IBuffBase> BuffTypeDic = new Dictionary<Type, IBuffBase>();
-        public void AddBuff(IBuffBase buff)
-        {
-            AllBuff[(int)buff.TriggerType].Add(buff);
-            BuffNameDic.Add(buff.Name, buff);
-            if (buff is IBuff_独有) BuffTypeDic.Add(buff.GetType(), buff);
-            buff.RoleAddThis(this);
-        }
-        public void RemoveBuff(IBuffBase buff)
-        {
-            AllBuff[(int)buff.TriggerType].Remove(buff);
-            BuffNameDic.Remove(buff.Name);
-            if (buff is IBuff_独有) BuffTypeDic.Remove(buff.GetType());
-            buff.RoleRemoveThis();
-        }
+        public SortList<BuffBase>[] AllBuff { get; } = new SortList<BuffBase>[(int)BuffTriggerType.end];
+        /// <summary>
+        /// 独有的buff
+        /// </summary>
+        public Dictionary<Type, ReusableList<BuffBase>> BuffTypeDic { get; } = new Dictionary<Type, ReusableList<BuffBase>>();
         public void UpdateBuffUI()
         {
             if (GameMainUIC.Inst.NowShowRole != this) return;
             GameMainUIC.Inst.UpdateNowShowRoleBuff();
         }
-        public IBuffBase GetBuff(string buffName)
-        {
-            BuffNameDic.TryGetValue(buffName, out IBuffBase buff);
-            return buff;
-        }
-        public T GetBuff<T>() where T : class, IBuffBase
-        {
-            BuffTypeDic.TryGetValue(typeof(T), out IBuffBase buff);
-            return buff as T;
-        }
 
         public void ForEachBuffApplyEffect(BuffTriggerType type, CombatContext context, int byAgentIndex)
         {
-            List<IBuffBase> buffList = AllBuff[(int)type];
-            for (int i = buffList.Count - 1; i >= 0; i--)
-            {
-                var buff = buffList[i];
-                if (buff.GetActive()) buff.ApplyEffect(context, byAgentIndex);
-            }
+            var buffList = AllBuff[(int)type];
+            for (int i = 0; i < buffList.Count; i++)
+                foreach (var buff in buffList.FormIndex(i))
+                    buff.ApplyEffect(context, byAgentIndex);
         }
         #endregion
 
         #region 序列化与反序列化
-
-        public Proto.RoleData ToDisk()
+        public Offset<Flat.RoleData> ToDisk(FlatBufferBuilder builder)
         {
-            var diskData = Proto.ProtoPool.TakeOut<Proto.RoleData>();
-            diskData.TransFormData = transform.ToDisk();
-            diskData.Rigidbody2DData = Rig2D.ToDisk();
-            diskData.SkillPlayAgentData = SkillPlayAgent.ToDisk();
-            diskData.NavType = nav.TypeName;
-            diskData.Toward = (int)Toward;
-            diskData.RoleTypeName = RoleTypeName;
-            diskData.GUID = Guid;
-            diskData.Name = Name;
-            diskData.Info = Info.ToDisk();
+            var skillPlayAgentOffset = SkillPlayAgent.ToDisk(builder);
+            var navTypeOffset = builder.CreateString(nav?.TypeName);
+            var roleTypeOffset = builder.CreateString(RoleTypeName);
+            var guidOffset = builder.CreateString(GUID);
+            var nameOffset = builder.CreateString(Name);
+            var infoOffset = Info.ToDisk(builder);
+            Flat.RoleData.StartRoleData(builder);
+            Flat.RoleData.AddTransformData(builder, transform.ToDisk(builder));
+            Flat.RoleData.AddRigidbody2DData(builder, Rig2D.ToDisk(builder));
+            Flat.RoleData.AddSkillPlayAgentData(builder, skillPlayAgentOffset);
+            Flat.RoleData.AddNavType(builder, navTypeOffset);
+            Flat.RoleData.AddToward(builder, (int)Toward);
+            Flat.RoleData.AddRoleTypeName(builder, roleTypeOffset);
+            Flat.RoleData.AddGuid(builder, guidOffset);
+            Flat.RoleData.AddInfo(builder, infoOffset);
 
+            return Flat.RoleData.EndRoleData(builder);
 
-            return diskData;
         }
 
-        public void ToRAM(Proto.RoleData diskData)
+        public void ToRAM(Flat.RoleData diskData)
         {
-            transform.ToRAM(diskData.TransFormData);
-            Rig2D.ToRAM(diskData.Rigidbody2DData);
-            SkillPlayAgent.ToRAM(diskData.SkillPlayAgentData);
+            transform.ToRAM(diskData.TransformData.Value);
+            Rig2D.ToRAM(diskData.Rigidbody2DData.Value);
+            SkillPlayAgent.ToRAM(diskData.SkillPlayAgentData.Value);
             nav = NavManager.Inst.GetNav(diskData.NavType);
             Toward = (Toward)diskData.Toward;
-            Guid = diskData.GUID;
             Name = diskData.Name;
-            Info.ToRAM(diskData.Info);
+            Info.ToRAM(diskData.Info.Value);
 
         }
 

@@ -15,8 +15,7 @@ namespace PRO.TurnBased
             foreach (var role in fsm.RoleHash)
             {
                 //此处应当先按照先攻排序，然后按顺序生成回合
-                TurnFSM turn = new TurnFSM();
-                turn.Init(fsm, role, i++);
+                TurnFSM turn = new TurnFSM(fsm, role, i++);
                 state3.TurnFSMList.Add(turn);
             }
             GameMainUIC.Inst.SetTurn(state3.TurnFSMList, 0);

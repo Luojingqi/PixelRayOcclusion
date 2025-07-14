@@ -1,4 +1,6 @@
-﻿using PRO.Skill;
+﻿using Google.FlatBuffers;
+using Google.Protobuf;
+using PRO.Skill;
 using PRO.Tool;
 using UnityEngine;
 
@@ -16,7 +18,6 @@ namespace PRO.TurnBased
 
         public void Enter()
         {
-            // Operate.Turn.Agent.Info.行动点.Value -= Operate.config.行动点;
         }
 
         public abstract void Exit();
@@ -27,7 +28,7 @@ namespace PRO.TurnBased
             if (state == OperateFSMBase.TriggerState.toT0)
             {
                 Operate.context.Calculate_最终结算();
-                Operate.Turn.Agent.ForEachBuffApplyEffect(BuffTriggerType.技能释放后, Operate.context, -1);
+                Operate.Agent.ForEachBuffApplyEffect(BuffTriggerType.技能释放后, Operate.context, -1);
                 LogPanelC.Inst.AddLog(Operate.context, true);
                 Operate.SwitchState(OperateStateEnum.t0);
                 CombatContext.PutIn(Operate.context);
@@ -46,7 +47,7 @@ namespace PRO.TurnBased
             particle.Rig2D.velocity = n * v;
         }
 
-        public abstract void Enter(IOperateRecord operateRecord);
+        public abstract void Enter(FlatBufferBuilder operateRecord);
 
         /// <summary>
         /// 操作的实际执行过程，只能返回toT0或者update，返回toT1无效
@@ -54,7 +55,7 @@ namespace PRO.TurnBased
         /// <returns></returns>
         protected abstract OperateFSMBase.TriggerState Trigger();
 
-        //  public abstract StringBuilder ToDisk();
-        //  public abstract int ToRAM(string text, int offset);
+        public abstract void ToDisk(FlatBufferBuilder builder);
+        public abstract void ToRAM(FlatBufferBuilder builder);
     }
 }

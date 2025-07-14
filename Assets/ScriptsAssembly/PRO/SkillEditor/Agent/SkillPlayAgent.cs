@@ -1,3 +1,4 @@
+using Google.FlatBuffers;
 using PRO.Tool;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -121,27 +122,27 @@ namespace PRO.SkillEditor
         }
         #endregion
 
-        public Proto.SkillPlayerAgentData ToDisk()
+        public Offset<Flat.SkillPlayerAgentData> ToDisk(FlatBufferBuilder builder)
         {
-            var diskData = Proto.ProtoPool.TakeOut<Proto.SkillPlayerAgentData>();
-            diskData.Play = play;
-            diskData.Time = time;
-            diskData.NowFrame = nowFrame;
-            if (idle != null)
-                diskData.IdleLoadPath = idle.loadPath;
-            if (skill != null)
-                diskData.SkillLoadPath = skill.loadPath;
-            return diskData;
-        }
+            var idleLoadPathOffset = builder.CreateString(idle?.loadPath); 
+            var skillLoadPathOffset = builder.CreateString(skill?.loadPath);
 
-        public void ToRAM(Proto.SkillPlayerAgentData diskData)
+            Flat.SkillPlayerAgentData.StartSkillPlayerAgentData(builder);
+            Flat.SkillPlayerAgentData.AddPlay(builder, play);
+            Flat.SkillPlayerAgentData.AddTime(builder, time);
+            Flat.SkillPlayerAgentData.AddNowFrame(builder,nowFrame);
+            Flat.SkillPlayerAgentData.AddIdleLoadPath(builder, idleLoadPathOffset);
+            Flat.SkillPlayerAgentData.AddSkillLoadPath(builder, skillLoadPathOffset);
+            return Flat.SkillPlayerAgentData.EndSkillPlayerAgentData(builder);
+        }
+        public void ToRAM(Flat.SkillPlayerAgentData diskData)
         {
             play = diskData.Play;
             time = diskData.Time;
             nowFrame = diskData.NowFrame;
-            if (diskData.IdleLoadPath != string.Empty)
+            if(diskData.IdleLoadPath != null)
                 idle = AssetManager.Load_A<Skill_Disk>("skill.ab", @$"ScriptsAssembly\PRO\技能\{diskData.IdleLoadPath}.asset");
-            if (diskData.SkillLoadPath != string.Empty)
+            if(diskData.SkillLoadPath != null)
                 skill = AssetManager.Load_A<Skill_Disk>("skill.ab", @$"ScriptsAssembly\PRO\技能\{diskData.SkillLoadPath}.asset");
             skill?.UpdateFrame(this, nowFrame, (int)(Skill_Disk.PlayTrack.AnimationTrack2D | Skill_Disk.PlayTrack.SpecialEffectTrack2D));
         }

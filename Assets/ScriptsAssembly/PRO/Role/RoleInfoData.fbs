@@ -1,0 +1,16 @@
+﻿namespace PRO.Flat;
+
+table RoleInfoData {
+  value1 : int;
+  value2 : int;
+  value3 : int;
+  value4 : [int];
+  value5 : float;
+  value6 : float;
+  value7 : float;
+  value8 : float;
+  value9 : int;
+  value10 : int;
+  value11 : int;
+  value12 : int;
+}

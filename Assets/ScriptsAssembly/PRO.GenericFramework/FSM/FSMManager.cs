@@ -42,9 +42,9 @@ namespace PRO.Tool
             else return;
         }
 
-        public void SwitchState(int nextState)
+        public void SetState(T setState)
         {
-
+            NowState = stateDic[setState];
         }
 
         public virtual void Update()

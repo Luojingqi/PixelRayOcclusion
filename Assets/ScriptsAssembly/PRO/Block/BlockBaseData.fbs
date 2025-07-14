@@ -1,0 +1,34 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.Flat;
+
+table BlockBaseData
+{
+	pixel_type_name_array : [string];
+
+	pixel_color_name_array : [string];
+
+	pixel_building_guid_array : [string];
+
+	//Block数据
+	block_pixel_array : [PixelData];
+
+	fluid_update_hash1 : [Vector2Byte];
+	fluid_update_hash2 : [Vector2Byte];
+	fluid_update_hash3 : [Vector2Byte];
+	//
+
+
+	//Background数据
+	background_pixel_array : [PixelData];
+	//
+}
+
+table PixelData
+{
+	type_index : int;
+	color_index : int;
+	durability : int;
+	affects_transparency : float;
+	building_list : [int];
+}

@@ -35,7 +35,7 @@ namespace PRO.SkillEditor
                 }
 
 
-                building.Scene.BuildingInRAM.Add(building.GUID, building);
+                building.Scene.ActiveBuilding.Add(building.GUID, building);
 
                 foreach (var pixelData in pixelList)
                 {

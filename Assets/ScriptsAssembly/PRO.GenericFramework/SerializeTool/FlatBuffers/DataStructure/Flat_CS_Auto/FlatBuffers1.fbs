@@ -1,0 +1,19 @@
+﻿
+namespace MyGame;
+enum Color : byte { Red = 1, Green, Blue }
+struct Vec2 {
+  x : float;
+  y : float;
+}
+table Monster {
+  pos : Vec2;
+  pos_array : [Vec2];
+  mana : short = 150;
+  name : string;
+  friendly : bool = false;
+  inventory : [float];
+  color : Color = Blue;
+  
+  dic_key : [string];
+  dic_value : [int];
+}

@@ -1,81 +1,104 @@
-using System;
+using PRO.Tool;
 
 namespace PRO.Buff.Base
 {
-    public abstract class BuffBase<T> : IBuffBase where T : BuffBase<T>
+    public abstract class BuffBase
     {
-        public abstract BuffTriggerType TriggerType { get; }
-        public abstract string Name { get; }
         /// <summary>
-        /// 活动状态
+        /// 应用buff的效果到战斗上下文中，与buff的活跃状态有关
         /// </summary>
-        protected bool active = false;
+        /// <param name="context"></param>
+        /// <param name="index"></param>
         public abstract void ApplyEffect(CombatContext context, int index);
 
-        public abstract RoleBuffUpdateCheckBase<T> UpdateCheck { get; }
-
         public Role Agent { get; private set; }
+
+        public BuffConfig Config => config;
+        private BuffConfig config;
+        public string Name => config.Name;
+        public abstract BuffTriggerType TriggerType { get; }
+        public string guid;
+        public BuffBase()
+        {
+            config = AssetManagerEX.LoadBuffConfig(this);
+            guid = System.Guid.NewGuid().ToString();
+        }
         /// <summary>
         /// 此接口只需重写禁止调用，请使用Role.AddBuff()
         /// </summary>
-        public virtual void RoleAddThis(Role role)
+        public virtual bool RoleAddThis(Role role)
         {
+            bool ret = true;
+            for (int i = 0; i < childBuffList.Count; i++)
+                ret = ret && childBuffList[i].RoleAddThis(role);
+            var type = this.GetType();
+            if (config.独有)
+            {
+                if (role.BuffTypeDic.ContainsKey(type))
+                    return false;
+            }
+            if (role.BuffTypeDic.TryGetValue(type, out var list))
+            {
+                list.Add(this);
+                role.BuffTypeDic[type] = list;
+            }
+            else
+            {
+                list = new ReusableList<BuffBase>(1);
+                list.Add(this);
+                role.BuffTypeDic.Add(type, list);
+            }
+            role.AllBuff[(int)TriggerType].Add(this, config.Priority);
             Agent = role;
+            return true && ret;
         }
         /// <summary>
         /// 此接口只需重写禁止调用，请使用Role.RemoveBuff()
         /// </summary>
-        public virtual void RoleRemoveThis()
+        public virtual bool RoleRemoveThis()
         {
+            bool ret = true;
+            for (int i = 0; i < childBuffList.Count; i++)
+                ret = ret && childBuffList[i].RoleRemoveThis();
+            if (Agent == null) return false;
+            var type = this.GetType();
+            ret = ret && Agent.AllBuff[(int)TriggerType].Remove(this, config.Priority);
+            var list = Agent.BuffTypeDic[type];
+            if (list.Count > 1)
+            {
+                var newList = new ReusableList<BuffBase>(list.Count);
+                for (int i = 0; i < list.Count; i++)
+                    if (list[i] != this)
+                        newList.Add(list[i]);
+                Agent.BuffTypeDic[type] = newList;
+            }
+            else
+            {
+                Agent.BuffTypeDic.Remove(type);
+            }
+            list.Dispose();
             Agent = null;
+            return ret;
         }
-        public bool GetActive() => active;
-        /// <summary>
-        /// 设置buff的活动状态，由于设置时可能会处理buff冲突，所以先设置buff内的各种属性字段的值，然后在调用此方法
-        /// </summary>
-        /// <param name="active"></param>
-        public virtual void SetActive(bool active) => this.active = active;
 
-        public void UpdateCheckAction()
+        /// <summary>
+        /// 更新buff的帧更新检查
+        /// </summary>
+        public virtual void Update() { }
+
+        protected ReusableList<IChildBuff> childBuffList;
+        protected void AddChildBuuff(IChildBuff childBuff)
         {
-            if (UpdateCheck != null && UpdateCheck.active)
-                UpdateCheck?.Update();
+            if (childBuffList.Length <= 0)
+                childBuffList = new ReusableList<IChildBuff>(1);
+            childBuffList.Add(childBuff);
         }
     }
 
-    public interface IBuffBase
+    public interface IChildBuff
     {
-        public BuffTriggerType TriggerType { get; }
-        public string Name { get; }
-        public void ApplyEffect(CombatContext context, int index);
-        /// <summary>
-        /// 此接口只需重写禁止调用，请使用Role.AddBuff()
-        /// </summary>
-        public void RoleAddThis(Role role);
-        /// <summary>
-        /// 此接口只需重写禁止调用，请使用Role.RemoveBuff()
-        /// </summary>
-        public void RoleRemoveThis();
-        public bool GetActive();
-        public void UpdateCheckAction();
-    }
-}
-
-
-namespace PRO.Buff.Base.BuffAux
-{
-    public abstract class BuffAuxBase_回合开始 : BuffBase<BuffAuxBase_回合开始>
-    {
-        public override BuffTriggerType TriggerType => BuffTriggerType.回合开始时;
-        public override string Name => name;
-        private string name = $"回合开始_{Guid.NewGuid()}";
-        public override RoleBuffUpdateCheckBase<BuffAuxBase_回合开始> UpdateCheck => null;
-    }
-    public abstract class BuffAuxBase_回合结束 : BuffBase<BuffAuxBase_回合结束>
-    {
-        public override BuffTriggerType TriggerType => BuffTriggerType.回合结束时;
-        public override string Name => name;
-        private string name = $"回合结束_{Guid.NewGuid()}";
-        public override RoleBuffUpdateCheckBase<BuffAuxBase_回合结束> UpdateCheck => null;
+        public bool RoleAddThis(Role role);
+        public bool RoleRemoveThis();
+        public Role Agent { get; }
     }
 }

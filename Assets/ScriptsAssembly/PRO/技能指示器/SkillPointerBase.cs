@@ -29,7 +29,7 @@ namespace PRO.Skill
             gameObject.SetActive(false);
         }
 
-        public void SetPosition(Vector2Int global)
+        public virtual void SetPosition(Vector2Int global)
         {
             transform.position = Block.GlobalToWorld(global) + Vector3.one * Pixel.Size / 2;
         }
