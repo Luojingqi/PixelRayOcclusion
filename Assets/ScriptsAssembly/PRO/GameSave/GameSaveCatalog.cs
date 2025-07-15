@@ -50,6 +50,10 @@ namespace PRO
         /// <returns></returns>
         public static GameSaveCatalog CreatFile(string name)
         {
+            if (Directory.Exists(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}"))
+            {
+                Directory.Delete(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}", true);
+            }
             GameSaveCatalog gameSaveCatalog = new GameSaveCatalog();
             gameSaveCatalog.name = name;
             gameSaveCatalog.saveTime = DateTime.Now;
@@ -116,21 +120,5 @@ namespace PRO
             }
             return ret;
         }
-
-        /// <summary>
-        /// 创建一个空存档文件，如果有，覆盖
-        /// </summary>
-        /// <param name="saveName"></param>
-        /// <returns></returns>
-        public static GameSaveCatalog CreateGameSaveFile(string saveName)
-        {
-            if (Directory.Exists(@$"{Application.streamingAssetsPath}\GameSaveFiles\{saveName}"))
-            {
-                Directory.Delete(@$"{Application.streamingAssetsPath}\GameSaveFiles\{saveName}", true);
-            }
-            GameSaveCatalog gameSave = GameSaveCatalog.CreatFile(saveName);
-            return gameSave;
-        }
-
     }
 }

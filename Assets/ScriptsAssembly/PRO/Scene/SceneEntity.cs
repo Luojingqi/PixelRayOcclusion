@@ -2,6 +2,7 @@ using Google.FlatBuffers;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Disk.Scene;
+using PRO.Flat.Ex;
 using PRO.Tool;
 using PRO.Tool.Serialize.IO;
 using PRO.TurnBased;
@@ -12,7 +13,6 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using static PRO.BlockMaterial;
-using static UnityEngine.ParticleSystem;
 
 namespace PRO
 {
@@ -43,6 +43,7 @@ namespace PRO
         public SceneEntity(SceneCatalog sceneCatalog)
         {
             this.sceneCatalog = sceneCatalog;
+            //LoadAll();
         }
         #region 获取已经实例化的对象
         public HashSet<Vector2Int> ActiveBlockBase = new HashSet<Vector2Int>(50);
@@ -106,119 +107,129 @@ namespace PRO
         /// <summary>
         /// 使用多线程加载一个区块，区块文件不存在时会创建一个空区块
         /// </summary>
-        /// <param name="scene"></param>
         /// <param name="blockPos"></param>
-        /// <param name="endActionUnity">每次加载完成一个区块都会传递方法让主线程执行</param>
-        /// <param name="endAction">每次加载完成一个区块都会执行</param>
-        public void ThreadLoadOrCreateBlock(Vector2Int blockPos)
+        public void ThreadLoadOrCreateBlock(Vector2Int blockPos, CountdownEvent countdown_main = null)
         {
+            if (ActiveBlockBase.Contains(blockPos)) return;
             ActiveBlockBase.Add(blockPos);
             var block = CreateBlock(blockPos);
             var background = CreateBackground(blockPos);
-            block.UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
+            block.ResetUnLoadCountdown();
             #region 加载  区块
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockData", out var builder))
-                {
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        try
-                        {
-                            var diskData = Flat.BlockBaseData.GetRootAsBlockBaseData(builder.DataBuffer);
-                            PixelTypeInfo[] typeInfoArray = new PixelTypeInfo[diskData.PixelTypeNameArrayLength];
-                            PixelColorInfo[] colorInfoArray = new PixelColorInfo[diskData.PixelColorNameArrayLength];
-                            BuildingBase[] buildingArray = new BuildingBase[diskData.PixelBuildingGuidArrayLength];
-                            for (int i = typeInfoArray.Length - 1; i >= 0; i--)
-                                typeInfoArray[typeInfoArray.Length - i - 1] = Pixel.GetPixelTypeInfo(diskData.PixelTypeNameArray(i));
-                            for (int i = colorInfoArray.Length - 1; i >= 0; i--)
-                                colorInfoArray[colorInfoArray.Length - i - 1] = BlockMaterial.GetPixelColorInfo(diskData.PixelColorNameArray(i));
-                            for (int i = buildingArray.Length - 1; i >= 0; i--)
-                            {
-                                string guid = diskData.PixelBuildingGuidArray(i);
-                                var building = GetBuilding(guid);
-                                if (building == null)
-                                {
-                                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => LoadBuilding(guid));
-                                    building = GetBuilding(guid);
-                                }
-                                buildingArray[buildingArray.Length - i - 1] = building;
-                            }
-                            for (int i = Block.Size.x * Block.Size.y - 1; i >= 0; i--)
-                            {
-                                var blockPixelDiskData = diskData.BlockPixelArray(i).Value;
-                                var backgroundPixelDiskData = diskData.BackgroundPixelArray(i).Value;
-                                int index = Block.Size.x * Block.Size.y - i - 1;
-                                Vector2Byte pos = new(index % Block.Size.y, index / Block.Size.y);
-                                block.SetPixel(PixelToRAM(blockPixelDiskData, pos, typeInfoArray, colorInfoArray, buildingArray), false, false, false);
-                                background.SetPixel(PixelToRAM(backgroundPixelDiskData, pos, typeInfoArray, colorInfoArray, buildingArray), false, false, false);
-                            }
-                            block.ToRAM(diskData);
-                            background.ToRAM(diskData);
-                            FlatBufferBuilder.PutIn(builder);
-                        }
-                        catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
-                    });
-                }
-                else
-                {
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        try
-                        {
-                            for (int x = 0; x < Block.Size.x; x++)
-                                for (int y = 0; y < Block.Size.y; y++)
-                                {
 
-                                    Pixel pixel;
-                                    lock (Pixel.pixelPool)
-                                        pixel = Pixel.pixelPool.TakeOut();
-                                    Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
-                                    block.SetPixel(pixel, false, false, false);
-                                    block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-
-                                    lock (Pixel.pixelPool)
-                                        pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
-                                    background.SetPixel(pixel, false, false, false);
-                                    background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                                }
-                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
-                            {
-                                BlockMaterial.SetBlock(block);
-                                BlockMaterial.SetBackgroundBlock(background);
-                            });
-                        }
-                        catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
-                    });
-                }
-            });
-            #endregion
-            #region 加载  particle
+            
+            if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockData", out var builder))
             {
-                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockParticleData", out var builder))
+                countdown_main?.AddCount();
+                ThreadPool.QueueUserWorkItem((obj) =>
                 {
-                    var diskData = Flat.BlockParticleData.GetRootAsBlockParticleData(builder.DataBuffer);
-                    for (int i = diskData.ListLength - 1; i >= 0; i--)
+                    try
                     {
-                        var particleData = diskData.List(i).Value;
-                        ParticleManager.Inst.GetPool(particleData.LoadPath).TakeOut(this).ToRAM(particleData);
+                        var diskData = Flat.BlockBaseData.GetRootAsBlockBaseData(builder.DataBuffer);
+                        PixelTypeInfo[] typeInfoArray = new PixelTypeInfo[diskData.PixelTypeNameArrayLength];
+                        PixelColorInfo[] colorInfoArray = new PixelColorInfo[diskData.PixelColorNameArrayLength];
+                        BuildingBase[] buildingArray = new BuildingBase[diskData.PixelBuildingGuidArrayLength];
+                        for (int i = typeInfoArray.Length - 1; i >= 0; i--)
+                            typeInfoArray[typeInfoArray.Length - i - 1] = Pixel.GetPixelTypeInfo(diskData.PixelTypeNameArray(i));
+                        for (int i = colorInfoArray.Length - 1; i >= 0; i--)
+                            colorInfoArray[colorInfoArray.Length - i - 1] = BlockMaterial.GetPixelColorInfo(diskData.PixelColorNameArray(i));
+                        for (int i = buildingArray.Length - 1; i >= 0; i--)
+                        {
+                            string guid = diskData.PixelBuildingGuidArray(i);
+                            var building = GetBuilding(guid);
+                            if (building == null)
+                            {
+                                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => LoadBuilding(guid));
+                                building = GetBuilding(guid);
+                            }
+                            buildingArray[buildingArray.Length - i - 1] = building;
+                        }
+                        for (int i = Block.Size.x * Block.Size.y - 1; i >= 0; i--)
+                        {
+                            var blockPixelDiskData = diskData.BlockPixelArray(i).Value;
+                            var backgroundPixelDiskData = diskData.BackgroundPixelArray(i).Value;
+                            int index = Block.Size.x * Block.Size.y - i - 1;
+                            Vector2Byte pos = new(index % Block.Size.y, index / Block.Size.y);
+                            block.SetPixel(PixelToRAM(blockPixelDiskData, pos, typeInfoArray, colorInfoArray, buildingArray), false, false, false);
+                            background.SetPixel(PixelToRAM(backgroundPixelDiskData, pos, typeInfoArray, colorInfoArray, buildingArray), false, false, false);
+                        }
+                        CountdownEvent countdown = new CountdownEvent(1);
+                        block.ToRAM(diskData, countdown);
+                        background.ToRAM(diskData, countdown);
+                        countdown.Signal();
+                        countdown.Wait();
+                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                        {
+                            #region 加载  particle
+                            {
+                                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockParticleData", out var builder))
+                                {
+                                    var diskData = Flat.BlockParticleData.GetRootAsBlockParticleData(builder.DataBuffer);
+                                    for (int i = diskData.ListLength - 1; i >= 0; i--)
+                                    {
+                                        var particleData = diskData.List(i).Value;
+                                        ParticleManager.Inst.ToRAM(this, particleData);
+                                    }
+                                    FlatBufferBuilder.PutIn(builder);
+                                }
+                            }
+                            #endregion
+                            #region 加载  role
+                            {
+                                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockRoleData", out var builder))
+                                {
+                                    var diskData = Flat.BlockRoleData.GetRootAsBlockRoleData(builder.DataBuffer);
+                                    for (int i = diskData.ListLength - 1; i >= 0; i--)
+                                    {
+                                        var roleGuid = diskData.List(i);
+                                        RoleManager.Inst.Load(roleGuid, this);
+                                    }
+                                    FlatBufferBuilder.PutIn(builder);
+                                }
+                            }
+                            #endregion
+                        });
+
                     }
+                    catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
                     FlatBufferBuilder.PutIn(builder);
-                }
+                    countdown_main?.Signal();
+                });
             }
-            #endregion
-            #region 加载  role
+            else
             {
-                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockRoleData", out var builder))
+                countdown_main?.AddCount();
+                ThreadPool.QueueUserWorkItem((obj) =>
                 {
-                    var diskData = Flat.BlockRoleData.GetRootAsBlockRoleData(builder.DataBuffer);
-                    for (int i = diskData.ListLength - 1; i >= 0; i--)
+                    try
                     {
-                        var roleGuid = diskData.List(i);
-                        RoleManager.Inst.Load(roleGuid, this);
+                        for (int x = 0; x < Block.Size.x; x++)
+                            for (int y = 0; y < Block.Size.y; y++)
+                            {
+
+                                Pixel pixel;
+                                lock (Pixel.pixelPool)
+                                    pixel = Pixel.pixelPool.TakeOut();
+                                Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
+                                block.SetPixel(pixel, false, false, false);
+                                block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+
+                                lock (Pixel.pixelPool)
+                                    pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
+                                background.SetPixel(pixel, false, false, false);
+                                background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
+                            }
+                        countdown_main?.AddCount();
+                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+                        {
+                            BlockMaterial.SetBlock(block);
+                            BlockMaterial.SetBackgroundBlock(background);
+                            countdown_main?.Signal();
+                        });
                     }
-                    FlatBufferBuilder.PutIn(builder);
-                }
+                    catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
+                    countdown_main?.Signal();
+                });
             }
             #endregion
         }
@@ -244,9 +255,9 @@ namespace PRO
         /// 直接调用，内部会使用多线程
         /// </summary>
         /// <param name="blockPos"></param>
-        private CountdownEvent UnloadBlockData(Vector2Int blockPos)
+        private CountdownEvent UnloadBlockData(Vector2Int blockPos, CountdownEvent countdown)
         {
-            CountdownEvent countdown = new CountdownEvent(1);
+            countdown.AddCount();
             ActiveBlockBase.Remove(blockPos);
             ThreadPool.QueueUserWorkItem((obj) =>
             {
@@ -391,9 +402,10 @@ namespace PRO
             if (IOTool.LoadFlat(@$"{sceneCatalog.directoryInfo}\Round\{guid}", out var builder))
             {
                 var diskData = TurnBased.Flat.RoundFSMData.GetRootAsRoundFSMData(builder.DataBuffer);
-                new RoundFSM(this, diskData.Guid);
+                var round = new RoundFSM(this, diskData.Guid);
+                round.ToRAM(diskData);
+                FlatBufferBuilder.PutIn(builder);
             }
-            FlatBufferBuilder.PutIn(builder);
         }
         private void SaveRound(RoundFSM round)
         {
@@ -510,22 +522,63 @@ namespace PRO
                 countdown.Signal();
             });
             sceneCatalog.Save();
+            #region 保存  场景额外数据
+            {
+                var builder = FlatBufferBuilder.TakeOut(1024);
+                Flat.SceneEntityData.StartActiveBlockBaseVector(builder, ActiveBlockBase.Count);
+                foreach (var blockPos in ActiveBlockBase)
+                    blockPos.ToDisk(builder);
+                var activeBlockOffset = builder.EndVector();
+
+                Span<int> roundGuidOffsetArray = stackalloc int[ActiveRound.Count];
+                int index = 0;
+                int roundMainIndex = -1;
+                foreach (var round in ActiveRound.Values)
+                    roundGuidOffsetArray[index++] = builder.CreateString(round.GUID).Value;
+                var roundGuidOffset = builder.CreateVector_Offset(roundGuidOffsetArray);
+                var roundMainOffset = builder.CreateString(GamePlayMain.Inst.Round?.GUID);
+                Flat.SceneEntityData.StartSceneEntityData(builder);
+                Flat.SceneEntityData.AddActiveBlockBase(builder, activeBlockOffset);
+                Flat.SceneEntityData.AddCamera(builder, Camera.main.transform.ToDisk(builder));
+                Flat.SceneEntityData.AddRoundGuid(builder, roundGuidOffset);
+                Flat.SceneEntityData.AddRoundMain(builder, roundMainOffset);
+                builder.Finish(Flat.SceneEntityData.EndSceneEntityData(builder).Value);
+                IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\SceneEntityData", builder);
+                FlatBufferBuilder.PutIn(builder);
+            }
+            #endregion
             return countdown;
         }
 
-        public void LoadAll()
+        public CountdownEvent LoadAll()
         {
-            #region 加载  round
+            CountdownEvent countdown = new CountdownEvent(1);
+            if (IOTool.LoadFlat(@$"{sceneCatalog.directoryInfo}\SceneEntityData", out var builder))
             {
-                var files = sceneCatalog.directoryInfo.GetFiles(@$"\Round\*{IOTool.flatExtension}");
-                for (int i = 0; i < files.Length; i++)
+                var diskData = Flat.SceneEntityData.GetRootAsSceneEntityData(builder.DataBuffer);
+                Camera.main.transform.ToRAM(diskData.Camera.Value);
+                CountdownEvent countdown_block = new CountdownEvent(1);
+                for (int i = diskData.ActiveBlockBaseLength - 1; i >= 0; i--)
+                    ThreadLoadOrCreateBlock(diskData.ActiveBlockBase(i).Value.ToRAM(), countdown_block);
+                countdown_block.Signal();
+                countdown.AddCount();
+                ThreadPool.QueueUserWorkItem((obj) =>
                 {
-                    string fileName = files[i].Name;
-                    string guid = fileName.Substring(0, fileName.Length - IOTool.flatExtension.Length);
-                    LoadRound(guid);
-                }
+                    countdown_block.Wait();
+                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                    {
+                        for (int i = diskData.RoundGuidLength - 1; i >= 0; i--)
+                            LoadRound(diskData.RoundGuid(i));
+                        var roundMainGuid = diskData.RoundMain;
+                        if (roundMainGuid != null)
+                            GamePlayMain.Inst.Round = ActiveRound[roundMainGuid];
+                    });
+                    FlatBufferBuilder.PutIn(builder);
+                    countdown.Signal();
+                });
             }
-            #endregion
+            countdown.Signal();
+            return countdown;
         }
         /// <summary>
         /// 卸载所有已加载区块，上方的建筑也会被一并卸载
@@ -560,16 +613,9 @@ namespace PRO
             JumpOutSceneParticleDic.Clear();
             #endregion
             #region 卸载  block  building
-            countdown.AddCount();
-            WaitHandle[] countdowns = new WaitHandle[ActiveParticle.Count];
             var blockPosArray = ActiveBlockBase.ToArray();
-            for (int i = 0; i < countdowns.Length; i++)
-                countdowns[i] = UnloadBlockData(blockPosArray[i]).WaitHandle;
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                WaitHandle.WaitAll(countdowns);
-                countdown.Signal();
-            });
+            for (int i = 0; i < blockPosArray.Length; i++)
+                UnloadBlockData(blockPosArray[i], countdown);
             #endregion
             countdown.Signal();
             return countdown;
@@ -619,6 +665,8 @@ namespace PRO
         List<Vector2Int> unLoadBlock = new List<Vector2Int>(20);
 
         PriorityQueue<Vector2Int> activeBlockUpdateTempQueue = new PriorityQueue<Vector2Int>(50);
+
+        CountdownEvent _countdownEvent = new CountdownEvent(1);
         #endregion
 
         public void TimeUpdate()
@@ -788,7 +836,7 @@ namespace PRO
                 foreach (var blockPos in array)
                 {
                     ThreadPool.QueueUserWorkItem((obj) => SaveBlockData(blockPos, true));
-                    UnloadBlockData(blockPos);
+                    UnloadBlockData(blockPos, _countdownEvent);
                 }
                 unLoadBlock.Clear();
             }

@@ -10,9 +10,6 @@ namespace PRO.Disk.Scene
     /// </summary>
     public class SceneCatalog
     {
-
-
-
         /// <summary>
         /// 场景文件夹的目录/{GameSave}/Scene/{SceneName}
         /// </summary>
@@ -23,7 +20,7 @@ namespace PRO.Disk.Scene
 
         public void Save()
         {
-            IOTool.SaveText(@$"{directoryInfo.FullName}\SceneCatalog.json", JsonTool.ToJson(this));
+            IOTool.SaveText(@$"{directoryInfo}\SceneCatalog.json", JsonTool.ToJson(this));
         }
 
 
@@ -37,13 +34,18 @@ namespace PRO.Disk.Scene
         {
             SceneCatalog info = new SceneCatalog();
             //创建场景根文件夹
-            DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{sceneRoot.FullName}\{name}");
+            DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{sceneRoot}\{name}");
             //创建块文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Block");
+            Directory.CreateDirectory(@$"{sceneDirectory}\Block");
             //创建建筑文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
+            Directory.CreateDirectory(@$"{sceneDirectory}\Building");
             //创建角色文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Role");
+            Directory.CreateDirectory(@$"{sceneDirectory}\Role");
+            //创建战斗文件夹
+            Directory.CreateDirectory(@$"{sceneDirectory}\Round");
+
+            
+
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
             info.Save();
@@ -57,7 +59,7 @@ namespace PRO.Disk.Scene
         /// <returns></returns>
         public static SceneCatalog LoadSceneInfo(DirectoryInfo saveDirectoryInfo)
         {
-            if (IOTool.LoadText(@$"{saveDirectoryInfo.FullName}\SceneCatalog.json", out string sceneInfoText))
+            if (IOTool.LoadText(@$"{saveDirectoryInfo}\SceneCatalog.json", out string sceneInfoText))
             {
                 SceneCatalog sceneCatalog = JsonTool.ToObject<SceneCatalog>(sceneInfoText);
                 if (sceneCatalog != null)

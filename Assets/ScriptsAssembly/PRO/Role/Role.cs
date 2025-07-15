@@ -21,9 +21,9 @@ namespace PRO
         public Rigidbody2D Rig2D { get; private set; }
 
 
-        [NonSerialized]
+        [HideInInspector]
         public FreelyLightSource source;
-        [NonSerialized]
+        [HideInInspector]
         public Nav nav;
 
         public SceneEntity Scene => _scene;

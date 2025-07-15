@@ -233,7 +233,7 @@ namespace PRO
                     if (SceneManager.Inst.NowScene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
                         SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
                     else
-                        SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
+                        SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).ResetUnLoadCountdown();
                 }
         }
 

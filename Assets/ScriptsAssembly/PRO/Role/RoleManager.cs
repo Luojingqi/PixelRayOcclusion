@@ -19,6 +19,7 @@ namespace PRO
             roleNode.parent = SceneManager.Inst.PoolNode;
             {
                 var role = AssetManager.Load_A<GameObject>("role.ab", @$"ScriptsAssembly\PRO\Role\Role_默认").GetComponent<Role>();
+                role.nav = NavManager.Inst.GetNav("默认");
                 var pool = AddRolePool(role);
                 pool.PutInEvent += t =>
                 {
@@ -58,6 +59,7 @@ namespace PRO
         public Role Load(string guid, SceneEntity scene)
         {
             Role role = null;
+            if (scene.ActiveRole_Guid.ContainsKey(guid)) return role;
             if (IOTool.LoadFlat(@$"{scene.sceneCatalog.directoryInfo}\Role\{guid}", out var builder))
             {
                 var diskData = Flat.RoleData.GetRootAsRoleData(builder.DataBuffer);

@@ -7,35 +7,34 @@ namespace PRO
 {
     public class LogPanelM
     {
-        public class OneLog : MonoBehaviour
+        public class OneLog : IGameObjectPool_NoMono
         {
-            public Transform transform;
+            public Transform transform { get; set; }
+            public GameObject gameObject { get; set; }
+
             public TMP_Text value;
-            public void Init(Transform transform)
+            public void Init()
             {
-                this.transform = transform;
                 value = transform.GetComponent<TMP_Text>();
+                value.text = null;
             }
 
-            public static GameObjectPool<OneLog> pool;
+            public static GameObjectPool_NoMono<OneLog> pool;
             public static Queue<OneLog> oneLogQueue = new Queue<OneLog>();
-            public static void InitPool(Transform prefab, Transform panelPutIn)
+
+            public static void InitPool(GameObject prefab, Transform panelPutIn)
             {
-                //pool = new GameObjectPool<OneLog>(prefab, panelPutIn);
-                //pool.CreateEventT += (g, t) =>
-                //{
-                //    t.Init(g.transform);
-                //    t.value.text = null;
-                //};
-                //pool.PutInEvent +=  t =>
-                //{
-                //    t.value.text = null;
-                //};
-                //pool.TakeOutEventT += (g, t) =>
-                //{
-                //    oneLogQueue.Enqueue(t);
-                //    t.transform.parent = prefab.parent;
-                //};
+                var parent = prefab.transform.parent;
+                pool = new GameObjectPool_NoMono<OneLog>(prefab, panelPutIn);
+                pool.PutInEvent += t =>
+                {
+                    t.value.text = null;
+                };
+                pool.TakeOutEvent += t =>
+                {
+                    oneLogQueue.Enqueue(t);
+                    t.transform.parent = parent;
+                };
             }
         }
     }

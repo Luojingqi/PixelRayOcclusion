@@ -10,8 +10,6 @@ namespace PRO
         private GameObjectPool<TurnImage> WaitPool;
         #endregion
 
-        public static RoundPanelC Inst { get; private set; }
-
         public override UIChildViewBase View => view;
 
         private RoundPanelV view = new RoundPanelV();
@@ -19,7 +17,6 @@ namespace PRO
         public override void Init()
         {
             base.Init();
-            Inst = this;
 
             AfootPool = new GameObjectPool<TurnImage>(view.afoot, view.ImageNode.parent);
             WaitPool = new GameObjectPool<TurnImage>(view.wait, view.ImageNode.parent);

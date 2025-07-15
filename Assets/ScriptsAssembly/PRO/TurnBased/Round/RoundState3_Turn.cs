@@ -16,7 +16,7 @@ namespace PRO.TurnBased
         /// </summary>
         public List<TurnFSM> TurnFSMList = new List<TurnFSM>();
 
-        public TurnFSM NowTurn => TurnFSMList[nowTurnIndex];
+       
         public void Enter()
         {
             TurnFSMList[0].SwitchState(TurnStateEnum.start);
@@ -44,6 +44,7 @@ namespace PRO.TurnBased
         /// 当前正在执行谁的回合
         /// </summary>
         private int nowTurnIndex = 0;
+        public TurnFSM NowTurn => TurnFSMList[nowTurnIndex];
         public void Update()
         {
             TurnFSM turn = TurnFSMList[nowTurnIndex];
@@ -58,7 +59,8 @@ namespace PRO.TurnBased
                 turn.SwitchState(TurnStateEnum.start);
                 if (nowRoundNum > 0)
                     turn.Agent.Info.行动点.Value += turn.Agent.Info.行动点初始.Value;
-                GameMainUIC.Inst.SetTurn(TurnFSMList, nowTurnIndex);
+                if (GamePlayMain.Inst.Round == fsm)
+                    GamePlayMain.Inst.Round = fsm;
             }
             turn.Update();
         }

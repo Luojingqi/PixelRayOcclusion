@@ -13,7 +13,7 @@ namespace PRO
         {
             Inst = this;
             base.Init(uiName);
-            OneLog.InitPool(view.LogPrefab, transform);
+            OneLog.InitPool(view.LogPrefab.gameObject, transform);
         }
         public void TimeAwake()
         {

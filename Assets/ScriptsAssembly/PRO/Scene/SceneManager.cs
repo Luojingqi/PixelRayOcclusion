@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using PRO.Disk.Scene;
 using PRO.Tool;
 using PROTool;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 namespace PRO
@@ -13,8 +15,9 @@ namespace PRO
 
 
         private SceneEntity nowScene;
+        [ShowInInspector]
         public SceneEntity NowScene { get => nowScene; }
-
+        [ShowInInspector]
         private Dictionary<string, SceneEntity> scenes = new Dictionary<string, SceneEntity>();
 
         public SceneEntity GetScene(string sceneName) => scenes[sceneName];
@@ -44,7 +47,7 @@ namespace PRO
             Texture2DPool.InitPool();
         }
         public void TimeStart()
-        { 
+        {
             foreach (var buildingType in ReflectionTool.GetDerivedClasses(typeof(BuildingBase)))
                 SceneEntity.BuildingTypeDic.Add(buildingType.Name, buildingType);
             //GameSaveManager.Inst.CreateGameSaveFile("testSave");
@@ -60,9 +63,20 @@ namespace PRO
             nowScene = scene;
             BlockMaterial.FirstBind();
 
+            D(scene);
 
 
             source = FreelyLightSource.New(NowScene, BlockMaterial.GetPixelColorInfo("Êó±ê¹âÔ´0").color, 20);
+        }
+        private async UniTask D(SceneEntity scene)
+        {
+            var countDown = scene.LoadAll();
+            await UniTask.WaitUntil(() => countDown.IsSet);
+            //foreach (var round in scene.ActiveRound.Values)
+            //{
+            //    GamePlayMain.Inst.Round = round;
+            //    break;
+            //}
         }
 
         public FreelyLightSource source;

@@ -219,7 +219,7 @@ namespace PRO
         public void Delete()
         {
             _scene.ActiveBuilding.Remove(GUID);
-            File.Delete(@$"{_scene.sceneCatalog.directoryInfo.FullName}/Building/{GUID}{IOTool.protoExtension}");
+            File.Delete(@$"{_scene.sceneCatalog.directoryInfo}/Building/{GUID}{IOTool.protoExtension}");
             foreach (var item in AllPixel.Values)
             {
                 item.pixel.buildingSet.Remove(this);

@@ -2,6 +2,7 @@ using PRO.DataStructure;
 using PRO.Tool;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using UnityEngine;
 namespace PRO
 {
@@ -53,8 +54,8 @@ namespace PRO
             public Vector2Byte length;
         }
 
-        private static ObjectPool<HashSet<Vector2Int>> pool_set = new ObjectPool<HashSet<Vector2Int>>();
-        private static ObjectPool<List<ColliderData>> pool_list = new ObjectPool<List<ColliderData>>();
+        private static ObjectPoolArbitrary<HashSet<Vector2Int>> pool_set = new ObjectPoolArbitrary<HashSet<Vector2Int>>(() => new HashSet<Vector2Int>(Block.Size.x * Block.Size.y));
+        private static ObjectPoolArbitrary<List<ColliderData>> pool_list = new ObjectPoolArbitrary<List<ColliderData>>(() => new List<ColliderData>(Block.Size.x));
         /// <summary>
         /// 返回用于创建碰撞箱的数据集合
         /// </summary>
@@ -113,8 +114,8 @@ namespace PRO
                     }
             lock (pool_list)
             {
+                hash.Clear();
                 pool_set.PutIn(hash);
-                pool_list.PutIn(colliderDataList);
             }
             return colliderDataList;
         }
@@ -137,7 +138,11 @@ namespace PRO
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
                         block.allCollider[x, y] = box;
-
+            }
+            lock (pool_list)
+            {
+                colliderDataList.Clear();
+                pool_list.PutIn(colliderDataList);
             }
         }
         /// <summary>

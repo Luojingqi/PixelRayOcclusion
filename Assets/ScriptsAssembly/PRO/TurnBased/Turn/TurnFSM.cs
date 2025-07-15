@@ -26,6 +26,7 @@ namespace PRO.TurnBased
             {
                 operate.Value.Turn = this;
             }
+            SetState(TurnStateEnum.end);
         }
 
         public Offset<Flat.TurnFSMData> ToDisk(FlatBufferBuilder builder)

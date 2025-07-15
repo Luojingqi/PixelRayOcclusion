@@ -18,16 +18,11 @@ namespace PRO.TurnBased
             context.Calculate_最终结算();
             LogPanelC.Inst.AddLog(context, true);
             CombatContext.PutIn(context);
-        }
-
-        public void Exit()
-        {
-
-        }
-
-        public void Update()
-        {
             fsm.SwitchState(TurnStateEnum.operate);
         }
+
+        public void Exit() { }
+
+        public void Update() { }
     }
 }

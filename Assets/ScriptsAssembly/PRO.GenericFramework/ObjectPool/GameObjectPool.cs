@@ -34,6 +34,10 @@ namespace PRO.Tool
         }
     }
 
+    /// <summary>
+    /// 游戏对象池，但是脚本不继承mono，类需要实现接口
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class GameObjectPool_NoMono<T> : ObjectPoolBase<T> where T : class, IGameObjectPool_NoMono, new()
     {
         private GameObject holdPrefab;
@@ -53,6 +57,7 @@ namespace PRO.Tool
             t.gameObject = go;
             t.transform = go.transform;
             t.transform.parent = toolParent;
+            t.Init();
             return t;
         }
         public override T TakeOut()
@@ -73,5 +78,7 @@ namespace PRO.Tool
     {
         public Transform transform { get; set; }
         public GameObject gameObject { get; set; }
+
+        public void Init();
     }
 }

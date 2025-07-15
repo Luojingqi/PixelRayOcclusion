@@ -164,6 +164,8 @@ namespace PRO
         /// –∂‘ÿµπº∆ ±
         /// </summary>
         public float UnLoadCountdown;
+        public void ResetUnLoadCountdown() => UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
+
         public override void Init()
         {
             base.Init();
@@ -618,8 +620,9 @@ namespace PRO
             return builder.EndVector();
         }
 
-        public override void ToRAM(Flat.BlockBaseData blockDiskData)
+        public override void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown)
         {
+            countdown.AddCount();
             for (int i = blockDiskData.FluidUpdateHash1Length - 1; i >= 0; i--)
             {
                 var pos = blockDiskData.FluidUpdateHash1(i).Value.ToRAM();
@@ -640,6 +643,7 @@ namespace PRO
             {
                 GreedyCollider.CreateColliderAction(this, colliderDataList);
                 BlockMaterial.SetBlock(this);
+                countdown.Signal();
             });
         }
     }

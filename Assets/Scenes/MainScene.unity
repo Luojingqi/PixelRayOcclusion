@@ -7664,9 +7664,6 @@ MonoBehaviour:
     - Name: priority
       Entry: 3
       Data: -1
-    - Name: round
-      Entry: 6
-      Data: 
 --- !u!1 &1305003538
 GameObject:
   m_ObjectHideFlags: 0

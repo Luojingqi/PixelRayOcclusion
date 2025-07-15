@@ -22,7 +22,7 @@ namespace PRO.TurnBased
             AddState(new RoundState2_Initiative());
             AddState(new RoundState3_Turn());
             AddState(new RoundState4_End());
-            SwitchState(RoundStateEnum.dataReady);
+            SetState(RoundStateEnum.dataReady);
             State3_Turn = GetState<RoundState3_Turn>();
             scene.ActiveRound.Add(guid, this);
         }
@@ -35,12 +35,6 @@ namespace PRO.TurnBased
         public HashSet<Role> RoleHash = new HashSet<Role>();
 
 
-
-        public void AddRole(Role role)
-        {
-            RoleHash.Add(role);
-        }
-
         public override void Update()
         {
             base.Update();
@@ -50,7 +44,7 @@ namespace PRO.TurnBased
                 if (SceneManager.Inst.NowScene.ActiveBlockBase.Contains(blockPos) == false)
                     SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(blockPos);
                 else
-                    SceneManager.Inst.NowScene.GetBlock(blockPos).UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
+                    SceneManager.Inst.NowScene.GetBlock(blockPos).ResetUnLoadCountdown();
             }
         }
 
@@ -78,7 +72,7 @@ namespace PRO.TurnBased
                 var roleGuid = diskData.RoleHash(i);
                 var role = scene.GetRole(roleGuid);
                 if (role == null)
-                    RoleManager.Inst.Load(roleGuid, scene);
+                    role = RoleManager.Inst.Load(roleGuid, scene);
                 RoleHash.Add(role);
             }
             if (NowState.EnumName == RoundStateEnum.turn)

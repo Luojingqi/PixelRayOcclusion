@@ -360,6 +360,6 @@ namespace PRO
 
 
         public abstract System.Action ToDisk(FlatBufferBuilder builder);
-        public abstract void ToRAM(Flat.BlockBaseData blockDiskData);
+        public abstract void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown);
     }
 }

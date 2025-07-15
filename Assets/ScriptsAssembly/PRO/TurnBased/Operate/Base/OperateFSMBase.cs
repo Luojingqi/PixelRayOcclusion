@@ -20,7 +20,8 @@ namespace PRO.Skill
 
         public Role Agent { get; set; }
 
-        public string GUID;
+        public string GUID => guid;
+        private string guid;
         /// <summary>
         /// 快捷键，使用按键按下触发时可以设置
         /// </summary>
@@ -52,8 +53,8 @@ namespace PRO.Skill
                 Debug.Log("操作状态机未添加相应的三个状态");
             }
             SwitchState(OperateStateEnum.t0);
-            if (GUID == null) GUID = Guid.NewGuid().ToString();
-            this.GUID = GUID;
+            if (GUID == null) guid = Guid.NewGuid().ToString();
+            guid = GUID;
         }
         /// <summary>
         /// 为操作状态机添加三个状态

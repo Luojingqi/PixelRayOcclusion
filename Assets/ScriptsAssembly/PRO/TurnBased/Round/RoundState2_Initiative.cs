@@ -18,7 +18,8 @@ namespace PRO.TurnBased
                 TurnFSM turn = new TurnFSM(fsm, role, i++);
                 state3.TurnFSMList.Add(turn);
             }
-            GameMainUIC.Inst.SetTurn(state3.TurnFSMList, 0);
+            if (GamePlayMain.Inst.Round == fsm)
+                GamePlayMain.Inst.Round = fsm;
             fsm.SwitchState(RoundStateEnum.turn);
         }
 

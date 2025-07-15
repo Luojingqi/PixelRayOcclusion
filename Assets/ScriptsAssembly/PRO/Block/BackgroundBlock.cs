@@ -68,11 +68,13 @@ namespace PRO
             return null;
         }
 
-        public override void ToRAM(Flat.BlockBaseData blockDiskData)
+        public override void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown)
         {
+            countdown.AddCount();
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 BlockMaterial.SetBackgroundBlock(this);
+                countdown.Signal();
             });
         }
     }

@@ -184,13 +184,16 @@ namespace PRO
         /// <param name="action"></param>
         public void AddToQueue_MainThreadUpdate_Clear_WaitInvoke(Action action)
         {
-            var manual = resetEventPool.TakeOut();
+            AutoResetEvent manual = null;
+            lock (resetEventPool)
+                manual = resetEventPool.TakeOut();
             lock (mainThreadUpdateEventLock_Clear)
             {
                 mainThreadUpdateEvent_Clear += () => { action(); manual.Set(); };
             }
             manual.WaitOne();
-            resetEventPool.PutIn(manual);
+            lock (resetEventPool)
+                resetEventPool.PutIn(manual);
         }
         #endregion
 

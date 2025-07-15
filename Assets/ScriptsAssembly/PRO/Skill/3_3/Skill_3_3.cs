@@ -11,6 +11,8 @@ namespace PRO.Skill
         public SkillPointer_范围内射线类 SkillPointer => skillPointer;
         private SkillPointer_范围内射线类 skillPointer;
 
+        public Skill_3_3(string GUID) : base(GUID) { }
+
         protected override void InitState()
         {
             AddState(new Skill_3_3_T0());
