@@ -77,7 +77,7 @@ namespace PRO.Skill
         public override void SetPosition(Vector2Int global)
         {
             base.SetPosition(global);
-            StartPos = global;
+            StartPos = transform.position;
         }
     }
 }

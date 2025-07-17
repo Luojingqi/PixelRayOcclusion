@@ -1,10 +1,9 @@
-﻿using PRO.SkillEditor;
+﻿using Google.FlatBuffers;
+using PRO.Flat.Ex;
+using PRO.Proto.Ex;
+using PRO.SkillEditor;
 using System;
 using UnityEngine;
-using PRO.Proto.Ex;
-using Google.FlatBuffers;
-using PRO.Flat.Ex;
-using Sirenix.OdinInspector;
 
 namespace PRO
 {
@@ -147,33 +146,42 @@ namespace PRO
             transform.position = Block.GlobalToWorld(global) + new Vector3(pixelSizeHalf, pixelSizeHalf);
         }
 
-        public Offset<Flat.ParticleData> ToDisk(FlatBufferBuilder builder)
+        public Offset<Flat.ParticleData> ToDisk(FlatBufferBuilder builder, FlatBufferBuilder extendBuilder = null)
         {
+            bool extendBuilderIsNull = extendBuilder == null;
+            if (extendBuilderIsNull) extendBuilder = FlatBufferBuilder.TakeOut(1024);
             var loadPathOffset = builder.CreateString(loadPath);
-            var extendDataOffset = ExtendDataToDisk(builder);
+            ExtendDataToDisk(extendBuilder);
+            var extendDataOffset = builder.CreateVector_Builder(extendBuilder);
+            if (extendBuilderIsNull) 
+                FlatBufferBuilder.PutIn(extendBuilder);
+            else
+                extendBuilder.Clear();
+            var skillPlayAgentOffset = SkillPlayAgent.ToDisk(builder);
 
             Flat.ParticleData.StartParticleData(builder);
             Flat.ParticleData.AddLoadPath(builder, loadPathOffset);
             Flat.ParticleData.AddTransform(builder, transform.ToDisk(builder));
             Flat.ParticleData.AddRigidbody(builder, Rig2D.ToDisk(builder));
+            Flat.ParticleData.AddSkillPlayAgent(builder, skillPlayAgentOffset);
             Flat.ParticleData.AddSurviveTimeRange(builder, surviveTimeRange.ToDisk(builder));
             Flat.ParticleData.AddRemainTime(builder, remainTime);
             Flat.ParticleData.AddElapsedTime(builder, elapsedTime);
             Flat.ParticleData.AddExtendData(builder, extendDataOffset);
             return Flat.ParticleData.EndParticleData(builder);
         }
-        public virtual int ExtendDataToDisk(FlatBufferBuilder builder)
-        {
-            return 0;
-        }
 
-        public virtual void ToRAM(Flat.ParticleData diskData)
+        public void ToRAM(Flat.ParticleData diskData)
         {
             transform.ToRAM(diskData.Transform.Value);
             Rig2D.ToRAM(diskData.Rigidbody.Value);
+            SkillPlayAgent.ToRAM(diskData.SkillPlayAgent.Value);
             surviveTimeRange = diskData.SurviveTimeRange.Value.ToRAM();
             remainTime = diskData.RemainTime;
             elapsedTime = diskData.ElapsedTime;
         }
+
+        protected virtual void ExtendDataToDisk(FlatBufferBuilder builder) { }
+        protected virtual void ExtendDataToRAM(FlatBufferBuilder builder) { }
     }
 }

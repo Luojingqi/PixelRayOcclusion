@@ -32,7 +32,7 @@ namespace PRO.TurnBased
                 Operate.lastToward = Operate.startToward;
 
                 Operate.context = CombatContext.TakeOut();
-                Operate.context.SetAgent(Operate.Agent, Operate.Turn.RoundFSM, Operate.Turn);
+                Operate.context.SetAgent(Operate.Agent);
                 Operate.context.LogBuilder.Append(Operate.config.Name);
                 Operate.context.Calculate_战斗技能初始化(Operate.config.施法type, Operate.config.StartCombatEffectDataList);
 
@@ -46,12 +46,12 @@ namespace PRO.TurnBased
 
         protected void CreatePointer(string loadPath)
         {
-            if (Operate is ISkillPointer i == false) return;
+            if (loadPath == string.Empty || Operate is ISkillPointer i == false) return;
             SkillPointerBase skillPointer = AssetManagerEX.LoadSkillPointer<SkillPointerBase>(loadPath);
             i.SkillPointerBase = skillPointer;
             skillPointer.Open();
             Role agent = Operate.Agent;
-            skillPointer.SetPosition(agent.GlobalPos + agent.nav.AgentMould.center);   
+            skillPointer.SetPosition(agent.GlobalPos + agent.nav.AgentMould.center);
         }
 
         /// <summary>

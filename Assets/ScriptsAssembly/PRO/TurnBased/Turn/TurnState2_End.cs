@@ -12,7 +12,7 @@ namespace PRO.TurnBased
         public void Enter()
         {
             CombatContext context = CombatContext.TakeOut();
-            context.SetAgent(fsm.Agent, fsm.RoundFSM, fsm);
+            context.SetAgent(fsm.Agent);
             context.LogBuilder.Append($"回合结束：");
             fsm.Agent.ForEachBuffApplyEffect(BuffTriggerType.回合结束时, context, -1);
             context.Calculate_最终结算();

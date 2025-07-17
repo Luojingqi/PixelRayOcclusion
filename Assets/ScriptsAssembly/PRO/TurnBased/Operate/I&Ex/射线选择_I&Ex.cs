@@ -34,7 +34,7 @@ namespace PRO.Skill
                 return TriggerState.toT0;
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                var byRoleGuidOffset = record.CreateString(byRole.GUID);
+                var byRoleGuidOffset = record.CreateString(byRole?.GUID);
                 Flat.OperateRecord_RaySelect.StartOperateRecord_RaySelect(record);
                 Flat.OperateRecord_RaySelect.AddStartPos(record, operate.SkillPointer.StartPos.ToDisk(record));
                 Flat.OperateRecord_RaySelect.AddEndPos(record, operate.SkillPointer.EndPos.ToDisk(record));
@@ -69,11 +69,13 @@ namespace PRO.Skill
             }
         }
 
-        public static void 节点执行<T>(T operate, FlatBufferBuilder record, OperateFSMBase.Operator form) where T : OperateFSMBase, ISkillPointer_射线选择
+        public static void 节点执行<T>(T operate, FlatBufferBuilder record, Operator form) where T : OperateFSMBase, ISkillPointer_射线选择
         {
             var operateData = Flat.OperateRecord_RaySelect.GetRootAsOperateRecord_RaySelect(record.DataBuffer);
             operate.Agent.LookAt(operateData.EndPos.Value.ToRAM());
-            operate.context.AddByAgent(operate.context.Agent.Scene.GetRole(operateData.ByRoleGuid), true);
+            string byRoleGuid = operateData.ByRoleGuid;
+            if (byRoleGuid != null)
+                operate.context.AddByAgent(operate.context.Agent.Scene.GetRole(byRoleGuid), true);
         }
     }
 }

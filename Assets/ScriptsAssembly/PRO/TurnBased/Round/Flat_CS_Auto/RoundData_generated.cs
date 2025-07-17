@@ -9,6 +9,71 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
+public struct OperateT2Data : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static OperateT2Data GetRootAsOperateT2Data(ByteBuffer _bb) { return GetRootAsOperateT2Data(_bb, new OperateT2Data()); }
+  public static OperateT2Data GetRootAsOperateT2Data(ByteBuffer _bb, OperateT2Data obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public OperateT2Data __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public string Guid { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetGuidBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetGuidBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetGuidArray() { return __p.__vector_as_array<byte>(4); }
+  public PRO.Flat.CombatContextData? Context { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.CombatContextData?)(new PRO.Flat.CombatContextData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public byte ExtendData(int j) { int o = __p.__offset(8); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int ExtendDataLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetExtendDataBytes() { return __p.__vector_as_span<byte>(8, 1); }
+#else
+  public ArraySegment<byte>? GetExtendDataBytes() { return __p.__vector_as_arraysegment(8); }
+#endif
+  public byte[] GetExtendDataArray() { return __p.__vector_as_array<byte>(8); }
+
+  public static Offset<PRO.TurnBased.Flat.OperateT2Data> CreateOperateT2Data(FlatBufferBuilder builder,
+      StringOffset guidOffset = default(StringOffset),
+      Offset<PRO.Flat.CombatContextData> contextOffset = default(Offset<PRO.Flat.CombatContextData>),
+      VectorOffset extend_dataOffset = default(VectorOffset)) {
+    builder.StartTable(3);
+    OperateT2Data.AddExtendData(builder, extend_dataOffset);
+    OperateT2Data.AddContext(builder, contextOffset);
+    OperateT2Data.AddGuid(builder, guidOffset);
+    return OperateT2Data.EndOperateT2Data(builder);
+  }
+
+  public static void StartOperateT2Data(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(0, guidOffset.Value, 0); }
+  public static void AddContext(FlatBufferBuilder builder, Offset<PRO.Flat.CombatContextData> contextOffset) { builder.AddOffset(1, contextOffset.Value, 0); }
+  public static void AddExtendData(FlatBufferBuilder builder, VectorOffset extendDataOffset) { builder.AddOffset(2, extendDataOffset.Value, 0); }
+  public static VectorOffset CreateExtendDataVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartExtendDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
+  public static Offset<PRO.TurnBased.Flat.OperateT2Data> EndOperateT2Data(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.TurnBased.Flat.OperateT2Data>(o);
+  }
+}
+
+
+static public class OperateT2DataVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyString(tablePos, 4 /*Guid*/, false)
+      && verifier.VerifyTable(tablePos, 6 /*Context*/, PRO.Flat.CombatContextDataVerify.Verify, false)
+      && verifier.VerifyVectorOfData(tablePos, 8 /*ExtendData*/, 1 /*byte*/, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
 public struct TurnState1_OperateData : IFlatbufferObject
 {
   private Table __p;
@@ -19,7 +84,7 @@ public struct TurnState1_OperateData : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public TurnState1_OperateData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public PRO.Skill.Flat.SkillData? NowOperateListT2(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.Skill.Flat.SkillData?)(new PRO.Skill.Flat.SkillData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public PRO.TurnBased.Flat.OperateT2Data? NowOperateListT2(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.TurnBased.Flat.OperateT2Data?)(new PRO.TurnBased.Flat.OperateT2Data()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int NowOperateListT2Length { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<PRO.TurnBased.Flat.TurnState1_OperateData> CreateTurnState1_OperateData(FlatBufferBuilder builder,
@@ -31,10 +96,10 @@ public struct TurnState1_OperateData : IFlatbufferObject
 
   public static void StartTurnState1_OperateData(FlatBufferBuilder builder) { builder.StartTable(1); }
   public static void AddNowOperateListT2(FlatBufferBuilder builder, VectorOffset nowOperateListT2Offset) { builder.AddOffset(0, nowOperateListT2Offset.Value, 0); }
-  public static VectorOffset CreateNowOperateListT2Vector(FlatBufferBuilder builder, Offset<PRO.Skill.Flat.SkillData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateNowOperateListT2VectorBlock(FlatBufferBuilder builder, Offset<PRO.Skill.Flat.SkillData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateNowOperateListT2VectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Skill.Flat.SkillData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateNowOperateListT2VectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.Skill.Flat.SkillData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static VectorOffset CreateNowOperateListT2Vector(FlatBufferBuilder builder, Offset<PRO.TurnBased.Flat.OperateT2Data>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateNowOperateListT2VectorBlock(FlatBufferBuilder builder, Offset<PRO.TurnBased.Flat.OperateT2Data>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateNowOperateListT2VectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.TurnBased.Flat.OperateT2Data>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateNowOperateListT2VectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.TurnBased.Flat.OperateT2Data>>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartNowOperateListT2Vector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<PRO.TurnBased.Flat.TurnState1_OperateData> EndTurnState1_OperateData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -48,7 +113,7 @@ static public class TurnState1_OperateDataVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyVectorOfTables(tablePos, 4 /*NowOperateListT2*/, PRO.Skill.Flat.SkillDataVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 4 /*NowOperateListT2*/, PRO.TurnBased.Flat.OperateT2DataVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

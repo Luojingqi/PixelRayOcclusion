@@ -9,27 +9,6 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
-public enum ParticleExtendData : byte
-{
-  NONE = 0,
-};
-
-
-
-static public class ParticleExtendDataVerify
-{
-  static public bool Verify(Google.FlatBuffers.Verifier verifier, byte typeId, uint tablePos)
-  {
-    bool result = true;
-    switch((ParticleExtendData)typeId)
-    {
-      default: result = true;
-        break;
-    }
-    return result;
-  }
-}
-
 public struct ParticleData : IFlatbufferObject
 {
   private Table __p;
@@ -49,21 +28,33 @@ public struct ParticleData : IFlatbufferObject
   public byte[] GetLoadPathArray() { return __p.__vector_as_array<byte>(4); }
   public PRO.Flat.Transform? Transform { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.Transform?)(new PRO.Flat.Transform()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public PRO.Flat.Rigidbody2D? Rigidbody { get { int o = __p.__offset(8); return o != 0 ? (PRO.Flat.Rigidbody2D?)(new PRO.Flat.Rigidbody2D()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public PRO.Flat.Vector2Int? SurviveTimeRange { get { int o = __p.__offset(10); return o != 0 ? (PRO.Flat.Vector2Int?)(new PRO.Flat.Vector2Int()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public int RemainTime { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int ElapsedTime { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public PRO.Flat.ParticleExtendData ExtendDataType { get { int o = __p.__offset(16); return o != 0 ? (PRO.Flat.ParticleExtendData)__p.bb.Get(o + __p.bb_pos) : PRO.Flat.ParticleExtendData.NONE; } }
-  public TTable? ExtendData<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(18); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
+  public PRO.Flat.SkillPlayerAgentData? SkillPlayAgent { get { int o = __p.__offset(10); return o != 0 ? (PRO.Flat.SkillPlayerAgentData?)(new PRO.Flat.SkillPlayerAgentData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public PRO.Flat.Vector2Int? SurviveTimeRange { get { int o = __p.__offset(12); return o != 0 ? (PRO.Flat.Vector2Int?)(new PRO.Flat.Vector2Int()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public int RemainTime { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public int ElapsedTime { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public byte ExtendData(int j) { int o = __p.__offset(18); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int ExtendDataLength { get { int o = __p.__offset(18); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetExtendDataBytes() { return __p.__vector_as_span<byte>(18, 1); }
+#else
+  public ArraySegment<byte>? GetExtendDataBytes() { return __p.__vector_as_arraysegment(18); }
+#endif
+  public byte[] GetExtendDataArray() { return __p.__vector_as_array<byte>(18); }
 
   public static void StartParticleData(FlatBufferBuilder builder) { builder.StartTable(8); }
   public static void AddLoadPath(FlatBufferBuilder builder, StringOffset loadPathOffset) { builder.AddOffset(0, loadPathOffset.Value, 0); }
   public static void AddTransform(FlatBufferBuilder builder, Offset<PRO.Flat.Transform> transformOffset) { builder.AddStruct(1, transformOffset.Value, 0); }
   public static void AddRigidbody(FlatBufferBuilder builder, Offset<PRO.Flat.Rigidbody2D> rigidbodyOffset) { builder.AddStruct(2, rigidbodyOffset.Value, 0); }
-  public static void AddSurviveTimeRange(FlatBufferBuilder builder, Offset<PRO.Flat.Vector2Int> surviveTimeRangeOffset) { builder.AddStruct(3, surviveTimeRangeOffset.Value, 0); }
-  public static void AddRemainTime(FlatBufferBuilder builder, int remainTime) { builder.AddInt(4, remainTime, 0); }
-  public static void AddElapsedTime(FlatBufferBuilder builder, int elapsedTime) { builder.AddInt(5, elapsedTime, 0); }
-  public static void AddExtendDataType(FlatBufferBuilder builder, PRO.Flat.ParticleExtendData extendDataType) { builder.AddByte(6, (byte)extendDataType, 0); }
-  public static void AddExtendData(FlatBufferBuilder builder, int extendDataOffset) { builder.AddOffset(7, extendDataOffset, 0); }
+  public static void AddSkillPlayAgent(FlatBufferBuilder builder, Offset<PRO.Flat.SkillPlayerAgentData> skillPlayAgentOffset) { builder.AddOffset(3, skillPlayAgentOffset.Value, 0); }
+  public static void AddSurviveTimeRange(FlatBufferBuilder builder, Offset<PRO.Flat.Vector2Int> surviveTimeRangeOffset) { builder.AddStruct(4, surviveTimeRangeOffset.Value, 0); }
+  public static void AddRemainTime(FlatBufferBuilder builder, int remainTime) { builder.AddInt(5, remainTime, 0); }
+  public static void AddElapsedTime(FlatBufferBuilder builder, int elapsedTime) { builder.AddInt(6, elapsedTime, 0); }
+  public static void AddExtendData(FlatBufferBuilder builder, VectorOffset extendDataOffset) { builder.AddOffset(7, extendDataOffset.Value, 0); }
+  public static VectorOffset CreateExtendDataVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartExtendDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
   public static Offset<PRO.Flat.ParticleData> EndParticleData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.ParticleData>(o);
@@ -79,11 +70,11 @@ static public class ParticleDataVerify
       && verifier.VerifyString(tablePos, 4 /*LoadPath*/, false)
       && verifier.VerifyField(tablePos, 6 /*Transform*/, 40 /*PRO.Flat.Transform*/, 4, false)
       && verifier.VerifyField(tablePos, 8 /*Rigidbody*/, 16 /*PRO.Flat.Rigidbody2D*/, 4, false)
-      && verifier.VerifyField(tablePos, 10 /*SurviveTimeRange*/, 8 /*PRO.Flat.Vector2Int*/, 4, false)
-      && verifier.VerifyField(tablePos, 12 /*RemainTime*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 14 /*ElapsedTime*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 16 /*ExtendDataType*/, 1 /*PRO.Flat.ParticleExtendData*/, 1, false)
-      && verifier.VerifyUnion(tablePos, 16, 18 /*ExtendData*/, PRO.Flat.ParticleExtendDataVerify.Verify, false)
+      && verifier.VerifyTable(tablePos, 10 /*SkillPlayAgent*/, PRO.Flat.SkillPlayerAgentDataVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 12 /*SurviveTimeRange*/, 8 /*PRO.Flat.Vector2Int*/, 4, false)
+      && verifier.VerifyField(tablePos, 14 /*RemainTime*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 16 /*ElapsedTime*/, 4 /*int*/, 4, false)
+      && verifier.VerifyVectorOfData(tablePos, 18 /*ExtendData*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

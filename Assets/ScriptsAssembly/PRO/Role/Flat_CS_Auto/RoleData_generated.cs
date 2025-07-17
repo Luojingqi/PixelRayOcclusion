@@ -9,6 +9,82 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
+public struct OperatBasiceData : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static OperatBasiceData GetRootAsOperatBasiceData(ByteBuffer _bb) { return GetRootAsOperatBasiceData(_bb, new OperatBasiceData()); }
+  public static OperatBasiceData GetRootAsOperatBasiceData(ByteBuffer _bb, OperatBasiceData obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public OperatBasiceData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public string Type { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetTypeBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetTypeBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetTypeArray() { return __p.__vector_as_array<byte>(4); }
+  public string Guid { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetGuidBytes() { return __p.__vector_as_span<byte>(6, 1); }
+#else
+  public ArraySegment<byte>? GetGuidBytes() { return __p.__vector_as_arraysegment(6); }
+#endif
+  public byte[] GetGuidArray() { return __p.__vector_as_array<byte>(6); }
+  public int NowState { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public byte ExtendData(int j) { int o = __p.__offset(10); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int ExtendDataLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetExtendDataBytes() { return __p.__vector_as_span<byte>(10, 1); }
+#else
+  public ArraySegment<byte>? GetExtendDataBytes() { return __p.__vector_as_arraysegment(10); }
+#endif
+  public byte[] GetExtendDataArray() { return __p.__vector_as_array<byte>(10); }
+
+  public static Offset<PRO.Flat.OperatBasiceData> CreateOperatBasiceData(FlatBufferBuilder builder,
+      StringOffset typeOffset = default(StringOffset),
+      StringOffset guidOffset = default(StringOffset),
+      int now_state = 0,
+      VectorOffset extend_dataOffset = default(VectorOffset)) {
+    builder.StartTable(4);
+    OperatBasiceData.AddExtendData(builder, extend_dataOffset);
+    OperatBasiceData.AddNowState(builder, now_state);
+    OperatBasiceData.AddGuid(builder, guidOffset);
+    OperatBasiceData.AddType(builder, typeOffset);
+    return OperatBasiceData.EndOperatBasiceData(builder);
+  }
+
+  public static void StartOperatBasiceData(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static void AddType(FlatBufferBuilder builder, StringOffset typeOffset) { builder.AddOffset(0, typeOffset.Value, 0); }
+  public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(1, guidOffset.Value, 0); }
+  public static void AddNowState(FlatBufferBuilder builder, int nowState) { builder.AddInt(2, nowState, 0); }
+  public static void AddExtendData(FlatBufferBuilder builder, VectorOffset extendDataOffset) { builder.AddOffset(3, extendDataOffset.Value, 0); }
+  public static VectorOffset CreateExtendDataVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateExtendDataVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartExtendDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
+  public static Offset<PRO.Flat.OperatBasiceData> EndOperatBasiceData(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.Flat.OperatBasiceData>(o);
+  }
+}
+
+
+static public class OperatBasiceDataVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyString(tablePos, 4 /*Type*/, false)
+      && verifier.VerifyString(tablePos, 6 /*Guid*/, false)
+      && verifier.VerifyField(tablePos, 8 /*NowState*/, 4 /*int*/, 4, false)
+      && verifier.VerifyVectorOfData(tablePos, 10 /*ExtendData*/, 1 /*byte*/, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
 public struct RoleData : IFlatbufferObject
 {
   private Table __p;
@@ -30,13 +106,13 @@ public struct RoleData : IFlatbufferObject
 #endif
   public byte[] GetNavTypeArray() { return __p.__vector_as_array<byte>(10); }
   public int Toward { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public string RoleTypeName { get { int o = __p.__offset(14); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public string RoleType { get { int o = __p.__offset(14); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetRoleTypeNameBytes() { return __p.__vector_as_span<byte>(14, 1); }
+  public Span<byte> GetRoleTypeBytes() { return __p.__vector_as_span<byte>(14, 1); }
 #else
-  public ArraySegment<byte>? GetRoleTypeNameBytes() { return __p.__vector_as_arraysegment(14); }
+  public ArraySegment<byte>? GetRoleTypeBytes() { return __p.__vector_as_arraysegment(14); }
 #endif
-  public byte[] GetRoleTypeNameArray() { return __p.__vector_as_array<byte>(14); }
+  public byte[] GetRoleTypeArray() { return __p.__vector_as_array<byte>(14); }
   public string Guid { get { int o = __p.__offset(16); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetGuidBytes() { return __p.__vector_as_span<byte>(16, 1); }
@@ -52,33 +128,25 @@ public struct RoleData : IFlatbufferObject
 #endif
   public byte[] GetNameArray() { return __p.__vector_as_array<byte>(18); }
   public PRO.Flat.RoleInfoData? Info { get { int o = __p.__offset(20); return o != 0 ? (PRO.Flat.RoleInfoData?)(new PRO.Flat.RoleInfoData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-  public string AllCanUseOperateType(int j) { int o = __p.__offset(22); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
-  public int AllCanUseOperateTypeLength { get { int o = __p.__offset(22); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public string AllBuffType(int j) { int o = __p.__offset(24); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
-  public int AllBuffTypeLength { get { int o = __p.__offset(24); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.OperatBasiceData? AllOperate(int j) { int o = __p.__offset(22); return o != 0 ? (PRO.Flat.OperatBasiceData?)(new PRO.Flat.OperatBasiceData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int AllOperateLength { get { int o = __p.__offset(22); return o != 0 ? __p.__vector_len(o) : 0; } }
 
-  public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(11); }
+  public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(10); }
   public static void AddTransformData(FlatBufferBuilder builder, Offset<PRO.Flat.Transform> transformDataOffset) { builder.AddStruct(0, transformDataOffset.Value, 0); }
   public static void AddRigidbody2DData(FlatBufferBuilder builder, Offset<PRO.Flat.Rigidbody2D> rigidbody2DDataOffset) { builder.AddStruct(1, rigidbody2DDataOffset.Value, 0); }
   public static void AddSkillPlayAgentData(FlatBufferBuilder builder, Offset<PRO.Flat.SkillPlayerAgentData> skillPlayAgentDataOffset) { builder.AddOffset(2, skillPlayAgentDataOffset.Value, 0); }
   public static void AddNavType(FlatBufferBuilder builder, StringOffset navTypeOffset) { builder.AddOffset(3, navTypeOffset.Value, 0); }
   public static void AddToward(FlatBufferBuilder builder, int toward) { builder.AddInt(4, toward, 0); }
-  public static void AddRoleTypeName(FlatBufferBuilder builder, StringOffset roleTypeNameOffset) { builder.AddOffset(5, roleTypeNameOffset.Value, 0); }
+  public static void AddRoleType(FlatBufferBuilder builder, StringOffset roleTypeOffset) { builder.AddOffset(5, roleTypeOffset.Value, 0); }
   public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(6, guidOffset.Value, 0); }
   public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(7, nameOffset.Value, 0); }
   public static void AddInfo(FlatBufferBuilder builder, Offset<PRO.Flat.RoleInfoData> infoOffset) { builder.AddOffset(8, infoOffset.Value, 0); }
-  public static void AddAllCanUseOperateType(FlatBufferBuilder builder, VectorOffset allCanUseOperateTypeOffset) { builder.AddOffset(9, allCanUseOperateTypeOffset.Value, 0); }
-  public static VectorOffset CreateAllCanUseOperateTypeVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateAllCanUseOperateTypeVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAllCanUseOperateTypeVectorBlock(FlatBufferBuilder builder, ArraySegment<StringOffset> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAllCanUseOperateTypeVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<StringOffset>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartAllCanUseOperateTypeVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static void AddAllBuffType(FlatBufferBuilder builder, VectorOffset allBuffTypeOffset) { builder.AddOffset(10, allBuffTypeOffset.Value, 0); }
-  public static VectorOffset CreateAllBuffTypeVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateAllBuffTypeVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAllBuffTypeVectorBlock(FlatBufferBuilder builder, ArraySegment<StringOffset> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAllBuffTypeVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<StringOffset>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartAllBuffTypeVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddAllOperate(FlatBufferBuilder builder, VectorOffset allOperateOffset) { builder.AddOffset(9, allOperateOffset.Value, 0); }
+  public static VectorOffset CreateAllOperateVector(FlatBufferBuilder builder, Offset<PRO.Flat.OperatBasiceData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, Offset<PRO.Flat.OperatBasiceData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Flat.OperatBasiceData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.Flat.OperatBasiceData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartAllOperateVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<PRO.Flat.RoleData> EndRoleData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.RoleData>(o);
@@ -96,12 +164,11 @@ static public class RoleDataVerify
       && verifier.VerifyTable(tablePos, 8 /*SkillPlayAgentData*/, PRO.Flat.SkillPlayerAgentDataVerify.Verify, false)
       && verifier.VerifyString(tablePos, 10 /*NavType*/, false)
       && verifier.VerifyField(tablePos, 12 /*Toward*/, 4 /*int*/, 4, false)
-      && verifier.VerifyString(tablePos, 14 /*RoleTypeName*/, false)
+      && verifier.VerifyString(tablePos, 14 /*RoleType*/, false)
       && verifier.VerifyString(tablePos, 16 /*Guid*/, false)
       && verifier.VerifyString(tablePos, 18 /*Name*/, false)
       && verifier.VerifyTable(tablePos, 20 /*Info*/, PRO.Flat.RoleInfoDataVerify.Verify, false)
-      && verifier.VerifyVectorOfStrings(tablePos, 22 /*AllCanUseOperateType*/, false)
-      && verifier.VerifyVectorOfStrings(tablePos, 24 /*AllBuffType*/, false)
+      && verifier.VerifyVectorOfTables(tablePos, 22 /*AllOperate*/, PRO.Flat.OperatBasiceDataVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

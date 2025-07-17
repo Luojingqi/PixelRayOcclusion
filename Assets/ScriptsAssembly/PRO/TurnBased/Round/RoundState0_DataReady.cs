@@ -28,7 +28,7 @@ namespace PRO.TurnBased
                 agent.Rig2D.simulated = true;
 
                 CombatContext context = CombatContext.TakeOut();
-                context.SetAgent(agent, fsm, null);
+                context.SetAgent(agent);
                 context.LogBuilder.Append("战斗开始：");
                 agent.ForEachBuffApplyEffect(BuffTriggerType.战斗开始时, context, -1);
                 context.Calculate_最终结算();

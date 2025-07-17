@@ -140,53 +140,18 @@ MonoBehaviour:
     - Name: priority
       Entry: 3
       Data: -1
+    - Name: source
+      Entry: 6
+      Data: 
+    - Name: nav
+      Entry: 6
+      Data: 
     - Name: toward
       Entry: 3
       Data: 0
-    - Name: BuffNameDic
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[PRO.Buff.Base.IBuffBase,
-        PRO.Assembly]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: BuffTypeDic
-      Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[PRO.Buff.Base.IBuffBase,
-        PRO.Assembly]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 3|System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
-        mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   RoleTypeName: "\u9ED8\u8BA4"
-  Guid: 
   Name: 
-  Icon: {fileID: 0}
+  Icon: {fileID: -801767232, guid: ea9eca77030757e4596eda3e675b01cc, type: 3}
 --- !u!50 &2677625915330494701
 Rigidbody2D:
   serializedVersion: 4

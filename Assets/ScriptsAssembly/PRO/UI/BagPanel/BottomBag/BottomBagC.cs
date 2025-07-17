@@ -60,20 +60,19 @@ namespace PRO
         }
         public void SetRole(Role role)
         {
-            //ResetGridObjectGroup();
-            //int r = 0;
-            //int c = 0;
-            //for (int j = 0; j < role.AllCanUseOperate.Count; j++)
-            //{
-            //    var grid = GridGroups[r].Grids[c++];
-            //    if (c >= GridGroups[r].Grids.Length)
-            //    {
-            //        r++;
-            //        c = 0;
-            //    }
-            //    var operate = role.AllCanUseOperate[j];
-            //    operate.BuildUI(grid);
-            //}
+            ResetGridObjectGroup();
+            int r = 0;
+            int c = 0;
+            foreach (var operate in role.AllCanUseOperate.Values)
+            {
+                var grid = GridGroups[r].Grids[c++];
+                if (c >= GridGroups[r].Grids.Length)
+                {
+                    r++;
+                    c = 0;
+                }
+                operate.BuildUI(grid);
+            }
         }
     }
 }

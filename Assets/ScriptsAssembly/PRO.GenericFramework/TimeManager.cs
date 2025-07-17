@@ -160,6 +160,13 @@ namespace PRO
                 event_AddTo_MainThreadUpdateQueue_UnClear += action;
             }
         }
+        public void RemoveToQueue_MainThreadUpdate_UnClear(Action action)
+        {
+            lock (mainThreadUpdateEventLock_UnClear)
+            {
+                event_AddTo_MainThreadUpdateQueue_UnClear -= action;
+            }
+        }
         #endregion
 
         #region 主线程更新事件_Clear

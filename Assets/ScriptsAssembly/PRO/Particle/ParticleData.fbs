@@ -1,22 +1,20 @@
 ﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+include "PRO/SkillEditor/Agent/SkillPlayerAgentData.fbs";
 
 namespace PRO.Flat;
-
-union ParticleExtendData
-{
-	
-}
 
 table ParticleData
 {
 	load_path : string;
 	transform : Transform;
 	rigidbody : Rigidbody2D;
+
+	skill_play_agent : SkillPlayerAgentData;
 	survive_time_range : Vector2Int;
 	remain_time : int;
 	elapsed_time : int;
 
-	extend_data : ParticleExtendData; 
+	extend_data : [ubyte]; 
 }
 
 table BlockParticleData

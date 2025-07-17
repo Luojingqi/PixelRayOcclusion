@@ -25,6 +25,13 @@ namespace PRO
         {
             public Block Block;
             public BackgroundBlock BackgroundBlock;
+
+            public OneBlock(Block block, BackgroundBlock backgroundBlock)
+            {
+                Block = block;
+                BackgroundBlock = backgroundBlock;
+            }
+
             public BlockBase this[int index]
             {
                 get
@@ -43,7 +50,6 @@ namespace PRO
         public SceneEntity(SceneCatalog sceneCatalog)
         {
             this.sceneCatalog = sceneCatalog;
-            //LoadAll();
         }
         #region 获取已经实例化的对象
         public HashSet<Vector2Int> ActiveBlockBase = new HashSet<Vector2Int>(50);
@@ -112,15 +118,16 @@ namespace PRO
         {
             if (ActiveBlockBase.Contains(blockPos)) return;
             ActiveBlockBase.Add(blockPos);
-            var block = CreateBlock(blockPos);
-            var background = CreateBackground(blockPos);
+            var oneBlock = CreateOneBlock(blockPos);
+            BlockBaseCrossList[blockPos] = oneBlock;
+            var block = oneBlock.Block;
+            var background = oneBlock.BackgroundBlock;
             block.ResetUnLoadCountdown();
             #region 加载  区块
 
-            
+            countdown_main?.AddCount();
             if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockData", out var builder))
             {
-                countdown_main?.AddCount();
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     try
@@ -198,7 +205,6 @@ namespace PRO
             }
             else
             {
-                countdown_main?.AddCount();
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     try
@@ -374,12 +380,11 @@ namespace PRO
         #endregion
 
         #region Building
-        public static Dictionary<string, Type> BuildingTypeDic = new Dictionary<string, Type>();
         public void LoadBuilding(string guid)
         {
             if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Building\{guid}", Proto.BuildingBaseData.Parser, out var diskData))
             {
-                BuildingBase building = BuildingBase.New(BuildingTypeDic[diskData.Name], guid, this);
+                BuildingBase building = BuildingBase.New(diskData.Name, guid, this);
                 building.ToRAM(diskData);
                 ActiveBuilding.Add(guid, building);
             }
@@ -415,6 +420,41 @@ namespace PRO
             FlatBufferBuilder.PutIn(builder);
         }
         #endregion
+
+
+        private void Add_Save_Load_UnLoad_Queue(Func<CountdownEvent> func)
+        {
+            lock (Save_Load_UnLoad_Queue)
+            {
+                if (now_Wait == false)
+                {
+                    now_Wait = true;
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        while (Save_Load_UnLoad_Queue.Count > 0)
+                        {
+                            Func<CountdownEvent> _func = null;
+                            lock (Save_Load_UnLoad_Queue)
+                                _func = Save_Load_UnLoad_Queue.Dequeue();
+                            CountdownEvent countdown = null;
+                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                            {
+                                countdown = _func.Invoke();
+                            });
+                            countdown.Wait();
+                        }
+                        lock (Save_Load_UnLoad_Queue)
+                            now_Wait = false;
+                    });
+                }
+                else
+                {
+                    Save_Load_UnLoad_Queue.Enqueue(func);
+                }
+            }
+        }
+        private bool now_Wait = false;
+        private Queue<Func<CountdownEvent>> Save_Load_UnLoad_Queue = new Queue<Func<CountdownEvent>>();
         /// <summary>
         /// 保存场景所有数据，内部使用线程池优化，返回等待信号
         /// </summary>
@@ -427,36 +467,38 @@ namespace PRO
                 try
                 {
                     #region 保存  Block  Building  Round
-                    countdown.AddCount(ActiveBlockBase.Count);
+                    var countdown_Block = new CountdownEvent(ActiveBlockBase.Count);
                     foreach (var blockPos in ActiveBlockBase)
-                        ThreadPool.QueueUserWorkItem((obj) => { SaveBlockData(blockPos, false); countdown.Signal(); });
+                        ThreadPool.QueueUserWorkItem((obj) => { SaveBlockData(blockPos, false); countdown_Block.Signal(); });
                     foreach (var building in ActiveBuilding.Values)
                         SaveBuilding(building);
-                    foreach (var round in ActiveRound.Values)
-                        SaveRound(round);
                     #endregion
-                    countdown.AddCount();
-                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+                    countdown_Block.Wait();
+                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                     {
+                        foreach (var round in ActiveRound.Values)
+                            SaveRound(round);
+
                         #region 保存  Particle
-                        {                        //粒子分组
+                        {
+                            //粒子分组
                             foreach (var particle in ActiveParticle)
                             {
-
                                 var blockPos = Block.WorldToBlock(particle.transform.position);
                                 if (JumpOutSceneParticleDic.TryGetValue(blockPos, out var jumpList))
                                     jumpList.Add(particle);
                                 else
                                     JumpOutSceneParticleDic.Add(blockPos, new List<Particle>() { particle });
                             }
-                            var builder = FlatBufferBuilder.TakeOut(1024 * 32);
+                            var builder = FlatBufferBuilder.TakeOut(1024 * 16);
+                            var extendBuilder = FlatBufferBuilder.TakeOut(1024);
                             foreach (var kv in JumpOutSceneParticleDic)
                             {
                                 Span<int> particleListOffset = stackalloc int[kv.Value.Count];
                                 int index = 0;
                                 foreach (var particle in kv.Value)
-                                    if (particle.loadPath == "技能播放")
-                                        particleListOffset[index++] = particle.ToDisk(builder).Value;
+                                    if (particle.loadPath != "技能播放")
+                                        particleListOffset[index++] = particle.ToDisk(builder, extendBuilder).Value;
                                 var listOffset = builder.CreateVector_Offset(particleListOffset.Slice(0, index));
                                 if (ActiveBlockBase.Contains(kv.Key) == false)
                                     foreach (var particle in kv.Value)
@@ -469,6 +511,7 @@ namespace PRO
                                 builder.Clear();
                             }
                             FlatBufferBuilder.PutIn(builder);
+                            FlatBufferBuilder.PutIn(extendBuilder);
                             JumpOutSceneParticleDic.Clear();
                         }
                         #endregion
@@ -514,11 +557,9 @@ namespace PRO
                             JumpOutSceneRoleDic.Clear();
                         }
                         #endregion
-
-                        countdown.Signal();
                     });
                 }
-                catch (Exception e) { Debug.Log(e); }
+                catch (Exception e) { Log.Print(e.ToString(), Color.red); }
                 countdown.Signal();
             });
             sceneCatalog.Save();
@@ -532,7 +573,6 @@ namespace PRO
 
                 Span<int> roundGuidOffsetArray = stackalloc int[ActiveRound.Count];
                 int index = 0;
-                int roundMainIndex = -1;
                 foreach (var round in ActiveRound.Values)
                     roundGuidOffsetArray[index++] = builder.CreateString(round.GUID).Value;
                 var roundGuidOffset = builder.CreateVector_Offset(roundGuidOffsetArray);
@@ -570,13 +610,20 @@ namespace PRO
                         for (int i = diskData.RoundGuidLength - 1; i >= 0; i--)
                             LoadRound(diskData.RoundGuid(i));
                         var roundMainGuid = diskData.RoundMain;
-                        if (roundMainGuid != null)
-                            GamePlayMain.Inst.Round = ActiveRound[roundMainGuid];
+                        if (roundMainGuid != null && ActiveRound.TryGetValue(roundMainGuid, out var round))
+                            GamePlayMain.Inst.Round = round;
                     });
                     FlatBufferBuilder.PutIn(builder);
                     countdown.Signal();
                 });
             }
+            else
+            {
+                for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
+                    for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
+                        ThreadLoadOrCreateBlock(new Vector2Int(x, y), countdown);
+            }
+            UpdateBind();
             countdown.Signal();
             return countdown;
         }
@@ -594,7 +641,7 @@ namespace PRO
             ActiveRound.Clear();
             #endregion
             #region 卸载  role
-            foreach (var role in ActiveRole_Guid.Values)
+            foreach (var role in ActiveRole_Guid.Values.ToArray())
                 RoleManager.Inst.PutIn(role);
             foreach (var list in JumpOutSceneRoleDic.Values)
                 for (int i = 0; i < list.Count; i++)
@@ -623,35 +670,20 @@ namespace PRO
         #endregion
 
         #region 创建区块的空游戏物体
-        /// <summary>
-        /// 创建一个块的游戏物体，内部像素点数据为空
-        /// </summary>
-        /// <param name="blockPos"></param>
-        /// <returns></returns>
-        public Block CreateBlock(Vector2Int blockPos)
+
+        private OneBlock CreateOneBlock(Vector2Int blockPos)
         {
             var block = Block.TakeOut(this);
             block.name = $"Block{blockPos}";
-            var oneBlock = BlockBaseCrossList[blockPos];
-            BlockBaseCrossList[blockPos] = new OneBlock() { Block = block, BackgroundBlock = oneBlock.BackgroundBlock };
             block.transform.position = Block.BlockToWorld(blockPos);
             block.BlockPos = blockPos;
-            return block;
-        }
-        /// <summary>
-        /// 创建一个背景的游戏物体，内部像素点数据为空
-        /// </summary>
-        /// <param name="blockPos"></param>
-        /// <returns></returns>
-        public BackgroundBlock CreateBackground(Vector2Int blockPos)
-        {
+
             var back = BackgroundBlock.TakeOut(this);
-            var oneBlock = BlockBaseCrossList[blockPos];
-            BlockBaseCrossList[blockPos] = new OneBlock() { Block = oneBlock.Block, BackgroundBlock = back };
             back.transform.position = Block.BlockToWorld(blockPos);
-            back.transform.parent = GetBlock(blockPos).transform;
+            back.transform.parent = block.transform;
             back.BlockPos = blockPos;
-            return back;
+
+            return new OneBlock(block, back);
         }
         #endregion
 
@@ -684,6 +716,16 @@ namespace PRO
                     TimeManager.enableUpdate = true;
 
                 });
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                var c = UnLoadAll();
+                ThreadPool.QueueUserWorkItem((obj) =>
+                {
+                    c.Wait();
+                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => LoadAll());
+                });
+
             }
 
             #region 更新  火焰

@@ -63,7 +63,7 @@ namespace PRO
             if (IOTool.LoadFlat(@$"{scene.sceneCatalog.directoryInfo}\Role\{guid}", out var builder))
             {
                 var diskData = Flat.RoleData.GetRootAsRoleData(builder.DataBuffer);
-                role = TakeOut(diskData.RoleTypeName, scene, guid);
+                role = TakeOut(diskData.RoleType, scene, guid);
                 role.ToRAM(diskData);
             }
             return role;

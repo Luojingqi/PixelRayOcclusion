@@ -27,25 +27,8 @@ namespace PRO.Renderer
 
 
             shareMaterial = Resources.Load<Material>("PixelRayOcclusion/PRO_Block");
-        }
 
-        public void FirstBind()
-        {
             shareMaterial.SetBuffer("AllPixelColorInfo", pixelColorInfoToShaderBufffer);
-
-            for (int y = 0; y < LightResultBufferBlockSize.y; y++)
-                for (int x = 0; x < LightResultBufferBlockSize.x; x++)
-                {
-                    Vector2Int globalBlockPos = MinLightBufferBlockPos + new Vector2Int(x, y);
-                    Vector2Int localBlockBufferPos = globalBlockPos - MinBlockBufferPos;
-                    int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
-                    int lightIndex = x + y * LightResultBufferBlockSize.x;
-                    //Debug.Log($"¿é×ø±ê{block.BlockPos}  ¸üÐÂ°ó¶¨ ¿é»º´æË÷Òý{blockIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
-                    materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", blockBufferArray[blockIndex]);
-                    materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
-                    Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
-                    block.spriteRenderer.SetPropertyBlock(materialPropertyBlockArray[lightIndex]);
-                }
         }
 
         public void ClearLastBind()

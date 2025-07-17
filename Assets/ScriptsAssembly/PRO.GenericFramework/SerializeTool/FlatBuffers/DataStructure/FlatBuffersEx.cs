@@ -32,7 +32,7 @@ namespace Google.FlatBuffers
         /// 创建基本数据数组的指针
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="datas"></param>
+        /// <param name="datas">全是基础类型的数组</param>
         /// <returns></returns>
         public unsafe VectorOffset CreateVector_Data<T>(Span<T> datas) where T : unmanaged
         {
@@ -50,6 +50,10 @@ namespace Google.FlatBuffers
                 datas_byte.CopyTo(_bb.ToSpan(_space, allObjectSize));
             }
             return EndVector();
+        }
+        public VectorOffset CreateVector_Builder(FlatBufferBuilder datasForm)
+        {
+            return CreateVector_Data(datasForm.DataBuffer.ToSpan(datasForm.DataBuffer.Position, datasForm.Offset));
         }
 
         private static void ToLittleEndian<T>(Span<T> array, int oneObjectSize) where T : unmanaged
@@ -72,16 +76,22 @@ namespace Google.FlatBuffers
             int minGap = int.MaxValue;
             int minGapIndex = -1;
 
-            int maxSize = int.MinValue;
+            int maxSize = size;
             int maxSizeIndex = -1;
             lock (pool)
             {
-                for (int i = 0; i < pool.Count; i++)
+                for (int i = pool.Count - 1; i >= 0; i--)
                 {
                     var builder = pool[i];
                     int gap = builder.DataBuffer.Length - size;
                     if (gap >= 0 && gap < minGap)
                     {
+                        //差距在一个size以内，直接返回
+                        if (gap < size)
+                        {
+                            minGapIndex = i;
+                            break;
+                        }
                         minGap = gap;
                         minGapIndex = i;
                     }
@@ -117,5 +127,6 @@ namespace Google.FlatBuffers
                 pool.Add(builder);
             }
         }
+
     }
 }

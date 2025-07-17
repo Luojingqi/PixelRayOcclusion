@@ -124,13 +124,13 @@ namespace PRO.SkillEditor
 
         public Offset<Flat.SkillPlayerAgentData> ToDisk(FlatBufferBuilder builder)
         {
-            var idleLoadPathOffset = builder.CreateString(idle?.loadPath); 
+            var idleLoadPathOffset = builder.CreateString(idle?.loadPath);
             var skillLoadPathOffset = builder.CreateString(skill?.loadPath);
 
             Flat.SkillPlayerAgentData.StartSkillPlayerAgentData(builder);
             Flat.SkillPlayerAgentData.AddPlay(builder, play);
             Flat.SkillPlayerAgentData.AddTime(builder, time);
-            Flat.SkillPlayerAgentData.AddNowFrame(builder,nowFrame);
+            Flat.SkillPlayerAgentData.AddNowFrame(builder, nowFrame);
             Flat.SkillPlayerAgentData.AddIdleLoadPath(builder, idleLoadPathOffset);
             Flat.SkillPlayerAgentData.AddSkillLoadPath(builder, skillLoadPathOffset);
             return Flat.SkillPlayerAgentData.EndSkillPlayerAgentData(builder);
@@ -140,10 +140,11 @@ namespace PRO.SkillEditor
             play = diskData.Play;
             time = diskData.Time;
             nowFrame = diskData.NowFrame;
-            if(diskData.IdleLoadPath != null)
-                idle = AssetManager.Load_A<Skill_Disk>("skill.ab", @$"ScriptsAssembly\PRO\技能\{diskData.IdleLoadPath}.asset");
-            if(diskData.SkillLoadPath != null)
-                skill = AssetManager.Load_A<Skill_Disk>("skill.ab", @$"ScriptsAssembly\PRO\技能\{diskData.SkillLoadPath}.asset");
+
+            if (diskData.IdleLoadPath != null)
+                idle = AssetManagerEX.LoadSkillDisk(diskData.IdleLoadPath, false);
+            if (diskData.SkillLoadPath != null)
+                skill = AssetManagerEX.LoadSkillDisk(diskData.SkillLoadPath, false);
             skill?.UpdateFrame(this, nowFrame, (int)(Skill_Disk.PlayTrack.AnimationTrack2D | Skill_Disk.PlayTrack.SpecialEffectTrack2D));
         }
     }

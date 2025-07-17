@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using PRO.Proto.Ex;
+using PRO.Skill;
+using PROTool;
+using System.Buffers;
+using System.Reflection;
 
 namespace PRO
 {
@@ -74,6 +78,13 @@ namespace PRO
         protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
         public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - Global), blockType));
         public abstract void Init();
+        public static BuildingBase New(string typeName, string guid, SceneEntity scene)
+        {
+            BuildingBase ret = null;
+            if (BuildingTypeDic.TryGetValue(typeName, out var type))
+                ret = New(type, guid, scene);
+            return ret;
+        }
         public static BuildingBase New(Type type, string guid, SceneEntity scene)
         {
             GameObject go = new GameObject(type.Name);
@@ -87,6 +98,19 @@ namespace PRO
             go.layer = (int)GameLayer.Building;
             return building;
         }
+        #region 反射创建Building实例
+        private static Dictionary<string, Type> BuildingTypeDic;
+        public static void InitBuildingType()
+        {
+            var typeList = ReflectionTool.GetDerivedClasses(typeof(BuildingBase));
+            BuildingTypeDic = new(typeList.Count);
+            for (int i = 0; i < typeList.Count; i++)
+            {
+                var type = typeList[i];
+                BuildingTypeDic.Add(type.Name, type);
+            }
+        }
+        #endregion
         #region 序列化与反序列化
         /// <summary>
         /// 反序列化过程1：添加一个蓝图点到建筑中(未加载状态)

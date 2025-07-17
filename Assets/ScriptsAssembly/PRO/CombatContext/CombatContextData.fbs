@@ -1,0 +1,30 @@
+﻿//include "PRO/Skill/SkillBase/SkillData.fbs";
+include "PRO/Role/RoleInfoData.fbs";
+
+namespace PRO.Flat;
+
+struct StartCombatEffectData
+{
+	type : int;
+	value : int;
+}
+
+table CombatContext_ByAgentData
+{
+	role_guid : string;
+	role_info : RoleInfoData;
+	start_combat_effect_data_list : [StartCombatEffectData];
+	play_affected_animation : bool;
+	log_builder : string;
+}
+
+table CombatContextData
+{
+	role_guid : string;
+	role_info : RoleInfoData;
+	start_combat_effect_data_list : [StartCombatEffectData];
+	cast_a_spell_type : int;
+	log_builder : string;
+
+	by_agent_data_list : [CombatContext_ByAgentData];
+}

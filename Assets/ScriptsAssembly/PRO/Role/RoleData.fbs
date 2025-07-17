@@ -3,6 +3,14 @@ include "PRO/SkillEditor/Agent/SkillPlayerAgentData.fbs";
 include "PRO/Role/RoleInfoData.fbs";
 namespace PRO.Flat;
 
+table OperatBasiceData
+{
+	type : string;
+	guid : string;
+	now_state : int;
+	extend_data : [ubyte];
+}
+
 table RoleData {
   transform_data : Transform;
   rigidbody_2_d_data : Rigidbody2D;
@@ -10,13 +18,13 @@ table RoleData {
   
   nav_type : string;
   toward : int;
-  role_type_name : string;
+  role_type : string;
   guid : string;
   name : string;
   info : RoleInfoData;
   
-  all_can_use_operate_type : [string];  
-  all_buff_type : [string];             
+  all_operate : [OperatBasiceData];  
+  //all_buff_type : [string];             
 }
 
 table BlockRoleData

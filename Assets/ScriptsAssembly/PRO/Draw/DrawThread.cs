@@ -18,6 +18,7 @@ namespace PRO
             while (true)
             {
                 SceneEntity scene = SceneManager.Inst.NowScene;
+                if (scene == null) continue;
                 Vector2Int minLightBufferBlockPos = BlockMaterial.CameraCenterBlockPos - BlockMaterial.LightResultBufferBlockSize / 2;
                 for (int x = 0; x < BlockMaterial.LightResultBufferBlockSize.x; x++)
                     for (int y = 0; y < BlockMaterial.LightResultBufferBlockSize.y; y++)

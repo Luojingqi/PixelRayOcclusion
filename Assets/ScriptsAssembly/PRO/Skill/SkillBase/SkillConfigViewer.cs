@@ -39,12 +39,12 @@ namespace PRO.Skill.Base
 
         public class Viewer
         {
+            [ReadOnly]
+            [TableColumnWidth(0)]
+            public SkillConfig config;
             [TableColumnWidth(0)]
             [ReadOnly]
             public string id;
-            [ReadOnly]
-            [HideInInspector]
-            public SkillConfig config;
             [ShowInInspector]
             public string name { get => config.Name; set => config.Name = value; }
             [TableColumnWidth(0)]

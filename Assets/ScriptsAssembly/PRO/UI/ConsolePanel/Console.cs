@@ -172,8 +172,8 @@ namespace PRO.Console
             {
                 if (method_0_4_State == value) return;
                 method_0_4_State = value;
-                if (method_0_4_State) GameMainUIC.Inst.UpdateAction += Method_0_4_主函数更新;
-                else GameMainUIC.Inst.UpdateAction -= Method_0_4_主函数更新;
+                if (method_0_4_State) TimeManager.Inst.AddToQueue_MainThreadUpdate_UnClear(Method_0_4_主函数更新);
+                else TimeManager.Inst.RemoveToQueue_MainThreadUpdate_UnClear(Method_0_4_主函数更新);
             }
         }
         private static void Method_0_4_主函数更新()

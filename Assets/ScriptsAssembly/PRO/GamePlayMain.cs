@@ -1,3 +1,4 @@
+using PRO.Skill;
 using PRO.TurnBased;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,10 +8,10 @@ namespace PRO
     {
         public static GamePlayMain Inst { get; private set; }
 
-
         public void TimeAwake()
         {
             Inst = this;
+            OperateFSMBase.InitOperateType();
         }
         public RoundFSM Round
         {
@@ -18,9 +19,15 @@ namespace PRO
             set
             {
                 round = value;
-                if (round == null) return;
-                GameMainUIC.Inst.OpenTurnUI();
-                GameMainUIC.Inst.SetTurn(round.State3_Turn.TurnFSMList, round.State3_Turn.NowTurn.Index);
+                if (round == null)
+                {
+                    GameMainUIC.Inst.CloseTurnUI();
+                }
+                else
+                {
+                    GameMainUIC.Inst.OpenTurnUI();
+                    GameMainUIC.Inst.SetTurn(round.State3_Turn.TurnFSMList, round.State3_Turn.NowTurn.Index);
+                }
             }
         }
         [ShowInInspector]
@@ -41,7 +48,7 @@ namespace PRO
             {
                 var round = new RoundFSM(SceneManager.Inst.NowScene, System.Guid.NewGuid().ToString());
                 var round_state0 = round.GetState<RoundState0_DataReady>();
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     var role = RoleManager.Inst.TakeOut("д╛хо", SceneManager.Inst.NowScene, System.Guid.NewGuid().ToString());
                     role.transform.position = new Vector3(i / 0.5f, 0);
@@ -49,7 +56,7 @@ namespace PRO
                 }
 
                 round_state0.ReadyOver();
-                this.Round = round;
+                Round = round;
             }
         }
     }

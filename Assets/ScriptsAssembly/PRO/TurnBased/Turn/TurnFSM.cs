@@ -22,10 +22,7 @@ namespace PRO.TurnBased
             RoundFSM = roundFSM;
             Agent = role;
             Index = index;
-            foreach (var operate in Agent.AllCanUseOperate)
-            {
-                operate.Value.Turn = this;
-            }
+            Agent.Turn = this;
             SetState(TurnStateEnum.end);
         }
 

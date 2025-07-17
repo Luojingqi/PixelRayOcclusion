@@ -36,7 +36,7 @@ namespace PRO
         /// <summary>
         /// 上一帧相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int LastCameraCenterBlockPos { get; set; }
+        public static Vector2Int LastCameraCenterBlockPos { get; private set; }
         /// <summary>
         /// 最大光源半径，修改完后需要调用编辑器扩展PRO>2.创建hlsl
         /// 将生成LightRadiusMax个计算着色器函数  每个代表一个不同半径的光源函数
@@ -94,6 +94,8 @@ namespace PRO
             blockShareMaterialManager.Init();
             backgroundShareMaterialManager.Init();
             computeShaderManager.Init();
+
+            new Thread(() => DrawThread.LoopDraw()).Start();
         }
 
         #region 像素点的颜色属性的加载与缓冲区
@@ -193,25 +195,6 @@ namespace PRO
         }
         #endregion
 
-        /// <summary>
-        /// 初始化绑定数据
-        /// 加载相机周围区块
-        /// </summary>
-        public static void FirstBind()
-        {
-            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-
-            for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
-                for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
-                    if (SceneManager.Inst.NowScene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
-                        SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
-
-            blockShareMaterialManager.FirstBind();
-            backgroundShareMaterialManager.FirstBind();
-            computeShaderManager.FirstBind();
-
-            new Thread(() => DrawThread.LoopDraw()).Start();
-        }
         public static void UpdateBind()
         {
             blockShareMaterialManager.ClearLastBind();
@@ -230,10 +213,12 @@ namespace PRO
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                 {
-                    if (SceneManager.Inst.NowScene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
-                        SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
+                    var scene = SceneManager.Inst.NowScene;
+                    if (scene == null) return;
+                    if (scene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
+                        scene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
                     else
-                        SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)).ResetUnLoadCountdown();
+                        scene.GetBlock(new Vector2Int(x, y)).ResetUnLoadCountdown();
                 }
         }
 

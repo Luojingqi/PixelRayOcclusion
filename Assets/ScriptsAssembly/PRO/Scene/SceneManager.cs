@@ -40,7 +40,6 @@ namespace PRO
             DontDestroyOnLoad(PoolNode);
             BlockMaterial.Init();
             Pixel.LoadPixelTypeInfo();
-            Pixel.空气 = Pixel.TakeOut("空气", 0, new());
             GreedyCollider.InitBoxCollider2DPool();
             Block.InitPool();
             BackgroundBlock.InitPool();
@@ -48,8 +47,7 @@ namespace PRO
         }
         public void TimeStart()
         {
-            foreach (var buildingType in ReflectionTool.GetDerivedClasses(typeof(BuildingBase)))
-                SceneEntity.BuildingTypeDic.Add(buildingType.Name, buildingType);
+            BuildingBase.InitBuildingType();
             //GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
             var catalogList = GameSaveCatalog.LoadAllSaveCatalog();
@@ -61,7 +59,6 @@ namespace PRO
             SceneEntity scene = new SceneEntity(sceneCatalog);
             scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
-            BlockMaterial.FirstBind();
 
             D(scene);
 

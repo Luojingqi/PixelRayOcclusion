@@ -272,6 +272,7 @@ namespace PRO
                     }
                 }
             }
+            Pixel.¿ÕÆø = Pixel.TakeOut("¿ÕÆø", 0, new());
         }
         #endregion
     }

@@ -18,7 +18,7 @@ public class BuildAssetBundle
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<Skill_Disk>(path);
-            asset.loadPath = path.Substring(@"Assets\".Length, path.Length - @"Assets\".Length);
+            asset.loadPath = path.Substring(@"Assets\".Length, path.Length - @"Assets\.asset".Length);
             EditorUtility.SetDirty(asset);
         }
         AssetDatabase.SaveAssets();

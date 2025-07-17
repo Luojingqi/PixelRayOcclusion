@@ -2,7 +2,10 @@
 using PRO.Skill.Base;
 using PRO.Tool;
 using PRO.TurnBased;
+using PROTool;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using static PRO.BottomBagM;
 
@@ -13,12 +16,57 @@ namespace PRO.Skill
     /// </summary>
     public abstract class OperateFSMBase : FSMManager<OperateStateEnum>
     {
-        /// <summary>
-        /// 本操作受此管理
-        /// </summary>
-        public TurnFSM Turn { get; set; }
+        #region 反射创建Operate实例
+        private static Dictionary<string, CreateOperateInfo> OperateTypeDic;
+        private class CreateOperateInfo
+        {
+            public Type type;
+            public ConstructorInfo constructor;
 
-        public Role Agent { get; set; }
+            public CreateOperateInfo(Type type, ConstructorInfo constructor)
+            {
+                this.type = type;
+                this.constructor = constructor;
+            }
+        }
+        public static void InitOperateType()
+        {
+            Type[] bind = new Type[] { typeof(string) };
+            var typeList = ReflectionTool.GetDerivedClasses(typeof(OperateFSMBase));
+            OperateTypeDic = new(typeList.Count);
+            for (int i = 0; i < typeList.Count; i++)
+            {
+                var type = typeList[i];
+                var info = type.GetConstructor(bind);
+                if (info != null)
+                {
+                    OperateTypeDic.Add(type.Name, new(type, info));
+                }
+            }
+        }
+        private static object[] parameter = new object[1];
+        public static OperateFSMBase CreateOperate(string typeName, string guid)
+        {
+            OperateFSMBase ret = null;
+            if (OperateTypeDic.TryGetValue(typeName, out var info))
+            {
+                parameter[0] = guid;
+                ret = info.constructor.Invoke(parameter) as OperateFSMBase;
+                parameter[0] = null;
+            }
+            return ret;
+        }
+        public static OperateFSMBase CreateOperate(PRO.Flat.OperatBasiceData diskData)
+        {
+            OperateFSMBase ret = CreateOperate(diskData.Type, diskData.Guid);
+            ret?.ToRAM(diskData);
+            return ret;
+        }
+        #endregion
+
+        public Role Agent;
+
+        public TurnFSM Turn => Agent.Turn;
 
         public string GUID => guid;
         private string guid;
@@ -52,7 +100,7 @@ namespace PRO.Skill
             {
                 Debug.Log("操作状态机未添加相应的三个状态");
             }
-            SwitchState(OperateStateEnum.t0);
+            SetState(OperateStateEnum.t0);
             if (GUID == null) guid = Guid.NewGuid().ToString();
             guid = GUID;
         }
@@ -103,31 +151,34 @@ namespace PRO.Skill
             AI,
         }
 
-        public Offset<Flat.SkillData> ToDisk(FlatBufferBuilder builder)
+        public Offset<PRO.Flat.OperatBasiceData> ToDisk(FlatBufferBuilder builder)
         {
-            var skillTypeNameOffset = builder.CreateString(GetType().Name);
+            var skillTypeOffset = builder.CreateString(GetType().Name);
             var skillGuidOffset = builder.CreateString(GUID);
-            var t2Builder = FlatBufferBuilder.TakeOut(1024);
-            T2.ToDisk(t2Builder);
-            var datasOffset = builder.CreateVector_Data(t2Builder.DataBuffer.ToSpan(t2Builder.DataBuffer.Position, t2Builder.Offset));
-            FlatBufferBuilder.PutIn(t2Builder);
-            Flat.SkillData.StartSkillData(builder);
-            Flat.SkillData.AddTypeName(builder, skillTypeNameOffset);
-            Flat.SkillData.AddGuid(builder, skillGuidOffset);
-            Flat.SkillData.AddDatas(builder, datasOffset);
-            return Flat.SkillData.EndSkillData(builder);
+            var extendBuilder = FlatBufferBuilder.TakeOut(1024);
+            ExtendDataToDisk(extendBuilder);
+            var extendOffset = builder.CreateVector_Builder(extendBuilder);
+            FlatBufferBuilder.PutIn(extendBuilder);
+
+            PRO.Flat.OperatBasiceData.StartOperatBasiceData(builder);
+            PRO.Flat.OperatBasiceData.AddType(builder, skillTypeOffset);
+            PRO.Flat.OperatBasiceData.AddGuid(builder, skillGuidOffset);
+            PRO.Flat.OperatBasiceData.AddNowState(builder, (int)NowState.EnumName);
+            PRO.Flat.OperatBasiceData.AddExtendData(builder, extendOffset);
+            return PRO.Flat.OperatBasiceData.EndOperatBasiceData(builder);
         }
-        public void ToRAM(Flat.SkillData diskData)
+        public void ToRAM(PRO.Flat.OperatBasiceData diskData)
         {
-            var builder = FlatBufferBuilder.TakeOut(diskData.DatasLength);
-            var datas = builder.DataBuffer.ToSpan(0, diskData.DatasLength);
-            for (int i = diskData.DatasLength - 1; i >= 0; i--)
-            {
-                datas[diskData.DatasLength - i - 1] = diskData.Datas(i);
-            }
-            builder.DataBuffer.Position = 0;
-            T2.ToRAM(builder);
+            SetState((OperateStateEnum)diskData.NowState);
+
+            var builder = FlatBufferBuilder.TakeOut(diskData.ExtendDataLength);
+            var datas = builder.DataBuffer.ToSpan(0, diskData.ExtendDataLength);
+            for (int i = datas.Length - 1; i >= 0; i--)
+                datas[datas.Length - i - 1] = diskData.ExtendData(i);
+            ExtendDataToRAM(builder);
             FlatBufferBuilder.PutIn(builder);
         }
+        protected virtual void ExtendDataToDisk(FlatBufferBuilder builder) { }
+        protected virtual void ExtendDataToRAM(FlatBufferBuilder builder) { }
     }
 }

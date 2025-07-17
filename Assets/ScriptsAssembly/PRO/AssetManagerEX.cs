@@ -23,9 +23,12 @@ namespace PRO
         /// 
         /// Asset\ScriptsAssembly\PRO\技能\
         /// </summary>
-        public static Skill_Disk LoadSkillDisk(string path)
+        public static Skill_Disk LoadSkillDisk(string path,bool path补全 = true)
         {
-            return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+            if (path补全)
+                return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+            else
+                return AssetManager.Load_A<Skill_Disk>("skill.ab", $@"{path}.asset");
         }
         private static StringBuilder stringBuilder = new StringBuilder(64);
         public static Skill_Disk LoadSkillDisk(OperateFSMBase SkillOperate)

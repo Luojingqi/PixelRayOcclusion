@@ -71,8 +71,6 @@ namespace PRO.TurnBased
             {
                 var roleGuid = diskData.RoleHash(i);
                 var role = scene.GetRole(roleGuid);
-                if (role == null)
-                    role = RoleManager.Inst.Load(roleGuid, scene);
                 RoleHash.Add(role);
             }
             if (NowState.EnumName == RoundStateEnum.turn)

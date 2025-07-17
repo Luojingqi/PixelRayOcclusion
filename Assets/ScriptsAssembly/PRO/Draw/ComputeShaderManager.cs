@@ -9,6 +9,7 @@ namespace PRO.Renderer
         public void Init()
         {
             LoadComputeShader();
+            FirstBind();
         }
         private void LoadComputeShader()
         {
@@ -24,7 +25,7 @@ namespace PRO.Renderer
             }
         }
 
-        public void FirstBind()
+        private void FirstBind()
         {
             //光缓存块里左下角的坐标
             Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;

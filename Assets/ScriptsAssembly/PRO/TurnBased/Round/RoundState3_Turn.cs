@@ -27,7 +27,7 @@ namespace PRO.TurnBased
             foreach (var turn in TurnFSMList)
             {
                 CombatContext context = CombatContext.TakeOut();
-                context.SetAgent(turn.Agent, fsm, turn);
+                context.SetAgent(turn.Agent);
                 context.LogBuilder.Append($"战斗结束：");
                 turn.Agent.ForEachBuffApplyEffect(BuffTriggerType.战斗结束时, context, -1);
                 context.Calculate_最终结算();
@@ -70,7 +70,7 @@ namespace PRO.TurnBased
             foreach (var turn in TurnFSMList)
             {
                 CombatContext context = CombatContext.TakeOut();
-                context.SetAgent(turn.Agent, fsm, turn);
+                context.SetAgent(turn.Agent);
                 context.LogBuilder.Append($"轮次结束：");
                 turn.Agent.ForEachBuffApplyEffect(BuffTriggerType.轮次结束时, context, -1);
                 context.Calculate_最终结算();
@@ -82,7 +82,7 @@ namespace PRO.TurnBased
             foreach (var turn in TurnFSMList)
             {
                 CombatContext context = CombatContext.TakeOut();
-                context.SetAgent(turn.Agent, fsm, turn);
+                context.SetAgent(turn.Agent);
                 context.LogBuilder.Append($"轮次开始：");
                 turn.Agent.ForEachBuffApplyEffect(BuffTriggerType.轮次开始时, context, -1);
                 context.Calculate_最终结算();

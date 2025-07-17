@@ -20,7 +20,12 @@ namespace PRO.Console
             view.ClearButton.onClick.AddListener(ClearLog);
             view.CloseButton.onClick.AddListener(() => { gameObject.SetActive(false); });
             view.TimeButton.onClick.AddListener(() => { useTime = !useTime; Refresh(); });
-            GameMainUIC.Inst.UpdateAction += () => { if (Input.GetKeyDown(KeyCode.Slash)) gameObject.SetActive(true); };
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_UnClear(
+            () =>
+            {
+                if (Input.GetKeyDown(KeyCode.Slash)) 
+                    gameObject.SetActive(true);
+            });
 
             Console.Init(this);
         }

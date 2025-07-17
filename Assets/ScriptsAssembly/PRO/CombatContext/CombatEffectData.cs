@@ -1,17 +1,28 @@
-﻿namespace PRO
+﻿using Google.FlatBuffers;
+
+namespace PRO
 {
     /// <summary>
     /// 战斗起始效果数据
     /// </summary>
     public struct StartCombatEffectData
     {
-        public int value;
         public 属性 type;
+        public int value;
 
         public StartCombatEffectData(属性 type, int value)
         {
             this.value = value;
             this.type = type;
+        }
+
+        public Offset<Flat.StartCombatEffectData> ToDisk(FlatBufferBuilder builder)
+        {
+            return Flat.StartCombatEffectData.CreateStartCombatEffectData(builder, value, (int)type);
+        }
+        public static StartCombatEffectData ToRAM(Flat.StartCombatEffectData diskData)
+        {
+            return new StartCombatEffectData((属性)diskData.Type, diskData.Value);
         }
     }
     /// <summary>

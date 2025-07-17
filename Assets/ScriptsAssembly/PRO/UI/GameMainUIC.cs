@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace PRO
 {
-    public class GameMainUIC : UIControllerBase, ITime_Awake, ITime_Update
+    public class GameMainUIC : UIControllerBase, ITime_Awake
     {
         public static GameMainUIC Inst { get; private set; }
         public override UIViewBase View => view;
@@ -72,13 +72,6 @@ namespace PRO
         {
             view.RoundPanel.Clear();
             view.RoundPanel.gameObject.SetActive(false);
-        }
-
-        public event Action UpdateAction;
-        public override void TimeUpdate()
-        {
-            base.TimeUpdate();
-            UpdateAction?.Invoke();
         }
     }
 }

@@ -1,10 +1,17 @@
-﻿include "PRO/Skill/SkillBase/SkillData.fbs";
+﻿include "PRO/CombatContext/CombatContextData.fbs";
 
 namespace PRO.TurnBased.Flat;
 
+table OperateT2Data
+{
+	guid : string;
+	context : PRO.Flat.CombatContextData;
+	extend_data : [ubyte];
+}
+
 table TurnState1_OperateData
 {
-	now_operate_list_t2 : [Skill.Flat.SkillData];
+	now_operate_list_t2 : [OperateT2Data];
 }
 
 table TurnFSMData

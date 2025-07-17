@@ -1,5 +1,5 @@
-﻿using PRO.Tool;
-using PRO.TurnBased;
+﻿using Google.FlatBuffers;
+using PRO.Tool;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -17,9 +17,7 @@ namespace PRO
         public 施法方式 施法方式type;
 
 
-        public StringBuilder LogBuilder = new StringBuilder();
-        public RoundFSM Round { get; private set; }
-        public TurnFSM Turn { get; private set; }
+        public StringBuilder LogBuilder = new StringBuilder(50);
 
 
         public List<CombatContext_ByAgentData> ByAgentDataList = new List<CombatContext_ByAgentData>();
@@ -36,9 +34,45 @@ namespace PRO
             context.LogBuilder.Clear();
             context.StartCombatEffectDataList.Clear();
             context.ClearByAgentData();
-            context.Round = null;
-            context.Turn = null;
             pool.PutIn(context);
+        }
+        #endregion
+
+        #region 序列化与反序列化
+        public Offset<Flat.CombatContextData> ToDisk(FlatBufferBuilder builder)
+        {
+            var roleGuidOffset = builder.CreateString(Agent.GUID);
+            var roleInfoOffset = AgentInfo.ToDisk(builder);
+            Flat.CombatContextData.StartStartCombatEffectDataListVector(builder, StartCombatEffectDataList.Count);
+            for (int i = 0; i < StartCombatEffectDataList.Count; i++)
+                StartCombatEffectDataList[i].ToDisk(builder);
+            var startCombatEffectDataListOffset = builder.EndVector();
+            var logBuilderOffset = builder.CreateString(LogBuilder.ToString());
+            System.Span<int> byAgentDataListOffsetArray = stackalloc int[ByAgentDataList.Count];
+            for (int i = 0; i < ByAgentDataList.Count; i++)
+                byAgentDataListOffsetArray[i] = ByAgentDataList[i].ToDisk(builder).Value;
+            var byAgentDataListOffset = builder.CreateVector_Offset(byAgentDataListOffsetArray);
+            Flat.CombatContextData.StartCombatContextData(builder);
+            Flat.CombatContextData.AddRoleGuid(builder, roleGuidOffset);
+            Flat.CombatContextData.AddRoleInfo(builder, roleInfoOffset);
+            Flat.CombatContextData.AddStartCombatEffectDataList(builder, startCombatEffectDataListOffset);
+            Flat.CombatContextData.AddCastASpellType(builder, (int)施法方式type);
+            Flat.CombatContextData.AddLogBuilder(builder, logBuilderOffset);
+            Flat.CombatContextData.AddByAgentDataList(builder, byAgentDataListOffset);
+            return Flat.CombatContextData.EndCombatContextData(builder);
+        }
+        public static CombatContext ToRAM(Flat.CombatContextData diskData, SceneEntity scene)
+        {
+            var data = TakeOut();
+            data.Agent = scene.GetRole(diskData.RoleGuid);
+            data.AgentInfo.ToRAM(diskData.RoleInfo.Value);
+            for (int i = diskData.StartCombatEffectDataListLength - 1; i >= 0; i--)
+                data.StartCombatEffectDataList.Add(StartCombatEffectData.ToRAM(diskData.StartCombatEffectDataList(i).Value));
+            data.施法方式type = (施法方式)diskData.CastASpellType;
+            data.LogBuilder.Append(diskData.LogBuilder);
+            for (int i = diskData.ByAgentDataListLength - 1; i >= 0; i--)
+                data.ByAgentDataList.Add(CombatContext_ByAgentData.ToRAM(diskData.ByAgentDataList(i).Value, scene));
+            return data;
         }
         #endregion
 
@@ -50,7 +84,7 @@ namespace PRO
             public EndCombatEffectData EndCombatEffectData;
             public InjuryEstimationPanelC InjuryEstimation;
             public bool PlayAffectedAnimation = true;
-            public StringBuilder LogBuilder = new StringBuilder();
+            public StringBuilder LogBuilder = new StringBuilder(50);
 
             #region CombatContext_ByAgentData对象池
             private static ObjectPool<CombatContext_ByAgentData> pool = new ObjectPool<CombatContext_ByAgentData>();
@@ -73,22 +107,46 @@ namespace PRO
                 pool.PutIn(agentData);
             }
             #endregion
+
+            #region 序列化与反序列化
+            public Offset<Flat.CombatContext_ByAgentData> ToDisk(FlatBufferBuilder builder)
+            {
+                var roleGuidOffset = builder.CreateString(Agent.GUID);
+                var roleInfoOffset = AgentInfo.ToDisk(builder);
+                Flat.CombatContext_ByAgentData.StartStartCombatEffectDataListVector(builder, StartCombatEffectDataList.Count);
+                for (int i = 0; i < StartCombatEffectDataList.Count; i++)
+                    StartCombatEffectDataList[i].ToDisk(builder);
+                var startCombatEffectDataListOffset = builder.EndVector();
+                var logBuidlderOffset = builder.CreateString(LogBuilder.ToString());
+                Flat.CombatContext_ByAgentData.StartCombatContext_ByAgentData(builder);
+                Flat.CombatContext_ByAgentData.AddRoleGuid(builder, roleGuidOffset);
+                Flat.CombatContext_ByAgentData.AddRoleInfo(builder, roleInfoOffset);
+                Flat.CombatContext_ByAgentData.AddStartCombatEffectDataList(builder, startCombatEffectDataListOffset);
+                Flat.CombatContext_ByAgentData.AddPlayAffectedAnimation(builder, PlayAffectedAnimation);
+                Flat.CombatContext_ByAgentData.AddLogBuilder(builder, logBuidlderOffset);
+                return Flat.CombatContext_ByAgentData.EndCombatContext_ByAgentData(builder);
+            }
+            public static CombatContext_ByAgentData ToRAM(Flat.CombatContext_ByAgentData diskData, SceneEntity scene)
+            {
+                CombatContext_ByAgentData data = TakeOut();
+                data.Agent = scene.GetRole(diskData.RoleGuid);
+                data.AgentInfo.ToRAM(diskData.RoleInfo.Value);
+                for (int i = diskData.StartCombatEffectDataListLength - 1; i >= 0; i--)
+                    data.StartCombatEffectDataList.Add(StartCombatEffectData.ToRAM(diskData.StartCombatEffectDataList(i).Value));
+                data.PlayAffectedAnimation = diskData.PlayAffectedAnimation;
+                data.LogBuilder.Append(diskData.LogBuilder);
+                return data;
+            }
+            #endregion
         }
 
 
 
-        public void SetAgent(Role role, RoundFSM Round, TurnFSM Turn)
+        public void SetAgent(Role role)
         {
             Agent = role;
             RoleInfo.Clone(role.Info, AgentInfo);
             LogBuilder.Insert(0, $"{Agent.Name}：");
-            this.Round = Round;
-            this.Turn = Turn;
-        }
-
-        public void SetAgent(CombatContext context)
-        {
-            SetAgent(context.Agent, context.Round, context.Turn);
         }
 
         public void AddByAgent(Role byRole, bool triggerBuff_选中)
@@ -103,8 +161,12 @@ namespace PRO
             if (triggerBuff_选中)
             {
                 int agentIndex = ByAgentDataList.Count - 1;
+                //这两个buff类型的意义在于
+                //某些buff的影响可以在技能选中敌人的时候就将
+                //效果展示在面板上（命中率与暴击率）
                 Agent.ForEachBuffApplyEffect(BuffTriggerType.技能选中敌人, this, agentIndex);
                 byAgentData.Agent.ForEachBuffApplyEffect(BuffTriggerType.被技能选中, this, agentIndex);
+                //buff效果处理完毕，展示可能的命中率与暴击率，后续还有其他buff影响
                 EndCombatEffectData data = new EndCombatEffectData();
                 data.命中率 = AgentInfo.命中率.Value - byAgentData.AgentInfo.闪避率.Value;
                 data.暴击率 = AgentInfo.暴击率.Value + Mathf.Max(data.命中率 - 1f, 0);
@@ -121,20 +183,6 @@ namespace PRO
             ByAgentDataList.Clear();
         }
         #endregion
-        /// <summary>
-        /// 添加技能伤害
-        /// </summary>
-        public void Calculate_战斗技能初始化(施法方式 type, System.Span<StartCombatEffectData> startDatas)
-        {
-            施法方式type = type;
-            foreach (var data in startDatas)
-            {
-                StartCombatEffectDataList.Add(data);
-                LogBuilder.Append($"{data.type}{data.value}，");
-            }
-            LogBuilder.EndCommaToPeriod();
-            LogBuilder.Append('\n');
-        }
         /// <summary>
         /// 添加技能伤害
         /// </summary>

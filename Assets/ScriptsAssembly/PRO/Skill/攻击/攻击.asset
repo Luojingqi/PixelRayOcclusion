@@ -421,4 +421,4 @@ MonoBehaviour:
       Data: 
   MaxFrame: 7
   FrameTime: 20
-  loadPath: "ScriptsAssembly/PRO/Skill/\u653B\u51FB/\u653B\u51FB.asset"
+  loadPath: "ScriptsAssembly/PRO/Skill/\u653B\u51FB/\u653B\u51FB"
