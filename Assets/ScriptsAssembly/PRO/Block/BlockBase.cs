@@ -65,13 +65,13 @@ namespace PRO
 
             PixelTypeInfo removeInfo = null;
             Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
-            //旧点所属于一个建筑且建筑不可被破坏，并且耐久大于0
-            //  if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false && removePixel.durability > 0) return;
+
             if (removePixel != null)
             {
+#if !PRO_MCTS
                 if (removePixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius == 0)//&& removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
                     RemoveLightSource(removePixel);
-
+#endif
                 removeInfo = removePixel.typeInfo;
 
                 //切换建筑这个点的状态（死亡||存活
@@ -86,12 +86,12 @@ namespace PRO
 
 
             allPixel[pixel.pos.x, pixel.pos.y] = pixel;
-
+#if !PRO_MCTS
             textureData.SetPixelInfoToShader(pixel);
 
             if (pixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
                 AddLightSource(pixel);
-
+#endif
             if (this is Block)
             {
                 Block block = this as Block;
@@ -104,8 +104,9 @@ namespace PRO
             }
 
             if (pixel.typeInfo.typeName == "火焰") queue_火焰.Enqueue(pixel.pos);
-
+#if !PRO_MCTS
             if (drawPixelAsync) DrawPixelAsync(pixel.pos, pixel.colorInfo.color);
+#endif
         }
 
         #endregion
@@ -362,4 +363,89 @@ namespace PRO
         public abstract System.Action ToDisk(FlatBufferBuilder builder);
         public abstract void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown);
     }
+
+
+    //public abstract partial class BlockBase : IScene
+    //{
+    //    public SceneEntity Scene => _screen;
+    //    protected SceneEntity _screen;
+    //    /// <summary>
+    //    /// 区块坐标，worldPos.x / Block.Size.x
+    //    /// </summary>
+    //    public Vector2Int BlockPos { get { return blockPos; } set { blockPos = value; } }
+    //    [SerializeField]
+    //    protected Vector2Int blockPos;
+    //    protected BlockType _blockType;
+    //    public BlockType blockType => _blockType;
+    //    /// <summary>
+    //    /// 像素点集
+    //    /// </summary>
+    //    protected readonly Pixel[,] allPixel = new Pixel[Block.Size.x, Block.Size.y];
+    //    public Pixel GetPixel(Vector2Byte pos) => allPixel[pos.x, pos.y];
+
+    //    public void SetPixel(Pixel pixel, bool updateCollider = true, bool updateLiquidOrGas = true)
+    //    {
+    //        if (pixel == null) return;
+    //        pixel.posG = PixelToGlobal(pixel.pos);
+    //        pixel.blockBase = this;
+
+    //        PixelTypeInfo removeInfo = null;
+    //        Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
+    //        //旧点所属于一个建筑且建筑不可被破坏，并且耐久大于0
+    //        //  if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false && removePixel.durability > 0) return;
+    //        if (removePixel != null)
+    //        {
+    //            if (removePixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius == 0)//&& removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
+    //                RemoveLightSource(removePixel);
+
+    //            removeInfo = removePixel.typeInfo;
+
+    //            //切换建筑这个点的状态（死亡||存活
+    //            foreach (var building in removePixel.buildingSet)
+    //            {
+    //                building.PixelSwitch(building.GetBuilding_Pixel(pixel.posG, removePixel.blockBase.blockType), pixel);
+    //            }
+
+    //            removePixel.buildingSet.Clear();
+    //            Pixel.PutIn(removePixel);
+    //        }
+
+
+    //        allPixel[pixel.pos.x, pixel.pos.y] = pixel;
+
+    //        if (this is Block)
+    //        {
+    //            Block block = this as Block;
+    //            if (updateCollider)
+    //                block.ChangeCollider(removeInfo, pixel);
+    //            if (updateLiquidOrGas)
+    //                for (int y = -1; y <= 1; y++)
+    //                    for (int x = -1; x <= 1; x++)
+    //                        Block.AddFluidUpdateHash(pixel.posG + new Vector2Int(x, y));
+    //        }
+
+    //        if (pixel.typeInfo.typeName == "火焰") queue_火焰.Enqueue(pixel.pos);
+    //    }
+
+    //    /// <summary>
+    //    /// 尝试破坏像素
+    //    /// </summary>
+    //    /// <param name="hardness">坚硬度，-1代表无视坚硬度直接对耐久度破坏</param>
+    //    /// <param name="durability">破坏的耐久度</param>
+    //    public void TryDestroyPixel(Vector2Byte pixelPos, int hardness = -1, int durability = int.MaxValue)
+    //    {
+    //        Pixel pixel = GetPixel(pixelPos);
+    //        if (pixel.typeInfo.typeName == "空气") return;
+    //        if (hardness == -1 && pixel.typeInfo.hardness != -1 || hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
+    //        {
+    //            pixel.durability -= durability;
+    //            if (pixel.durability <= 0)
+    //                pixel.blockBase.SetPixel(Pixel.空气.Clone(pixel.pos));
+    //        }
+    //    }
+
+
+    //    public abstract System.Action ToDisk(FlatBufferBuilder builder);
+    //    public abstract void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown);
+    //}
 }

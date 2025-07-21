@@ -3,7 +3,7 @@ include "PRO/Particle/ParticleData.fbs";
 
 namespace PRO.Skill.Flat;
 
-table Skill_3_3_Data
+table Skill_3_3_Disk
 {
 	particle : Flat.ParticleData;
 	end_pos : Flat.Vector2;

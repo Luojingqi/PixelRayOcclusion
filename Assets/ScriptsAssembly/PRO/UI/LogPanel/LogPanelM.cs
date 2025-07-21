@@ -33,7 +33,7 @@ namespace PRO
                 pool.TakeOutEvent += t =>
                 {
                     oneLogQueue.Enqueue(t);
-                    t.transform.parent = parent;
+                    t.transform.SetParent(parent);
                 };
             }
         }

@@ -52,7 +52,7 @@ namespace PRO.SkillEditor
             if (trans == null)
             {
                 renderer = new GameObject($"场景破坏轨道{trackIndex}").AddComponent<SpriteRenderer>();
-                renderer.transform.parent = agent.transform;
+                renderer.transform.SetParent(agent.transform);
                 renderer.transform.position = Vector3.zero;
             }
             else

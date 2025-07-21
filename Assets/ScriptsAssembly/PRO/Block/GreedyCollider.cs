@@ -2,7 +2,6 @@ using PRO.DataStructure;
 using PRO.Tool;
 using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using UnityEngine;
 namespace PRO
 {
@@ -16,7 +15,7 @@ namespace PRO
         public static void InitBoxCollider2DPool()
         {
             GameObject boxCollider2DPoolGo = new GameObject("BoxCollider2DPool");
-            boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
+            boxCollider2DPoolGo.transform.SetParent(SceneManager.Inst.PoolNode);
             BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
             boxCollider.gameObject.layer = (int)GameLayer.Block;
             BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider, boxCollider2DPoolGo.transform);
@@ -134,7 +133,7 @@ namespace PRO
                 box.transform.position = data.position;
 
                 box.offset = box.size / 2f;
-                box.transform.parent = block.colliderNode;
+                box.transform.SetParent(block.colliderNode);
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
                         block.allCollider[x, y] = box;
@@ -184,7 +183,7 @@ namespace PRO
                 box.size = new Vector2(Pixel.Size, Pixel.Size);
                 box.offset = box.size / 2;
                 box.transform.position = block.PixelToWorld(pos);
-                box.transform.parent = block.colliderNode;
+                box.transform.SetParent(block.colliderNode);
                 block.allCollider[pos.x, pos.y] = box;
             }
         }

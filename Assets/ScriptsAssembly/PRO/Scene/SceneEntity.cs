@@ -51,6 +51,18 @@ namespace PRO
         {
             this.sceneCatalog = sceneCatalog;
         }
+
+        private SceneCatalog sceneCatalog_temp;
+        public void SetTempCatalog(SceneCatalog tempCatalog)
+        {
+            sceneCatalog_temp = sceneCatalog;
+            sceneCatalog = tempCatalog;
+        }
+        public void ResetCatalog()
+        {
+            sceneCatalog = sceneCatalog_temp;
+            sceneCatalog_temp = null;
+        }
         #region 获取已经实例化的对象
         public HashSet<Vector2Int> ActiveBlockBase = new HashSet<Vector2Int>(50);
         private CrossList<OneBlock> BlockBaseCrossList = new CrossList<OneBlock>();
@@ -117,6 +129,7 @@ namespace PRO
         public void ThreadLoadOrCreateBlock(Vector2Int blockPos, CountdownEvent countdown_main = null)
         {
             if (ActiveBlockBase.Contains(blockPos)) return;
+            countdown_main?.AddCount();
             ActiveBlockBase.Add(blockPos);
             var oneBlock = CreateOneBlock(blockPos);
             BlockBaseCrossList[blockPos] = oneBlock;
@@ -125,7 +138,6 @@ namespace PRO
             block.ResetUnLoadCountdown();
             #region 加载  区块
 
-            countdown_main?.AddCount();
             if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockData", out var builder))
             {
                 ThreadPool.QueueUserWorkItem((obj) =>
@@ -199,8 +211,11 @@ namespace PRO
 
                     }
                     catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
-                    FlatBufferBuilder.PutIn(builder);
-                    countdown_main?.Signal();
+                    finally
+                    {
+                        FlatBufferBuilder.PutIn(builder);
+                        countdown_main?.Signal();
+                    }
                 });
             }
             else
@@ -234,7 +249,10 @@ namespace PRO
                         });
                     }
                     catch (Exception e) { Log.Print($"线程报错：{e}", Color.red); }
-                    countdown_main?.Signal();
+                    finally
+                    {
+                        countdown_main?.Signal();
+                    }
                 });
             }
             #endregion
@@ -461,7 +479,10 @@ namespace PRO
         /// <returns></returns>
         public CountdownEvent SaveAll()
         {
+            lock (this)
+                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
+            countdown.AddCount();
             ThreadPool.QueueUserWorkItem((obj) =>
             {
                 try
@@ -561,6 +582,9 @@ namespace PRO
                 }
                 catch (Exception e) { Log.Print(e.ToString(), Color.red); }
                 countdown.Signal();
+                countdown.Wait();
+                lock (this)
+                    IsLock = false;
             });
             sceneCatalog.Save();
             #region 保存  场景额外数据
@@ -587,11 +611,14 @@ namespace PRO
                 FlatBufferBuilder.PutIn(builder);
             }
             #endregion
+            countdown.Signal();
             return countdown;
         }
 
         public CountdownEvent LoadAll()
         {
+            lock (this)
+                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
             if (IOTool.LoadFlat(@$"{sceneCatalog.directoryInfo}\SceneEntityData", out var builder))
             {
@@ -623,8 +650,16 @@ namespace PRO
                     for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                         ThreadLoadOrCreateBlock(new Vector2Int(x, y), countdown);
             }
+#if !PRO_MCTS
             UpdateBind();
+#endif
             countdown.Signal();
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                countdown.Wait();
+                lock (this)
+                    IsLock = false;
+            });
             return countdown;
         }
         /// <summary>
@@ -636,9 +671,12 @@ namespace PRO
         /// </summary>
         public CountdownEvent UnLoadAll()
         {
+            lock (this)
+                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
             #region 卸载 round
             ActiveRound.Clear();
+            GamePlayMain.Inst.Round = null;
             #endregion
             #region 卸载  role
             foreach (var role in ActiveRole_Guid.Values.ToArray())
@@ -664,10 +702,48 @@ namespace PRO
             for (int i = 0; i < blockPosArray.Length; i++)
                 UnloadBlockData(blockPosArray[i], countdown);
             #endregion
+            BlockMaterial.DrawApplyQueue.Clear();
             countdown.Signal();
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                countdown.Wait();
+                lock (this)
+                    IsLock = false;
+            });
             return countdown;
         }
-        #endregion
+
+        /// <summary>
+        /// 重新加载
+        /// </summary>
+        /// <returns></returns>
+        public CountdownEvent ReLoadAll()
+        {
+            lock (this)
+                IsLock = false;
+            CountdownEvent countdown = new CountdownEvent(1);
+            var countdown_unload = UnLoadAll();
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                countdown_unload.Wait();
+                lock (this)
+                    IsLock = false;
+                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+                {
+                    var countdown_load = LoadAll();
+                    ThreadPool.QueueUserWorkItem((obj) =>
+                    {
+                        countdown_load.Wait();
+                        countdown.Signal();
+                    });
+                });
+                countdown.Wait();
+                lock (this)
+                    IsLock = true;
+            });
+            return countdown;
+        }
+#endregion
 
         #region 创建区块的空游戏物体
 
@@ -680,7 +756,7 @@ namespace PRO
 
             var back = BackgroundBlock.TakeOut(this);
             back.transform.position = Block.BlockToWorld(blockPos);
-            back.transform.parent = block.transform;
+            back.transform.SetParent(block.transform);
             back.BlockPos = blockPos;
 
             return new OneBlock(block, back);
@@ -700,6 +776,8 @@ namespace PRO
 
         CountdownEvent _countdownEvent = new CountdownEvent(1);
         #endregion
+
+        public bool IsLock;
 
         public void TimeUpdate()
         {
@@ -727,6 +805,8 @@ namespace PRO
                 });
 
             }
+
+            if (IsLock) return;
 
             #region 更新  火焰
             {

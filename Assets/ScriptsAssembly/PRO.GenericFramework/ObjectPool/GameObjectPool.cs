@@ -10,14 +10,14 @@ namespace PRO.Tool
         {
             prefab.gameObject.SetActive(false);
             if (prefab.gameObject.scene.IsValid())
-                prefab.transform.parent = parent;
+                prefab.transform.SetParent(parent);
             holdPrefab = prefab;
             toolParent = parent;
         }
         protected override T NewObject()
         {
             GameObject go = GameObject.Instantiate(holdPrefab.gameObject);
-            go.transform.parent = toolParent;
+            go.transform.SetParent(toolParent);
             return go.GetComponent<T>();
         }
         public override T TakeOut()
@@ -30,7 +30,7 @@ namespace PRO.Tool
         {
             base.PutIn(item);
             item.gameObject.SetActive(false);
-            item.transform.parent = toolParent;
+            item.transform.SetParent(toolParent);
         }
     }
 
@@ -46,7 +46,7 @@ namespace PRO.Tool
         public GameObjectPool_NoMono(GameObject prefab, Transform parent)
         {
             prefab.SetActive(false);
-            prefab.transform.parent = parent;
+            prefab.transform.SetParent(parent);
             holdPrefab = prefab;
             toolParent = parent;
         }
@@ -56,7 +56,7 @@ namespace PRO.Tool
             var t = new T();
             t.gameObject = go;
             t.transform = go.transform;
-            t.transform.parent = toolParent;
+            t.transform.SetParent(toolParent);
             t.Init();
             return t;
         }
@@ -70,7 +70,7 @@ namespace PRO.Tool
         {
             base.PutIn(item);
             item.gameObject.SetActive(false);
-            item.transform.parent = toolParent;
+            item.transform.SetParent(toolParent);
         }
     }
 

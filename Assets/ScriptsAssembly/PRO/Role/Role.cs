@@ -11,7 +11,6 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Contexts;
 using UnityEngine;
 namespace PRO
 {
@@ -45,11 +44,13 @@ namespace PRO
             }
         }
         public string RoleTypeName;
+        [ShowInInspector]
         public string GUID => guid;
         private string guid;
         public string Name;
         public Sprite Icon;
         [NonSerialized]
+        [ShowInInspector]
         public RoleInfo Info = new RoleInfo();
 
         public TurnFSM Turn;
@@ -124,7 +125,7 @@ namespace PRO
                 var buffTriggerList = AllBuff[i];
                 for (int j = 0; j < buffTriggerList.Count; j++)
                 {
-                    var list = new ReusableList<BuffBase>();
+                    var list = new ReusableList<BuffBase>(buffTriggerList.AllCount);
                     foreach (var buff in buffTriggerList.FormIndex(i))
                         list.Add(buff);
                     for (int k = 0; k < list.Count; k++)
@@ -178,7 +179,7 @@ namespace PRO
             var operate = OperateFSMBase.CreateOperate(type.Name, System.Guid.NewGuid().ToString());
             AllCanUseOperate.Add(operate.GUID, operate);
             operate.Agent = this;
-            if (Turn.RoundFSM == GamePlayMain.Inst.Round && Turn == Turn.RoundFSM.State3_Turn.NowTurn)
+            if (Turn != null && Turn.RoundFSM == GamePlayMain.Inst.Round && Turn == Turn.RoundFSM.State3_Turn.NowTurn)
                 GamePlayMain.Inst.Round = GamePlayMain.Inst.Round;
         }
 

@@ -1,0 +1,11 @@
+﻿namespace PRO.Skill.Flat;
+
+table Skill_0_0_Record
+{
+	time : float;
+}
+
+table Skill_0_0_Disk
+{
+	time : float;
+}

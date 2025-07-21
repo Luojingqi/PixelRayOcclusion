@@ -20,6 +20,7 @@ namespace PRO.DataStructure
         {
             get { return elements.Count; }
         }
+        public T this[int index] => elements[index];
 
         public void Enqueue(T item, float cost)
         {
@@ -119,5 +120,6 @@ namespace PRO.DataStructure
         {
             return GetEnumerator();
         }
+
     }
 }

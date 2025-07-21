@@ -77,6 +77,7 @@ namespace PRO.TurnBased
                 LogPanelC.Inst.AddLog(context, true);
                 CombatContext.PutIn(context);
             }
+            LogPanelC.Inst.AddLog("------------------------", true);
             nowTurnIndex = 0;
             nowRoundNum++;
             foreach (var turn in TurnFSMList)

@@ -18,7 +18,7 @@ namespace PRO
         {
             Inst = this;
             Node = new GameObject("ParticlePool").transform;
-            Node.parent = SceneManager.Inst.PoolNode;
+            Node.SetParent(SceneManager.Inst.PoolNode);
             {
                 Particle particle = AssetManager.Load_A<GameObject>("particle.ab", @$"ScriptsAssembly\PRO\Particle\Particle_单像素").GetComponent<Particle>();
                 particlePoolDic.Add("单像素", new ParticlePool(particle, Node, "单像素"));

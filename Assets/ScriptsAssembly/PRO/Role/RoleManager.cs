@@ -1,4 +1,5 @@
-﻿using PRO.Skill;
+﻿using Google.FlatBuffers;
+using PRO.Skill;
 using PRO.Tool;
 using PRO.Tool.Serialize.IO;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace PRO
         {
             Inst = this;
             roleNode = new GameObject("RolePool").transform;
-            roleNode.parent = SceneManager.Inst.PoolNode;
+            roleNode.SetParent(SceneManager.Inst.PoolNode);
             {
                 var role = AssetManager.Load_A<GameObject>("role.ab", @$"ScriptsAssembly\PRO\Role\Role_默认").GetComponent<Role>();
                 role.nav = NavManager.Inst.GetNav("默认");
@@ -32,7 +33,7 @@ namespace PRO
         private GameObjectPool<Role> AddRolePool(Role role)
         {
             var node = new GameObject(role.RoleTypeName + "PoolNode").transform;
-            node.transform.parent = roleNode;
+            node.transform.SetParent(roleNode);
             var pool = new GameObjectPool<Role>(role, node);
             pool.CreateEvent += t => t.Init();
             rolePoolDic.Add(role.RoleTypeName, pool);
@@ -65,6 +66,7 @@ namespace PRO
                 var diskData = Flat.RoleData.GetRootAsRoleData(builder.DataBuffer);
                 role = TakeOut(diskData.RoleType, scene, guid);
                 role.ToRAM(diskData);
+                FlatBufferBuilder.PutIn(builder);
             }
             return role;
         }

@@ -19,6 +19,7 @@ namespace PRO
             set
             {
                 round = value;
+#if !PRO_MCTS
                 if (round == null)
                 {
                     GameMainUIC.Inst.CloseTurnUI();
@@ -28,6 +29,7 @@ namespace PRO
                     GameMainUIC.Inst.OpenTurnUI();
                     GameMainUIC.Inst.SetTurn(round.State3_Turn.TurnFSMList, round.State3_Turn.NowTurn.Index);
                 }
+#endif
             }
         }
         [ShowInInspector]
@@ -44,7 +46,7 @@ namespace PRO
                 p = !p;
             }
 
-            if (Input.GetKeyDown(KeyCode.M))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 var round = new RoundFSM(SceneManager.Inst.NowScene, System.Guid.NewGuid().ToString());
                 var round_state0 = round.GetState<RoundState0_DataReady>();
@@ -53,11 +55,29 @@ namespace PRO
                     var role = RoleManager.Inst.TakeOut("默认", SceneManager.Inst.NowScene, System.Guid.NewGuid().ToString());
                     role.transform.position = new Vector3(i / 0.5f, 0);
                     round_state0.AddRole(role);
+
+                    role.AddOperate(typeof(Skill_0_0));
+                    role.AddOperate(typeof(Skill_3_3));
                 }
 
                 round_state0.ReadyOver();
                 Round = round;
             }
+
+            if (Input.GetKeyDown(KeyCode.M) && m == false)
+            {
+                MTCS();
+                m = true;
+            }
+        }
+        private bool m = false;
+
+        [Button]
+        public void MTCS()
+        {
+            Debug.Log("进入");
+            var mcts = new AI.MCTS();
+            mcts.开始模拟(round);
         }
     }
 }

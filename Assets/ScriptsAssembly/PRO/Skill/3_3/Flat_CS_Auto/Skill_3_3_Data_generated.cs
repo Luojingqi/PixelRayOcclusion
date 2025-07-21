@@ -9,30 +9,30 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
-public struct Skill_3_3_Data : IFlatbufferObject
+public struct Skill_3_3_Disk : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
   public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
-  public static Skill_3_3_Data GetRootAsSkill_3_3_Data(ByteBuffer _bb) { return GetRootAsSkill_3_3_Data(_bb, new Skill_3_3_Data()); }
-  public static Skill_3_3_Data GetRootAsSkill_3_3_Data(ByteBuffer _bb, Skill_3_3_Data obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public static Skill_3_3_Disk GetRootAsSkill_3_3_Disk(ByteBuffer _bb) { return GetRootAsSkill_3_3_Disk(_bb, new Skill_3_3_Disk()); }
+  public static Skill_3_3_Disk GetRootAsSkill_3_3_Disk(ByteBuffer _bb, Skill_3_3_Disk obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
-  public Skill_3_3_Data __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+  public Skill_3_3_Disk __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public PRO.Flat.ParticleData? Particle { get { int o = __p.__offset(4); return o != 0 ? (PRO.Flat.ParticleData?)(new PRO.Flat.ParticleData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
   public PRO.Flat.Vector2? EndPos { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.Vector2?)(new PRO.Flat.Vector2()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
-  public static void StartSkill_3_3_Data(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void StartSkill_3_3_Disk(FlatBufferBuilder builder) { builder.StartTable(2); }
   public static void AddParticle(FlatBufferBuilder builder, Offset<PRO.Flat.ParticleData> particleOffset) { builder.AddOffset(0, particleOffset.Value, 0); }
   public static void AddEndPos(FlatBufferBuilder builder, Offset<PRO.Flat.Vector2> endPosOffset) { builder.AddStruct(1, endPosOffset.Value, 0); }
-  public static Offset<PRO.Skill.Flat.Skill_3_3_Data> EndSkill_3_3_Data(FlatBufferBuilder builder) {
+  public static Offset<PRO.Skill.Flat.Skill_3_3_Disk> EndSkill_3_3_Disk(FlatBufferBuilder builder) {
     int o = builder.EndTable();
-    return new Offset<PRO.Skill.Flat.Skill_3_3_Data>(o);
+    return new Offset<PRO.Skill.Flat.Skill_3_3_Disk>(o);
   }
 }
 
 
-static public class Skill_3_3_DataVerify
+static public class Skill_3_3_DiskVerify
 {
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {

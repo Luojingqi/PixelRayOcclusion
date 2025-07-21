@@ -36,7 +36,7 @@ namespace PRO
                 else
 
                     ti = WaitPool.TakeOut();
-                ti.transform.parent = view.ImageNode;
+                ti.transform.SetParent(view.ImageNode);
                 ti.Icon.sprite = turn.Agent.Icon;
                 ti.SetTurn(turn);
                 TurnImageList.Add(ti);

@@ -1,95 +1,84 @@
-﻿//using PRO.TurnBased;
-//using System.Collections.Generic;
-//namespace PRO.Skill
-//{
-//    public class Skill_0_0 : OperateFSMBase, IOperate_射线选择
-//    {
-//        public SkillPointer_范围内射线类 SkillPointer { get; set; }
+﻿using Google.FlatBuffers;
+using PRO.Tool;
+using PRO.TurnBased;
+using UnityEngine;
+namespace PRO.Skill
+{
+    /// <summary>
+    /// 结束回合
+    /// </summary>
+    public class Skill_0_0 : OperateFSMBase
+    {
+        public Skill_0_0(string GUID) : base(GUID) { }
 
-//        protected override void InitState()
-//        {
-//            AddState(new Skill_0_0_T0());
-//            AddState(new Skill_0_0_T1());
-//            AddState(new Skill_0_0_T2());
-//        }
+        public SkillPointer_范围内射线类 SkillPointer { get; set; }
 
-//        public class Skill_0_0_T0 : OperateStateBase_T0
-//        {
-//            public override OperateFSMBase Operate { get => operate; set => operate = (Skill_0_0)value; }
-//            private Skill_0_0 operate;
-//        }
-//        public class Skill_0_0_T1 : OperateStateBase_T1
-//        {
-//            public override OperateFSMBase Operate { get => operate; set => operate = (Skill_0_0)value; }
-//            private Skill_0_0 operate;
+        protected override void InitState()
+        {
+            AddState(new Skill_0_0_T0());
+            AddState(new Skill_0_0_T1());
+            AddState(new Skill_0_0_T2());
+            ShortcutKey = KeyCode.Escape;
+        }
 
-//            public CombatContext context => operate.context;
-//            public override TriggerState Trigger(out IOperateRecord operateRecord)
-//            {
-//                operateRecord = null;
-//                return TriggerState.toT2;
-//            }
+        public class Skill_0_0_T0 : OperateStateBase_T0
+        {
+            public override OperateFSMBase Operate { get => operate; set => operate = (Skill_0_0)value; }
+            private Skill_0_0 operate;
 
-//            public override void 扩展节点(ref List<IOperateRecord> operateRecordList)
-//            {
-//                //for (int i = 0; i < 6; i++)
-//                //{
-//                //    var record = OperateRecord_TimeDelay.TakeOut();
-//                //    operateRecordList.Add(record);
-//                //    record.time = (i + 1) * 0.5f;
-//                //}
-//            }
+            public override bool CheckUp()
+            {
+                return base.CheckUp() &&  operate.Turn.State_Operate.NowOperateList_T2.Count == 0; ;
+            }
+        }
+        public class Skill_0_0_T1 : OperateStateBase_T1
+        {
+            public override OperateFSMBase Operate { get => operate; set => operate = (Skill_0_0)value; }
+            private Skill_0_0 operate;
 
-//            public override void 节点执行(IOperateRecord operateRecord)
-//            {
-//                //var record = operateRecord as OperateRecord_TimeDelay;
-//                //while (record.time > 0)
-//                //{
-//                //    record.time -= TimeManager.physicsDeltaTime;
-//                //    TimeManager.Inst.ScriptUpdate(TimeManager.physicsDeltaTime);
-//                //}
-//            }
+            public CombatContext context => operate.context;
+            public override TriggerState Trigger(FlatBufferBuilder operateRecord)
+            {
+                return TriggerState.toT2;
+            }
 
-//            //public class OperateRecord_TimeDelay : IOperateRecord
-//            //{
-//            //    private static ObjectPool<OperateRecord_TimeDelay> pool = new ObjectPool<OperateRecord_TimeDelay>();
-//            //    public static OperateRecord_TimeDelay TakeOut() => pool.TakeOut();
-//            //    public override void PutIn()
-//            //    {
-//            //        pool.PutIn(this);
-//            //    }
+            public override void 节点扩展(ref ReusableList<FlatBufferBuilder> recordList)
+            {
+                recordList.Add(FlatBufferBuilder.TakeOut(1024));
+            }
 
-//            //    public float time;
-//            //}
-//        }
-//        public class Skill_0_0_T2 : OperateStateBase_T2
-//        {
-//            public override OperateFSMBase Operate { get => operate; set => operate = (Skill_0_0)value; }
-//            private Skill_0_0 operate;
+            public override void 节点执行(FlatBufferBuilder record, Operator form)
+            {
+            }
+        }
+        public class Skill_0_0_T2 : OperateStateBase_T2
+        {
+            public override OperateFSMBase Operate { get => operate; set => operate = (Skill_0_0)value; }
+            private Skill_0_0 operate;
 
-//            public override void Enter(IOperateRecord operateRecord)
-//            {
-//            }
+            public override void Enter(FlatBufferBuilder operateRecord)
+            {
+            }
 
-//            protected override TriggerState Trigger()
-//            {
-//                return TriggerState.toT0;
-//            }
+            protected override TriggerState Trigger()
+            {
+                return TriggerState.toT0;
+            }
+            public override void Exit()
+            {
+                operate.Turn.SwitchState(TurnStateEnum.end);
+                operate.context.LogBuilder.Clear();
+            }
 
-//            public override void Exit()
-//            {
-//                throw new System.NotImplementedException();
-//            }
+            public override void ToDisk(FlatBufferBuilder builder)
+            {
+                throw new System.NotImplementedException();
+            }
 
-//            //public override StringBuilder ToDisk()
-//            //{
-//            //    throw new System.NotImplementedException();
-//            //}
-
-//            //public override int ToRAM(string text, int offset)
-//            //{
-//            //    throw new System.NotImplementedException();
-//            //}
-//        }
-//    }
-//}
+            public override void ToRAM(FlatBufferBuilder builder)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+    }
+}

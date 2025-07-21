@@ -16,7 +16,7 @@ namespace PRO.SkillEditor
                 {
                     SpriteRenderer spriteRenderer = new GameObject($"特效轨道{i}").AddComponent<SpriteRenderer>();
                     spriteRenderer.sortingOrder = 20;
-                    spriteRenderer.transform.parent = agent.transform;
+                    spriteRenderer.transform.SetParent(agent.transform);
                     agent.SpecialEffect2DSpriteList.Add(spriteRenderer);
                 }
             }

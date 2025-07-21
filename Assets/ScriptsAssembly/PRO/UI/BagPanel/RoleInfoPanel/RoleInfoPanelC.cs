@@ -45,7 +45,7 @@ namespace PRO
             role.Info.行动点.ValueChange = 行动点Changed;
             role.Info.行动点上限.ValueChange = 行动点Changed;
             //挨个触发事件
-            RoleInfo.Clone(role.Info, role.Info);
+            RoleInfo.CloneValue(role.Info, role.Info);
             #endregion
             view.Icon.sprite = role.Icon;
             view.BuffInfoListC.SetRole(role);

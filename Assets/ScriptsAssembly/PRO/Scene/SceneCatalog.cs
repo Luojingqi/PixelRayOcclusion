@@ -17,6 +17,7 @@ namespace PRO.Disk.Scene
         public DirectoryInfo directoryInfo;
         private SceneCatalog() { }
 
+        public string name;
 
         public void Save()
         {
@@ -30,11 +31,11 @@ namespace PRO.Disk.Scene
         /// <param name="name">场景名</param>
         /// <param name="sceneRoot">场景的根目录</param>
         /// <returns></returns>
-        public static SceneCatalog CreateFile(string name, GameSaveCatalog saveInfo, DirectoryInfo sceneRoot)
+        public static SceneCatalog CreateFile(string name, GameSaveCatalog saveInfo)
         {
             SceneCatalog info = new SceneCatalog();
             //创建场景根文件夹
-            DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{sceneRoot}\{name}");
+            DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{saveInfo.directoryInfo}\Scene\{name}");
             //创建块文件夹
             Directory.CreateDirectory(@$"{sceneDirectory}\Block");
             //创建建筑文件夹
@@ -48,6 +49,7 @@ namespace PRO.Disk.Scene
 
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
+            info.name = name;
             info.Save();
             return info;
         }

@@ -39,7 +39,7 @@ namespace PRO
                 GridGroups[i] = group;
                 for (int j = 0; j < maxColumn; j++)
                 {
-                    group.Grids[j].transform.parent = view.GridLayout.transform;
+                    group.Grids[j].transform.SetParent(view.GridLayout.transform);
                     group.Grids[j].Number.text = $"{i}__{j}";
                     group.Grids[j].Name.text = null;
                 }
@@ -52,7 +52,7 @@ namespace PRO
                 var group = GridGroups[i]; 
                 for (int j = 0; j < MaxColumn; j++)
                 {
-                    group.Grids[j].transform.parent = view.GridLayout.transform;
+                    group.Grids[j].transform.SetParent(view.GridLayout.transform);
                     group.Grids[j].Number.text = $"{i}__{j}";
                     group.Grids[j].Name.text = null;
                 }

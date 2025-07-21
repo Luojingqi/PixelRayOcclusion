@@ -80,7 +80,7 @@ namespace PRO.Skill
         public void EventTrigger()
         {
             if (Turn.State_Operate.NowOperate_T1 == null)
-                T0.TrySwitchStateToT1();
+                T0.TrySwitchStateToT1(Operator.Player);
         }
 
         public OperateStateBase_T0 T0 { get; private set; }
@@ -88,6 +88,8 @@ namespace PRO.Skill
         public OperateStateBase_T2 T2 { get; private set; }
 
         public SkillConfig config { get; private set; }
+
+        public Operator form = Operator.Not;
 
         public OperateFSMBase(string GUID)
         {
@@ -149,6 +151,7 @@ namespace PRO.Skill
         {
             Player,
             AI,
+            Not,
         }
 
         public Offset<PRO.Flat.OperatBasiceData> ToDisk(FlatBufferBuilder builder)

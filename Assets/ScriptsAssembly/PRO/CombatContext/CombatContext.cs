@@ -145,7 +145,7 @@ namespace PRO
         public void SetAgent(Role role)
         {
             Agent = role;
-            RoleInfo.Clone(role.Info, AgentInfo);
+            RoleInfo.CloneValue(role.Info, AgentInfo);
             LogBuilder.Insert(0, $"{Agent.Name}：");
         }
 
@@ -154,7 +154,7 @@ namespace PRO
             var byAgentData = CombatContext_ByAgentData.TakeOut();
             ByAgentDataList.Add(byAgentData);
             byAgentData.Agent = byRole;
-            RoleInfo.Clone(byRole.Info, byAgentData.AgentInfo);
+            RoleInfo.CloneValue(byRole.Info, byAgentData.AgentInfo);
             byAgentData.LogBuilder.Append($"{byRole.Name}：被攻击。");
             foreach (var data in StartCombatEffectDataList)
                 byAgentData.StartCombatEffectDataList.Add(data);

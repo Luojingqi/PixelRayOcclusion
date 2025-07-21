@@ -43,11 +43,6 @@ namespace PRO
         public Vector2Int Size;
         public BoxCollider2D TriggerCollider;
 
-        /// <summary>
-        /// 这个建筑是否可以被破坏
-        /// </summary>
-        public bool CanByBroken = true;
-
 
         /// <summary>
         /// 这个蓝图位置的像素点被更改，将这个蓝图点(已加载)从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
@@ -165,7 +160,6 @@ namespace PRO
             diskData.Name = Name;
             diskData.Global = Global.ToDisk();
             diskData.Size = Size.ToDisk();
-            diskData.CanByBroken = CanByBroken;
 
             foreach (var building_Pixel in AllPixel.Values)
             {

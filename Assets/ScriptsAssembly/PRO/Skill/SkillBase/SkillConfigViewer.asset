@@ -35,48 +35,48 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 1|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
-    - Name: id
-      Entry: 1
-      Data: 0_0
     - Name: config
       Entry: 10
       Data: 0
+    - Name: id
+      Entry: 1
+      Data: 0_0
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
       Data: 2|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
-    - Name: id
-      Entry: 1
-      Data: 1_0
     - Name: config
       Entry: 10
       Data: 1
+    - Name: id
+      Entry: 1
+      Data: 1_0
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
       Data: 3|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
-    - Name: id
-      Entry: 1
-      Data: 1_1
     - Name: config
       Entry: 10
       Data: 2
+    - Name: id
+      Entry: 1
+      Data: 1_1
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
       Data: 4|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
-    - Name: id
-      Entry: 1
-      Data: 3_3
     - Name: config
       Entry: 10
       Data: 3
+    - Name: id
+      Entry: 1
+      Data: 3_3
     - Name: 
       Entry: 8
       Data: 

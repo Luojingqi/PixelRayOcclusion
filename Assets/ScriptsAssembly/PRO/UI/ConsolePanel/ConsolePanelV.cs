@@ -61,7 +61,7 @@ namespace PRO.Console
                 pool.TakeOutEvent += t =>
                 {
                     queue.Enqueue(t);
-                    t.transform.parent = content;
+                    t.transform.SetParent(content);
                 };
             }
         }

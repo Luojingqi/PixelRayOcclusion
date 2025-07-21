@@ -18,6 +18,7 @@ namespace PRO.TurnBased
 
         public void Enter()
         {
+            Operate.Agent.Info.行动点.Value -= Operate.config.行动点;
         }
 
         public abstract void Exit();
@@ -33,6 +34,7 @@ namespace PRO.TurnBased
                 Operate.SwitchState(OperateStateEnum.t0);
                 CombatContext.PutIn(Operate.context);
                 Operate.context = null;
+                Operate.form = OperateFSMBase.Operator.Not;
             }
         }
         private float v = Pixel.Size * 25f;

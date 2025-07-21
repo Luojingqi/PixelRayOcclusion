@@ -113,7 +113,7 @@ namespace PRO
             Block block = go.AddComponent<Block>();
             #endregion
             GameObject blockPoolGo = new GameObject("BlockPool");
-            blockPoolGo.transform.parent = SceneManager.Inst.PoolNode;
+            blockPoolGo.transform.SetParent(SceneManager.Inst.PoolNode);
             BlockPool = new GameObjectPool<Block>(block, blockPoolGo.transform);
             BlockPool.CreateEvent += t => t.Init();
         }
@@ -121,7 +121,7 @@ namespace PRO
         public static Block TakeOut(SceneEntity scene)
         {
             Block block = BlockPool.TakeOut();
-            block.transform.parent = BlockNode;
+            block.transform.SetParent(BlockNode);
             block._screen = scene;
             return block;
         }
@@ -150,15 +150,17 @@ namespace PRO
             block._screen = null;
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
+#if !PRO_MCTS
                 block.name = "Block(Clone)";
                 block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+#endif
                 BlockPool.PutIn(block);
                 foreach (var box in boxHash)
                     GreedyCollider.PutIn(box);
                 countdown.Signal();
             });
         }
-        #endregion 
+#endregion
 
         /// <summary>
         /// –∂‘ÿµπº∆ ±
@@ -176,7 +178,7 @@ namespace PRO
                 fluidUpdateHash3[i] = new HashSet<Vector2Byte>();
             }
             colliderNode = new GameObject("ColliderNode").transform;
-            colliderNode.parent = transform;
+            colliderNode.SetParent(transform);
 
             spriteRenderer.sortingOrder = 10;
 
@@ -584,18 +586,6 @@ namespace PRO
         /// </summary>
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
 
-
-        public HashSet<Particle> ActiveParticle = new HashSet<Particle>(20);
-        public HashSet<Role> ActiveRole = new HashSet<Role>();
-
-
-
-        //public override void ToRAM(Proto.BlockBaseData diskData, SceneEntity scene)
-        //{
-        //    base.ToRAM(diskData, scene);
-        //    
-        //}
-
         public override System.Action ToDisk(FlatBufferBuilder builder)
         {
             var offset1 = AddFluidUpdateHash(builder, fluidUpdateHash1);
@@ -642,7 +632,9 @@ namespace PRO
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 GreedyCollider.CreateColliderAction(this, colliderDataList);
+#if !PRO_MCTS
                 BlockMaterial.SetBlock(this);
+#endif
                 countdown.Signal();
             });
         }

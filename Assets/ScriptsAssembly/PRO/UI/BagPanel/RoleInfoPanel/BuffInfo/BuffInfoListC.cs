@@ -40,7 +40,7 @@ namespace PRO
         public BuffInfoC TakeOut()
         {
             BuffInfoC info = pool.TakeOut();
-            info.transform.parent = transform;
+            info.transform.SetParent(transform);
             return info;
         }
         public void PutIn(BuffInfoC info)

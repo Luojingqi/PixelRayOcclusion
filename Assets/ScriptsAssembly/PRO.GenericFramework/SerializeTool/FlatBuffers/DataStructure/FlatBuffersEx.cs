@@ -73,6 +73,7 @@ namespace Google.FlatBuffers
         private static List<FlatBufferBuilder> pool = new List<FlatBufferBuilder>(26);
         public static FlatBufferBuilder TakeOut(int size)
         {
+            if (size <= 0) size = 1024;
             int minGap = int.MaxValue;
             int minGapIndex = -1;
 

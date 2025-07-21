@@ -21,7 +21,7 @@ namespace PRO
             BackgroundBlock background = go.AddComponent<BackgroundBlock>();
             #endregion
             GameObject backgroundPoolGo = new GameObject("BackgroundPool");
-            backgroundPoolGo.transform.parent = SceneManager.Inst.PoolNode;
+            backgroundPoolGo.transform.SetParent(SceneManager.Inst.PoolNode);
             BackgroundPool = new GameObjectPool<BackgroundBlock>(background, backgroundPoolGo.transform);
             BackgroundPool.CreateEvent += t => t.Init();
         }
@@ -48,12 +48,14 @@ namespace PRO
 
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
+#if !PRO_MCTS
                 background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+#endif
                 BackgroundPool.PutIn(background);
                 countdown.Signal();
             });
         }
-        #endregion
+#endregion
 
         public override void Init()
         {
@@ -70,12 +72,14 @@ namespace PRO
 
         public override void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown)
         {
+#if !PRO_MCTS
             countdown.AddCount();
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 BlockMaterial.SetBackgroundBlock(this);
                 countdown.Signal();
             });
+#endif
         }
     }
 }

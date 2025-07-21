@@ -60,20 +60,11 @@ namespace PRO
             scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
 
-            D(scene);
+            scene.LoadAll();
 
-
+#if !PRO_MCTS
             source = FreelyLightSource.New(NowScene, BlockMaterial.GetPixelColorInfo("Êó±ê¹âÔ´0").color, 20);
-        }
-        private async UniTask D(SceneEntity scene)
-        {
-            var countDown = scene.LoadAll();
-            await UniTask.WaitUntil(() => countDown.IsSet);
-            //foreach (var round in scene.ActiveRound.Values)
-            //{
-            //    GamePlayMain.Inst.Round = round;
-            //    break;
-            //}
+#endif
         }
 
         public FreelyLightSource source;
@@ -81,14 +72,18 @@ namespace PRO
 
         public void TimeUpdate()
         {
+#if !PRO_MCTS
             MousePoint.Update();
             BlockMaterial.Update();
             if (source != null) source.GloabPos = MousePoint.globalPos;
-            NowScene.TimeUpdate();
+#endif
+            NowScene?.TimeUpdate();
         }
         public void TimeLateUpdate()
         {
+#if !PRO_MCTS
             BlockMaterial.LastUpdate();
+#endif
         }
     }
 }

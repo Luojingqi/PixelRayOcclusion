@@ -21,6 +21,7 @@ namespace PRO.TurnBased
 
         public void Update()
         {
+            if (Operate.form != OperateFSMBase.Operator.Player) return;
             FlatBufferBuilder record = FlatBufferBuilder.TakeOut(1024 * 4);
             OperateFSMBase.TriggerState state = Trigger(record);
 
@@ -112,7 +113,7 @@ namespace PRO.TurnBased
         }
         public void RotateToMouse(Transform transform, Vector2Int center, Vector2Int offset) => RotateToMouse(transform, Block.GlobalToWorld(center), Block.GlobalToWorld(offset));
 
-        public abstract void 扩展节点(ref ReusableList<FlatBufferBuilder> recordList);
+        public abstract void 节点扩展(ref ReusableList<FlatBufferBuilder> recordList);
 
         public abstract void 节点执行(FlatBufferBuilder record, OperateFSMBase.Operator form);
     }

@@ -46,7 +46,7 @@ namespace PRO.Skill
             return TriggerState.update;
         }
 
-        public static void 扩展节点<T>(T operate, ref ReusableList<FlatBufferBuilder> recordList) where T : OperateFSMBase, ISkillPointer_射线选择
+        public static void 节点扩展<T>(T operate, ref ReusableList<FlatBufferBuilder> recordList) where T : OperateFSMBase, ISkillPointer_射线选择
         {
             foreach (var byRole in operate.Turn.RoundFSM.RoleHash)
             {
@@ -60,8 +60,8 @@ namespace PRO.Skill
                     var record = FlatBufferBuilder.TakeOut(1024);
                     var byRoleGuidOffset = record.CreateString(byRole.GUID);
                     Flat.OperateRecord_RaySelect.StartOperateRecord_RaySelect(record);
-                    Flat.OperateRecord_RaySelect.AddStartPos(record, operate.SkillPointer.StartPos.ToDisk(record));
-                    Flat.OperateRecord_RaySelect.AddEndPos(record, operate.SkillPointer.EndPos.ToDisk(record));
+                    Flat.OperateRecord_RaySelect.AddStartPos(record, startPos.ToDisk(record));
+                    Flat.OperateRecord_RaySelect.AddEndPos(record, endPos.ToDisk(record));
                     Flat.OperateRecord_RaySelect.AddByRoleGuid(record, byRoleGuidOffset);
                     record.Finish(Flat.OperateRecord_RaySelect.EndOperateRecord_RaySelect(record).Value);
                     recordList.Add(record);
@@ -75,7 +75,7 @@ namespace PRO.Skill
             operate.Agent.LookAt(operateData.EndPos.Value.ToRAM());
             string byRoleGuid = operateData.ByRoleGuid;
             if (byRoleGuid != null)
-                operate.context.AddByAgent(operate.context.Agent.Scene.GetRole(byRoleGuid), true);
+                operate.context.AddByAgent(operate.Agent.Scene.GetRole(byRoleGuid), true);
         }
     }
 }

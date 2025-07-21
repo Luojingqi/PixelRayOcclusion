@@ -36,9 +36,9 @@ namespace PRO.Skill
                 return ISkillPointer_射线选择.Trigger(operate, record);
             }
 
-            public override void 扩展节点(ref ReusableList<FlatBufferBuilder> recordList)
+            public override void 节点扩展(ref ReusableList<FlatBufferBuilder> recordList)
             {
-                ISkillPointer_射线选择.扩展节点(operate, ref recordList);
+                ISkillPointer_射线选择.节点扩展(operate, ref recordList);
             }
 
             public override void 节点执行(FlatBufferBuilder record, Operator form)
@@ -80,15 +80,15 @@ namespace PRO.Skill
             public override void ToDisk(FlatBufferBuilder builder)
             {
                 var particleOffset = particle.ToDisk(builder);
-                Flat.Skill_3_3_Data.StartSkill_3_3_Data(builder);
-                Flat.Skill_3_3_Data.AddParticle(builder, particleOffset);
-                Flat.Skill_3_3_Data.AddEndPos(builder, endPos.ToDisk(builder));
-                builder.Finish(Flat.Skill_3_3_Data.EndSkill_3_3_Data(builder).Value);
+                Flat.Skill_3_3_Disk.StartSkill_3_3_Disk(builder);
+                Flat.Skill_3_3_Disk.AddParticle(builder, particleOffset);
+                Flat.Skill_3_3_Disk.AddEndPos(builder, endPos.ToDisk(builder));
+                builder.Finish(Flat.Skill_3_3_Disk.EndSkill_3_3_Disk(builder).Value);
             }
 
             public override void ToRAM(FlatBufferBuilder builder)
             {
-                var diskData = Flat.Skill_3_3_Data.GetRootAsSkill_3_3_Data(builder.DataBuffer);
+                var diskData = Flat.Skill_3_3_Disk.GetRootAsSkill_3_3_Disk(builder.DataBuffer);
                 particle = ParticleManager.Inst.ToRAM(operate.Agent.Scene, diskData.Particle.Value);
                 endPos = diskData.EndPos.Value.ToRAM();
             }

@@ -61,10 +61,8 @@ namespace PRO
             //创建存档的根目录
             DirectoryInfo root = Directory.CreateDirectory(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}");
             gameSaveCatalog.directoryInfo = root;
-            //创建场景的根目录
-            DirectoryInfo sceneRoot = Directory.CreateDirectory(@$"{root.FullName}\Scene");
             //创建一个场景
-            SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog, sceneRoot);
+            SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog);
             gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
             IOTool.SaveText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
             return gameSaveCatalog;
@@ -97,6 +95,8 @@ namespace PRO
             }
             return null;
         }
+
+        public static GameSaveCatalog LoadGameSaveInfo(string name) => LoadGameSaveInfo(new DirectoryInfo(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}"));
 
 
         /// <summary>

@@ -81,9 +81,9 @@ namespace PRO.SceneEditor
         private void Sort()
         {
             for (int i = 0; i < showDirectoryInfoList.Count; i++)
-                showDirectoryInfoList[i].transform.parent = null;
+                showDirectoryInfoList[i].transform.SetParent(null);
             for (int i = showDirectoryInfoList.Count - 1; i >= 0; i--)
-                showDirectoryInfoList[i].transform.parent = transform;
+                showDirectoryInfoList[i].transform.SetParent(transform);
         }
 
 

@@ -31,12 +31,12 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: PRO.StartCombatEffectData, PRO.Assembly
-    - Name: value
-      Entry: 3
-      Data: 3
     - Name: type
       Entry: 3
       Data: 0
+    - Name: value
+      Entry: 3
+      Data: 3
     - Name: 
       Entry: 8
       Data: 

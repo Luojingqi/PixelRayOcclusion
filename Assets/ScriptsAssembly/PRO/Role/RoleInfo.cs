@@ -1,13 +1,26 @@
 ﻿using Google.FlatBuffers;
+using PRO.Tool;
+using Sirenix.OdinInspector;
 using System;
 
 namespace PRO
 {
     public class RoleInfo
     {
+        private static ObjectPool<RoleInfo> pool = new ObjectPool<RoleInfo>();
+        public readonly static RoleInfo empty = new RoleInfo();
+        public static RoleInfo TakeOut() => pool.TakeOut();
+        public static void PutIn(RoleInfo info)
+        {
+            info.ClearAction();
+            CloneValue(empty, info);
+            pool.PutIn(info);
+        }
+
         public class Data<T> where T : struct
         {
             private T value;
+            [ShowInInspector]
             public T Value
             {
                 get { return value; }
@@ -19,7 +32,9 @@ namespace PRO
 
                 }
             }
+            [HideLabel]
             public Action<RoleInfo> ValueChange;
+            [HideLabel]
             public Func<RoleInfo, T, T> SetCheck;
             private RoleInfo info;
             public Data(RoleInfo roleInfo)
@@ -80,7 +95,7 @@ namespace PRO
             行动点.ValueChange = null;
         }
 
-        public static void Clone(RoleInfo form, RoleInfo to)
+        public static void CloneValue(RoleInfo form, RoleInfo to)
         {
             to.最大血量.Value = form.最大血量.Value;
             to.血量.Value = form.血量.Value;
