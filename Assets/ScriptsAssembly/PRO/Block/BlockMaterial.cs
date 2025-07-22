@@ -143,20 +143,9 @@ namespace PRO
             #endregion
         }
         //所有点的颜色数据_顺序索引
-        private static List<PixelColorInfo> pixelColorInfoList = new List<PixelColorInfo>();
+        public static List<PixelColorInfo> pixelColorInfoList = new List<PixelColorInfo>();
         //点颜色数据_字典索引
-        private static Dictionary<string, PixelColorInfo> pixelColorInfoDic = new Dictionary<string, PixelColorInfo>();
-        public static PixelColorInfo GetPixelColorInfo(string colorName)
-        {
-            if (pixelColorInfoDic.TryGetValue(colorName, out PixelColorInfo value)) return value;
-            else Debug.Log($"没有像素颜色名称为{colorName}");
-            return null;
-        }
-        public static PixelColorInfo GetPixelColorInfo(int id)
-        {
-            if (id >= pixelColorInfoList.Count) return null;
-            else return pixelColorInfoList[id];
-        }
+        public static Dictionary<string, PixelColorInfo> pixelColorInfoDic = new Dictionary<string, PixelColorInfo>();
         #endregion
 
         #region 将块数据传递到GPU

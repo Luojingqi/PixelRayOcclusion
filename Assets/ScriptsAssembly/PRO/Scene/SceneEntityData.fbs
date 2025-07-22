@@ -6,8 +6,6 @@ table SceneEntityData
 {
 	active_block_base : [Vector2Int];
 
-	camera : Transform;
-
 	round_guid : [string];
 
 	round_main : string;

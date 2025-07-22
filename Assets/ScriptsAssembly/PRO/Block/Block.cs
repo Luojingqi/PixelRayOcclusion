@@ -1,13 +1,12 @@
+using Google.FlatBuffers;
 using PRO.DataStructure;
 using PRO.Disk;
+using PRO.Flat.Ex;
 using PRO.Renderer;
 using PRO.Tool;
 using System.Collections.Generic;
-using UnityEngine;
-using Google.FlatBuffers;
-using Sirenix.OdinInspector;
-using PRO.Flat.Ex;
 using System.Threading;
+using UnityEngine;
 namespace PRO
 {
     public class Block : BlockBase
@@ -118,26 +117,29 @@ namespace PRO
             BlockPool.CreateEvent += t => t.Init();
         }
 
-        public static Block TakeOut(SceneEntity scene)
+        public static Block TakeOut(SceneEntity scene, Vector2Int blockPos)
         {
             Block block = BlockPool.TakeOut();
-            block.transform.SetParent(BlockNode);
             block._screen = scene;
+            block.transform.SetParent(BlockNode);
+            block.name = $"Block{blockPos}";
+            block.transform.position = Block.BlockToWorld(blockPos);
+            block.BlockPos = blockPos;
+
+            block.background.TakeOut(scene, blockPos);
+
             return block;
         }
 
         public static void PutIn(Block block, CountdownEvent countdown)
         {
             countdown.AddCount();
+            block.PutIn();
             HashSet<BoxCollider2D> boxHash = new HashSet<BoxCollider2D>(10);
             for (int y = 0; y < Block.Size.y; y++)
-            {
                 for (int x = 0; x < Block.Size.x; x++)
                 {
-                    Pixel pixel = block.allPixel[x, y];
-                    block.allPixel[x, y] = null;
-
-                    Pixel.PutIn(pixel);
+                    block.GetPixel(new(x, y)).Clear();
 
                     BoxCollider2D box = block.allCollider[x, y];
                     if (box != null)
@@ -146,8 +148,15 @@ namespace PRO
                         block.allCollider[x, y] = null;
                     }
                 }
+
+            for (int i = 0; i < Block.Size.y; i++)
+            {
+                block.fluidUpdateHash1[i].Clear();
+                block.fluidUpdateHash2[i].Clear();
+                block.fluidUpdateHash3[i].Clear();
             }
-            block._screen = null;
+            block.FreelyLightSourceHash.Clear();
+            block.background.PutIn(countdown);
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
 #if !PRO_MCTS
@@ -160,7 +169,7 @@ namespace PRO
                 countdown.Signal();
             });
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// 卸载倒计时
@@ -173,9 +182,9 @@ namespace PRO
             base.Init();
             for (int i = 0; i < Block.Size.y; i++)
             {
-                fluidUpdateHash1[i] = new HashSet<Vector2Byte>();
-                fluidUpdateHash2[i] = new HashSet<Vector2Byte>();
-                fluidUpdateHash3[i] = new HashSet<Vector2Byte>();
+                fluidUpdateHash1[i] = new HashSet<Vector2Byte>(16);
+                fluidUpdateHash2[i] = new HashSet<Vector2Byte>(16);
+                fluidUpdateHash3[i] = new HashSet<Vector2Byte>(16);
             }
             colliderNode = new GameObject("ColliderNode").transform;
             colliderNode.SetParent(transform);
@@ -183,8 +192,11 @@ namespace PRO
             spriteRenderer.sortingOrder = 10;
 
             _blockType = BlockType.Block;
+            background = BackgroundBlock.Create();
+            background.transform.SetParent(transform);
         }
-
+        [HideInInspector]
+        public BackgroundBlock background;
 
         /// <summary>
         /// 获取点（如果点不在此区块会被修正到对应区块）
@@ -311,14 +323,6 @@ namespace PRO
                             {
                                 SwapFluid(nextPosG, pixel.posG);
                                 stopUpdate = false;
-                                #region 将被交换点附近3x3的点都加入流体更新队列
-                                for (int y = -2; y <= 2; y++)
-                                    for (int x = -2; x <= 2; x++)
-                                    {
-                                        var tempG = nextPosG + new Vector2Int(x, y);
-                                        AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
-                                    }
-                                #endregion
 
                                 #region 处理特殊像素
                                 {
@@ -419,14 +423,6 @@ namespace PRO
                             {
                                 SwapFluid(nextPosG, pixel.posG);
                                 stopUpdate = false;
-                                #region 将被交换点附近3x3的点都加入流体更新队列
-                                for (int y = -2; y <= 2; y++)
-                                    for (int x = -2; x <= 2; x++)
-                                    {
-                                        var tempG = nextPosG + new Vector2Int(x, y);
-                                        AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
-                                    }
-                                #endregion
 
                                 #region 处理特殊像素
                                 {
@@ -436,7 +432,7 @@ namespace PRO
                                         pixel_next.affectsTransparency -= Random.Range(0, 0.05f);
                                         if (pixel_next.affectsTransparency < 0.07f)
                                         {
-                                            SetPixel(Pixel.空气.Clone(pixel_next.pos));
+                                            pixel_next.Replace(Pixel.空气);
                                             stopUpdate = true;
                                             if (Random.Range(0, 100) < 25)
                                             {
@@ -517,14 +513,6 @@ namespace PRO
                             (nextPixel.typeInfo.fluidType == 2) ||  //下个点为气体
                             (nextPixel.typeInfo.fluidType == 3 && pixel.typeInfo.fluidDensity > nextPixel.typeInfo.fluidDensity && Random.Range(0, 100) >= 50))//下个点为固体，当密度比他大的时候概率会沉入
                         {
-                            //将被交换点附近3x3的点都加入流体更新队列
-                            for (int y = -1; y <= 1; y++)
-                                for (int x = -1; x <= 1; x++)
-                                {
-                                    //  var tempG = nextPosG + new Vector2Int(0, 0);
-                                    var tempG = nextPosG + new Vector2Int(x, y);
-                                    AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
-                                }
                             SwapFluid(nextPosG, pixel.posG);
                             stopUpdate = false;
 
@@ -553,10 +541,14 @@ namespace PRO
             var block1 = _screen.GetBlock(GlobalToBlock(p1_G));
             var p0 = block0.GetPixel(Block.GlobalToPixel(p0_G));
             var p1 = block1.GetPixel(Block.GlobalToPixel(p1_G));
-            var p0_Clone = p0.Clone(p1.pos);
-            var p1_Clone = p1.Clone(p0.pos);
-            block1.SetPixel(p0_Clone, true, false, false);
-            block0.SetPixel(p1_Clone, true, false, false);
+            var tempTypeInfo = p0.typeInfo;
+            var tempColorInfo = p0.colorInfo;
+            var tempDurability = p0.durability;
+            var tempAffectsTransparency = p0.affectsTransparency;
+            p0.Replace(p1);
+            p1.Replace(tempTypeInfo, tempColorInfo);
+            p1.durability = tempDurability;
+            p1.affectsTransparency = tempAffectsTransparency;
         }
 
         #region 更新流体的临时变量
@@ -571,14 +563,16 @@ namespace PRO
         #endregion
         #endregion
 
+        [HideInInspector]
         public Transform colliderNode;
+        [HideInInspector]
         public readonly BoxCollider2D[,] allCollider = new BoxCollider2D[Block.Size.x, Block.Size.y];
-        public void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
+        public void ChangeCollider(PixelTypeInfo old, PixelTypeInfo now, Vector2Byte pos)
         {
             bool oldCollider = (old == null || !old.collider) ? false : true;
             //原本无碰撞箱，现在有就创建，反之删除
-            if (oldCollider == false && nowPixel.typeInfo.collider) GreedyCollider.TryExpandCollider(this, nowPixel.pos);
-            else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
+            if (oldCollider == false && now.collider) GreedyCollider.TryExpandCollider(this, pos);
+            else if (oldCollider && now.collider == false) GreedyCollider.TryShrinkCollider(this, pos);
         }
 
         /// <summary>
@@ -588,11 +582,23 @@ namespace PRO
 
         public override System.Action ToDisk(FlatBufferBuilder builder)
         {
+            int count = queue_火焰.Count;
+            Flat.BlockBaseData.StartBlockFlameQueueVector(builder, count);
+            for (int i = 0; i < count; i++)
+            {
+                var pos = queue_火焰.Dequeue();
+                pos.ToDisk(builder);
+                queue_火焰.Enqueue(pos);
+            }
+            var blockFlameQueueOffset = builder.EndVector();
+
+
             var offset1 = AddFluidUpdateHash(builder, fluidUpdateHash1);
             var offset2 = AddFluidUpdateHash(builder, fluidUpdateHash2);
             var offset3 = AddFluidUpdateHash(builder, fluidUpdateHash3);
             return () =>
             {
+                Flat.BlockBaseData.AddBlockFlameQueue(builder, blockFlameQueueOffset);
                 Flat.BlockBaseData.AddFluidUpdateHash1(builder, offset1);
                 Flat.BlockBaseData.AddFluidUpdateHash2(builder, offset2);
                 Flat.BlockBaseData.AddFluidUpdateHash3(builder, offset3);
@@ -601,10 +607,10 @@ namespace PRO
         private VectorOffset AddFluidUpdateHash(FlatBufferBuilder builder, HashSet<Vector2Byte>[] fluidUpdateHash)
         {
             int length = 0;
-            foreach (var hash in fluidUpdateHash1)
+            foreach (var hash in fluidUpdateHash)
                 length += hash.Count;
             Flat.BlockBaseData.StartFluidUpdateHash1Vector(builder, length);
-            foreach (var hash in fluidUpdateHash1)
+            foreach (var hash in fluidUpdateHash)
                 foreach (var pos in hash)
                     pos.ToDisk(builder);
             return builder.EndVector();

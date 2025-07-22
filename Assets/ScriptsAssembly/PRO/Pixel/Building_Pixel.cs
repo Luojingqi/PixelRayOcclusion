@@ -14,6 +14,7 @@ namespace PRO
         private Vector2Int _offset;
         private BlockBase.BlockType _blockType;
 
+        public State oldState = State.Unload;
         public Pixel pixel;
         public PixelTypeInfo typeInfo => _typeInfo;
         public PixelColorInfo colorInfo => _colorInfo;
@@ -55,10 +56,15 @@ namespace PRO
             Survival,
             Death
         }
-        public State GetState()
+        public State GetNowState()
         {
             if (pixel == null) return State.Unload;
             if (pixel.typeInfo == _typeInfo && pixel.colorInfo == _colorInfo) return State.Survival;
+            return State.Death;
+        }
+        public State GetState(PixelTypeInfo typeInfo, PixelColorInfo colorInfo)
+        {
+            if (typeInfo == _typeInfo && colorInfo == _colorInfo) return State.Survival;
             return State.Death;
         }
 

@@ -65,7 +65,7 @@ namespace PRO.Buff
                     if (pixel != null && pixel.typeInfo.typeName == "水")
                         if (nowP <= ProportionMax)
                         {
-                            pixel.blockBase.SetPixel(Pixel.空气.Clone(pixel.pos));
+                            pixel.Replace(Pixel.空气);
                             nowP += minAdd;
                             change = true;
                         }

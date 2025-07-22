@@ -30,7 +30,7 @@ namespace PRO.SkillEditor
 
                 foreach (var pixelData in pixelList)
                 {
-                    Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(pixelData.typeName), BlockMaterial.GetPixelColorInfo(pixelData.colorName), pixelData.pos, pixelData.blockType);
+                    Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(pixelData.typeName), Pixel.GetPixelColorInfo(pixelData.colorName), pixelData.pos, pixelData.blockType);
                     building.ToRAM_AddBuilding_Pixel(building_Pixel);
                 }
 

@@ -21,30 +21,6 @@ namespace PRO
     /// </summary>
     public partial class SceneEntity
     {
-        private struct OneBlock
-        {
-            public Block Block;
-            public BackgroundBlock BackgroundBlock;
-
-            public OneBlock(Block block, BackgroundBlock backgroundBlock)
-            {
-                Block = block;
-                BackgroundBlock = backgroundBlock;
-            }
-
-            public BlockBase this[int index]
-            {
-                get
-                {
-                    switch (index)
-                    {
-                        default:
-                        case 0: return Block;
-                        case 1: return BackgroundBlock;
-                    }
-                }
-            }
-        }
 
         public SceneCatalog sceneCatalog { get; private set; }
         public SceneEntity(SceneCatalog sceneCatalog)
@@ -65,7 +41,7 @@ namespace PRO
         }
         #region 获取已经实例化的对象
         public HashSet<Vector2Int> ActiveBlockBase = new HashSet<Vector2Int>(50);
-        private CrossList<OneBlock> BlockBaseCrossList = new CrossList<OneBlock>();
+        private CrossList<Block> BlockBaseCrossList = new CrossList<Block>();
 
         public Dictionary<string, Role> ActiveRole_Guid = new Dictionary<string, Role>(20);
         public Dictionary<Transform, Role> ActiveRole_Trans = new Dictionary<Transform, Role>(20);
@@ -87,9 +63,17 @@ namespace PRO
         public Dictionary<string, RoundFSM> ActiveRound = new Dictionary<string, RoundFSM>(4);
         private List<string> RemoveActiveRoundList = new List<string>(2);
 
-        public Block GetBlock(Vector2Int blockPos) => BlockBaseCrossList[blockPos].Block;
-        public BackgroundBlock GetBackground(Vector2Int blockPos) => BlockBaseCrossList[blockPos].BackgroundBlock;
-        public BlockBase GetBlockBase(BlockBase.BlockType blockType, Vector2Int blockPos) => BlockBaseCrossList[blockPos][(int)blockType];
+        public Block GetBlock(Vector2Int blockPos) => BlockBaseCrossList[blockPos];
+        public BackgroundBlock GetBackground(Vector2Int blockPos) => BlockBaseCrossList[blockPos]?.background;
+        public BlockBase GetBlockBase(BlockBase.BlockType blockType, Vector2Int blockPos)
+        {
+            var block = BlockBaseCrossList[blockPos];
+            switch (blockType)
+            {
+                case BlockBase.BlockType.BackgroundBlock: return block.background;
+                default: return block;
+            }
+        }
 
         public BuildingBase GetBuilding(string guid)
         {
@@ -131,10 +115,9 @@ namespace PRO
             if (ActiveBlockBase.Contains(blockPos)) return;
             countdown_main?.AddCount();
             ActiveBlockBase.Add(blockPos);
-            var oneBlock = CreateOneBlock(blockPos);
-            BlockBaseCrossList[blockPos] = oneBlock;
-            var block = oneBlock.Block;
-            var background = oneBlock.BackgroundBlock;
+            var block = Block.TakeOut(this, blockPos);
+            var background = block.background;
+            BlockBaseCrossList[blockPos] = block;
             block.ResetUnLoadCountdown();
             #region 加载  区块
 
@@ -144,6 +127,8 @@ namespace PRO
                 {
                     try
                     {
+                        block.FillPixel();
+                        background.FillPixel();
                         var diskData = Flat.BlockBaseData.GetRootAsBlockBaseData(builder.DataBuffer);
                         PixelTypeInfo[] typeInfoArray = new PixelTypeInfo[diskData.PixelTypeNameArrayLength];
                         PixelColorInfo[] colorInfoArray = new PixelColorInfo[diskData.PixelColorNameArrayLength];
@@ -151,27 +136,34 @@ namespace PRO
                         for (int i = typeInfoArray.Length - 1; i >= 0; i--)
                             typeInfoArray[typeInfoArray.Length - i - 1] = Pixel.GetPixelTypeInfo(diskData.PixelTypeNameArray(i));
                         for (int i = colorInfoArray.Length - 1; i >= 0; i--)
-                            colorInfoArray[colorInfoArray.Length - i - 1] = BlockMaterial.GetPixelColorInfo(diskData.PixelColorNameArray(i));
+                            colorInfoArray[colorInfoArray.Length - i - 1] = Pixel.GetPixelColorInfo(diskData.PixelColorNameArray(i));
+                        var builder_Extend = FlatBufferBuilder.TakeOut(1024 * 2);
                         for (int i = buildingArray.Length - 1; i >= 0; i--)
                         {
                             string guid = diskData.PixelBuildingGuidArray(i);
                             var building = GetBuilding(guid);
                             if (building == null)
                             {
-                                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => LoadBuilding(guid));
+                                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => LoadBuilding(guid, builder_Extend));
                                 building = GetBuilding(guid);
+                                builder_Extend.Clear();
                             }
                             buildingArray[buildingArray.Length - i - 1] = building;
                         }
+                        FlatBufferBuilder.PutIn(builder_Extend);
                         for (int i = Block.Size.x * Block.Size.y - 1; i >= 0; i--)
                         {
                             var blockPixelDiskData = diskData.BlockPixelArray(i).Value;
                             var backgroundPixelDiskData = diskData.BackgroundPixelArray(i).Value;
                             int index = Block.Size.x * Block.Size.y - i - 1;
                             Vector2Byte pos = new(index % Block.Size.y, index / Block.Size.y);
-                            block.SetPixel(PixelToRAM(blockPixelDiskData, pos, typeInfoArray, colorInfoArray, buildingArray), false, false, false);
-                            background.SetPixel(PixelToRAM(backgroundPixelDiskData, pos, typeInfoArray, colorInfoArray, buildingArray), false, false, false);
+                            block.GetPixel(pos).ToRAM(blockPixelDiskData, typeInfoArray, colorInfoArray, buildingArray);
+                            background.GetPixel(pos).ToRAM(backgroundPixelDiskData, typeInfoArray, colorInfoArray, buildingArray);
                         }
+                        for (int i = diskData.BlockFlameQueueLength - 1; i >= 0; i--)
+                            block.queue_火焰.Enqueue(diskData.BlockFlameQueue(i).Value.ToRAM());
+                        for (int i = diskData.BackgroundFlameQueueLength - 1; i >= 0; i--)
+                            background.queue_火焰.Enqueue(diskData.BackgroundFlameQueue(i).Value.ToRAM());
                         CountdownEvent countdown = new CountdownEvent(1);
                         block.ToRAM(diskData, countdown);
                         background.ToRAM(diskData, countdown);
@@ -224,27 +216,13 @@ namespace PRO
                 {
                     try
                     {
-                        for (int x = 0; x < Block.Size.x; x++)
-                            for (int y = 0; y < Block.Size.y; y++)
-                            {
-
-                                Pixel pixel;
-                                lock (Pixel.pixelPool)
-                                    pixel = Pixel.pixelPool.TakeOut();
-                                Pixel.空气.CloneTo(pixel, new Vector2Byte(x, y));
-                                block.SetPixel(pixel, false, false, false);
-                                block.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-
-                                lock (Pixel.pixelPool)
-                                    pixel = Pixel.TakeOut("背景", "背景色2", new(x, y));
-                                background.SetPixel(pixel, false, false, false);
-                                background.DrawPixelSync(new Vector2Byte(x, y), pixel.colorInfo.color);
-                            }
+                        block.FillPixel();
+                        background.FillPixel();
                         countdown_main?.AddCount();
                         TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
                         {
-                            BlockMaterial.SetBlock(block);
-                            BlockMaterial.SetBackgroundBlock(background);
+                            SetBlock(block);
+                            SetBackgroundBlock(background);
                             countdown_main?.Signal();
                         });
                     }
@@ -256,21 +234,6 @@ namespace PRO
                 });
             }
             #endregion
-        }
-        private static Pixel PixelToRAM(Flat.PixelData pixelDiskData, Vector2Byte pos, PixelTypeInfo[] typeInfoArray, PixelColorInfo[] colorInfoArray, BuildingBase[] buildingArray)
-        {
-            Pixel pixel = null;
-            lock (Pixel.pixelPool)
-                pixel = Pixel.pixelPool.TakeOut();
-            Pixel.InitPixel(pixel, typeInfoArray[pixelDiskData.TypeIndex], colorInfoArray[pixelDiskData.ColorIndex], pos, pixelDiskData.Durability);
-            pixel.affectsTransparency = pixelDiskData.AffectsTransparency;
-            for (int i = pixelDiskData.BuildingListLength - 1; i >= 0; i--)
-            {
-                var building = buildingArray[pixelDiskData.BuildingList(i)];
-                pixel.buildingSet.Add(building);
-                building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType), pixel);
-            }
-            return pixel;
         }
         #endregion
         #region 卸载区块
@@ -288,10 +251,8 @@ namespace PRO
                 try
                 {
                     var block = GetBlock(blockPos);
-                    var background = GetBackground(blockPos);
-                    BlockBaseCrossList[blockPos] = new OneBlock();
+                    BlockBaseCrossList[blockPos] = null;
                     Block.PutIn(block, countdown);
-                    BackgroundBlock.PutIn(background, countdown);
                 }
                 catch (Exception e)
                 {
@@ -312,34 +273,42 @@ namespace PRO
         {
             string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
-            var builder = FlatBufferBuilder.TakeOut(1024 * 300);
+            var builder = FlatBufferBuilder.TakeOut(1024 * 400);
             var block = GetBlock(blockPos);
             var background = GetBackground(blockPos);
+
+            var typeNameIndexDic = new Dictionary<string, int>(8);
+            var colorNameIndexDic = new Dictionary<string, int>(16);
+            var buildingGuidIndexDic = new Dictionary<string, int>(4);
+            var blockPixelArrayOffset = ToDiskPixelData(block, typeNameIndexDic, colorNameIndexDic, buildingGuidIndexDic, builder);
+            var backgroundPixelArrayOffset = ToDiskPixelData(background, typeNameIndexDic, colorNameIndexDic, buildingGuidIndexDic, builder);
+            Action addDataEvent = null;
+            addDataEvent += block.ToDisk(builder);
+            addDataEvent += background.ToDisk(builder);
+            var typeNameArrayOffset = DicKeyToOffset(typeNameIndexDic, builder);
+            var colorNameArrayOffset = DicKeyToOffset(colorNameIndexDic, builder);
+            var buildingGuidArrayOffset = DicKeyToOffset(buildingGuidIndexDic, builder);
+            Flat.BlockBaseData.StartBlockBaseData(builder);
+            Flat.BlockBaseData.AddBlockPixelArray(builder, blockPixelArrayOffset);
+            Flat.BlockBaseData.AddBackgroundPixelArray(builder, backgroundPixelArrayOffset);
+            Flat.BlockBaseData.AddPixelTypeNameArray(builder, typeNameArrayOffset);
+            Flat.BlockBaseData.AddPixelColorNameArray(builder, colorNameArrayOffset);
+            Flat.BlockBaseData.AddPixelBuildingGuidArray(builder, buildingGuidArrayOffset);
+            addDataEvent.Invoke();
+            builder.Finish(Flat.BlockBaseData.EndBlockBaseData(builder).Value);
+            
+            if (isSaveBuilding)
             {
-                var typeNameIndexDic = new Dictionary<string, int>(8);
-                var colorNameIndexDic = new Dictionary<string, int>(16);
-                var buildingGuidIndexDic = new Dictionary<string, int>(4);
-                var blockPixelArrayOffset = ToDiskPixelData(block, typeNameIndexDic, colorNameIndexDic, buildingGuidIndexDic, builder);
-                var backgroundPixelArrayOffset = ToDiskPixelData(background, typeNameIndexDic, colorNameIndexDic, buildingGuidIndexDic, builder);
-                Action addDataEvent = null;
-                addDataEvent += block.ToDisk(builder);
-                addDataEvent += background.ToDisk(builder);
-                var typeNameArrayOffset = DicKeyToOffset(typeNameIndexDic, builder);
-                var colorNameArrayOffset = DicKeyToOffset(colorNameIndexDic, builder);
-                var buildingGuidArrayOffset = DicKeyToOffset(buildingGuidIndexDic, builder);
-                Flat.BlockBaseData.StartBlockBaseData(builder);
-                Flat.BlockBaseData.AddBlockPixelArray(builder, blockPixelArrayOffset);
-                Flat.BlockBaseData.AddBackgroundPixelArray(builder, backgroundPixelArrayOffset);
-                Flat.BlockBaseData.AddPixelTypeNameArray(builder, typeNameArrayOffset);
-                Flat.BlockBaseData.AddPixelColorNameArray(builder, colorNameArrayOffset);
-                Flat.BlockBaseData.AddPixelBuildingGuidArray(builder, buildingGuidArrayOffset);
-                addDataEvent.Invoke();
-                builder.Finish(Flat.BlockBaseData.EndBlockBaseData(builder).Value);
-
-
-                if (isSaveBuilding)
-                    foreach (string guid in buildingGuidIndexDic.Keys)
-                        SaveBuilding(ActiveBuilding[guid]);
+                var builder_building = FlatBufferBuilder.TakeOut(1024 * 8);
+                var builder_Extend = FlatBufferBuilder.TakeOut(1024 * 2);
+                foreach (string guid in buildingGuidIndexDic.Keys)
+                {
+                    SaveBuilding(ActiveBuilding[guid], builder_building, builder_Extend);
+                    builder_building.Clear();
+                    builder_Extend.Clear();
+                }
+                FlatBufferBuilder.PutIn(builder_building);
+                FlatBufferBuilder.PutIn(builder_Extend);
             }
             IOTool.SaveFlat($@"{path}\BlockData", builder);
             File.Delete($@"{path}\BlockParticleData{IOTool.flatExtension}");
@@ -398,24 +367,26 @@ namespace PRO
         #endregion
 
         #region Building
-        public void LoadBuilding(string guid)
+        private void LoadBuilding(string guid, FlatBufferBuilder builder_Extend)
         {
-            if (IOTool.LoadProto($@"{sceneCatalog.directoryInfo}\Building\{guid}", Proto.BuildingBaseData.Parser, out var diskData))
+            if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Building\{guid}", out var builder))
             {
+                var diskData = Flat.BuildingBaseData.GetRootAsBuildingBaseData(builder.DataBuffer);
                 BuildingBase building = BuildingBase.New(diskData.Name, guid, this);
-                building.ToRAM(diskData);
+                building.ToRAM(diskData, builder_Extend);
                 ActiveBuilding.Add(guid, building);
+                FlatBufferBuilder.PutIn(builder);
+                builder_Extend.Clear();
             }
             else
             {
                 Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
             }
         }
-        private void SaveBuilding(BuildingBase building)
+        private void SaveBuilding(BuildingBase building, FlatBufferBuilder builder, FlatBufferBuilder builder_Extend)
         {
-            var diskData = building.ToDisk();
-            IOTool.SaveProto($@"{sceneCatalog.directoryInfo}\Building\{building.GUID}", diskData);
-            diskData.ClearPutIn();
+            building.ToDisk(builder, builder_Extend);
+            IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\Building\{building.GUID}", builder);
         }
         #endregion
 
@@ -440,39 +411,6 @@ namespace PRO
         #endregion
 
 
-        private void Add_Save_Load_UnLoad_Queue(Func<CountdownEvent> func)
-        {
-            lock (Save_Load_UnLoad_Queue)
-            {
-                if (now_Wait == false)
-                {
-                    now_Wait = true;
-                    ThreadPool.QueueUserWorkItem((obj) =>
-                    {
-                        while (Save_Load_UnLoad_Queue.Count > 0)
-                        {
-                            Func<CountdownEvent> _func = null;
-                            lock (Save_Load_UnLoad_Queue)
-                                _func = Save_Load_UnLoad_Queue.Dequeue();
-                            CountdownEvent countdown = null;
-                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                            {
-                                countdown = _func.Invoke();
-                            });
-                            countdown.Wait();
-                        }
-                        lock (Save_Load_UnLoad_Queue)
-                            now_Wait = false;
-                    });
-                }
-                else
-                {
-                    Save_Load_UnLoad_Queue.Enqueue(func);
-                }
-            }
-        }
-        private bool now_Wait = false;
-        private Queue<Func<CountdownEvent>> Save_Load_UnLoad_Queue = new Queue<Func<CountdownEvent>>();
         /// <summary>
         /// 保存场景所有数据，内部使用线程池优化，返回等待信号
         /// </summary>
@@ -491,8 +429,16 @@ namespace PRO
                     var countdown_Block = new CountdownEvent(ActiveBlockBase.Count);
                     foreach (var blockPos in ActiveBlockBase)
                         ThreadPool.QueueUserWorkItem((obj) => { SaveBlockData(blockPos, false); countdown_Block.Signal(); });
+                    var builder_building = FlatBufferBuilder.TakeOut(1024 * 8);
+                    var builder_Extend = FlatBufferBuilder.TakeOut(1024 * 2);
                     foreach (var building in ActiveBuilding.Values)
-                        SaveBuilding(building);
+                    {
+                        SaveBuilding(building, builder_building, builder_Extend);
+                        builder_building.Clear();
+                        builder_Extend.Clear();
+                    }
+                    FlatBufferBuilder.PutIn(builder_building);
+                    FlatBufferBuilder.PutIn(builder_Extend);
                     #endregion
                     countdown_Block.Wait();
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
@@ -586,31 +532,46 @@ namespace PRO
                 lock (this)
                     IsLock = false;
             });
-            sceneCatalog.Save();
             #region 保存  场景额外数据
             {
                 var builder = FlatBufferBuilder.TakeOut(1024);
-                Flat.SceneEntityData.StartActiveBlockBaseVector(builder, ActiveBlockBase.Count);
-                foreach (var blockPos in ActiveBlockBase)
-                    blockPos.ToDisk(builder);
-                var activeBlockOffset = builder.EndVector();
+                var blockPosSet = new HashSet<Vector2Int>(ActiveBlockBase.Count);
 
                 Span<int> roundGuidOffsetArray = stackalloc int[ActiveRound.Count];
                 int index = 0;
                 foreach (var round in ActiveRound.Values)
+                {
                     roundGuidOffsetArray[index++] = builder.CreateString(round.GUID).Value;
+                    foreach (var role in round.RoleHash)
+                    {
+                        var blockPos = Block.WorldToBlock(role.transform.position);
+                        for (int y = -1; y <= 1; y++)
+                            for (int x = -1; x <= 1; x++)
+                                blockPosSet.Add(blockPos + new Vector2Int(x, y));
+                    }
+                }
                 var roundGuidOffset = builder.CreateVector_Offset(roundGuidOffsetArray);
                 var roundMainOffset = builder.CreateString(GamePlayMain.Inst.Round?.GUID);
+
+                Flat.SceneEntityData.StartActiveBlockBaseVector(builder, blockPosSet.Count);
+                foreach (var blockPos in blockPosSet)
+                    blockPos.ToDisk(builder);
+                var activeBlockOffset = builder.EndVector();
+
                 Flat.SceneEntityData.StartSceneEntityData(builder);
                 Flat.SceneEntityData.AddActiveBlockBase(builder, activeBlockOffset);
-                Flat.SceneEntityData.AddCamera(builder, Camera.main.transform.ToDisk(builder));
                 Flat.SceneEntityData.AddRoundGuid(builder, roundGuidOffset);
                 Flat.SceneEntityData.AddRoundMain(builder, roundMainOffset);
                 builder.Finish(Flat.SceneEntityData.EndSceneEntityData(builder).Value);
                 IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\SceneEntityData", builder);
                 FlatBufferBuilder.PutIn(builder);
+
+                if (this == SceneManager.Inst.NowScene)
+                    sceneCatalog.cameraPos = Camera.main.transform.position;
             }
             #endregion
+
+            sceneCatalog.Save();
             countdown.Signal();
             return countdown;
         }
@@ -623,10 +584,18 @@ namespace PRO
             if (IOTool.LoadFlat(@$"{sceneCatalog.directoryInfo}\SceneEntityData", out var builder))
             {
                 var diskData = Flat.SceneEntityData.GetRootAsSceneEntityData(builder.DataBuffer);
-                Camera.main.transform.ToRAM(diskData.Camera.Value);
                 CountdownEvent countdown_block = new CountdownEvent(1);
                 for (int i = diskData.ActiveBlockBaseLength - 1; i >= 0; i--)
                     ThreadLoadOrCreateBlock(diskData.ActiveBlockBase(i).Value.ToRAM(), countdown_block);
+#if !PRO_MCTS
+                var cameraCenterBlockPos = Block.WorldToBlock(sceneCatalog.cameraPos);
+                var minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+                var minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
+                var maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
+                for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
+                    for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+                        ThreadLoadOrCreateBlock(new(x, y), countdown_block);
+#endif
                 countdown_block.Signal();
                 countdown.AddCount();
                 ThreadPool.QueueUserWorkItem((obj) =>
@@ -669,10 +638,8 @@ namespace PRO
         /// 卸载战斗
         /// 返回等待信号
         /// </summary>
-        public CountdownEvent UnLoadAll()
+        private CountdownEvent UnLoadAll()
         {
-            lock (this)
-                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
             #region 卸载 round
             ActiveRound.Clear();
@@ -704,12 +671,6 @@ namespace PRO
             #endregion
             BlockMaterial.DrawApplyQueue.Clear();
             countdown.Signal();
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                countdown.Wait();
-                lock (this)
-                    IsLock = false;
-            });
             return countdown;
         }
 
@@ -720,14 +681,12 @@ namespace PRO
         public CountdownEvent ReLoadAll()
         {
             lock (this)
-                IsLock = false;
+                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
             var countdown_unload = UnLoadAll();
             ThreadPool.QueueUserWorkItem((obj) =>
             {
                 countdown_unload.Wait();
-                lock (this)
-                    IsLock = false;
                 TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
                 {
                     var countdown_load = LoadAll();
@@ -739,29 +698,12 @@ namespace PRO
                 });
                 countdown.Wait();
                 lock (this)
-                    IsLock = true;
+                    IsLock = false;
             });
             return countdown;
         }
-#endregion
-
-        #region 创建区块的空游戏物体
-
-        private OneBlock CreateOneBlock(Vector2Int blockPos)
-        {
-            var block = Block.TakeOut(this);
-            block.name = $"Block{blockPos}";
-            block.transform.position = Block.BlockToWorld(blockPos);
-            block.BlockPos = blockPos;
-
-            var back = BackgroundBlock.TakeOut(this);
-            back.transform.position = Block.BlockToWorld(blockPos);
-            back.transform.SetParent(block.transform);
-            back.BlockPos = blockPos;
-
-            return new OneBlock(block, back);
-        }
         #endregion
+
 
         #region 更新所用的临时对象
         float time火焰 = 0;
@@ -783,8 +725,8 @@ namespace PRO
         {
             if (Input.GetKeyDown(KeyCode.U))
             {
-                var countdown = SaveAll();
                 TimeManager.enableUpdate = false;
+                var countdown = SaveAll();
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     if (countdown.Wait(1000 * 15))
@@ -797,11 +739,16 @@ namespace PRO
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                var c = UnLoadAll();
+                TimeManager.enableUpdate = false;
+                var countdown = ReLoadAll();
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
-                    c.Wait();
-                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => LoadAll());
+                    if (countdown.Wait(1000 * 15))
+                        Log.Print("重载完成");
+                    else
+                        Log.Print("重载超时");
+                    TimeManager.enableUpdate = true;
+
                 });
 
             }

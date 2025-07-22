@@ -2,6 +2,7 @@
 using PRO.Tool.Serialize.IO;
 using PRO.Tool.Serialize.Json;
 using System.IO;
+using UnityEngine;
 
 namespace PRO.Disk.Scene
 {
@@ -18,6 +19,8 @@ namespace PRO.Disk.Scene
         private SceneCatalog() { }
 
         public string name;
+
+        public Vector2 cameraPos;
 
         public void Save()
         {

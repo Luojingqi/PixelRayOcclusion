@@ -287,6 +287,8 @@ namespace Google.FlatBuffers
 
         public Span<byte> ToSpan(int pos, int len)
         {
+            if (pos + len > _buffer.Length)
+                new Exception("FlatBufferBuilder³¤¶È²»¹»");
             return _buffer.Span.Slice(pos, len);
         }
 #else

@@ -21,28 +21,37 @@ public struct SceneEntityData : IFlatbufferObject
 
   public PRO.Flat.Vector2Int? ActiveBlockBase(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.Flat.Vector2Int?)(new PRO.Flat.Vector2Int()).__assign(__p.__vector(o) + j * 8, __p.bb) : null; }
   public int ActiveBlockBaseLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public PRO.Flat.Transform? Camera { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.Transform?)(new PRO.Flat.Transform()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public string RoundGuid(int j) { int o = __p.__offset(8); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
-  public int RoundGuidLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public string RoundMain { get { int o = __p.__offset(10); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public string RoundGuid(int j) { int o = __p.__offset(6); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
+  public int RoundGuidLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public string RoundMain { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetRoundMainBytes() { return __p.__vector_as_span<byte>(10, 1); }
+  public Span<byte> GetRoundMainBytes() { return __p.__vector_as_span<byte>(8, 1); }
 #else
-  public ArraySegment<byte>? GetRoundMainBytes() { return __p.__vector_as_arraysegment(10); }
+  public ArraySegment<byte>? GetRoundMainBytes() { return __p.__vector_as_arraysegment(8); }
 #endif
-  public byte[] GetRoundMainArray() { return __p.__vector_as_array<byte>(10); }
+  public byte[] GetRoundMainArray() { return __p.__vector_as_array<byte>(8); }
 
-  public static void StartSceneEntityData(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static Offset<PRO.Flat.SceneEntityData> CreateSceneEntityData(FlatBufferBuilder builder,
+      VectorOffset active_block_baseOffset = default(VectorOffset),
+      VectorOffset round_guidOffset = default(VectorOffset),
+      StringOffset round_mainOffset = default(StringOffset)) {
+    builder.StartTable(3);
+    SceneEntityData.AddRoundMain(builder, round_mainOffset);
+    SceneEntityData.AddRoundGuid(builder, round_guidOffset);
+    SceneEntityData.AddActiveBlockBase(builder, active_block_baseOffset);
+    return SceneEntityData.EndSceneEntityData(builder);
+  }
+
+  public static void StartSceneEntityData(FlatBufferBuilder builder) { builder.StartTable(3); }
   public static void AddActiveBlockBase(FlatBufferBuilder builder, VectorOffset activeBlockBaseOffset) { builder.AddOffset(0, activeBlockBaseOffset.Value, 0); }
   public static void StartActiveBlockBaseVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 4); }
-  public static void AddCamera(FlatBufferBuilder builder, Offset<PRO.Flat.Transform> cameraOffset) { builder.AddStruct(1, cameraOffset.Value, 0); }
-  public static void AddRoundGuid(FlatBufferBuilder builder, VectorOffset roundGuidOffset) { builder.AddOffset(2, roundGuidOffset.Value, 0); }
+  public static void AddRoundGuid(FlatBufferBuilder builder, VectorOffset roundGuidOffset) { builder.AddOffset(1, roundGuidOffset.Value, 0); }
   public static VectorOffset CreateRoundGuidVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateRoundGuidVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateRoundGuidVectorBlock(FlatBufferBuilder builder, ArraySegment<StringOffset> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateRoundGuidVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<StringOffset>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartRoundGuidVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static void AddRoundMain(FlatBufferBuilder builder, StringOffset roundMainOffset) { builder.AddOffset(3, roundMainOffset.Value, 0); }
+  public static void AddRoundMain(FlatBufferBuilder builder, StringOffset roundMainOffset) { builder.AddOffset(2, roundMainOffset.Value, 0); }
   public static Offset<PRO.Flat.SceneEntityData> EndSceneEntityData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.SceneEntityData>(o);
@@ -56,9 +65,8 @@ static public class SceneEntityDataVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyVectorOfData(tablePos, 4 /*ActiveBlockBase*/, 8 /*PRO.Flat.Vector2Int*/, false)
-      && verifier.VerifyField(tablePos, 6 /*Camera*/, 40 /*PRO.Flat.Transform*/, 4, false)
-      && verifier.VerifyVectorOfStrings(tablePos, 8 /*RoundGuid*/, false)
-      && verifier.VerifyString(tablePos, 10 /*RoundMain*/, false)
+      && verifier.VerifyVectorOfStrings(tablePos, 6 /*RoundGuid*/, false)
+      && verifier.VerifyString(tablePos, 8 /*RoundMain*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

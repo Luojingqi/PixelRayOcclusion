@@ -42,7 +42,7 @@ namespace PRO
             Pixel.LoadPixelTypeInfo();
             GreedyCollider.InitBoxCollider2DPool();
             Block.InitPool();
-            BackgroundBlock.InitPool();
+            BackgroundBlock.InitPrefab();
             Texture2DPool.InitPool();
         }
         public void TimeStart()
@@ -63,7 +63,7 @@ namespace PRO
             scene.LoadAll();
 
 #if !PRO_MCTS
-            source = FreelyLightSource.New(NowScene, BlockMaterial.GetPixelColorInfo("鼠标光源0").color, 20);
+            source = FreelyLightSource.New(NowScene, Pixel.GetPixelColorInfo("鼠标光源0").color, 20);
 #endif
         }
 

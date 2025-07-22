@@ -79,8 +79,8 @@ namespace PRO.SceneEditor
                         Vector2Int nowGloab = global + new Vector2Int(x, y);
                         BlockBase blockBase = SceneManager.Inst.NowScene.GetBlockBase(view.Toggle.isOn ? BlockBase.BlockType.BackgroundBlock : BlockBase.BlockType.Block, Block.GlobalToBlock(nowGloab));
                         if (blockBase == null) continue;
-                        Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
-                        blockBase.SetPixel(pixel);
+                        var pixel = blockBase.GetPixel(Block.GlobalToPixel(nowGloab));
+                        pixel.Replace(typeName, colorName);
                         if (building != null)
                         {
                             Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(pixel, new(x, y));

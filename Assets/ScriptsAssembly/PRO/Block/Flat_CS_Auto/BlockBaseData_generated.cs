@@ -27,29 +27,37 @@ public struct BlockBaseData : IFlatbufferObject
   public int PixelBuildingGuidArrayLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
   public PRO.Flat.PixelData? BlockPixelArray(int j) { int o = __p.__offset(10); return o != 0 ? (PRO.Flat.PixelData?)(new PRO.Flat.PixelData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int BlockPixelArrayLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public PRO.Flat.Vector2Byte? FluidUpdateHash1(int j) { int o = __p.__offset(12); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
-  public int FluidUpdateHash1Length { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public PRO.Flat.Vector2Byte? FluidUpdateHash2(int j) { int o = __p.__offset(14); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
-  public int FluidUpdateHash2Length { get { int o = __p.__offset(14); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public PRO.Flat.Vector2Byte? FluidUpdateHash3(int j) { int o = __p.__offset(16); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
-  public int FluidUpdateHash3Length { get { int o = __p.__offset(16); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public PRO.Flat.PixelData? BackgroundPixelArray(int j) { int o = __p.__offset(18); return o != 0 ? (PRO.Flat.PixelData?)(new PRO.Flat.PixelData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int BackgroundPixelArrayLength { get { int o = __p.__offset(18); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.Vector2Byte? BlockFlameQueue(int j) { int o = __p.__offset(12); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
+  public int BlockFlameQueueLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.Vector2Byte? FluidUpdateHash1(int j) { int o = __p.__offset(14); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
+  public int FluidUpdateHash1Length { get { int o = __p.__offset(14); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.Vector2Byte? FluidUpdateHash2(int j) { int o = __p.__offset(16); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
+  public int FluidUpdateHash2Length { get { int o = __p.__offset(16); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.Vector2Byte? FluidUpdateHash3(int j) { int o = __p.__offset(18); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
+  public int FluidUpdateHash3Length { get { int o = __p.__offset(18); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.PixelData? BackgroundPixelArray(int j) { int o = __p.__offset(20); return o != 0 ? (PRO.Flat.PixelData?)(new PRO.Flat.PixelData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int BackgroundPixelArrayLength { get { int o = __p.__offset(20); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.Vector2Byte? BackgroundFlameQueue(int j) { int o = __p.__offset(22); return o != 0 ? (PRO.Flat.Vector2Byte?)(new PRO.Flat.Vector2Byte()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
+  public int BackgroundFlameQueueLength { get { int o = __p.__offset(22); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<PRO.Flat.BlockBaseData> CreateBlockBaseData(FlatBufferBuilder builder,
       VectorOffset pixel_type_name_arrayOffset = default(VectorOffset),
       VectorOffset pixel_color_name_arrayOffset = default(VectorOffset),
       VectorOffset pixel_building_guid_arrayOffset = default(VectorOffset),
       VectorOffset block_pixel_arrayOffset = default(VectorOffset),
+      VectorOffset block_flame_queueOffset = default(VectorOffset),
       VectorOffset fluid_update_hash1Offset = default(VectorOffset),
       VectorOffset fluid_update_hash2Offset = default(VectorOffset),
       VectorOffset fluid_update_hash3Offset = default(VectorOffset),
-      VectorOffset background_pixel_arrayOffset = default(VectorOffset)) {
-    builder.StartTable(8);
+      VectorOffset background_pixel_arrayOffset = default(VectorOffset),
+      VectorOffset background_flame_queueOffset = default(VectorOffset)) {
+    builder.StartTable(10);
+    BlockBaseData.AddBackgroundFlameQueue(builder, background_flame_queueOffset);
     BlockBaseData.AddBackgroundPixelArray(builder, background_pixel_arrayOffset);
     BlockBaseData.AddFluidUpdateHash3(builder, fluid_update_hash3Offset);
     BlockBaseData.AddFluidUpdateHash2(builder, fluid_update_hash2Offset);
     BlockBaseData.AddFluidUpdateHash1(builder, fluid_update_hash1Offset);
+    BlockBaseData.AddBlockFlameQueue(builder, block_flame_queueOffset);
     BlockBaseData.AddBlockPixelArray(builder, block_pixel_arrayOffset);
     BlockBaseData.AddPixelBuildingGuidArray(builder, pixel_building_guid_arrayOffset);
     BlockBaseData.AddPixelColorNameArray(builder, pixel_color_name_arrayOffset);
@@ -57,7 +65,7 @@ public struct BlockBaseData : IFlatbufferObject
     return BlockBaseData.EndBlockBaseData(builder);
   }
 
-  public static void StartBlockBaseData(FlatBufferBuilder builder) { builder.StartTable(8); }
+  public static void StartBlockBaseData(FlatBufferBuilder builder) { builder.StartTable(10); }
   public static void AddPixelTypeNameArray(FlatBufferBuilder builder, VectorOffset pixelTypeNameArrayOffset) { builder.AddOffset(0, pixelTypeNameArrayOffset.Value, 0); }
   public static VectorOffset CreatePixelTypeNameArrayVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreatePixelTypeNameArrayVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
@@ -82,18 +90,22 @@ public struct BlockBaseData : IFlatbufferObject
   public static VectorOffset CreateBlockPixelArrayVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Flat.PixelData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateBlockPixelArrayVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.Flat.PixelData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartBlockPixelArrayVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static void AddFluidUpdateHash1(FlatBufferBuilder builder, VectorOffset fluidUpdateHash1Offset) { builder.AddOffset(4, fluidUpdateHash1Offset.Value, 0); }
+  public static void AddBlockFlameQueue(FlatBufferBuilder builder, VectorOffset blockFlameQueueOffset) { builder.AddOffset(4, blockFlameQueueOffset.Value, 0); }
+  public static void StartBlockFlameQueueVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(2, numElems, 1); }
+  public static void AddFluidUpdateHash1(FlatBufferBuilder builder, VectorOffset fluidUpdateHash1Offset) { builder.AddOffset(5, fluidUpdateHash1Offset.Value, 0); }
   public static void StartFluidUpdateHash1Vector(FlatBufferBuilder builder, int numElems) { builder.StartVector(2, numElems, 1); }
-  public static void AddFluidUpdateHash2(FlatBufferBuilder builder, VectorOffset fluidUpdateHash2Offset) { builder.AddOffset(5, fluidUpdateHash2Offset.Value, 0); }
+  public static void AddFluidUpdateHash2(FlatBufferBuilder builder, VectorOffset fluidUpdateHash2Offset) { builder.AddOffset(6, fluidUpdateHash2Offset.Value, 0); }
   public static void StartFluidUpdateHash2Vector(FlatBufferBuilder builder, int numElems) { builder.StartVector(2, numElems, 1); }
-  public static void AddFluidUpdateHash3(FlatBufferBuilder builder, VectorOffset fluidUpdateHash3Offset) { builder.AddOffset(6, fluidUpdateHash3Offset.Value, 0); }
+  public static void AddFluidUpdateHash3(FlatBufferBuilder builder, VectorOffset fluidUpdateHash3Offset) { builder.AddOffset(7, fluidUpdateHash3Offset.Value, 0); }
   public static void StartFluidUpdateHash3Vector(FlatBufferBuilder builder, int numElems) { builder.StartVector(2, numElems, 1); }
-  public static void AddBackgroundPixelArray(FlatBufferBuilder builder, VectorOffset backgroundPixelArrayOffset) { builder.AddOffset(7, backgroundPixelArrayOffset.Value, 0); }
+  public static void AddBackgroundPixelArray(FlatBufferBuilder builder, VectorOffset backgroundPixelArrayOffset) { builder.AddOffset(8, backgroundPixelArrayOffset.Value, 0); }
   public static VectorOffset CreateBackgroundPixelArrayVector(FlatBufferBuilder builder, Offset<PRO.Flat.PixelData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateBackgroundPixelArrayVectorBlock(FlatBufferBuilder builder, Offset<PRO.Flat.PixelData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateBackgroundPixelArrayVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Flat.PixelData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateBackgroundPixelArrayVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.Flat.PixelData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartBackgroundPixelArrayVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddBackgroundFlameQueue(FlatBufferBuilder builder, VectorOffset backgroundFlameQueueOffset) { builder.AddOffset(9, backgroundFlameQueueOffset.Value, 0); }
+  public static void StartBackgroundFlameQueueVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(2, numElems, 1); }
   public static Offset<PRO.Flat.BlockBaseData> EndBlockBaseData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.BlockBaseData>(o);
@@ -110,10 +122,12 @@ static public class BlockBaseDataVerify
       && verifier.VerifyVectorOfStrings(tablePos, 6 /*PixelColorNameArray*/, false)
       && verifier.VerifyVectorOfStrings(tablePos, 8 /*PixelBuildingGuidArray*/, false)
       && verifier.VerifyVectorOfTables(tablePos, 10 /*BlockPixelArray*/, PRO.Flat.PixelDataVerify.Verify, false)
-      && verifier.VerifyVectorOfData(tablePos, 12 /*FluidUpdateHash1*/, 2 /*PRO.Flat.Vector2Byte*/, false)
-      && verifier.VerifyVectorOfData(tablePos, 14 /*FluidUpdateHash2*/, 2 /*PRO.Flat.Vector2Byte*/, false)
-      && verifier.VerifyVectorOfData(tablePos, 16 /*FluidUpdateHash3*/, 2 /*PRO.Flat.Vector2Byte*/, false)
-      && verifier.VerifyVectorOfTables(tablePos, 18 /*BackgroundPixelArray*/, PRO.Flat.PixelDataVerify.Verify, false)
+      && verifier.VerifyVectorOfData(tablePos, 12 /*BlockFlameQueue*/, 2 /*PRO.Flat.Vector2Byte*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 14 /*FluidUpdateHash1*/, 2 /*PRO.Flat.Vector2Byte*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 16 /*FluidUpdateHash2*/, 2 /*PRO.Flat.Vector2Byte*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 18 /*FluidUpdateHash3*/, 2 /*PRO.Flat.Vector2Byte*/, false)
+      && verifier.VerifyVectorOfTables(tablePos, 20 /*BackgroundPixelArray*/, PRO.Flat.PixelDataVerify.Verify, false)
+      && verifier.VerifyVectorOfData(tablePos, 22 /*BackgroundFlameQueue*/, 2 /*PRO.Flat.Vector2Byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

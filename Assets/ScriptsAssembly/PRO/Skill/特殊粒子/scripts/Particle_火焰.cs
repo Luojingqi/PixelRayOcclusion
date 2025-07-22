@@ -10,7 +10,7 @@ namespace PRO
         public override void TakeOut(SceneEntity scene)
         {
             base.TakeOut(scene);
-            Renderer.color = BlockMaterial.GetPixelColorInfo("火焰色7").color;
+            Renderer.color = Pixel.GetPixelColorInfo("火焰色7").color;
             UpdateEvent += UpdateEventAction;
             CollisionEnterEvent += CollisionEnterEventAction;
             RemainTimeIsZeroEvent += RemainTimeIsZeroEventAction;

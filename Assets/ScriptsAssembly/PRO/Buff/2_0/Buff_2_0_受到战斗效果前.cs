@@ -48,7 +48,8 @@ namespace PRO.Buff
             }
             public void Vaporize(Role agent)
             {
-                Pixel 水蒸气实例 = Pixel.TakeOut("水蒸气", 0, new());
+                var typeInfo = Pixel.GetPixelTypeInfo("水蒸气");
+                var colorInfo = Pixel.GetPixelColorInfo(typeInfo.availableColors[0]);
                 Vector2Int agentGlobal = agent.GlobalPos;
                 int num = (int)(buff.Proportion * agent.nav.AgentMould.area);
                 for (int y = agent.nav.AgentMould.size.y - 1; y >= 0; y--)
@@ -60,9 +61,8 @@ namespace PRO.Buff
                             if (block == null) continue;
                             num--;
                             Vector2Byte pos = Block.GlobalToPixel(pos_G);
-                            block.SetPixel(水蒸气实例.Clone(pos));
+                            block.GetPixel(pos).Replace(typeInfo, colorInfo);
                         }
-                Pixel.PutIn(水蒸气实例);
             }
         }
     }

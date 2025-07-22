@@ -29,24 +29,20 @@ namespace PRO.SkillEditor
                         BlockBase blockBase = agent.Scene.GetBlockBase(blockType, Block.GlobalToBlock(gloabPos));
                         if (blockBase == null) continue;
                         Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                        Pixel oldPixel = blockBase.GetPixel(pixelPos);
+                        Pixel pixel = blockBase.GetPixel(pixelPos);
                         PixelTypeInfo pixelTypeInfo = Pixel.GetPixelTypeInfo(data.typeName);
-                        PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(data.colorName);
+                        PixelColorInfo pixelColorInfo = Pixel.GetPixelColorInfo(data.colorName);
 
 
-                        if (oldPixel.typeInfo.typeName == data.lastTypeName && oldPixel.colorInfo.colorName == data.colorName)
+                        if (pixel.typeInfo.typeName == data.lastTypeName && pixel.colorInfo.colorName == data.colorName)
                         {
-                            Pixel pixel = Pixel.TakeOut(pixelTypeInfo, pixelColorInfo, pixelPos);
-                            blockBase.SetPixel(pixel);
+                            pixel.Replace(pixelTypeInfo, pixelColorInfo);
                         }
                         else
                         {
                             blockBase.TryDestroyPixel(pixelPos, pixelTypeInfo.hardness);
-                            if (blockBase.GetPixel(pixelPos).typeInfo.typeName == "空气")
-                            {
-                                Pixel pixel = Pixel.TakeOut(pixelTypeInfo, pixelColorInfo, pixelPos);
-                                blockBase.SetPixel(pixel);
-                            }
+                            if (pixel.typeInfo.typeName == "空气")
+                                pixel.Replace(pixelTypeInfo, pixelColorInfo);
                         }
                     }
                 }
@@ -58,12 +54,10 @@ namespace PRO.SkillEditor
                         BlockBase blockBase = agent.Scene.GetBlockBase(blockType, Block.GlobalToBlock(gloabPos));
                         if (blockBase == null) continue;
                         Vector2Byte pixelPos = Block.GlobalToPixel(gloabPos);
-                        Pixel oldPixel = blockBase.GetPixel(pixelPos);
+                        Pixel pixel = blockBase.GetPixel(pixelPos);
                         PixelTypeInfo pixelTypeInfo = Pixel.GetPixelTypeInfo(data.typeName);
-                        PixelColorInfo pixelColorInfo = BlockMaterial.GetPixelColorInfo(data.colorName);
-
-                        Pixel pixel = Pixel.TakeOut(pixelTypeInfo, pixelColorInfo, pixelPos);
-                        blockBase.SetPixel(pixel);
+                        PixelColorInfo pixelColorInfo = Pixel.GetPixelColorInfo(data.colorName);
+                        pixel.Replace(pixelTypeInfo, pixelColorInfo);
                     }
                 }
             }

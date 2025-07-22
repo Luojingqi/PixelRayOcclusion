@@ -13,6 +13,8 @@ table BlockBaseData
 	//Block数据
 	block_pixel_array : [PixelData];
 
+	block_flame_queue : [Vector2Byte];
+
 	fluid_update_hash1 : [Vector2Byte];
 	fluid_update_hash2 : [Vector2Byte];
 	fluid_update_hash3 : [Vector2Byte];
@@ -21,7 +23,12 @@ table BlockBaseData
 
 	//Background数据
 	background_pixel_array : [PixelData];
+	
+	background_flame_queue : [Vector2Byte];
 	//
+
+
+	
 }
 
 table PixelData

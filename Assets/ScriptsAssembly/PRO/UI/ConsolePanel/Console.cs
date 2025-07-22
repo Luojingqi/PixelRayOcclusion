@@ -44,7 +44,7 @@ namespace PRO.Console
             else
             {
                 pixelTypeInfo_放置 = info;
-                pixelColorInfo_放置 = BlockMaterial.GetPixelColorInfo(info.availableColors[0]);
+                pixelColorInfo_放置 = Pixel.GetPixelColorInfo(info.availableColors[0]);
                 Method_0_4_State = true;
                 return $"/设置鼠标放置像素类型  {values[1]}";
             }
@@ -59,7 +59,7 @@ namespace PRO.Console
         public static string Method_0_1(string[] values)
         {
             if (values.Length < 2) return Method_0_1_ErrorLog;
-            var info = BlockMaterial.GetPixelColorInfo(values[1]);
+            var info = Pixel.GetPixelColorInfo(values[1]);
             if (info == null) return "未找到此像素颜色";
             else
             {
@@ -82,7 +82,7 @@ namespace PRO.Console
             if (typeInfo == null) return "未找到此像素类型";
             else
             {
-                var colorInfo = BlockMaterial.GetPixelColorInfo(values[2]);
+                var colorInfo = Pixel.GetPixelColorInfo(values[2]);
                 if (colorInfo == null) return "未找到此像素名称";
 
                 pixelTypeInfo_放置 = typeInfo;
@@ -108,7 +108,7 @@ namespace PRO.Console
                 else
                 {
                     int index = Convert.ToInt32(values[2]);
-                    var colorInfo = BlockMaterial.GetPixelColorInfo(typeInfo.availableColors[Mathf.Clamp(index, 0, typeInfo.availableColors.Length - 1)]);
+                    var colorInfo = Pixel.GetPixelColorInfo(typeInfo.availableColors[Mathf.Clamp(index, 0, typeInfo.availableColors.Length - 1)]);
                     pixelTypeInfo_放置 = typeInfo;
                     pixelColorInfo_放置 = colorInfo;
 
@@ -215,9 +215,9 @@ namespace PRO.Console
             Vector2Int blockPos = Block.GlobalToBlock(globalPos);
             Vector2Byte pixelPos = Block.GlobalToPixel(globalPos);
             if (setBlock)
-                SceneManager.Inst.NowScene.GetBlock(blockPos)?.SetPixel(Pixel.TakeOut(pixelTypeInfo_放置, pixelColorInfo_放置, pixelPos));
+                SceneManager.Inst.NowScene.GetBlock(blockPos)?.GetPixel(Block.GlobalToPixel(globalPos)).Replace(pixelTypeInfo_放置, pixelColorInfo_放置);
             if (setBack)
-                SceneManager.Inst.NowScene.GetBackground(blockPos)?.SetPixel(Pixel.TakeOut(pixelTypeInfo_放置, pixelColorInfo_放置, pixelPos));
+                SceneManager.Inst.NowScene.GetBackground(blockPos)?.GetPixel(Block.GlobalToPixel(globalPos)).Replace(pixelTypeInfo_放置, pixelColorInfo_放置);
         }
         #endregion
 
@@ -237,16 +237,6 @@ namespace PRO.Console
                 TimeManager.enableUpdate = true;
             });
             return "/保存";
-        }
-        #endregion
-
-        [ConsoleMethod("1_1")]
-        [ConsoleMethod("卸载")]
-        #region
-        public static string Method_1_1(string[] values)
-        {
-            SceneManager.Inst.NowScene.UnLoadAll();
-            return "卸载";
         }
         #endregion
 

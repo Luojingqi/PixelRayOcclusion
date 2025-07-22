@@ -10,6 +10,8 @@ using PRO.Skill;
 using PROTool;
 using System.Buffers;
 using System.Reflection;
+using Google.FlatBuffers;
+using PRO.Flat.Ex;
 
 namespace PRO
 {
@@ -47,12 +49,10 @@ namespace PRO
         /// <summary>
         /// 这个蓝图位置的像素点被更改，将这个蓝图点(已加载)从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
         /// </summary>
-        public void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        public void PixelSwitch(Building_Pixel building_Pixel, PixelTypeInfo oldTypeInfo, PixelColorInfo oldColorInfo)
         {
-            Building_Pixel.State oldState = building_Pixel.GetState();
-            building_Pixel.pixel = pixel;
-            pixel.buildingSet.Add(this);
-            Building_Pixel.State newState = building_Pixel.GetState();
+            Building_Pixel.State oldState = building_Pixel.GetState(oldTypeInfo, oldColorInfo);
+            Building_Pixel.State newState = building_Pixel.GetNowState();
             if (oldState == newState) return;
 
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
@@ -121,11 +121,11 @@ namespace PRO
         /// </summary>
         public virtual void ToRAM_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
-            var index = new Index(building_Pixel.offset, building_Pixel.blockType);
-            AllUnloadPixel.Remove(index);
             building_Pixel.pixel = pixel;
             pixel.buildingSet.Add(this);
-            Building_Pixel.State newState = building_Pixel.GetState();
+            var index = new Index(building_Pixel.offset, building_Pixel.blockType);
+            AllUnloadPixel.Remove(index);
+            Building_Pixel.State newState = building_Pixel.GetNowState();
             if (newState == Building_Pixel.State.Death)
                 AllDeathPixel.Add(index);
             else
@@ -134,13 +134,11 @@ namespace PRO
         /// <summary>
         /// 卸载一个点
         /// </summary>
-        public void UnloadPixel(Pixel pixel)
+        public void UnloadPixel(Building_Pixel building_Pixel)
         {
-            Building_Pixel building_Pixel = GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType);
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
-            if (building_Pixel.GetState() == Building_Pixel.State.Survival) AllSurvivalPixel.Remove(index);
+            if (building_Pixel.GetNowState() == Building_Pixel.State.Survival) AllSurvivalPixel.Remove(index);
             else AllDeathPixel.Remove(index);
-            building_Pixel.pixel = null;
             AllUnloadPixel.Add(index);
             if (AllUnloadPixel.Count == AllPixel.Count)
             {
@@ -152,55 +150,79 @@ namespace PRO
                 }
                 TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => GameObject.Destroy(gameObject));
             }
-        }
-        public virtual Proto.BuildingBaseData ToDisk()
-        {
-            var diskData = Proto.ProtoPool.TakeOut<Proto.BuildingBaseData>();
-            diskData.TypeName = GetType().Name;
-            diskData.Name = Name;
-            diskData.Global = Global.ToDisk();
-            diskData.Size = Size.ToDisk();
-
-            foreach (var building_Pixel in AllPixel.Values)
+            else
             {
-                if (diskData.TypeNameIndexDic.TryGetValue(building_Pixel.typeInfo.typeName, out int typeNameIndex) == false)
-                {
-                    typeNameIndex = diskData.TypeNameIndexDic.Count;
-                    diskData.TypeNameIndexDic.Add(building_Pixel.typeInfo.typeName, typeNameIndex);
-                }
-                if (diskData.ColorNameIndexDic.TryGetValue(building_Pixel.colorInfo.colorName, out int colorNameIndex) == false)
-                {
-                    colorNameIndex = diskData.ColorNameIndexDic.Count;
-                    diskData.ColorNameIndexDic.Add(building_Pixel.colorInfo.colorName, colorNameIndex);
-                }
-                var pixelData = Proto.ProtoPool.TakeOut<Proto.BuildingBaseData.Types.Bulding_Pixel>();
-                pixelData.TypeIndex = typeNameIndex;
-                pixelData.ColorIndex = colorNameIndex;
-                pixelData.Offset = building_Pixel.offset.ToDisk();
-                pixelData.BlockType = (int)building_Pixel.blockType;
-                diskData.AllPixel.Add(pixelData);
+                building_Pixel.pixel = null;
             }
-            return diskData;
         }
-        public virtual void ToRAM(Proto.BuildingBaseData diskData)
+        public void ToDisk(FlatBufferBuilder builder, FlatBufferBuilder builder_Extend)
         {
-            Dictionary<int, PixelTypeInfo> typeNameDic = new Dictionary<int, PixelTypeInfo>(diskData.TypeNameIndexDic.Count);
-            Dictionary<int, PixelColorInfo> colorNameDic = new Dictionary<int, PixelColorInfo>(diskData.ColorNameIndexDic.Count);
-
-            foreach (var kv in diskData.TypeNameIndexDic)
-                typeNameDic.Add(kv.Value, Pixel.GetPixelTypeInfo(kv.Key));
-            foreach (var kv in diskData.ColorNameIndexDic)
-                colorNameDic.Add(kv.Value, BlockMaterial.GetPixelColorInfo(kv.Key));
-            for (int i = 0; i < diskData.AllPixel.Count; i++)
+            var typeNameOffset = builder.CreateString(GetType().Name);
+            var nameOffset = builder.CreateString(Name);
+            var typeNameIndexDic = new Dictionary<string, int>();
+            var colorNameIndexDic = new Dictionary<string, int>();
+            Flat.BuildingBaseData.StartAllPixelVector(builder, AllPixel.Count);
+            foreach (var item in AllPixel.Values)
             {
-                var pixelData = diskData.AllPixel[i];
-                Building_Pixel pixel = null;
-                lock (Building_Pixel.pool)
-                    pixel = Building_Pixel.TakeOut();
-                pixel.Init(typeNameDic[pixelData.TypeIndex], colorNameDic[pixelData.ColorIndex], pixelData.Offset.ToRAM(), (Block.BlockType)pixelData.BlockType);
+                if (typeNameIndexDic.TryGetValue(item.typeInfo.typeName, out var typeNameIndex) == false)
+                {
+                    typeNameIndex = typeNameIndexDic.Count;
+                    typeNameIndexDic.Add(item.typeInfo.typeName, typeNameIndex);
+                }
+                if (colorNameIndexDic.TryGetValue(item.colorInfo.colorName, out var colorNameIndex) == false)
+                {
+                    colorNameIndex = colorNameIndexDic.Count;
+                    colorNameIndexDic.Add(item.colorInfo.colorName, colorNameIndex);
+                }
+                Flat.Building_PixelData.CreateBuilding_PixelData(builder, typeNameIndex, colorNameIndex, item.offset.x, item.offset.y, (int)item.blockType);
+            }
+            var allPixelOffset = builder.EndVector();
+            Span<int> typeNameArrayOffsetArray = stackalloc int[typeNameIndexDic.Count];
+            Span<int> colorNameArrayOffsetArray = stackalloc int[colorNameIndexDic.Count];
+            foreach (var kv in typeNameIndexDic)
+                typeNameArrayOffsetArray[kv.Value] = builder.CreateString(kv.Key).Value;
+            foreach (var kv in colorNameIndexDic)
+                colorNameArrayOffsetArray[kv.Value] = builder.CreateString(kv.Key).Value;
+            var typeNameArrayOffset = builder.CreateVector_Offset(typeNameArrayOffsetArray);
+            var colorNameArrayOffset = builder.CreateVector_Offset(colorNameArrayOffsetArray);
+
+            ExtendDataToDisk(builder_Extend);
+            var extendDataOffset = builder.CreateVector_Builder(builder_Extend);
+
+
+            Flat.BuildingBaseData.StartBuildingBaseData(builder);
+            Flat.BuildingBaseData.AddTypeName(builder, typeNameOffset);
+            Flat.BuildingBaseData.AddName(builder, nameOffset);
+            Flat.BuildingBaseData.AddGlobal(builder, Global.ToDisk(builder));
+            Flat.BuildingBaseData.AddSize(builder, Size.ToDisk(builder));
+            Flat.BuildingBaseData.AddPixelTypeNameArray(builder, typeNameArrayOffset);
+            Flat.BuildingBaseData.AddPixelColorNameArray(builder, colorNameArrayOffset);
+            Flat.BuildingBaseData.AddAllPixel(builder, allPixelOffset);
+        }
+        public void ToRAM(Flat.BuildingBaseData diskData, FlatBufferBuilder builder_Extend)
+        {
+            var typeInfoArray = new PixelTypeInfo[diskData.PixelColorNameArrayLength];
+            var colorInfoArray = new PixelColorInfo[diskData.PixelColorNameArrayLength];
+            for (int i = typeInfoArray.Length - 1; i >= 0; i--)
+                typeInfoArray[typeInfoArray.Length - i - 1] = Pixel.GetPixelTypeInfo(diskData.PixelTypeNameArray(i));
+            for (int i = colorInfoArray.Length - 1; i >= 0; i--)
+                colorInfoArray[colorInfoArray.Length - i - 1] = Pixel.GetPixelColorInfo(diskData.PixelColorNameArray(i));
+            for (int i = diskData.AllPixelLength - 1; i >= 0; i--)
+            {
+                var pixelDiskData = diskData.AllPixel(i).Value;
+                var pixel = Building_Pixel.TakeOut();
+                pixel.Init(typeInfoArray[pixelDiskData.TypeIndex], colorInfoArray[pixelDiskData.ColorIndex], pixelDiskData.Offset.ToRAM(), (BlockBase.BlockType)pixelDiskData.BlockType);
                 ToRAM_AddBuilding_Pixel(pixel);
             }
+            var extendSpan = builder_Extend.DataBuffer.ToSpan(0, diskData.ExtendDataLength);
+            for (int i = extendSpan.Length; i >= 0; i--)
+                extendSpan[extendSpan.Length - i - 1] = diskData.ExtendData(i);
+            ExtendDataToRAM(builder_Extend);
         }
+
+        protected virtual void ExtendDataToRAM(FlatBufferBuilder builder) { }
+        protected virtual void ExtendDataToDisk(FlatBufferBuilder builder) { }
+
         #endregion
 
         public SpriteRenderer CreateSelectionBox(Color color)

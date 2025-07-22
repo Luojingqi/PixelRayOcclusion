@@ -7,7 +7,7 @@ namespace PRO
         public override void TakeOut(SceneEntity scene)
         {
             base.TakeOut(scene);
-            Renderer.color = BlockMaterial.GetPixelColorInfo("油色0").color;
+            Renderer.color = Pixel.GetPixelColorInfo("油色0").color;
             UpdateEvent += UpdateEventAction;
             CollisionEnterEvent += CollisionEnterEventAction;
             gameObject.layer = (int)GameLayer.Particle_Block_Role;
@@ -31,7 +31,7 @@ namespace PRO
                     Pixel upPixel = Scene.GetPixel(BlockBase.BlockType.Block, global + new Vector2Int(0, i));
                     if (upPixel.typeInfo.typeName == "空气")
                     {
-                        upPixel.blockBase.SetPixel(Pixel.TakeOut("油", 0, upPixel.pos));
+                        upPixel.Replace("油", 0);
                         break;
                     }
                 }
@@ -44,7 +44,7 @@ namespace PRO
             Pixel upPixel = Scene.GetPixel(BlockBase.BlockType.Block, Block.WorldToGlobal(transform.position));
             if (upPixel.typeInfo.typeName == "空气")
             {
-                upPixel.blockBase.SetPixel(Pixel.TakeOut("油", 0, upPixel.pos));
+                upPixel.Replace("油", 0);
             }
             ParticleManager.Inst.GetPool(loadPath).PutIn(this);
         }
