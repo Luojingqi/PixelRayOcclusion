@@ -35,15 +35,6 @@ namespace PRO.AI
             public NodeBase node;
         }
 
-        public (CountdownEvent, SceneCatalog) SendScene(SceneEntity scene, RoundFSM round)
-        {
-            var root = GameSaveCatalog.CreatFile("MCTS_Temp_GameSave");
-            var sceneCatalog = SceneCatalog.CreateFile($"MCTS_Temp_Scene_Round_{round.GUID}", root);
-            scene.SetTempCatalog(sceneCatalog);
-            scene.ResetCatalog();
-            return (scene.SaveAll(), sceneCatalog);
-        }
-
         /// <summary>
         /// MCTS开始模拟的起始数据
         /// </summary>
@@ -75,14 +66,20 @@ namespace PRO.AI
         }
 
         #region Socket
-#if PRO_MCTS_CLIENT                
         public static void Init()
         {
+#if PRO_MCTS_SERVER
+            Server.Bind(new IPEndPoint(IPAddress.Loopback, 17000));
+            Server.Listen(100);
+            new Thread(AcceptThread).Start();
+#endif
+#if PRO_MCTS_CLIENT
             Client.Connect(new IPEndPoint(IPAddress.Loopback, 17000));
             Debug.Log("连接成功");
             new Thread(ReceiveThread).Start((Client, ClientReceive));
-
+#endif
         }
+#if PRO_MCTS_CLIENT
         private static event Action<Socket, FlatBufferBuilder, int> ClientReceive;
         private static Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #endif
@@ -93,12 +90,6 @@ namespace PRO.AI
             this.round = round;
             startingData.Init(round);
             main.开始模拟();
-        }
-        static MCTS()
-        {
-            Server.Bind(new IPEndPoint(IPAddress.Loopback, 17000));
-            Server.Listen(100);
-            new Thread(AcceptThread).Start();
         }
         private static void AcceptThread()
         {
@@ -138,6 +129,6 @@ namespace PRO.AI
             }
         }
 
-        #endregion
+#endregion
     }
 }

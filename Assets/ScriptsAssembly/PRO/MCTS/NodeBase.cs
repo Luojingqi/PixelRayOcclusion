@@ -123,7 +123,8 @@ namespace PRO.AI
                     chiles.Enqueue(nextNode, -nextNode.Get_UCB());
                 }
             }
-#elif PRO_MCTS_CLIENT
+#endif
+#if PRO_MCTS_CLIENT
             public void 访问(FlatBufferBuilder builder, Action<FlatBufferBuilder> action)
             {
                 执行();

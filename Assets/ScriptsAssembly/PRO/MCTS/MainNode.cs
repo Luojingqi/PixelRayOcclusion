@@ -22,7 +22,8 @@ namespace PRO.AI
                 this.mcts = mcts;
 #if PRO_MCTS_SERVER
                 MCTS.ServerReceive += ServerReceive;
-#elif PRO_MCTS_CLIENT
+#endif
+#if PRO_MCTS_CLIENT
                 MCTS.ClientReceive += ClientReceive;
 #endif
             }
@@ -38,7 +39,6 @@ namespace PRO.AI
                 scene.SetTempCatalog(sceneCatalog);
                 var countdown = scene.SaveAll();
                 扩展();
-                var data = mcts.SendScene(mcts.round.Scene, mcts.round);
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     try
@@ -77,7 +77,7 @@ namespace PRO.AI
                             mcts.NodeList.Clear();
                         }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Debug.Log(e);
                     }
@@ -123,14 +123,15 @@ namespace PRO.AI
                     }
                 }
             }
-#elif PRO_MCTS_CLIENT
+#endif
+#if PRO_MCTS_CLIENT
             private FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
             private void ClientReceive(Socket removeSocket, FlatBufferBuilder builder, int length)
             {
                 var startCmdData = Flat.Start_Cmd.GetRootAsStart_Cmd(builder.DataBuffer);
                 var scene = SceneEntity.TakeOut(SceneCatalog.LoadSceneInfo(new DirectoryInfo(startCmdData.Path)));
                 var countdown = scene.LoadAll();
-                countdown.Wait();
+                countdown.Wait(1000* 5);
                 // SceneManager.Inst.SwitchScene(scene);
                 SceneManager.Inst.NowScene = scene;
                 mcts.round = GamePlayMain.Inst.Round;
