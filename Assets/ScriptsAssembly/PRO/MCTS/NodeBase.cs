@@ -2,6 +2,8 @@
 using PRO.DataStructure;
 using PRO.Tool;
 using PRO.TurnBased;
+using System;
+using System.Net.Sockets;
 using UnityEngine;
 
 namespace PRO.AI
@@ -23,7 +25,7 @@ namespace PRO.AI
                 turnTimeNum = 0;
             }
 
-            private bool 结束检查()
+            private bool 结束检查(Span<Effect> effects)
             {
                 if (this is Node node && node.operate is Skill.Skill_0_0)
                 {
@@ -47,7 +49,7 @@ namespace PRO.AI
                         {
                             effect_自己.血量 += role.Info.血量.Value - startingInfo.血量.Value;
                         }
-                        AddEffect(EffectAgent.自己, effect_自己);
+                        effects[(int)EffectAgent.自己] = effect_自己;
                     }
                     {
                         var effect_敌军 = new Effect();
@@ -66,12 +68,10 @@ namespace PRO.AI
                                 effect_敌军.血量 += role.Info.血量.Value - startingInfo.血量.Value;
                             }
                         }
-                        AddEffect(EffectAgent.敌军, effect_敌军);
+                        effects[(int)EffectAgent.敌军] = effect_敌军;
                     }
-
                     return true;
                 }
-
 
                 if (turnTimeNum > maxTurnTimeNum)
                     return false;
@@ -79,45 +79,114 @@ namespace PRO.AI
                 return false;
             }
 
-            public void 访问()
+#if PRO_MCTS_SERVER
+            public void 访问(Socket removeSocket)
             {
-                try
+                if (chiles.Count == 0)
                 {
-                    执行();
-                    if (结束检查()) return;
-                    if (访问次数 == 0)
-                    {
-                        //第一次访问此节点，随机模拟
-                        扩展();
-                        if (chiles.Count > 0)
-                        {
-                            var nextNode = chiles[Random.Range(0, chiles.Count)];
-                            nextNode.访问();
-                            for (int i = 0; i < chiles.Count; i++)
-                                chiles[i].PutIn();
-                            chiles.Clear();
-                        }
-                    }
+                    if (已扩展) return;
                     else
                     {
-                        if (已扩展 == false)
+                        var workData = new ClientWorkData();
+                        workData.node = mcts.NodeList[mcts.NodeList.Count - 1];
+                        WorkClientSocketDic.Add(removeSocket, workData);
+                        Add线程占用(1);
+                        //第一次访问
+                        //没扩展所以没子节点，发送到模拟客户端里扩展并模拟
+                        var builder = FlatBufferBuilder.TakeOut(1024 * 10);
+                        Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[mcts.NodeList.Count];
+                        Span<int> nodeListOffsetArray = stackalloc int[mcts.NodeList.Count];
+                        for (int i = 0; i < mcts.NodeList.Count; i++)
                         {
-                            扩展();
-                            已扩展 = true;
+                            var data = mcts.NodeList[i].ToDisk(builder);
+                            nodeTypeListOffsetArray[i] = data.Item1;
+                            nodeListOffsetArray[i] = data.Item2.Value;
                         }
-                        if (chiles.Count == 0)
-                            return;
-                        var nextNode = chiles.Dequeue();
-                        nextNode.访问();
-                        chiles.Enqueue(nextNode, -nextNode.Get_UCB());
+
+                        var nodeTypeListOffset = builder.CreateVector_Data(nodeTypeListOffsetArray);
+                        var nodeListOffset = builder.CreateVector_Offset(nodeListOffsetArray);
+                        Flat.Start_Cmd.StartStart_Cmd(builder);
+                        Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
+                        Flat.Start_Cmd.AddNodes(builder, nodeListOffset);
+                        builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
+                        removeSocket.Send(builder.ToSpan());
                     }
                 }
-                finally
+                else
                 {
-                    访问次数 += 1;
+                    mcts.NodeList.Add(this);
+                    var nextNode = chiles.Dequeue();
+                    nextNode.访问(removeSocket);
+                    chiles.Enqueue(nextNode, -nextNode.Get_UCB());
                 }
             }
+#elif PRO_MCTS_CLIENT
+            public void 访问(FlatBufferBuilder builder, Action<FlatBufferBuilder> action)
+            {
+                执行();
+                Span<Effect> effects = stackalloc Effect[(int)EffectAgent.end];
+                if (结束检查(effects))
+                {
+                    Flat.Start_Rst.StartEffectsVector(builder, (int)EffectAgent.end);
+                    for (int i = 0; i < effects.Length; i++)
+                        effects[i].ToDisk(builder);
+                    var effectsOffset = builder.EndVector();
+                    action += (b) => Flat.Start_Rst.AddEffects(b, effectsOffset);
+                }
+                else
+                {
+                    if (chiles.Count <= 0) 扩展();
+                    if (chiles.Count <= 0) return;
+                    var nextNode = chiles[UnityEngine.Random.Range(0, chiles.Count)];
+                    nextNode.访问(builder, action);
+                }
+            }
+#endif
+            #region 自模拟
+            //public void 访问()
+            //{
+            //    访问次数++;
+            //    执行();
+            //    Span<Effect> effects = stackalloc Effect[(int)EffectAgent.end];
+            //    if (结束检查(effects))
+            //    {
+            //        var builder = FlatBufferBuilder.TakeOut(1024 * 4);
+            //        Flat.Start_Rst.StartEffectsVector(builder, (int)EffectAgent.end);
+            //        for (int i = 0; i < effects.Length; i++)
+            //            effects[i].ToDisk(builder);
 
+            //    }
+            //    else
+            //    {
+            //        if (访问次数 == 1)
+            //        {
+            //            //第一次访问此节点，随机模拟
+            //            扩展();
+            //            if (chiles.Count > 0)
+            //            {
+            //                var nextNode = chiles[UnityEngine.Random.Range(0, chiles.Count)];
+            //                nextNode.访问();
+            //                for (int i = 0; i < chiles.Count; i++)
+            //                    chiles[i].PutIn();
+            //                chiles.Clear();
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (已扩展 == false)
+            //            {
+            //                扩展();
+            //                已扩展 = true;
+            //            }
+            //            if (chiles.Count == 0)
+            //                return;
+            //            var nextNode = chiles.Dequeue();
+            //            nextNode.访问();
+            //            chiles.Enqueue(nextNode, -nextNode.Get_UCB());
+            //        }
+            //    }
+            //}
+            #endregion
             public void 扩展()
             {
                 foreach (var operate in mcts.round.State3_Turn.NowTurn.Agent.AllCanUseOperate.Values)
@@ -144,11 +213,13 @@ namespace PRO.AI
                     node.parent = this;
                     node.mcts = mcts;
                     node.timeNum = i;
-                    node.turnTimeNum = turnTimeNum;
+                    node.turnTimeNum = turnTimeNum + node.timeNum;
                     chiles.Enqueue(node, float.MinValue);
                 }
             }
             public abstract void 执行();
+
+            public abstract (Flat.NodeBase, Offset<int>) ToDisk(FlatBufferBuilder builder);
 
             /// <summary>
             /// 每个回合最大的等待时间/每个为0.5s
@@ -160,7 +231,7 @@ namespace PRO.AI
             public int turnTimeNum;
 
 
-            private bool 已扩展 = false;
+            protected bool 已扩展 = false;
 
             public NodeBase parent;
             public PriorityQueue<NodeBase> chiles = new PriorityQueue<NodeBase>();
@@ -168,12 +239,20 @@ namespace PRO.AI
             protected MCTS mcts;
 
             public int 访问次数;
+            public int 线程占用;
+
+            public void Add线程占用(int num)
+            {
+                线程占用 += num;
+                if (parent != null)
+                    parent.线程占用 += num;
+            }
 
 
             public static float c = 1;
             public float Get_UCB()
             {
-                float 探索系数 = c * Mathf.Sqrt(Mathf.Log(parent.访问次数) / 访问次数);
+                float 探索系数 = c * Mathf.Sqrt(2 * Mathf.Log(parent.访问次数 + parent.线程占用) / (访问次数 + 线程占用));
                 float 经验系数 = 0;
                 经验系数 += Effects[0].血量;
                 经验系数 += Effects[1].血量;
@@ -194,6 +273,18 @@ namespace PRO.AI
             public struct Effect
             {
                 public int 血量;
+
+                public Offset<Flat.Effect> ToDisk(FlatBufferBuilder builder)
+                {
+                    return Flat.Effect.CreateEffect(builder, 血量);
+                }
+                public static Effect ToRAM(Flat.Effect diskData)
+                {
+                    var effect = new Effect();
+                    effect.血量 = diskData.Value0;
+
+                    return effect;
+                }
             }
             public enum EffectAgent
             {
