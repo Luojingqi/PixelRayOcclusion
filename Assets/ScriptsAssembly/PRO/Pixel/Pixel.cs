@@ -91,7 +91,7 @@ namespace PRO
             foreach (var building in buildingSet)
                 building.PixelSwitch(building.GetBuilding_Pixel(posG, blockBase.blockType), oldTypeInfo, oldColorInfo);
 
-#if !PRO_MCTS
+#if PRO_RENDER
             if (newColorInfo.luminousRadius > 0 && newColorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
                 blockBase.AddLightSource(pos, newColorInfo);
             else if (oldColorInfo.luminousRadius > 0)
@@ -122,7 +122,7 @@ namespace PRO
                 var building = buildingArray[pixelDiskData.BuildingList(i)];
                 building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(posG, blockBase.blockType), this);
             }
-#if !PRO_MCTS
+#if PRO_RENDER
             blockBase.textureData.SetPixelInfoToShader(this);
 #endif
         }

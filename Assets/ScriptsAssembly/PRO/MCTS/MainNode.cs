@@ -3,6 +3,7 @@ using PRO.Disk.Scene;
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using UnityEngine;
 
 namespace PRO.AI
@@ -30,37 +31,59 @@ namespace PRO.AI
             public void 开始模拟()
             {
                 TimeManager.enableUpdate = false;
+                var round = mcts.round;
+                var scene = round.Scene;
+                var root = GameSaveCatalog.CreatFile("MCTS_Temp_GameSave");
+                var sceneCatalog = SceneCatalog.CreateFile($"MCTS_Temp_Scene_Round_{round.GUID}", root);
+                scene.SetTempCatalog(sceneCatalog);
+                var countdown = scene.SaveAll();
                 扩展();
                 var data = mcts.SendScene(mcts.round.Scene, mcts.round);
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
-                    if (data.Item1.Wait(1000 * 15) == false) return;
-                    for (int i = 0; i < max; i++)
+                    try
                     {
-                        Socket removeSocket = null;
-                        int time = 10000;
-                        do
+                        if (countdown.Wait(1000 * 15) == false) return;
+                        for (int i = 0; i < max; i++)
                         {
-                            lock (lockObject)
+                            Debug.Log($"第{i}次模拟-等待");
+                            Socket removeSocket = null;
+                            int time = 10000;
+
+                            do
                             {
-                                if (IdleClientSocketQueue.Count > 0)
+                                lock (lockObject)
                                 {
-                                    removeSocket = IdleClientSocketQueue.Dequeue();
-                                    break;
+                                    if (IdleClientSocketQueue.Count > 0)
+                                    {
+                                        removeSocket = IdleClientSocketQueue.Dequeue();
+                                        break;
+                                    }
                                 }
+                                time -= 25;
+                                Thread.Sleep(25);
+                            } while (time > 0);
+                            if (time <= 0)
+                            {
+                                Debug.Log("没有空闲的模拟器");
+                                return;
                             }
-                            time -= 25;
-                            Thread.Sleep(25);
-                        } while (time > 0);
-                        if (time <= 0)
-                        {
-                            Debug.Log("没有空闲的模拟器");
-                            return;
+                            Debug.Log("等待模拟器成功");
+                            访问次数 += 1;
+                            var nextNode = chiles.Dequeue();
+                            mcts.NodeList.Add(nextNode);
+                            nextNode.访问(removeSocket);
+                            chiles.Enqueue(nextNode, -nextNode.Get_UCB());
+                            mcts.NodeList.Clear();
                         }
-                        访问次数 += 1;
-                        var nextNode = chiles.Dequeue();
-                        nextNode.访问(removeSocket);
-                        chiles.Enqueue(nextNode, -nextNode.Get_UCB());
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.Log(e);
+                    }
+                    finally
+                    {
+                        scene.ResetCatalog();
                     }
                 });
             }
@@ -96,6 +119,7 @@ namespace PRO.AI
                         }
                         nextNode.parent = node;
                         node.chiles.Enqueue(nextNode, float.MinValue);
+                        node.已扩展 = true;
                     }
                 }
             }
@@ -105,9 +129,8 @@ namespace PRO.AI
             {
                 var startCmdData = Flat.Start_Cmd.GetRootAsStart_Cmd(builder.DataBuffer);
                 var scene = SceneEntity.TakeOut(SceneCatalog.LoadSceneInfo(new DirectoryInfo(startCmdData.Path)));
-                Debug.Log(startCmdData.Path);
                 var countdown = scene.LoadAll();
-                countdown.Wait(1000 * 5);
+                countdown.Wait();
                 // SceneManager.Inst.SwitchScene(scene);
                 SceneManager.Inst.NowScene = scene;
                 mcts.round = GamePlayMain.Inst.Round;

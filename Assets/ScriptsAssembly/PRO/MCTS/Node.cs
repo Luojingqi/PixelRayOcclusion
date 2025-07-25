@@ -38,13 +38,14 @@ namespace PRO.AI
             {
                 var roleOffset = builder.CreateString(operate.Agent.GUID);
                 var operateOffset = builder.CreateString(operate.GUID);
-                var builderOffset = builder.CreateVector_Builder(builder);
+                var builderOffset = builder.CreateVector_Builder(this.builder);
                 Flat.Node.StartNode(builder);
                 Flat.Node.AddTurnTimeNum(builder, turnTimeNum);
                 Flat.Node.AddRole(builder, roleOffset);
                 Flat.Node.AddOperate(builder, operateOffset);
                 Flat.Node.AddBuilder(builder, builderOffset);
-                return (Flat.NodeBase.Node, new(Flat.Node.EndNode(builder).Value));
+                var offset = Flat.Node.EndNode(builder);
+                return (Flat.NodeBase.Node, new(offset.Value));
             }
 
             public static Node ToRAM(Flat.Node diskData, SceneEntity scene)

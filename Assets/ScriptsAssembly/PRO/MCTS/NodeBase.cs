@@ -102,14 +102,17 @@ namespace PRO.AI
                             nodeTypeListOffsetArray[i] = data.Item1;
                             nodeListOffsetArray[i] = data.Item2.Value;
                         }
-
+                        var pathOffset = builder.CreateString(mcts.round.Scene.sceneCatalog.directoryInfo.FullName);
                         var nodeTypeListOffset = builder.CreateVector_Data(nodeTypeListOffsetArray);
                         var nodeListOffset = builder.CreateVector_Offset(nodeListOffsetArray);
                         Flat.Start_Cmd.StartStart_Cmd(builder);
+                        Flat.Start_Cmd.AddPath(builder, pathOffset);
                         Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
                         Flat.Start_Cmd.AddNodes(builder, nodeListOffset);
                         builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
                         removeSocket.Send(builder.ToSpan());
+                        Debug.Log("发送" + builder.Offset);
+                        //FlatBufferBuilder.PutIn(builder);
                     }
                 }
                 else
@@ -231,7 +234,7 @@ namespace PRO.AI
             public int turnTimeNum;
 
 
-            protected bool 已扩展 = false;
+            public bool 已扩展 = false;
 
             public NodeBase parent;
             public PriorityQueue<NodeBase> chiles = new PriorityQueue<NodeBase>();

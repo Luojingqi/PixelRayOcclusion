@@ -159,7 +159,7 @@ namespace PRO
             block.background.PutIn(countdown);
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
-#if !PRO_MCTS
+#if PRO_RENDER
                 block.name = "Block(Clone)";
                 block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
 #endif
@@ -638,7 +638,7 @@ namespace PRO
             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
             {
                 GreedyCollider.CreateColliderAction(this, colliderDataList);
-#if !PRO_MCTS
+#if PRO_RENDER
                 BlockMaterial.SetBlock(this);
 #endif
                 countdown.Signal();

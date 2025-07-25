@@ -1,3 +1,4 @@
+using PRO.AI;
 using PRO.Skill;
 using PRO.TurnBased;
 using Sirenix.OdinInspector;
@@ -12,6 +13,7 @@ namespace PRO
         {
             Inst = this;
             OperateFSMBase.InitOperateType();
+            MCTS.Init();
         }
         public RoundFSM Round
         {
@@ -19,7 +21,7 @@ namespace PRO
             set
             {
                 round = value;
-#if !PRO_MCTS
+#if PRO_RENDER
                 if (round == null)
                 {
                     GameMainUIC.Inst.CloseTurnUI();
@@ -34,6 +36,8 @@ namespace PRO
         }
         [ShowInInspector]
         private RoundFSM round;
+
+        private MCTS mcts = new MCTS();
 
         bool p = false;
 
@@ -64,6 +68,7 @@ namespace PRO
                 Round = round;
             }
 
+#if PRO_MCTS_SERVER
             if (Input.GetKeyDown(KeyCode.M) && m == false)
             {
                 MTCS();
@@ -75,9 +80,10 @@ namespace PRO
         [Button]
         public void MTCS()
         {
-            Debug.Log("进入");
-            var mcts = new AI.MCTS();
             mcts.开始模拟(round);
         }
+#elif PRO_MCTS_CLIENT
+        }
+#endif
     }
 }
