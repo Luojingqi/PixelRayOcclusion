@@ -26,9 +26,6 @@ table BlockBaseData
 	
 	background_flame_queue : [Vector2Byte];
 	//
-
-
-	
 }
 
 table PixelData

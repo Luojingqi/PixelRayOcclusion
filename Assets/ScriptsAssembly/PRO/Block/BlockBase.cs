@@ -65,7 +65,7 @@ namespace PRO
                 for (int y = 0; y < Block.Size.y; y++)
                     for (int x = 0; x < Block.Size.x; x++)
                     {
-#if !PRO_MCTS
+#if PRO_RENDER
                         var pixel = new Pixel(typeInfo, colorInfo, this, new Vector2Byte(x, y));
                         allPixel[x, y] = pixel;
                         this.textureData.SetPixelInfoToShader(pixel);

@@ -16,7 +16,7 @@ namespace PRO
 
         private SceneEntity nowScene;
         [ShowInInspector]
-        public SceneEntity NowScene { get => nowScene; }
+        public SceneEntity NowScene { get => nowScene; set => nowScene = value; }
         [ShowInInspector]
         private Dictionary<string, SceneEntity> scenes = new Dictionary<string, SceneEntity>();
 
@@ -48,23 +48,28 @@ namespace PRO
         public void TimeStart()
         {
             BuildingBase.InitBuildingType();
+#if PRO_MCTS_SERVER
             //GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
             var catalogList = GameSaveCatalog.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
-            GameSaveCatalog nowSave = catalogList[0];
-            //选择存档的第一个场景
+            GameSaveCatalog nowSave = catalogList.Find((info) => info.name == "testSave");            //选择存档的第一个场景
             SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];
             //转换为实体数据
-            SceneEntity scene = new SceneEntity(sceneCatalog);
+            SceneEntity scene = SceneEntity.TakeOut(sceneCatalog);
             scenes.Add(nowSave.sceneNameList[0], scene);
             nowScene = scene;
 
             scene.LoadAll();
+#endif
 
-#if !PRO_MCTS
+#if PRO_RENDER
             source = FreelyLightSource.New(NowScene, Pixel.GetPixelColorInfo("鼠标光源0").color, 20);
 #endif
+        }
+        public void SwitchScene(SceneCatalog sceneCatalog)
+        {
+            
         }
 
         public FreelyLightSource source;
@@ -72,7 +77,7 @@ namespace PRO
 
         public void TimeUpdate()
         {
-#if !PRO_MCTS
+#if PRO_RENDER
             MousePoint.Update();
             BlockMaterial.Update();
             if (source != null) source.GloabPos = MousePoint.globalPos;
@@ -81,7 +86,7 @@ namespace PRO
         }
         public void TimeLateUpdate()
         {
-#if !PRO_MCTS
+#if PRO_RENDER
             BlockMaterial.LastUpdate();
 #endif
         }

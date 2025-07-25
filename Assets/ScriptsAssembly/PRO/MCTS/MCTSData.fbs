@@ -1,0 +1,41 @@
+﻿//include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.AI.Flat;
+
+struct Effect
+{
+	value0 : int;
+}
+
+table TimeNode
+{
+	turn_time_num : int;
+
+	turn_time : int;
+}
+
+table Node
+{
+	turn_time_num : int;
+
+	role : string;
+	operate : string;
+	builder : [ubyte];
+}
+
+union NodeBase
+{
+	Node,
+	TimeNode
+}
+
+table Start_Cmd
+{
+	path : string;
+	nodes : [NodeBase];
+}
+table Start_Rst
+{
+	effects : [Effect];
+	nodes : [NodeBase];
+}

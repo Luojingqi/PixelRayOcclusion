@@ -88,7 +88,7 @@ namespace PRO
             LightResultBufferLength = LightResultBufferBlockSize.x * LightResultBufferBlockSize.y;
 
             LoadAllPixelColorInfo();
-#if !PRO_MCTS
+#if PRO_RENDER
             NullMaterialPropertyBlock = new MaterialPropertyBlock();
 
             blockShareMaterialManager.Init();

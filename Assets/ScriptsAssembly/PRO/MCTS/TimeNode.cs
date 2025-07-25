@@ -1,4 +1,6 @@
-﻿using PRO.Tool;
+﻿using Google.FlatBuffers;
+using PRO.Tool;
+using System;
 
 namespace PRO.AI
 {
@@ -26,6 +28,22 @@ namespace PRO.AI
                     time -= TimeManager.physicsDeltaTime;
                     TimeManager.Inst.ScriptUpdate(TimeManager.physicsDeltaTime);
                 }
+            }
+
+            public override (Flat.NodeBase, Offset<int>) ToDisk(FlatBufferBuilder builder)
+            {
+                Flat.TimeNode.StartTimeNode(builder);
+                Flat.TimeNode.AddTurnTimeNum(builder, turnTimeNum);
+                Flat.TimeNode.AddTurnTime(builder, timeNum);
+                return (Flat.NodeBase.TimeNode, new(Flat.TimeNode.EndTimeNode(builder).Value));
+            }
+
+            public static TimeNode ToRAM(Flat.TimeNode diskData, SceneEntity scene)
+            {
+                var node = TakeOut();
+                node.turnTimeNum = diskData.TurnTimeNum;
+                node.timeNum = diskData.TurnTime;
+                return node;
             }
         }
     }

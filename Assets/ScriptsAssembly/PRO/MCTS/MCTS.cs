@@ -1,6 +1,12 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Google.FlatBuffers;
+using PRO.Disk.Scene;
 using PRO.TurnBased;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using UnityEngine;
 
 namespace PRO.AI
 {
@@ -8,42 +14,35 @@ namespace PRO.AI
     {
         private MainNode main;
         private RoundFSM round;
-
         private StartingData startingData = new StartingData();
+        private List<NodeBase> NodeList = new List<NodeBase>(128);
 
         public MCTS()
         {
             main = new MainNode(this);
         }
 
-        public void 开始模拟(RoundFSM round)
+        public void Clear()
         {
-            TimeManager.Inst.enabled = false;
-            this.round = round;
-            startingData.Init(round);
-            main.开始模拟();
-            TimeManager.Inst.enabled = true;
+            main.PutIn();
+            round = null;
+            startingData.Clear();
+            NodeList.Clear();
         }
 
-        //public void SendScene(SceneEntity scene, RoundFSM round)
-        //{
-        //    var root = GameSaveCatalog.CreatFile("MCTS_TEMP");
-        //    scene.SetTempCatalog(SceneCatalog.CreateFile(scene.sceneCatalog.name, root));
-        //    var countdown = scene.SaveAll();
-        //    TimeManager.enableUpdate = false;
-        //    ThreadPool.QueueUserWorkItem((obj) =>
-        //    {
-        //        countdown.Wait(1000 * 15);
-        //        TimeManager.enableUpdate = true;
+        private struct ClientWorkData
+        {
+            public NodeBase node;
+        }
 
-        //    });
-        //}
-
-        //public void ResetScene(SceneEntity scene)
-        //{
-        //   var root = GameSaveCatalog.LoadGameSaveInfo("testSave");
-        //    scene.SetTempCatalog()
-        //}
+        public (CountdownEvent, SceneCatalog) SendScene(SceneEntity scene, RoundFSM round)
+        {
+            var root = GameSaveCatalog.CreatFile("MCTS_Temp_GameSave");
+            var sceneCatalog = SceneCatalog.CreateFile($"MCTS_Temp_Scene_Round_{round.GUID}", root);
+            scene.SetTempCatalog(sceneCatalog);
+            scene.ResetCatalog();
+            return (scene.SaveAll(), sceneCatalog);
+        }
 
         /// <summary>
         /// MCTS开始模拟的起始数据
@@ -51,7 +50,7 @@ namespace PRO.AI
         private class StartingData
         {
             public string roleGuid;
-            public int roundNum;
+            public int roundNum = -1;
             public Dictionary<string, RoleInfo> roleGuidInfoDic = new Dictionary<string, RoleInfo>();
 
             public void Init(RoundFSM round)
@@ -65,6 +64,72 @@ namespace PRO.AI
                     roleGuidInfoDic.Add(role.GUID, info);
                 }
             }
+            public void Clear()
+            {
+                roleGuid = null;
+                roundNum = -1;
+                foreach (var info in roleGuidInfoDic.Values)
+                    RoleInfo.PutIn(info);
+                roleGuidInfoDic.Clear();
+            }
         }
+
+        #region Socket
+        private static object lockObject = new object();
+#if PRO_MCTS_CLIENT                
+        static MCTS()
+        {
+            Client.Connect(new IPEndPoint(IPAddress.Loopback, 17000));
+            new Thread(ReceiveThread).Start((Client, ClientReceive));
+
+        }
+        private static event Action<Socket, FlatBufferBuilder, int> ClientReceive;
+        private static Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+#endif
+#if PRO_MCTS_SERVER
+        public void 开始模拟(RoundFSM round)
+        {
+            this.round = round;
+            startingData.Init(round);
+            main.开始模拟();
+        }
+        public static void Init()
+        {
+            Server.Bind(new IPEndPoint(IPAddress.Loopback, 17000));
+            Server.Listen(100);
+            new Thread(AcceptThread).Start();
+        }
+        private static void AcceptThread()
+        {
+            while (true)
+            {
+                Socket remoteSocket = Server.Accept();
+                Debug.Log("已连接");
+                new Thread(ReceiveThread).Start((remoteSocket, ServerReceive));
+                IdleClientSocketQueue.Enqueue(remoteSocket);
+            }
+        }
+        private static event Action<Socket, FlatBufferBuilder, int> ServerReceive;
+        private static Socket Server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static Queue<Socket> IdleClientSocketQueue = new Queue<Socket>();
+        private static Dictionary<Socket, ClientWorkData> WorkClientSocketDic = new Dictionary<Socket, ClientWorkData>();
+#endif
+        private static void ReceiveThread(object obj)
+        {
+            (Socket, Action<Socket, FlatBufferBuilder, int>)? obj_Value = obj as (Socket, Action<Socket, FlatBufferBuilder, int>)?;
+            Socket remoteSocket = obj_Value.Value.Item1;
+            Action<Socket, FlatBufferBuilder, int> receiveAction = obj_Value.Value.Item2;
+            FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
+            while (true)
+            {
+                int length = remoteSocket.Receive(builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length));
+                if (length > 0)
+                    receiveAction.Invoke(remoteSocket, builder, length);
+                else if (length == 0)
+                    break;
+            }
+        }
+
+        #endregion
     }
 }

@@ -51,10 +51,7 @@ namespace Google.FlatBuffers
             }
             return EndVector();
         }
-        public VectorOffset CreateVector_Builder(FlatBufferBuilder datasForm)
-        {
-            return CreateVector_Data(datasForm.DataBuffer.ToSpan(datasForm.DataBuffer.Position, datasForm.Offset));
-        }
+        public VectorOffset CreateVector_Builder(FlatBufferBuilder datasForm) => CreateVector_Data(datasForm.ToSpan());
 
         private static void ToLittleEndian<T>(Span<T> array, int oneObjectSize) where T : unmanaged
         {
@@ -129,5 +126,6 @@ namespace Google.FlatBuffers
             }
         }
 
+        public Span<byte> ToSpan() => DataBuffer.ToSpan(DataBuffer.Position, Offset);
     }
 }

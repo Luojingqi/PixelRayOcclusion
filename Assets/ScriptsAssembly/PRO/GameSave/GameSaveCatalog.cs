@@ -62,9 +62,9 @@ namespace PRO
             DirectoryInfo root = Directory.CreateDirectory(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}");
             gameSaveCatalog.directoryInfo = root;
             //创建一个场景
-            SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog);
-            gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
-            IOTool.SaveText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
+            //SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog);
+            //gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
+            //IOTool.SaveText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
             return gameSaveCatalog;
         }
 

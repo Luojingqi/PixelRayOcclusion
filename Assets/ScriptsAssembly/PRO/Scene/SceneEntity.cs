@@ -21,12 +21,20 @@ namespace PRO
     /// </summary>
     public partial class SceneEntity
     {
-
-        public SceneCatalog sceneCatalog { get; private set; }
-        public SceneEntity(SceneCatalog sceneCatalog)
+        private static ObjectPoolArbitrary<SceneEntity> pool = new ObjectPoolArbitrary<SceneEntity>(() => new SceneEntity());
+        public static SceneEntity TakeOut(SceneCatalog sceneCatalog)
         {
-            this.sceneCatalog = sceneCatalog;
+            var scene = pool.TakeOut();
+            scene.sceneCatalog = sceneCatalog;
+            return scene;
         }
+        public static CountdownEvent PutIn(SceneEntity scene)
+        {
+            pool.PutIn(scene);
+            return scene.UnLoadAll();
+        }
+        private SceneEntity() { }
+        public SceneCatalog sceneCatalog { get; private set; }
 
         private SceneCatalog sceneCatalog_temp;
         public void SetTempCatalog(SceneCatalog tempCatalog)
@@ -296,7 +304,7 @@ namespace PRO
             Flat.BlockBaseData.AddPixelBuildingGuidArray(builder, buildingGuidArrayOffset);
             addDataEvent.Invoke();
             builder.Finish(Flat.BlockBaseData.EndBlockBaseData(builder).Value);
-            
+
             if (isSaveBuilding)
             {
                 var builder_building = FlatBufferBuilder.TakeOut(1024 * 8);
@@ -587,7 +595,7 @@ namespace PRO
                 CountdownEvent countdown_block = new CountdownEvent(1);
                 for (int i = diskData.ActiveBlockBaseLength - 1; i >= 0; i--)
                     ThreadLoadOrCreateBlock(diskData.ActiveBlockBase(i).Value.ToRAM(), countdown_block);
-#if !PRO_MCTS
+#if PRO_RENDER
                 var cameraCenterBlockPos = Block.WorldToBlock(sceneCatalog.cameraPos);
                 var minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
                 var minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
@@ -619,7 +627,7 @@ namespace PRO
                     for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                         ThreadLoadOrCreateBlock(new Vector2Int(x, y), countdown);
             }
-#if !PRO_MCTS
+#if PRO_RENDER
             UpdateBind();
 #endif
             countdown.Signal();
@@ -642,8 +650,9 @@ namespace PRO
         {
             CountdownEvent countdown = new CountdownEvent(1);
             #region п╤ть round
+            if (GamePlayMain.Inst.Round != null && ActiveRound.ContainsKey(GamePlayMain.Inst.Round.GUID))
+                GamePlayMain.Inst.Round = null;
             ActiveRound.Clear();
-            GamePlayMain.Inst.Round = null;
             #endregion
             #region п╤ть  role
             foreach (var role in ActiveRole_Guid.Values.ToArray())
@@ -669,7 +678,8 @@ namespace PRO
             for (int i = 0; i < blockPosArray.Length; i++)
                 UnloadBlockData(blockPosArray[i], countdown);
             #endregion
-            BlockMaterial.DrawApplyQueue.Clear();
+            if (SceneManager.Inst.NowScene == this)
+                DrawApplyQueue.Clear();
             countdown.Signal();
             return countdown;
         }
