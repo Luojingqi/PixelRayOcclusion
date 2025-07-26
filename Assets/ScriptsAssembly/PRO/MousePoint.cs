@@ -22,7 +22,7 @@ namespace PRO
         public static Vector2Byte pixelPos;
         public static Block block;
         public static BackgroundBlock backgroundBlock;
-        public static void Update()
+        public static void Update(SceneEntity scene)
         {
             mousePosLast = mousePos;
             mousePos = Input.mousePosition;
@@ -31,8 +31,8 @@ namespace PRO
             globalPos = Block.WorldToGlobal(worldPos);
             blockPos = Block.GlobalToBlock(globalPos);
             pixelPos = Block.GlobalToPixel(globalPos);
-            block = SceneManager.Inst.NowScene.GetBlock(blockPos);
-            backgroundBlock = SceneManager.Inst.NowScene.GetBackground(blockPos);
+            block = scene?.GetBlock(blockPos);
+            backgroundBlock = scene?.GetBackground(blockPos);
         }
     }
 }

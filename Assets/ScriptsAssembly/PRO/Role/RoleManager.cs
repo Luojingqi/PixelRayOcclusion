@@ -1,4 +1,5 @@
 ﻿using Google.FlatBuffers;
+using PRO.Disk.Scene;
 using PRO.Skill;
 using PRO.Tool;
 using PRO.Tool.Serialize.IO;
@@ -57,11 +58,11 @@ namespace PRO
             role.PutIn();
         }
 
-        public Role Load(string guid, SceneEntity scene)
+        public Role Load(SceneEntity scene, SceneCatalog catalog, string guid)
         {
             Role role = null;
             if (scene.ActiveRole_Guid.ContainsKey(guid)) return role;
-            if (IOTool.LoadFlat(@$"{scene.sceneCatalog.directoryInfo}\Role\{guid}", out var builder))
+            if (IOTool.LoadFlat(@$"{catalog.directoryInfo}\Role\{guid}", out var builder))
             {
                 var diskData = Flat.RoleData.GetRootAsRoleData(builder.DataBuffer);
                 role = TakeOut(diskData.RoleType, scene, guid);

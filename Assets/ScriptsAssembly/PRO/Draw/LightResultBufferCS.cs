@@ -86,7 +86,7 @@ namespace PRO.Renderer
             SetLightBufferCS.SetInts("BlockPos", globalBlockPos.x, globalBlockPos.y);
         }
 
-        public void UpdateStaticLightSource()
+        public void UpdateStaticLightSource(SceneEntity scene)
         {
             ResetLightBufferCS.Dispatch(0, Block.Size.x / 8, Block.Size.y / 8, 1);
             Vector2Int blockMinPos = Block.PixelToGlobal(globalBlockPos, new(0, 0));
@@ -95,14 +95,14 @@ namespace PRO.Renderer
                 for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
                 {
                     Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
-                    Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
-                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(nowGloabBlockBufferPos);
+                    Block block = scene.GetBlock(nowGloabBlockBufferPos);
+                    BackgroundBlock background = scene.GetBackground(nowGloabBlockBufferPos);
 
                     if (block != null) foreach (var value in block.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                     if (background != null) foreach (var value in background.lightSourceDic.Values) DrawLightSource(value.radius, new LightSourceToShader(value), blockMinPos, blockMaxPos);
                 }
         }
-        public void UpdateFreelyLightSource()
+        public void UpdateFreelyLightSource(SceneEntity scene)
         {
             ResetLightBufferCS.Dispatch(4, Block.Size.x / 8, Block.Size.y / 8, 1);
             Vector2Int blockMinPos = Block.PixelToGlobal(globalBlockPos, new(0, 0));
@@ -111,7 +111,7 @@ namespace PRO.Renderer
                 for (int ex = 0; ex < EachBlockReceiveLightSize.x; ex++)
                 {
                     Vector2Int nowGloabBlockBufferPos = globalBlockPos - EachBlockReceiveLightSize / 2 + new Vector2Int(ex, ey);
-                    Block block = SceneManager.Inst.NowScene.GetBlock(nowGloabBlockBufferPos);
+                    Block block = scene.GetBlock(nowGloabBlockBufferPos);
                     if (block != null)
                         foreach (var value in block.FreelyLightSourceHash)
                         {

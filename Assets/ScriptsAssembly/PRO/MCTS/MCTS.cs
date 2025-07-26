@@ -1,7 +1,5 @@
 ﻿using Google.FlatBuffers;
-using PRO.Disk.Scene;
 using PRO.TurnBased;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -77,21 +75,33 @@ namespace PRO.AI
 #if PRO_MCTS_CLIENT
             Client.Connect(new IPEndPoint(IPAddress.Loopback, 17000));
             Debug.Log("连接成功");
-<<<<<<< HEAD
-            new Thread(ReceiveThread).Start(Client);
-#endif
-        }
-#if PRO_MCTS_CLIENT
-        private static event Action<Socket, FlatBufferBuilder, int> ClientReceive = (a, b, c) => { };
-=======
-            new Thread(ReceiveThread).Start((Client, ClientReceive));
+            new Thread(() =>
+            {
+                FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
+                var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
+                while (true)
+                {
+                    int length = Client.Receive(buffer);
+                    if (length > 0)
+                    {
+                        Debug.Log("客户端收到消息" + length);
+                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                        ClientReceive.Invoke(Client, builder, length));
+                    }
+                    else if (length == 0)
+                    {
+                        Debug.Log("连接断开");
+                        break;
+                    }
+                }
+            }).Start();
 #endif
         }
 #if PRO_MCTS_CLIENT
         private static event Action<Socket, FlatBufferBuilder, int> ClientReceive;
->>>>>>> 4f95b8224e97445d6ec08ffc75a20ad6f9774a5d
         private static Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #endif
+
 #if PRO_MCTS_SERVER
         private static object lockObject = new object();
         public void 开始模拟(RoundFSM round)
@@ -105,7 +115,26 @@ namespace PRO.AI
             while (true)
             {
                 Socket remoteSocket = Server.Accept();
-                new Thread(ReceiveThread).Start(remoteSocket);
+                new Thread(() =>
+                {
+                    FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
+                    var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
+                    while (true)
+                    {
+                        int length = remoteSocket.Receive(buffer);
+                        if (length > 0)
+                        {
+                            Debug.Log("服务端收到消息" + length);
+                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                            ServerReceive.Invoke(remoteSocket, builder, length));
+                        }
+                        else if (length == 0)
+                        {
+                            Debug.Log("连接断开");
+                            break;
+                        }
+                    }
+                }).Start();
                 IdleClientSocketQueue.Enqueue(remoteSocket);
             }
         }
@@ -114,35 +143,6 @@ namespace PRO.AI
         private static Queue<Socket> IdleClientSocketQueue = new Queue<Socket>();
         private static Dictionary<Socket, ClientWorkData> WorkClientSocketDic = new Dictionary<Socket, ClientWorkData>();
 #endif
-        private static void ReceiveThread(object obj)
-        {
-            Socket remoteSocket = obj as Socket;
-            FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
-            var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
-            while (true)
-            {
-                int length = remoteSocket.Receive(buffer);
-                if (length > 0)
-                {
-                    Debug.Log("收到消息" + length);
-                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                    {
-#if PRO_MCTS_SERVER
-                        ServerReceive.Invoke(remoteSocket, builder, length);
-#endif
-#if PRO_MCTS_CLIENT
-                        ClientReceive.Invoke(remoteSocket, builder, length);
-#endif
-                    });
-                }
-                else if (length == 0)
-                {
-                    Debug.Log("连接断开");
-                    break;
-                }
-            }
-        }
-
         #endregion
     }
 }

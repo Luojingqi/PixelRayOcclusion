@@ -31,19 +31,19 @@ namespace PRO.Renderer
             shareMaterial.SetBuffer("AllPixelColorInfo", pixelColorInfoToShaderBufffer);
         }
 
-        public void ClearLastBind()
+        public void ClearLastBind(SceneEntity scene)
         {
             Vector2Int minLightBufferBlockPos = LastCameraCenterBlockPos - LightResultBufferBlockSize / 2;
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
                     Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
+                    Block block = scene.GetBlock(globalBlockPos);
                     block.spriteRenderer.SetPropertyBlock(NullMaterialPropertyBlock);
                 }
         }
 
-        public void UpdateBind()
+        public void UpdateBind(SceneEntity scene)
         {
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
@@ -52,7 +52,7 @@ namespace PRO.Renderer
                     Vector2Int localBlockBufferPos = globalBlockPos - MinBlockBufferPos;
                     int blockIndex = localBlockBufferPos.x + localBlockBufferPos.y * (EachBlockReceiveLightSize.x - 1 + LightResultBufferBlockSize.x);
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
-                    Block block = SceneManager.Inst.NowScene.GetBlock(globalBlockPos);
+                    Block block = scene.GetBlock(globalBlockPos);
                     //Debug.Log($"¿é×ø±ê{block.BlockPos}  ¸üÐÂ°ó¶¨ ¿é»º´æË÷Òý{blockIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
                     materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", blockBufferArray[blockIndex]);
                     materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
@@ -60,7 +60,7 @@ namespace PRO.Renderer
                 }
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
-                    SetBlock(SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y)));
+                    SetBlock(scene.GetBlock(new Vector2Int(x, y)));
         }
 
         public void SetBufferData(int index, Array array)

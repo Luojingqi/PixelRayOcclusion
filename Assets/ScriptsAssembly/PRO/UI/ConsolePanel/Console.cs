@@ -226,16 +226,16 @@ namespace PRO.Console
         #region
         public static string Method_1_0(string[] values)
         {
-            var countdown = SceneManager.Inst.NowScene.SaveAll();
-            TimeManager.enableUpdate = false;
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                if (countdown.Wait(1000 * 15))
-                    Log.Print("保存完成");
-                else
-                    Log.Print("保存超时");
-                TimeManager.enableUpdate = true;
-            });
+            //var countdown = SceneManager.Inst.NowScene.SaveAll();
+            //TimeManager.enableUpdate = false;
+            //ThreadPool.QueueUserWorkItem((obj) =>
+            //{
+            //    if (countdown.Wait(1000 * 15))
+            //        Log.Print("保存完成");
+            //    else
+            //        Log.Print("保存超时");
+            //    TimeManager.enableUpdate = true;
+            //});
             return "/保存";
         }
         #endregion
@@ -251,7 +251,7 @@ namespace PRO.Console
             //            SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new(x, y));
             //        }
             //    BlockMaterial.UpdateBind();
-            SceneManager.Inst.NowScene.LoadAll();
+            //SceneManager.Inst.NowScene.LoadAll();
             return "加载";
         }
         #endregion

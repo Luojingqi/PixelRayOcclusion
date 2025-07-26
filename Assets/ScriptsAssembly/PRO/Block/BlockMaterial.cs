@@ -185,34 +185,37 @@ namespace PRO
         }
         #endregion
 
-        public static void UpdateBind()
+        public static void ClearBind(SceneEntity scene)
         {
-            blockShareMaterialManager.ClearLastBind();
-            backgroundShareMaterialManager.ClearLastBind();
-
-            blockShareMaterialManager.UpdateBind();
-            backgroundShareMaterialManager.UpdateBind();
-            computeShaderManager.UpdateBind();
+            blockShareMaterialManager.ClearLastBind(scene);
+            backgroundShareMaterialManager.ClearLastBind(scene);
+        }
+        public static void Bind(SceneEntity scene)
+        {
+            blockShareMaterialManager.UpdateBind(scene);
+            backgroundShareMaterialManager.UpdateBind(scene);
+            computeShaderManager.UpdateBind(scene);
         }
         /// <summary>
         /// 更新相机位置，加载更新位置后的区块，延长视野内区块的卸载倒计时
         /// </summary>
-        public static void Update()
+        public static void Update(SceneEntity scene)
         {
-            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-            var scene = SceneManager.Inst.NowScene;
-            if (scene == null || scene.IsLock) return;
+            var cameraPos = Camera.main.transform.position;
+            CameraCenterBlockPos = Block.WorldToBlock(cameraPos);
+            if (scene == null) return;
+            scene.sceneCatalog.cameraPos = cameraPos;
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                 {
                     if (scene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
-                        scene.ThreadLoadOrCreateBlock(new Vector2Int(x, y));
+                        scene.ThreadLoadOrCreateBlock(scene.sceneCatalog, new Vector2Int(x, y));
                     else
                         scene.GetBlock(new Vector2Int(x, y)).ResetUnLoadCountdown();
                 }
         }
 
-        public static void LastUpdate()
+        public static void LastUpdate(SceneEntity scene)
         {
             if (Monitor.TryEnter(DrawApplyQueue))
             {
@@ -232,12 +235,16 @@ namespace PRO
                 finally { Monitor.Exit(DrawApplyQueue); }
             }
 
-            if (CameraCenterBlockPos != LastCameraCenterBlockPos)
+            if (scene != null)
             {
-                UpdateBind();
-                return;
+                if (CameraCenterBlockPos != LastCameraCenterBlockPos)
+                {
+                    ClearBind(scene);
+                    Bind(scene);
+                    return;
+                }
+                computeShaderManager.Update(scene);
             }
-            computeShaderManager.Update();
         }
 
         /// <summary>

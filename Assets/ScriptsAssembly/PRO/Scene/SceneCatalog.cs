@@ -20,8 +20,9 @@ namespace PRO.Disk.Scene
 
         public string name;
 
-        public Vector2 cameraPos;
+        public Vector3 cameraPos = new Vector3(0, 0, -10);
 
+        public string mainRound;
         public void Save()
         {
             IOTool.SaveText(@$"{directoryInfo}\SceneCatalog.json", JsonTool.ToJson(this));
@@ -48,7 +49,7 @@ namespace PRO.Disk.Scene
             //创建战斗文件夹
             Directory.CreateDirectory(@$"{sceneDirectory}\Round");
 
-            
+
 
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;

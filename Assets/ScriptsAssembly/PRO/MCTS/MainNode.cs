@@ -1,5 +1,6 @@
 ﻿using Google.FlatBuffers;
 using PRO.Disk.Scene;
+using PRO.Tool;
 using System;
 using System.IO;
 using System.Net.Sockets;
@@ -31,7 +32,6 @@ namespace PRO.AI
 #endif
 #if PRO_MCTS_CLIENT
                 MCTS.ClientReceive += ClientReceive;
-                Debug.Log("注册");
 #endif
             }
 #if PRO_MCTS_SERVER
@@ -43,14 +43,14 @@ namespace PRO.AI
                 var scene = round.Scene;
                 var root = GameSaveCatalog.CreatFile("MCTS_Temp_GameSave");
                 var sceneCatalog = SceneCatalog.CreateFile($"MCTS_Temp_Scene_Round_{round.GUID}", root);
-                scene.SetTempCatalog(sceneCatalog);
-              //  var countdown = scene.SaveAll();
+                var countdown = scene.SaveAll(sceneCatalog);
                 扩展();
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
+                    // if (countdown.Wait(1000 * 15) == false) return;
+                    FlatBufferBuilder builder = FlatBufferBuilder.TakeOut(1024 * 16);
                     try
                     {
-                       // if (countdown.Wait(1000 * 15) == false) return;
                         for (int i = 0; i < max; i++)
                         {
                             Debug.Log($"第{i}次模拟-等待模拟器中");
@@ -79,7 +79,8 @@ namespace PRO.AI
                             访问次数 += 1;
                             var nextNode = chiles.Dequeue();
                             mcts.NodeList.Add(nextNode);
-                            nextNode.访问(removeSocket);
+                            nextNode.访问(removeSocket, builder, sceneCatalog.directoryInfo.FullName);
+                            builder.Clear();
                             chiles.Enqueue(nextNode, -nextNode.Get_UCB());
                             mcts.NodeList.Clear();
                         }
@@ -90,7 +91,7 @@ namespace PRO.AI
                     }
                     finally
                     {
-                        scene.ResetCatalog();
+                        FlatBufferBuilder.PutIn(builder);
                     }
                 });
             }
@@ -132,83 +133,85 @@ namespace PRO.AI
             }
 #endif
 #if PRO_MCTS_CLIENT
-            private FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
             private void ClientReceive(Socket removeSocket, FlatBufferBuilder builder, int length)
             {
                 var startCmdData = Flat.Start_Cmd.GetRootAsStart_Cmd(builder.DataBuffer);
                 var scene = SceneEntity.TakeOut(SceneCatalog.LoadSceneInfo(new DirectoryInfo(startCmdData.Path)));
-                var countdown = scene.LoadAll();
-<<<<<<< HEAD
+                var countdown = scene.LoadAll(scene.sceneCatalog);
                 ThreadPool.QueueUserWorkItem((obj) =>
-=======
-                countdown.Wait(1000* 5);
-                // SceneManager.Inst.SwitchScene(scene);
-                SceneManager.Inst.NowScene = scene;
-                mcts.round = GamePlayMain.Inst.Round;
-                mcts.startingData.Init(mcts.round);
-                NodeBase node = mcts.main;
-                for (int i = startCmdData.NodesLength - 1; i >= 0; i--)
->>>>>>> 4f95b8224e97445d6ec08ffc75a20ad6f9774a5d
                 {
-                    countdown.Wait(1000 * 2);
-                    CountdownEvent countdown_PutIn = null;
-                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                    try
                     {
-                        // SceneManager.Inst.SwitchScene(scene);
+                        countdown.Wait(1000 * 5);
                         mcts.round = GamePlayMain.Inst.Round;
                         mcts.startingData.Init(mcts.round);
                         NodeBase node = mcts.main;
                         for (int i = startCmdData.NodesLength - 1; i >= 0; i--)
                         {
-                            var nodeType = startCmdData.NodesType(i);
-                            NodeBase nowNode = null;
-                            switch (nodeType)
+                            countdown.Wait(1000 * 2);
+                            CountdownEvent countdown_PutIn = null;
+                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                             {
-                                case Flat.NodeBase.Node:
+                                mcts.round = GamePlayMain.Inst.Round;
+                                mcts.startingData.Init(mcts.round);
+                                NodeBase node = mcts.main;
+                                for (int i = startCmdData.NodesLength - 1; i >= 0; i--)
+                                {
+                                    var nodeType = startCmdData.NodesType(i);
+                                    NodeBase nowNode = null;
+                                    switch (nodeType)
                                     {
-                                        var diskData = startCmdData.Nodes<Flat.Node>(i).Value;
-                                        nowNode = Node.ToRAM(diskData, scene);
-                                        break;
+                                        case Flat.NodeBase.Node:
+                                            {
+                                                var diskData = startCmdData.Nodes<Flat.Node>(i).Value;
+                                                nowNode = Node.ToRAM(diskData, scene);
+                                                break;
+                                            }
+                                        case Flat.NodeBase.TimeNode:
+                                            {
+                                                var diskData = startCmdData.Nodes<Flat.TimeNode>(i).Value;
+                                                nowNode = TimeNode.ToRAM(diskData, scene);
+                                                break;
+                                            }
                                     }
-                                case Flat.NodeBase.TimeNode:
+                                    nowNode.mcts = mcts;
+                                    node.chiles.Enqueue(nowNode, 0);
+                                    node = nowNode;
+                                }
+                                builder.Clear();
+                                NodeBase rootNode = mcts.main.chiles.Dequeue();
+                                if (rootNode != null)
+                                {
+                                    Action<FlatBufferBuilder> action = null;
+                                    rootNode.访问(builder, action);
+                                    Span<int> nodesOffsetArray = stackalloc int[node.chiles.Count];
+                                    Span<Flat.NodeBase> nodeTypesOffsetArray = stackalloc Flat.NodeBase[node.chiles.Count];
+                                    for (int i = 0; i < node.chiles.Count; i++)
                                     {
-                                        var diskData = startCmdData.Nodes<Flat.TimeNode>(i).Value;
-                                        nowNode = TimeNode.ToRAM(diskData, scene);
-                                        break;
+                                        var data = node.chiles[i].ToDisk(builder);
+                                        nodeTypesOffsetArray[i] = data.Item1;
+                                        nodesOffsetArray[i] = data.Item2.Value;
                                     }
-                            }
-                            nowNode.mcts = mcts;
-                            node.chiles.Enqueue(nowNode, 0);
-                            node = nowNode;
+                                    var nodeTypesOffsetArrayOffset = builder.CreateVector_Data(nodeTypesOffsetArray);
+                                    var nodesOffsetArrayOffset = builder.CreateVector_Offset(nodesOffsetArray);
+                                    Flat.Start_Rst.StartStart_Rst(builder);
+                                    Flat.Start_Rst.AddNodes(builder, nodesOffsetArrayOffset);
+                                    Flat.Start_Rst.AddNodesType(builder, nodeTypesOffsetArrayOffset);
+                                    action?.Invoke(builder);
+                                    builder.Finish(Flat.Start_Rst.EndStart_Rst(builder).Value);
+                                }
+                                countdown_PutIn = SceneEntity.PutIn(scene);
+                            });
+                            countdown_PutIn.Wait(1000 * 2);
+                            removeSocket.Send(builder.ToSpan());
+                            builder.Clear();
+                            mcts.Clear();
                         }
-                        builder.Clear();
-                        NodeBase rootNode = mcts.main.chiles.Dequeue();
-                        if (rootNode != null)
-                        {
-                            Action<FlatBufferBuilder> action = null;
-                            rootNode.访问(builder, action);
-                            Span<int> nodesOffsetArray = stackalloc int[node.chiles.Count];
-                            Span<Flat.NodeBase> nodeTypesOffsetArray = stackalloc Flat.NodeBase[node.chiles.Count];
-                            for (int i = 0; i < node.chiles.Count; i++)
-                            {
-                                var data = node.chiles[i].ToDisk(builder);
-                                nodeTypesOffsetArray[i] = data.Item1;
-                                nodesOffsetArray[i] = data.Item2.Value;
-                            }
-                            var nodeTypesOffsetArrayOffset = builder.CreateVector_Data(nodeTypesOffsetArray);
-                            var nodesOffsetArrayOffset = builder.CreateVector_Offset(nodesOffsetArray);
-                            Flat.Start_Rst.StartStart_Rst(builder);
-                            Flat.Start_Rst.AddNodes(builder, nodesOffsetArrayOffset);
-                            Flat.Start_Rst.AddNodesType(builder, nodeTypesOffsetArrayOffset);
-                            action?.Invoke(builder);
-                            builder.Finish(Flat.Start_Rst.EndStart_Rst(builder).Value);
-                        }
-                        countdown_PutIn = SceneEntity.PutIn(scene);
-                    });
-                    countdown_PutIn.Wait(1000 * 2);
-                    removeSocket.Send(builder.ToSpan());
-                    builder.Clear();
-                    mcts.Clear();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Print(e.ToString());
+                    }
                 });
             }
 #endif

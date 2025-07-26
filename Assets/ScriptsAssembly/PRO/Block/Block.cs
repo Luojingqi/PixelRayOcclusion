@@ -100,11 +100,9 @@ namespace PRO
         #endregion
 
         #region 静态对象池
-        private static Transform BlockNode;
         private static GameObjectPool<Block> BlockPool;
         public static void InitPool()
         {
-            BlockNode = new GameObject("BlockNode").transform;
             #region 加载Block初始GameObject
             GameObject go = new GameObject("Block");
             SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
@@ -121,11 +119,10 @@ namespace PRO
         {
             Block block = BlockPool.TakeOut();
             block._screen = scene;
-            block.transform.SetParent(BlockNode);
             block.name = $"Block{blockPos}";
             block.transform.position = Block.BlockToWorld(blockPos);
             block.BlockPos = blockPos;
-
+            block.transform.SetParent(scene.BlockNode);
             block.background.TakeOut(scene, blockPos);
 
             return block;

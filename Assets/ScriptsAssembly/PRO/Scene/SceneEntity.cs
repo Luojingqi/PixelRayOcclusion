@@ -6,6 +6,7 @@ using PRO.Flat.Ex;
 using PRO.Tool;
 using PRO.Tool.Serialize.IO;
 using PRO.TurnBased;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,13 +20,30 @@ namespace PRO
     /// <summary>
     /// 场景实体类，在游戏运行时存储场景运行数据
     /// </summary>
-    public partial class SceneEntity
+    public partial class SceneEntity : SerializedMonoBehaviour
     {
-        private static ObjectPoolArbitrary<SceneEntity> pool = new ObjectPoolArbitrary<SceneEntity>(() => new SceneEntity());
+        #region 对象池
+        private static Transform PoolNode;
+        public Transform BlockNode;
+        private static GameObjectPool<SceneEntity> pool;
+        public static void InitPool()
+        {
+            PoolNode = new GameObject("SceneEntityPoolNode").transform;
+            PoolNode.SetParent(SceneManager.Inst.PoolNode);
+            var go = new GameObject("SceneEntity");
+            var scene = go.AddComponent<SceneEntity>();
+            pool = new GameObjectPool<SceneEntity>(scene, PoolNode);
+            pool.CreateEvent += t =>
+            {
+                t.BlockNode = new GameObject("BlockNode").transform;
+                t.BlockNode.SetParent(t.transform);
+            };
+        }
         public static SceneEntity TakeOut(SceneCatalog sceneCatalog)
         {
             var scene = pool.TakeOut();
             scene.sceneCatalog = sceneCatalog;
+            scene.name = sceneCatalog.name;
             return scene;
         }
         public static CountdownEvent PutIn(SceneEntity scene)
@@ -33,20 +51,8 @@ namespace PRO
             pool.PutIn(scene);
             return scene.UnLoadAll();
         }
-        private SceneEntity() { }
+        #endregion
         public SceneCatalog sceneCatalog { get; private set; }
-
-        private SceneCatalog sceneCatalog_temp;
-        public void SetTempCatalog(SceneCatalog tempCatalog)
-        {
-            sceneCatalog_temp = sceneCatalog;
-            sceneCatalog = tempCatalog;
-        }
-        public void ResetCatalog()
-        {
-            sceneCatalog = sceneCatalog_temp;
-            sceneCatalog_temp = null;
-        }
         #region 获取已经实例化的对象
         public HashSet<Vector2Int> ActiveBlockBase = new HashSet<Vector2Int>(50);
         private CrossList<Block> BlockBaseCrossList = new CrossList<Block>();
@@ -65,6 +71,7 @@ namespace PRO
         /// key：guid  value：building
         /// </summary>
         public Dictionary<string, BuildingBase> ActiveBuilding = new Dictionary<string, BuildingBase>(24);
+
         /// <summary>
         /// 在场景中活跃的战斗
         /// </summary>
@@ -118,7 +125,7 @@ namespace PRO
         /// 使用多线程加载一个区块，区块文件不存在时会创建一个空区块
         /// </summary>
         /// <param name="blockPos"></param>
-        public void ThreadLoadOrCreateBlock(Vector2Int blockPos, CountdownEvent countdown_main = null)
+        public void ThreadLoadOrCreateBlock(SceneCatalog catalog, Vector2Int blockPos, CountdownEvent countdown_main = null)
         {
             if (ActiveBlockBase.Contains(blockPos)) return;
             countdown_main?.AddCount();
@@ -128,8 +135,7 @@ namespace PRO
             BlockBaseCrossList[blockPos] = block;
             block.ResetUnLoadCountdown();
             #region 加载  区块
-
-            if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockData", out var builder))
+            if (IOTool.LoadFlat($@"{catalog.directoryInfo}\Block\{blockPos}\BlockData", out var builder))
             {
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
@@ -152,7 +158,7 @@ namespace PRO
                             var building = GetBuilding(guid);
                             if (building == null)
                             {
-                                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => LoadBuilding(guid, builder_Extend));
+                                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() => LoadBuilding(catalog, guid, builder_Extend));
                                 building = GetBuilding(guid);
                                 builder_Extend.Clear();
                             }
@@ -181,7 +187,7 @@ namespace PRO
                         {
                             #region 加载  particle
                             {
-                                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockParticleData", out var builder))
+                                if (IOTool.LoadFlat($@"{catalog.directoryInfo}\Block\{blockPos}\BlockParticleData", out var builder))
                                 {
                                     var diskData = Flat.BlockParticleData.GetRootAsBlockParticleData(builder.DataBuffer);
                                     for (int i = diskData.ListLength - 1; i >= 0; i--)
@@ -195,13 +201,13 @@ namespace PRO
                             #endregion
                             #region 加载  role
                             {
-                                if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Block\{blockPos}\BlockRoleData", out var builder))
+                                if (IOTool.LoadFlat($@"{catalog.directoryInfo}\Block\{blockPos}\BlockRoleData", out var builder))
                                 {
                                     var diskData = Flat.BlockRoleData.GetRootAsBlockRoleData(builder.DataBuffer);
                                     for (int i = diskData.ListLength - 1; i >= 0; i--)
                                     {
                                         var roleGuid = diskData.List(i);
-                                        RoleManager.Inst.Load(roleGuid, this);
+                                        RoleManager.Inst.Load(this, catalog, roleGuid);
                                     }
                                     FlatBufferBuilder.PutIn(builder);
                                 }
@@ -277,9 +283,9 @@ namespace PRO
         /// </summary>
         /// <param name="blockPos">区块坐标</param>
         /// <param name="isSaveBuilding">是否保存上方的建筑</param>
-        private void SaveBlockData(Vector2Int blockPos, bool isSaveBuilding)
+        private void SaveBlockData(SceneCatalog catalog, Vector2Int blockPos, bool isSaveBuilding)
         {
-            string path = $@"{sceneCatalog.directoryInfo}\Block\{blockPos}";
+            string path = $@"{catalog.directoryInfo}\Block\{blockPos}";
             if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
             var builder = FlatBufferBuilder.TakeOut(1024 * 400);
             var block = GetBlock(blockPos);
@@ -311,7 +317,7 @@ namespace PRO
                 var builder_Extend = FlatBufferBuilder.TakeOut(1024 * 2);
                 foreach (string guid in buildingGuidIndexDic.Keys)
                 {
-                    SaveBuilding(ActiveBuilding[guid], builder_building, builder_Extend);
+                    SaveBuilding(catalog, ActiveBuilding[guid], builder_building, builder_Extend);
                     builder_building.Clear();
                     builder_Extend.Clear();
                 }
@@ -375,9 +381,9 @@ namespace PRO
         #endregion
 
         #region Building
-        private void LoadBuilding(string guid, FlatBufferBuilder builder_Extend)
+        private void LoadBuilding(SceneCatalog catalog, string guid, FlatBufferBuilder builder_Extend)
         {
-            if (IOTool.LoadFlat($@"{sceneCatalog.directoryInfo}\Building\{guid}", out var builder))
+            if (IOTool.LoadFlat($@"{catalog.directoryInfo}\Building\{guid}", out var builder))
             {
                 var diskData = Flat.BuildingBaseData.GetRootAsBuildingBaseData(builder.DataBuffer);
                 BuildingBase building = BuildingBase.New(diskData.Name, guid, this);
@@ -391,17 +397,17 @@ namespace PRO
                 Log.Print($"无法加载建筑{guid}，可能建筑文件不存在", Color.red);
             }
         }
-        private void SaveBuilding(BuildingBase building, FlatBufferBuilder builder, FlatBufferBuilder builder_Extend)
+        private void SaveBuilding(SceneCatalog catalog, BuildingBase building, FlatBufferBuilder builder, FlatBufferBuilder builder_Extend)
         {
             building.ToDisk(builder, builder_Extend);
-            IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\Building\{building.GUID}", builder);
+            IOTool.SaveFlat($@"{catalog.directoryInfo}\Building\{building.GUID}", builder);
         }
         #endregion
 
         #region Round
-        public void LoadRound(string guid)
+        public void LoadRound(SceneCatalog catalog, string guid)
         {
-            if (IOTool.LoadFlat(@$"{sceneCatalog.directoryInfo}\Round\{guid}", out var builder))
+            if (IOTool.LoadFlat(@$"{catalog.directoryInfo}\Round\{guid}", out var builder))
             {
                 var diskData = TurnBased.Flat.RoundFSMData.GetRootAsRoundFSMData(builder.DataBuffer);
                 var round = new RoundFSM(this, diskData.Guid);
@@ -409,11 +415,11 @@ namespace PRO
                 FlatBufferBuilder.PutIn(builder);
             }
         }
-        private void SaveRound(RoundFSM round)
+        private void SaveRound(SceneCatalog catalog, RoundFSM round)
         {
             var builder = FlatBufferBuilder.TakeOut(1024 * 2);
             round.ToDisk(builder);
-            IOTool.SaveFlat(@$"{sceneCatalog.directoryInfo}\Round\{round.GUID}", builder);
+            IOTool.SaveFlat(@$"{catalog.directoryInfo}\Round\{round.GUID}", builder);
             FlatBufferBuilder.PutIn(builder);
         }
         #endregion
@@ -423,10 +429,8 @@ namespace PRO
         /// 保存场景所有数据，内部使用线程池优化，返回等待信号
         /// </summary>
         /// <returns></returns>
-        public CountdownEvent SaveAll()
+        public CountdownEvent SaveAll(SceneCatalog catalog)
         {
-            lock (this)
-                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
             countdown.AddCount();
             ThreadPool.QueueUserWorkItem((obj) =>
@@ -436,12 +440,12 @@ namespace PRO
                     #region 保存  Block  Building  Round
                     var countdown_Block = new CountdownEvent(ActiveBlockBase.Count);
                     foreach (var blockPos in ActiveBlockBase)
-                        ThreadPool.QueueUserWorkItem((obj) => { SaveBlockData(blockPos, false); countdown_Block.Signal(); });
+                        ThreadPool.QueueUserWorkItem((obj) => { SaveBlockData(catalog, blockPos, false); countdown_Block.Signal(); });
                     var builder_building = FlatBufferBuilder.TakeOut(1024 * 8);
                     var builder_Extend = FlatBufferBuilder.TakeOut(1024 * 2);
                     foreach (var building in ActiveBuilding.Values)
                     {
-                        SaveBuilding(building, builder_building, builder_Extend);
+                        SaveBuilding(catalog, building, builder_building, builder_Extend);
                         builder_building.Clear();
                         builder_Extend.Clear();
                     }
@@ -452,7 +456,7 @@ namespace PRO
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                     {
                         foreach (var round in ActiveRound.Values)
-                            SaveRound(round);
+                            SaveRound(catalog, round);
 
                         #region 保存  Particle
                         {
@@ -482,7 +486,7 @@ namespace PRO
                                 Flat.BlockParticleData.StartBlockParticleData(builder);
                                 Flat.BlockParticleData.AddList(builder, listOffset);
                                 builder.Finish(Flat.BlockParticleData.EndBlockParticleData(builder).Value);
-                                IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockParticleData", builder);
+                                IOTool.SaveFlat($@"{catalog.directoryInfo}\Block\{kv.Key}\BlockParticleData", builder);
                                 builder.Clear();
                             }
                             FlatBufferBuilder.PutIn(builder);
@@ -512,7 +516,7 @@ namespace PRO
                                 {
                                     roleListOffset[index++] = builder.CreateString(role.GUID).Value;
                                     roleBuilder.Finish(role.ToDisk(roleBuilder).Value);
-                                    IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\Role\{role.GUID}", roleBuilder);
+                                    IOTool.SaveFlat($@"{catalog.directoryInfo}\Role\{role.GUID}", roleBuilder);
                                     roleBuilder.Clear();
                                 }
 
@@ -524,7 +528,7 @@ namespace PRO
                                 Flat.BlockRoleData.StartBlockRoleData(builder);
                                 Flat.BlockRoleData.AddList(builder, listOffset);
                                 builder.Finish(Flat.BlockRoleData.EndBlockRoleData(builder).Value);
-                                IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\Block\{kv.Key}\BlockRoleData", builder);
+                                IOTool.SaveFlat($@"{catalog.directoryInfo}\Block\{kv.Key}\BlockRoleData", builder);
                                 builder.Clear();
                             }
                             FlatBufferBuilder.PutIn(builder);
@@ -537,8 +541,6 @@ namespace PRO
                 catch (Exception e) { Log.Print(e.ToString(), Color.red); }
                 countdown.Signal();
                 countdown.Wait();
-                lock (this)
-                    IsLock = false;
             });
             #region 保存  场景额外数据
             {
@@ -559,7 +561,6 @@ namespace PRO
                     }
                 }
                 var roundGuidOffset = builder.CreateVector_Offset(roundGuidOffsetArray);
-                var roundMainOffset = builder.CreateString(GamePlayMain.Inst.Round?.GUID);
 
                 Flat.SceneEntityData.StartActiveBlockBaseVector(builder, blockPosSet.Count);
                 foreach (var blockPos in blockPosSet)
@@ -569,40 +570,34 @@ namespace PRO
                 Flat.SceneEntityData.StartSceneEntityData(builder);
                 Flat.SceneEntityData.AddActiveBlockBase(builder, activeBlockOffset);
                 Flat.SceneEntityData.AddRoundGuid(builder, roundGuidOffset);
-                Flat.SceneEntityData.AddRoundMain(builder, roundMainOffset);
                 builder.Finish(Flat.SceneEntityData.EndSceneEntityData(builder).Value);
-                IOTool.SaveFlat($@"{sceneCatalog.directoryInfo}\SceneEntityData", builder);
+                IOTool.SaveFlat($@"{catalog.directoryInfo}\SceneEntityData", builder);
                 FlatBufferBuilder.PutIn(builder);
-
-                if (this == SceneManager.Inst.NowScene)
-                    sceneCatalog.cameraPos = Camera.main.transform.position;
             }
             #endregion
 
-            sceneCatalog.Save();
+            catalog.Save();
             countdown.Signal();
             return countdown;
         }
 
-        public CountdownEvent LoadAll()
+        public CountdownEvent LoadAll(SceneCatalog catalog)
         {
-            lock (this)
-                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
-            if (IOTool.LoadFlat(@$"{sceneCatalog.directoryInfo}\SceneEntityData", out var builder))
+            if (IOTool.LoadFlat(@$"{catalog.directoryInfo}\SceneEntityData", out var builder))
             {
                 var diskData = Flat.SceneEntityData.GetRootAsSceneEntityData(builder.DataBuffer);
                 CountdownEvent countdown_block = new CountdownEvent(1);
                 for (int i = diskData.ActiveBlockBaseLength - 1; i >= 0; i--)
-                    ThreadLoadOrCreateBlock(diskData.ActiveBlockBase(i).Value.ToRAM(), countdown_block);
+                    ThreadLoadOrCreateBlock(catalog, diskData.ActiveBlockBase(i).Value.ToRAM(), countdown_block);
 #if PRO_RENDER
-                var cameraCenterBlockPos = Block.WorldToBlock(sceneCatalog.cameraPos);
+                var cameraCenterBlockPos = Block.WorldToBlock(catalog.cameraPos);
                 var minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
                 var minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
                 var maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
                 for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
                     for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
-                        ThreadLoadOrCreateBlock(new(x, y), countdown_block);
+                        ThreadLoadOrCreateBlock(catalog, new(x, y), countdown_block);
 #endif
                 countdown_block.Signal();
                 countdown.AddCount();
@@ -612,10 +607,7 @@ namespace PRO
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                     {
                         for (int i = diskData.RoundGuidLength - 1; i >= 0; i--)
-                            LoadRound(diskData.RoundGuid(i));
-                        var roundMainGuid = diskData.RoundMain;
-                        if (roundMainGuid != null && ActiveRound.TryGetValue(roundMainGuid, out var round))
-                            GamePlayMain.Inst.Round = round;
+                            LoadRound(catalog, diskData.RoundGuid(i));
                     });
                     FlatBufferBuilder.PutIn(builder);
                     countdown.Signal();
@@ -625,18 +617,9 @@ namespace PRO
             {
                 for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                     for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
-                        ThreadLoadOrCreateBlock(new Vector2Int(x, y), countdown);
+                        ThreadLoadOrCreateBlock(catalog, new Vector2Int(x, y), countdown);
             }
-#if PRO_RENDER
-            UpdateBind();
-#endif
             countdown.Signal();
-            ThreadPool.QueueUserWorkItem((obj) =>
-            {
-                countdown.Wait();
-                lock (this)
-                    IsLock = false;
-            });
             return countdown;
         }
         /// <summary>
@@ -690,8 +673,6 @@ namespace PRO
         /// <returns></returns>
         public CountdownEvent ReLoadAll()
         {
-            lock (this)
-                IsLock = true;
             CountdownEvent countdown = new CountdownEvent(1);
             var countdown_unload = UnLoadAll();
             ThreadPool.QueueUserWorkItem((obj) =>
@@ -699,7 +680,7 @@ namespace PRO
                 countdown_unload.Wait();
                 TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
                 {
-                    var countdown_load = LoadAll();
+                    var countdown_load = LoadAll(sceneCatalog);
                     ThreadPool.QueueUserWorkItem((obj) =>
                     {
                         countdown_load.Wait();
@@ -707,8 +688,6 @@ namespace PRO
                     });
                 });
                 countdown.Wait();
-                lock (this)
-                    IsLock = false;
             });
             return countdown;
         }
@@ -729,14 +708,12 @@ namespace PRO
         CountdownEvent _countdownEvent = new CountdownEvent(1);
         #endregion
 
-        public bool IsLock;
-
         public void TimeUpdate()
         {
             if (Input.GetKeyDown(KeyCode.U))
             {
                 TimeManager.enableUpdate = false;
-                var countdown = SaveAll();
+                var countdown = SaveAll(sceneCatalog);
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     if (countdown.Wait(1000 * 15))
@@ -762,8 +739,6 @@ namespace PRO
                 });
 
             }
-
-            if (IsLock) return;
 
             #region 更新  火焰
             {
@@ -914,7 +889,7 @@ namespace PRO
                 var array = unLoadBlock.ToArray();
                 foreach (var blockPos in array)
                 {
-                    ThreadPool.QueueUserWorkItem((obj) => SaveBlockData(blockPos, true));
+                    ThreadPool.QueueUserWorkItem((obj) => SaveBlockData(sceneCatalog, blockPos, true));
                     UnloadBlockData(blockPos, _countdownEvent);
                 }
                 unLoadBlock.Clear();

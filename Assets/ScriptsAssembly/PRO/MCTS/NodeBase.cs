@@ -80,7 +80,7 @@ namespace PRO.AI
             }
 
 #if PRO_MCTS_SERVER
-            public void 访问(Socket removeSocket)
+            public void 访问(Socket removeSocket, FlatBufferBuilder builder, string scenePath)
             {
                 if (chiles.Count == 0)
                 {
@@ -93,7 +93,6 @@ namespace PRO.AI
                         Add线程占用(1);
                         //第一次访问
                         //没扩展所以没子节点，发送到模拟客户端里扩展并模拟
-                        var builder = FlatBufferBuilder.TakeOut(1024 * 10);
                         Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[mcts.NodeList.Count];
                         Span<int> nodeListOffsetArray = stackalloc int[mcts.NodeList.Count];
                         for (int i = 0; i < mcts.NodeList.Count; i++)
@@ -102,7 +101,7 @@ namespace PRO.AI
                             nodeTypeListOffsetArray[i] = data.Item1;
                             nodeListOffsetArray[i] = data.Item2.Value;
                         }
-                        var pathOffset = builder.CreateString(mcts.round.Scene.sceneCatalog.directoryInfo.FullName);
+                        var pathOffset = builder.CreateString(scenePath);
                         var nodeTypeListOffset = builder.CreateVector_Data(nodeTypeListOffsetArray);
                         var nodeListOffset = builder.CreateVector_Offset(nodeListOffsetArray);
                         Flat.Start_Cmd.StartStart_Cmd(builder);
@@ -111,29 +110,27 @@ namespace PRO.AI
                         Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
                         builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
                         removeSocket.Send(builder.ToSpan());
-                       // Debug.Log("发送" +builder.DataBuffer.Position +"|"+ builder.Offset);
 
-                        var bb = new FlatBufferBuilder(1024);
-                        var span = builder.ToSpan();
-                        var newSpan = bb.DataBuffer.ToSpan(0, 1024);
-                        for (int i = 0; i < span.Length; i++)
-                        {
-                            newSpan[i] = span[i];
-                        }
-                        var diskData = Flat.Start_Cmd.GetRootAsStart_Cmd(bb.DataBuffer);
-                        //Debug.Log(diskData.Path);
-                        //for (int i = diskData.NodesLength - 1; i >= 0; i--)
+                        //var bb = new FlatBufferBuilder(1024);
+                        //var span = builder.ToSpan();
+                        //var newSpan = bb.DataBuffer.ToSpan(0, 1024);
+                        //for (int i = 0; i < span.Length; i++)
                         //{
-                        //    Debug.Log(diskData.NodesType(i));
+                        //    newSpan[i] = span[i];
                         //}
-                        FlatBufferBuilder.PutIn(builder);
+                        //var diskData = Flat.Start_Cmd.GetRootAsStart_Cmd(bb.DataBuffer);
+                        ////Debug.Log(diskData.Path);
+                        ////for (int i = diskData.NodesLength - 1; i >= 0; i--)
+                        ////{
+                        ////    Debug.Log(diskData.NodesType(i));
+                        ////}
                     }
                 }
                 else
                 {
                     mcts.NodeList.Add(this);
                     var nextNode = chiles.Dequeue();
-                    nextNode.访问(removeSocket);
+                    nextNode.访问(removeSocket, builder, scenePath);
                     chiles.Enqueue(nextNode, -nextNode.Get_UCB());
                 }
             }

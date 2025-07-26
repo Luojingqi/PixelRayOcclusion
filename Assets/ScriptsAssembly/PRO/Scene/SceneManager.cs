@@ -4,6 +4,7 @@ using PRO.Tool;
 using PROTool;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 namespace PRO
 {
@@ -16,21 +17,26 @@ namespace PRO
 
         private SceneEntity nowScene;
         [ShowInInspector]
-        public SceneEntity NowScene { get => nowScene; set => nowScene = value; }
+        public SceneEntity NowScene => nowScene;
         [ShowInInspector]
         private Dictionary<string, SceneEntity> scenes = new Dictionary<string, SceneEntity>();
 
         public SceneEntity GetScene(string sceneName) => scenes[sceneName];
 
-        public void SwitchScene(string toSceneName)
+        public void SwitchScene(SceneEntity scene)
         {
-            // if (toSceneName == nowScene.name) return;
-            //SceneEntity toSceen = new SceneEntity("123");
-            //DrawThread.InitScene(toSceen);
-            //await UniTask.Delay(2500);
-            //Log.Print("切换场景");
-            //nowScene = toSceen;
-            //BlockMaterial.UpdateBind();
+            BlockMaterial.DrawApplyQueue.Clear();
+            if (NowScene != null)
+            {
+                NowScene.sceneCatalog.cameraPos = Camera.main.transform.position;
+                NowScene.sceneCatalog.mainRound = GamePlayMain.Inst.Round?.GUID;
+                BlockMaterial.ClearBind(NowScene);
+            }
+            Camera.main.transform.position = scene.sceneCatalog.cameraPos;
+            if (scene.sceneCatalog.mainRound != null)
+                GamePlayMain.Inst.Round = scene.ActiveRound[scene.sceneCatalog.mainRound];
+            BlockMaterial.Bind(scene);
+            nowScene = scene;
         }
         public void TimeAwake()
         {
@@ -44,6 +50,7 @@ namespace PRO
             Block.InitPool();
             BackgroundBlock.InitPrefab();
             Texture2DPool.InitPool();
+            SceneEntity.InitPool();
         }
         public void TimeStart()
         {
@@ -58,18 +65,20 @@ namespace PRO
             //转换为实体数据
             SceneEntity scene = SceneEntity.TakeOut(sceneCatalog);
             scenes.Add(nowSave.sceneNameList[0], scene);
-            nowScene = scene;
 
-            scene.LoadAll();
-#endif
-
+            var countEvent = scene.LoadAll(sceneCatalog);
+            ThreadPool.QueueUserWorkItem((obj) =>
+            {
+                countEvent.Wait();
+                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+                {
+                    SwitchScene(scene);
 #if PRO_RENDER
-            source = FreelyLightSource.New(NowScene, Pixel.GetPixelColorInfo("鼠标光源0").color, 20);
+                    source = FreelyLightSource.New(nowScene, Pixel.GetPixelColorInfo("鼠标光源0").color, 20);
 #endif
-        }
-        public void SwitchScene(SceneCatalog sceneCatalog)
-        {
-            
+                });
+            });
+#endif
         }
 
         public FreelyLightSource source;
@@ -78,16 +87,16 @@ namespace PRO
         public void TimeUpdate()
         {
 #if PRO_RENDER
-            MousePoint.Update();
-            BlockMaterial.Update();
+            MousePoint.Update(nowScene);
+            BlockMaterial.Update(nowScene);
             if (source != null) source.GloabPos = MousePoint.globalPos;
 #endif
-            NowScene?.TimeUpdate();
+            nowScene?.TimeUpdate();
         }
         public void TimeLateUpdate()
         {
 #if PRO_RENDER
-            BlockMaterial.LastUpdate();
+            BlockMaterial.LastUpdate(nowScene);
 #endif
         }
     }

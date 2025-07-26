@@ -31,25 +31,25 @@ namespace PRO.Renderer
             shareMaterial.SetBuffer("AllPixelColorInfo", pixelColorInfoToShaderBufffer);
         }
 
-        public void ClearLastBind()
+        public void ClearLastBind(SceneEntity scene)
         {
             Vector2Int minLightBufferBlockPos = LastCameraCenterBlockPos - LightResultBufferBlockSize / 2;
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
                     Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
+                    BackgroundBlock background = scene.GetBackground(globalBlockPos);
                     background.spriteRenderer.SetPropertyBlock(NullMaterialPropertyBlock);
                 }
         }
-        public void UpdateBind()
+        public void UpdateBind(SceneEntity scene)
         {
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
                     Vector2Int globalBlockPos = MinLightBufferBlockPos + new Vector2Int(x, y);
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
-                    BackgroundBlock background = SceneManager.Inst.NowScene.GetBackground(globalBlockPos);
+                    BackgroundBlock background = scene.GetBackground(globalBlockPos);
                     //Debug.Log($"±³¾°×ø±ê{background.BlockPos}  µÚÒ»´Î°ó¶¨  ±³¾°»º´æË÷Òý{lightIndex}  ¹âÕÕ»º´æË÷Òý{lightIndex}");
                     materialPropertyBlockArray[lightIndex].SetBuffer("BlockBuffer", backgroundBufferArray[lightIndex]);
                     materialPropertyBlockArray[lightIndex].SetBuffer("LightResultBuffer", computeShaderManager.lightResultBufferCSArray[lightIndex].LightResultBuffer);
@@ -59,7 +59,7 @@ namespace PRO.Renderer
                 }
             for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
                 for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
-                    SetBackgroundBlock(SceneManager.Inst.NowScene.GetBackground(new Vector2Int(x, y)));
+                    SetBackgroundBlock(scene.GetBackground(new Vector2Int(x, y)));
         }
 
         public void SetBufferData(int index, Array array)

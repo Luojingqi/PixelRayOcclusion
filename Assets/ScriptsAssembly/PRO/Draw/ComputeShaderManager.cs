@@ -43,7 +43,7 @@ namespace PRO.Renderer
                     lightResultBufferCSArray[lightIndex].FirstBind(globalBlockPos, localBlockBufferPos);
                 }
         }
-        public void UpdateBind()
+        public void UpdateBind(SceneEntity scene)
         {
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
@@ -57,26 +57,26 @@ namespace PRO.Renderer
 
             for (int i = 0; i < LightResultBufferLength; i++)
             {
-                lightResultBufferCSArray[i].UpdateStaticLightSource();
-                lightResultBufferCSArray[i].UpdateFreelyLightSource();
+                lightResultBufferCSArray[i].UpdateStaticLightSource(scene);
+                lightResultBufferCSArray[i].UpdateFreelyLightSource(scene);
             }
         }
         
         private int offset = 0;
-        public void Update()
+        public void Update(SceneEntity scene)
         {
             for (int i = 0; i < LightResultBufferLength; i++)
             {
                 int index = (offset + i) % LightResultBufferLength;
                 if (i < FrameUpdateBlockNum)
                 {
-                    lightResultBufferCSArray[index].UpdateStaticLightSource();
-                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                    lightResultBufferCSArray[index].UpdateStaticLightSource(scene);
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource(scene);
                 }
                 else
                 {
                     lightResultBufferCSArray[index].SubtractionFreelyLightResultBuffer();
-                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource(scene);
                 }
             }
             offset = (offset + FrameUpdateBlockNum) % LightResultBufferLength;

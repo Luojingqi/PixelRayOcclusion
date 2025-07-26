@@ -46,7 +46,7 @@ namespace PRO.TurnBased
                     {
                         var blockPos = roleBlockPos + new UnityEngine.Vector2Int(x, y);
                         if (scene.ActiveBlockBase.Contains(blockPos) == false)
-                            scene.ThreadLoadOrCreateBlock(blockPos);
+                            scene.ThreadLoadOrCreateBlock(scene.sceneCatalog, blockPos);
                         else
                             scene.GetBlock(blockPos).ResetUnLoadCountdown();
                     }
