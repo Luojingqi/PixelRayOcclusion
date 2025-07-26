@@ -107,12 +107,26 @@ namespace PRO.AI
                         var nodeListOffset = builder.CreateVector_Offset(nodeListOffsetArray);
                         Flat.Start_Cmd.StartStart_Cmd(builder);
                         Flat.Start_Cmd.AddPath(builder, pathOffset);
-                        Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
                         Flat.Start_Cmd.AddNodes(builder, nodeListOffset);
+                        Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
                         builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
                         removeSocket.Send(builder.ToSpan());
-                        Debug.Log("发送" + builder.Offset);
-                        //FlatBufferBuilder.PutIn(builder);
+                       // Debug.Log("发送" +builder.DataBuffer.Position +"|"+ builder.Offset);
+
+                        var bb = new FlatBufferBuilder(1024);
+                        var span = builder.ToSpan();
+                        var newSpan = bb.DataBuffer.ToSpan(0, 1024);
+                        for (int i = 0; i < span.Length; i++)
+                        {
+                            newSpan[i] = span[i];
+                        }
+                        var diskData = Flat.Start_Cmd.GetRootAsStart_Cmd(bb.DataBuffer);
+                        //Debug.Log(diskData.Path);
+                        //for (int i = diskData.NodesLength - 1; i >= 0; i--)
+                        //{
+                        //    Debug.Log(diskData.NodesType(i));
+                        //}
+                        FlatBufferBuilder.PutIn(builder);
                     }
                 }
                 else

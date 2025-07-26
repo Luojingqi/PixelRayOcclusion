@@ -52,7 +52,7 @@ namespace PRO
         {
             if (Directory.Exists(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}"))
             {
-                Directory.Delete(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}", true);
+                //Directory.Delete(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}", true);
             }
             GameSaveCatalog gameSaveCatalog = new GameSaveCatalog();
             gameSaveCatalog.name = name;

@@ -1,8 +1,11 @@
+using Google.FlatBuffers;
 using PRO.AI;
 using PRO.Skill;
 using PRO.TurnBased;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
+using PRO.AI.Flat;
 namespace PRO
 {
     public class GamePlayMain : MonoScriptBase, ITime_Awake, ITime_Update
@@ -14,7 +17,41 @@ namespace PRO
             Inst = this;
             OperateFSMBase.InitOperateType();
             MCTS.Init();
+            mcts = new MCTS();
         }
+        [Button]
+        public void BBBB()
+        {
+            FlatBufferBuilder builder = new FlatBufferBuilder(1024);
+            int length = 2;
+            Span<Base> bases = stackalloc Base[length];
+            Span<int> AOffsetArray = stackalloc int[length];
+            //Span<int> BOffsetArray = stackalloc int[length];
+            for (int i = 0; i < length; i++)
+            {
+                A.StartA(builder);
+                A.AddValue(builder, i);
+                AOffsetArray[i] = A.EndA(builder).Value;
+
+                bases[i] = Base.A;
+                //var offset = builder.CreateString($"{i}_{i}");
+                // B.StartB(builder);
+                // B.AddValue(builder, offset);
+                //BOffsetArray[i] =  B.EndB(builder).Value;
+            }
+            var AOffsetArrayOffset = builder.CreateVector_Offset(AOffsetArray);
+            var typeOffset = builder.CreateVector_Data(bases);
+            Test.StartTest(builder);
+            Test.AddValuesType(builder, typeOffset);
+            Test.AddValues(builder, AOffsetArrayOffset);
+            builder.Finish(Test.EndTest(builder).Value);
+
+            var diskData = Test.GetRootAsTest(builder.DataBuffer);
+            for (int i = diskData.ValuesLength - 1; i >= 0; i--)
+                Debug.Log(diskData.ValuesType(i) + "|" + diskData.Values<A>(i).Value.Value);
+        }
+
+
         public RoundFSM Round
         {
             get => round;
@@ -37,7 +74,7 @@ namespace PRO
         [ShowInInspector]
         private RoundFSM round;
 
-        private MCTS mcts = new MCTS();
+        private MCTS mcts;
 
         bool p = false;
 

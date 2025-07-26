@@ -38,20 +38,19 @@ namespace PRO.TurnBased
         public override void Update()
         {
             base.Update();
-            if (scene.IsLock == false)
-                foreach (var role in RoleHash)
-                {
-                    var roleBlockPos = Block.WorldToBlock(role.transform.position);
-                    for (int y = -1; y <= 1; y++)
-                        for (int x = -1; x <= 1; x++)
-                        {
-                            var blockPos = roleBlockPos + new UnityEngine.Vector2Int(x, y);
-                            if (scene.ActiveBlockBase.Contains(blockPos) == false)
-                                scene.ThreadLoadOrCreateBlock(blockPos);
-                            else
-                                scene.GetBlock(blockPos).ResetUnLoadCountdown();
-                        }
-                }
+            foreach (var role in RoleHash)
+            {
+                var roleBlockPos = Block.WorldToBlock(role.transform.position);
+                for (int y = -1; y <= 1; y++)
+                    for (int x = -1; x <= 1; x++)
+                    {
+                        var blockPos = roleBlockPos + new UnityEngine.Vector2Int(x, y);
+                        if (scene.ActiveBlockBase.Contains(blockPos) == false)
+                            scene.ThreadLoadOrCreateBlock(blockPos);
+                        else
+                            scene.GetBlock(blockPos).ResetUnLoadCountdown();
+                    }
+            }
         }
 
         public void ToDisk(FlatBufferBuilder builder)

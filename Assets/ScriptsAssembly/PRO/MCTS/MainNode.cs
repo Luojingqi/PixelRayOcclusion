@@ -12,6 +12,12 @@ namespace PRO.AI
     {
         internal class MainNode : NodeBase
         {
+            public override void PutIn()
+            {
+                var mcts = this.mcts;
+                base.PutIn();
+                this.mcts = mcts;
+            }
             public override void 执行()
             {
                 throw new System.NotImplementedException();
@@ -37,18 +43,18 @@ namespace PRO.AI
                 var root = GameSaveCatalog.CreatFile("MCTS_Temp_GameSave");
                 var sceneCatalog = SceneCatalog.CreateFile($"MCTS_Temp_Scene_Round_{round.GUID}", root);
                 scene.SetTempCatalog(sceneCatalog);
-                var countdown = scene.SaveAll();
+              //  var countdown = scene.SaveAll();
                 扩展();
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     try
                     {
-                        if (countdown.Wait(1000 * 15) == false) return;
+                       // if (countdown.Wait(1000 * 15) == false) return;
                         for (int i = 0; i < max; i++)
                         {
-                            Debug.Log($"第{i}次模拟-等待");
+                            Debug.Log($"第{i}次模拟-等待模拟器中");
                             Socket removeSocket = null;
-                            int time = 10000;
+                            int time = 10000000;
 
                             do
                             {
@@ -65,10 +71,10 @@ namespace PRO.AI
                             } while (time > 0);
                             if (time <= 0)
                             {
-                                Debug.Log("没有空闲的模拟器");
+                                Debug.Log($"第{i}次模拟-没有空闲的模拟器");
                                 return;
                             }
-                            Debug.Log("等待模拟器成功");
+                            Debug.Log($"第{i}次模拟-等待模拟器成功");
                             访问次数 += 1;
                             var nextNode = chiles.Dequeue();
                             mcts.NodeList.Add(nextNode);
@@ -98,12 +104,12 @@ namespace PRO.AI
                     IdleClientSocketQueue.Enqueue(removeSocket);
                     var node = workData.node;
                     node.Add线程占用(-1);
-                    int effectLength = startRstData.EffectsLength;
-                    for (int i = (int)EffectAgent.end - 1; i >= 0; i--)
-                    {
-                        var effectDiskData = startRstData.Effects(i).Value;
-                        node.AddEffect((EffectAgent)((int)EffectAgent.end - i - 1), Effect.ToRAM(effectDiskData));
-                    }
+                    if (startRstData.EffectsLength != 0)
+                        for (int i = (int)EffectAgent.end - 1; i >= 0; i--)
+                        {
+                            var effectDiskData = startRstData.Effects(i).Value;
+                            node.AddEffect((EffectAgent)((int)EffectAgent.end - i - 1), Effect.ToRAM(effectDiskData));
+                        }
                     for (int i = startRstData.NodesLength - 1; i >= 0; i--)
                     {
                         var nodeType = startRstData.NodesType(i);

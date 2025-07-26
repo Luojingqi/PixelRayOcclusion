@@ -1,6 +1,7 @@
 ﻿using Google.FlatBuffers;
 using PRO.Disk.Scene;
 using PRO.TurnBased;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -96,20 +97,18 @@ namespace PRO.AI
             while (true)
             {
                 Socket remoteSocket = Server.Accept();
-                new Thread(ReceiveThread).Start((remoteSocket, ServerReceive));
+                new Thread(ReceiveThread).Start(remoteSocket);
                 IdleClientSocketQueue.Enqueue(remoteSocket);
             }
         }
-        private static event Action<Socket, FlatBufferBuilder, int> ServerReceive;
+        private static event Action<Socket, FlatBufferBuilder, int> ServerReceive = (a, b, c) => { };
         private static Socket Server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static Queue<Socket> IdleClientSocketQueue = new Queue<Socket>();
         private static Dictionary<Socket, ClientWorkData> WorkClientSocketDic = new Dictionary<Socket, ClientWorkData>();
 #endif
         private static void ReceiveThread(object obj)
         {
-            (Socket, Action<Socket, FlatBufferBuilder, int>)? obj_Value = obj as (Socket, Action<Socket, FlatBufferBuilder, int>)?;
-            Socket remoteSocket = obj_Value.Value.Item1;
-            Action<Socket, FlatBufferBuilder, int> receiveAction = obj_Value.Value.Item2;
+            Socket remoteSocket = obj as Socket;
             FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
             var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
             while (true)
@@ -117,9 +116,16 @@ namespace PRO.AI
                 int length = remoteSocket.Receive(buffer);
                 if (length > 0)
                 {
-                    Debug.Log("收到消息");
+                    Debug.Log("收到消息" + length);
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                    receiveAction.Invoke(remoteSocket, builder, length));
+                    {
+#if PRO_MCTS_SERVER
+                        ServerReceive.Invoke(remoteSocket, builder, length);
+#endif
+#if PRO_MCTS_CLIENT
+                        ClientReceive.Invoke(remoteSocket, builder, length);
+#endif
+                    });
                 }
                 else if (length == 0)
                 {
@@ -129,6 +135,6 @@ namespace PRO.AI
             }
         }
 
-#endregion
+        #endregion
     }
 }

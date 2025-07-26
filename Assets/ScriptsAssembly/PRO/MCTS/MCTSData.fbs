@@ -39,3 +39,23 @@ table Start_Rst
 	effects : [Effect];
 	nodes : [NodeBase];
 }
+
+table A
+{
+	value : int;
+}
+table B
+{
+	value : string;
+}
+
+union Base
+{
+	A,
+	B
+}
+
+table Test
+{
+	values : [Base];
+}

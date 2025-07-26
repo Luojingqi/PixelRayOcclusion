@@ -38,6 +38,35 @@ static public class NodeBaseVerify
   }
 }
 
+public enum Base : byte
+{
+  NONE = 0,
+  A = 1,
+  B = 2,
+};
+
+
+
+static public class BaseVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, byte typeId, uint tablePos)
+  {
+    bool result = true;
+    switch((Base)typeId)
+    {
+      case Base.A:
+        result = PRO.AI.Flat.AVerify.Verify(verifier, tablePos);
+        break;
+      case Base.B:
+        result = PRO.AI.Flat.BVerify.Verify(verifier, tablePos);
+        break;
+      default: result = true;
+        break;
+    }
+    return result;
+  }
+}
+
 public struct Effect : IFlatbufferObject
 {
   private Struct __p;
@@ -305,6 +334,145 @@ static public class Start_RstVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyVectorOfData(tablePos, 4 /*Effects*/, 4 /*PRO.AI.Flat.Effect*/, false)
       && verifier.VerifyVectorOfData(tablePos, 6 /*NodesType*/, 1 /*PRO.AI.Flat.NodeBase*/, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
+public struct A : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static A GetRootAsA(ByteBuffer _bb) { return GetRootAsA(_bb, new A()); }
+  public static A GetRootAsA(ByteBuffer _bb, A obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public A __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public int Value { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+
+  public static Offset<PRO.AI.Flat.A> CreateA(FlatBufferBuilder builder,
+      int value = 0) {
+    builder.StartTable(1);
+    A.AddValue(builder, value);
+    return A.EndA(builder);
+  }
+
+  public static void StartA(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddValue(FlatBufferBuilder builder, int value) { builder.AddInt(0, value, 0); }
+  public static Offset<PRO.AI.Flat.A> EndA(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.AI.Flat.A>(o);
+  }
+}
+
+
+static public class AVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyField(tablePos, 4 /*Value*/, 4 /*int*/, 4, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
+public struct B : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static B GetRootAsB(ByteBuffer _bb) { return GetRootAsB(_bb, new B()); }
+  public static B GetRootAsB(ByteBuffer _bb, B obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public B __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public string Value { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetValueBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetValueBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetValueArray() { return __p.__vector_as_array<byte>(4); }
+
+  public static Offset<PRO.AI.Flat.B> CreateB(FlatBufferBuilder builder,
+      StringOffset valueOffset = default(StringOffset)) {
+    builder.StartTable(1);
+    B.AddValue(builder, valueOffset);
+    return B.EndB(builder);
+  }
+
+  public static void StartB(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddValue(FlatBufferBuilder builder, StringOffset valueOffset) { builder.AddOffset(0, valueOffset.Value, 0); }
+  public static Offset<PRO.AI.Flat.B> EndB(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.AI.Flat.B>(o);
+  }
+}
+
+
+static public class BVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyString(tablePos, 4 /*Value*/, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
+public struct Test : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static Test GetRootAsTest(ByteBuffer _bb) { return GetRootAsTest(_bb, new Test()); }
+  public static Test GetRootAsTest(ByteBuffer _bb, Test obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public Test __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public PRO.AI.Flat.Base ValuesType(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.AI.Flat.Base)__p.bb.Get(__p.__vector(o) + j * 1) : (PRO.AI.Flat.Base)0; }
+  public int ValuesTypeLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<PRO.AI.Flat.Base> GetValuesTypeBytes() { return __p.__vector_as_span<PRO.AI.Flat.Base>(4, 1); }
+#else
+  public ArraySegment<byte>? GetValuesTypeBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public PRO.AI.Flat.Base[] GetValuesTypeArray() { int o = __p.__offset(4); if (o == 0) return null; int p = __p.__vector(o); int l = __p.__vector_len(o); PRO.AI.Flat.Base[] a = new PRO.AI.Flat.Base[l]; for (int i = 0; i < l; i++) { a[i] = (PRO.AI.Flat.Base)__p.bb.Get(p + i * 1); } return a; }
+  public TTable? Values<TTable>(int j) where TTable : struct, IFlatbufferObject { int o = __p.__offset(6); return o != 0 ? (TTable?)__p.__union<TTable>(__p.__vector(o) + j * 4) : null; }
+  public int ValuesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+
+  public static Offset<PRO.AI.Flat.Test> CreateTest(FlatBufferBuilder builder,
+      VectorOffset values_typeOffset = default(VectorOffset),
+      VectorOffset valuesOffset = default(VectorOffset)) {
+    builder.StartTable(2);
+    Test.AddValues(builder, valuesOffset);
+    Test.AddValuesType(builder, values_typeOffset);
+    return Test.EndTest(builder);
+  }
+
+  public static void StartTest(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddValuesType(FlatBufferBuilder builder, VectorOffset valuesTypeOffset) { builder.AddOffset(0, valuesTypeOffset.Value, 0); }
+  public static VectorOffset CreateValuesTypeVector(FlatBufferBuilder builder, PRO.AI.Flat.Base[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte((byte)data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateValuesTypeVectorBlock(FlatBufferBuilder builder, PRO.AI.Flat.Base[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateValuesTypeVectorBlock(FlatBufferBuilder builder, ArraySegment<PRO.AI.Flat.Base> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateValuesTypeVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<PRO.AI.Flat.Base>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartValuesTypeVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
+  public static void AddValues(FlatBufferBuilder builder, VectorOffset valuesOffset) { builder.AddOffset(1, valuesOffset.Value, 0); }
+  public static VectorOffset CreateValuesVector(FlatBufferBuilder builder, int[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateValuesVectorBlock(FlatBufferBuilder builder, int[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateValuesVectorBlock(FlatBufferBuilder builder, ArraySegment<int> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateValuesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<int>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartValuesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static Offset<PRO.AI.Flat.Test> EndTest(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.AI.Flat.Test>(o);
+  }
+}
+
+
+static public class TestVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyVectorOfData(tablePos, 4 /*ValuesType*/, 1 /*PRO.AI.Flat.Base*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

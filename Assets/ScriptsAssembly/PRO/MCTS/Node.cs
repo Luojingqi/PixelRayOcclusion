@@ -53,10 +53,11 @@ namespace PRO.AI
                 var node = TakeOut();
                 node.turnTimeNum = diskData.TurnTimeNum;
                 node.operate = scene.GetRole(diskData.Role).AllCanUseOperate[diskData.Operate];
-                node.builder = FlatBufferBuilder.TakeOut(diskData.BuilderLength);
-                Span<byte> builderByteSpan = node.builder.DataBuffer.ToSpan(0, node.builder.DataBuffer.Length);
-                for (int i = builderByteSpan.Length - 1; i >= 0; i--)
-                    builderByteSpan[builderByteSpan.Length - i - 1] = diskData.Builder(i);
+                var length = diskData.BuilderLength;
+                node.builder = FlatBufferBuilder.TakeOut(length);
+                Span<byte> builderByteSpan = node.builder.DataBuffer.ToSpan(0, length);
+                for (int i = length - 1; i >= 0; i--)
+                    builderByteSpan[length - i - 1] = diskData.Builder(i);
                 return node;
             }
         }
