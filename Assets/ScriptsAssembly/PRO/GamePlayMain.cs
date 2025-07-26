@@ -102,7 +102,7 @@ namespace PRO
                 }
 
                 round_state0.ReadyOver();
-                Round = round;
+                Round = round; 
             }
 
 #if PRO_MCTS_SERVER

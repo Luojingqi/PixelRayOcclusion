@@ -77,11 +77,19 @@ namespace PRO.AI
 #if PRO_MCTS_CLIENT
             Client.Connect(new IPEndPoint(IPAddress.Loopback, 17000));
             Debug.Log("连接成功");
+<<<<<<< HEAD
+            new Thread(ReceiveThread).Start(Client);
+#endif
+        }
+#if PRO_MCTS_CLIENT
+        private static event Action<Socket, FlatBufferBuilder, int> ClientReceive = (a, b, c) => { };
+=======
             new Thread(ReceiveThread).Start((Client, ClientReceive));
 #endif
         }
 #if PRO_MCTS_CLIENT
         private static event Action<Socket, FlatBufferBuilder, int> ClientReceive;
+>>>>>>> 4f95b8224e97445d6ec08ffc75a20ad6f9774a5d
         private static Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #endif
 #if PRO_MCTS_SERVER
