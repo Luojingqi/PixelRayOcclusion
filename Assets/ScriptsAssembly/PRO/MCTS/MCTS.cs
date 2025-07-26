@@ -76,11 +76,19 @@ namespace PRO.AI
 #if PRO_MCTS_CLIENT
             Client.Connect(new IPEndPoint(IPAddress.Loopback, 17000));
             Debug.Log("连接成功");
+<<<<<<< HEAD
+            new Thread(ReceiveThread).Start(Client);
+#endif
+        }
+#if PRO_MCTS_CLIENT
+        private static event Action<Socket, FlatBufferBuilder, int> ClientReceive = (a, b, c) => { };
+=======
             new Thread(ReceiveThread).Start((Client, ClientReceive));
 #endif
         }
 #if PRO_MCTS_CLIENT
         private static event Action<Socket, FlatBufferBuilder, int> ClientReceive;
+>>>>>>> 4f95b8224e97445d6ec08ffc75a20ad6f9774a5d
         private static Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #endif
 #if PRO_MCTS_SERVER
@@ -107,9 +115,7 @@ namespace PRO.AI
 #endif
         private static void ReceiveThread(object obj)
         {
-            (Socket, Action<Socket, FlatBufferBuilder, int>)? obj_Value = obj as (Socket, Action<Socket, FlatBufferBuilder, int>)?;
-            Socket remoteSocket = obj_Value.Value.Item1;
-            Action<Socket, FlatBufferBuilder, int> receiveAction = obj_Value.Value.Item2;
+            Socket remoteSocket = obj as Socket;
             FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
             var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
             while (true)
@@ -117,9 +123,16 @@ namespace PRO.AI
                 int length = remoteSocket.Receive(buffer);
                 if (length > 0)
                 {
-                    Debug.Log("收到消息");
+                    Debug.Log("收到消息"+ length);
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                    receiveAction.Invoke(remoteSocket, builder, length));
+                    {
+#if PRO_MCTS_SERVER
+                        ServerReceive.Invoke(remoteSocket, builder, length);
+#endif
+#if PRO_MCTS_CLIENT
+                        ClientReceive.Invoke(remoteSocket, builder, length);
+#endif
+                    });
                 }
                 else if (length == 0)
                 {

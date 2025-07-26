@@ -12,6 +12,12 @@ namespace PRO.AI
     {
         internal class MainNode : NodeBase
         {
+            public override void PutIn()
+            {
+                var mcts = this.mcts;
+                base.PutIn();
+                this.mcts = mcts;
+            }
             public override void 执行()
             {
                 throw new System.NotImplementedException();
@@ -25,6 +31,7 @@ namespace PRO.AI
 #endif
 #if PRO_MCTS_CLIENT
                 MCTS.ClientReceive += ClientReceive;
+                Debug.Log("注册");
 #endif
             }
 #if PRO_MCTS_SERVER
@@ -131,6 +138,9 @@ namespace PRO.AI
                 var startCmdData = Flat.Start_Cmd.GetRootAsStart_Cmd(builder.DataBuffer);
                 var scene = SceneEntity.TakeOut(SceneCatalog.LoadSceneInfo(new DirectoryInfo(startCmdData.Path)));
                 var countdown = scene.LoadAll();
+<<<<<<< HEAD
+                ThreadPool.QueueUserWorkItem((obj) =>
+=======
                 countdown.Wait(1000* 5);
                 // SceneManager.Inst.SwitchScene(scene);
                 SceneManager.Inst.NowScene = scene;
@@ -138,49 +148,68 @@ namespace PRO.AI
                 mcts.startingData.Init(mcts.round);
                 NodeBase node = mcts.main;
                 for (int i = startCmdData.NodesLength - 1; i >= 0; i--)
+>>>>>>> 4f95b8224e97445d6ec08ffc75a20ad6f9774a5d
                 {
-                    var nodeType = startCmdData.NodesType(i);
-                    NodeBase nextNode = null;
-                    switch (nodeType)
+                    countdown.Wait(1000 * 2);
+                    CountdownEvent countdown_PutIn = null;
+                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                     {
-                        case Flat.NodeBase.Node:
+                        // SceneManager.Inst.SwitchScene(scene);
+                        mcts.round = GamePlayMain.Inst.Round;
+                        mcts.startingData.Init(mcts.round);
+                        NodeBase node = mcts.main;
+                        for (int i = startCmdData.NodesLength - 1; i >= 0; i--)
+                        {
+                            var nodeType = startCmdData.NodesType(i);
+                            NodeBase nowNode = null;
+                            switch (nodeType)
                             {
-                                var diskData = startCmdData.Nodes<Flat.Node>(i).Value;
-                                nextNode = Node.ToRAM(diskData, scene);
-                                break;
+                                case Flat.NodeBase.Node:
+                                    {
+                                        var diskData = startCmdData.Nodes<Flat.Node>(i).Value;
+                                        nowNode = Node.ToRAM(diskData, scene);
+                                        break;
+                                    }
+                                case Flat.NodeBase.TimeNode:
+                                    {
+                                        var diskData = startCmdData.Nodes<Flat.TimeNode>(i).Value;
+                                        nowNode = TimeNode.ToRAM(diskData, scene);
+                                        break;
+                                    }
                             }
-                        case Flat.NodeBase.TimeNode:
+                            nowNode.mcts = mcts;
+                            node.chiles.Enqueue(nowNode, 0);
+                            node = nowNode;
+                        }
+                        builder.Clear();
+                        NodeBase rootNode = mcts.main.chiles.Dequeue();
+                        if (rootNode != null)
+                        {
+                            Action<FlatBufferBuilder> action = null;
+                            rootNode.访问(builder, action);
+                            Span<int> nodesOffsetArray = stackalloc int[node.chiles.Count];
+                            Span<Flat.NodeBase> nodeTypesOffsetArray = stackalloc Flat.NodeBase[node.chiles.Count];
+                            for (int i = 0; i < node.chiles.Count; i++)
                             {
-                                var diskData = startCmdData.Nodes<Flat.TimeNode>(i).Value;
-                                nextNode = TimeNode.ToRAM(diskData, scene);
-                                break;
+                                var data = node.chiles[i].ToDisk(builder);
+                                nodeTypesOffsetArray[i] = data.Item1;
+                                nodesOffsetArray[i] = data.Item2.Value;
                             }
-                    }
-                    node.chiles.Enqueue(nextNode, 0);
-                    node = nextNode;
-                }
-                builder.Clear();
-                Action<FlatBufferBuilder> action = null;
-                mcts.main.访问(builder, action);
-                Span<int> nodesOffsetArray = stackalloc int[node.chiles.Count];
-                Span<Flat.NodeBase> nodeTypesOffsetArray = stackalloc Flat.NodeBase[node.chiles.Count];
-                for (int i = 0; i < node.chiles.Count; i++)
-                {
-                    var data = node.chiles[i].ToDisk(builder);
-                    nodeTypesOffsetArray[i] = data.Item1;
-                    nodesOffsetArray[i] = data.Item2.Value;
-                }
-                var nodeTypesOffsetArrayOffset = builder.CreateVector_Data(nodeTypesOffsetArray);
-                var nodesOffsetArrayOffset = builder.CreateVector_Offset(nodesOffsetArray);
-                Flat.Start_Rst.StartStart_Rst(builder);
-                Flat.Start_Rst.AddNodes(builder, nodesOffsetArrayOffset);
-                Flat.Start_Rst.AddNodesType(builder, nodeTypesOffsetArrayOffset);
-                action?.Invoke(builder);
-                builder.Finish(Flat.Start_Rst.EndStart_Rst(builder).Value);
-                SceneEntity.PutIn(scene).Wait();
-                SceneManager.Inst.NowScene = null;
-                mcts.main.PutIn();
-                removeSocket.Send(builder.ToSpan());
+                            var nodeTypesOffsetArrayOffset = builder.CreateVector_Data(nodeTypesOffsetArray);
+                            var nodesOffsetArrayOffset = builder.CreateVector_Offset(nodesOffsetArray);
+                            Flat.Start_Rst.StartStart_Rst(builder);
+                            Flat.Start_Rst.AddNodes(builder, nodesOffsetArrayOffset);
+                            Flat.Start_Rst.AddNodesType(builder, nodeTypesOffsetArrayOffset);
+                            action?.Invoke(builder);
+                            builder.Finish(Flat.Start_Rst.EndStart_Rst(builder).Value);
+                        }
+                        countdown_PutIn = SceneEntity.PutIn(scene);
+                    });
+                    countdown_PutIn.Wait(1000 * 2);
+                    removeSocket.Send(builder.ToSpan());
+                    builder.Clear();
+                    mcts.Clear();
+                });
             }
 #endif
             public override (Flat.NodeBase, Offset<int>) ToDisk(FlatBufferBuilder builder)

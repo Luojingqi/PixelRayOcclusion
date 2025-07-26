@@ -240,7 +240,7 @@ namespace PRO.AI
             public NodeBase parent;
             public PriorityQueue<NodeBase> chiles = new PriorityQueue<NodeBase>();
 
-            protected MCTS mcts;
+            public MCTS mcts;
 
             public int 访问次数;
             public int 线程占用;
@@ -280,6 +280,7 @@ namespace PRO.AI
 
                 public Offset<Flat.Effect> ToDisk(FlatBufferBuilder builder)
                 {
+                    Debug.Log("创建");
                     return Flat.Effect.CreateEffect(builder, 血量);
                 }
                 public static Effect ToRAM(Flat.Effect diskData)

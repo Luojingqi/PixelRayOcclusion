@@ -2,6 +2,7 @@ using PRO.AI;
 using PRO.Skill;
 using PRO.TurnBased;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 namespace PRO
 {
@@ -14,6 +15,7 @@ namespace PRO
             Inst = this;
             OperateFSMBase.InitOperateType();
             MCTS.Init();
+            mcts = new MCTS();
         }
         public RoundFSM Round
         {
@@ -37,7 +39,7 @@ namespace PRO
         [ShowInInspector]
         private RoundFSM round;
 
-        private MCTS mcts = new MCTS();
+        private MCTS mcts;
 
         bool p = false;
 
@@ -65,7 +67,7 @@ namespace PRO
                 }
 
                 round_state0.ReadyOver();
-                Round = round;
+                Round = round; 
             }
 
 #if PRO_MCTS_SERVER
