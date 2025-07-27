@@ -25,13 +25,17 @@ namespace PRO
 
         public void SwitchScene(SceneEntity scene)
         {
+#if PRO_RENDER
             BlockMaterial.DrawApplyQueue.Clear();
+#endif
             if (nowScene != null)
             {
                 nowScene.gameObject.SetActive(false);
                 nowScene.sceneCatalog.cameraPos = Camera.main.transform.position;
                 nowScene.sceneCatalog.mainRound = GamePlayMain.Inst.Round?.GUID;
+#if PRO_RENDER
                 BlockMaterial.ClearBind(nowScene);
+#endif
             }
 
             if (scene != null)
@@ -40,7 +44,9 @@ namespace PRO
                 Camera.main.transform.position = scene.sceneCatalog.cameraPos;
                 if (scene.sceneCatalog.mainRound != null)
                     GamePlayMain.Inst.Round = scene.ActiveRound[scene.sceneCatalog.mainRound];
+#if PRO_RENDER
                 BlockMaterial.Bind(scene);
+#endif
             }
 
             nowScene = scene;

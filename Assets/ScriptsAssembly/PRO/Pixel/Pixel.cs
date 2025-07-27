@@ -38,12 +38,34 @@ namespace PRO
         /// <summary>
         /// 耐久度
         /// </summary>
-        public int durability { get => _durability; set { _durability = value; blockBase.SetPixelInfoToShader(pos); blockBase.DrawPixelAsync(pos, colorInfo.color); } }
+        public int durability
+        {
+            get => _durability; 
+            set
+            {
+                _durability = value;
+#if PRO_RENDER
+                blockBase.SetPixelInfoToShader(pos);
+                blockBase.DrawPixelAsync(pos, colorInfo.color);
+#endif
+            }
+        }
         private int _durability;
         /// <summary>
         /// 透明度影响系数
         /// </summary>
-        public float affectsTransparency { get => _affectsTransparency; set { _affectsTransparency = value; blockBase.SetPixelInfoToShader(pos); blockBase.DrawPixelAsync(pos, colorInfo.color); } }
+        public float affectsTransparency
+        {
+            get => _affectsTransparency; 
+            set
+            {
+                _affectsTransparency = value;
+#if PRO_RENDER
+                blockBase.SetPixelInfoToShader(pos); 
+                blockBase.DrawPixelAsync(pos, colorInfo.color);
+#endif
+            }
+        }
         private float _affectsTransparency;
 
         public Pixel(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, BlockBase blockBase, Vector2Byte pos)
