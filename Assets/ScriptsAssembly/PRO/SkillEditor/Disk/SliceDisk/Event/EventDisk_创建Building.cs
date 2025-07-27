@@ -34,9 +34,6 @@ namespace PRO.SkillEditor
                     building.ToRAM_AddBuilding_Pixel(building_Pixel);
                 }
 
-
-                building.Scene.ActiveBuilding.Add(building.GUID, building);
-
                 foreach (var pixelData in pixelList)
                 {
                     Vector2Int globalPos = agentGlobalPos + nor.RotatePos(pixelData.pos);

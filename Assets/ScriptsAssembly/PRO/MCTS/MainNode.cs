@@ -185,6 +185,8 @@ namespace PRO.AI
                     try
                     {
                         countdown.Wait(1000 * 5);
+                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                            SceneManager.Inst.SwitchScene(scene));
                         mcts.round = scene.ActiveRound[scene.sceneCatalog.mainRound];
                         mcts.startingData.Init(mcts.round);
                         NodeBase node = mcts.main;
@@ -236,11 +238,14 @@ namespace PRO.AI
                         }
                         CountdownEvent countdown_PutIn = null;
                         TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                            countdown_PutIn = SceneEntity.PutIn(scene));
+                        {
+                            SceneManager.Inst.SwitchScene(null);
+                            countdown_PutIn = SceneEntity.PutIn(scene);
+                        });
                         countdown_PutIn.Wait(1000 * 2);
+                        mcts.Clear();
                         removeSocket.SendTo(builder.DataBuffer.GetBytes(), builder.DataBuffer.Position, builder.Offset, SocketFlags.None, remotePoint);
                         builder.Clear();
-                        mcts.Clear();
                     }
                     catch (Exception e)
                     {

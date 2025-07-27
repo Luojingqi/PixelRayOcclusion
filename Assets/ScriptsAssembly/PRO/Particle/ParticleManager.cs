@@ -77,6 +77,7 @@ namespace PRO
                 var particle = pool.TakeOut();
                 particle.TakeOut(scene);
                 particle.SkillPlayAgent?.SetScene(scene);
+                particle.transform.SetParent(scene.ParticleNode);
                 scene.ActiveParticle.Add(particle);
                 return particle;
             }

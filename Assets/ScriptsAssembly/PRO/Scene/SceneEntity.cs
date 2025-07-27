@@ -23,32 +23,46 @@ namespace PRO
     public partial class SceneEntity : SerializedMonoBehaviour
     {
         #region ∂‘œÛ≥ÿ
-        private static Transform PoolNode;
         public Transform BlockNode;
-        private static GameObjectPool<SceneEntity> pool;
+        public Transform RoleNode;
+        public Transform ParticleNode;
+        public Transform BuildingNode;
+
+        private static Transform Node;
+        private static Transform PoolNode;
+        private static ObjectPoolArbitrary<SceneEntity> pool = new ObjectPoolArbitrary<SceneEntity>(CreateSceneEntity);
         public static void InitPool()
         {
+            Node = new GameObject("SceneEntityNode").transform;
             PoolNode = new GameObject("SceneEntityPoolNode").transform;
             PoolNode.SetParent(SceneManager.Inst.PoolNode);
-            var go = new GameObject("SceneEntity");
-            var scene = go.AddComponent<SceneEntity>();
-            pool = new GameObjectPool<SceneEntity>(scene, PoolNode);
-            pool.CreateEvent += t =>
-            {
-                t.BlockNode = new GameObject("BlockNode").transform;
-                t.BlockNode.SetParent(t.transform);
-            };
+        }
+        private static SceneEntity CreateSceneEntity()
+        {
+            var scene = new GameObject("SceneEntity").AddComponent<SceneEntity>();
+            scene.BlockNode = new GameObject("BlockNode").transform;
+            scene.BlockNode.SetParent(scene.transform);
+            scene.RoleNode = new GameObject("RoleNode").transform;
+            scene.RoleNode.SetParent(scene.transform);
+            scene.ParticleNode = new GameObject("ParticleNode").transform;
+            scene.ParticleNode.SetParent(scene.transform);
+            scene.BuildingNode = new GameObject("BuildingNode").transform;
+            scene.BuildingNode.SetParent(scene.transform);
+            scene.gameObject.SetActive(false);  
+            return scene;
         }
         public static SceneEntity TakeOut(SceneCatalog sceneCatalog)
         {
             var scene = pool.TakeOut();
             scene.sceneCatalog = sceneCatalog;
             scene.name = sceneCatalog.name;
+            scene.transform.SetParent(Node);
             return scene;
         }
         public static CountdownEvent PutIn(SceneEntity scene)
         {
             pool.PutIn(scene);
+            scene.transform.SetParent(PoolNode);
             return scene.UnLoadAll();
         }
         #endregion
@@ -388,7 +402,6 @@ namespace PRO
                 var diskData = Flat.BuildingBaseData.GetRootAsBuildingBaseData(builder.DataBuffer);
                 BuildingBase building = BuildingBase.New(diskData.Name, guid, this);
                 building.ToRAM(diskData, builder_Extend);
-                ActiveBuilding.Add(guid, building);
                 FlatBufferBuilder.PutIn(builder);
                 builder_Extend.Clear();
             }

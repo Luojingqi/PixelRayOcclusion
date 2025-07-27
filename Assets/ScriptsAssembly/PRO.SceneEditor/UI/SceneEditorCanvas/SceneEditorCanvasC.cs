@@ -66,8 +66,6 @@ namespace PRO.SceneEditor
                     building.transform.position = Block.GlobalToWorld(global);
                     building.Global = global;
                     building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
-
-                    building.Scene.ActiveBuilding.Add(building.GUID, building);
                 }
 
                 for (int y = 0; y < HoldEntity.height; y++)

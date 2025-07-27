@@ -45,6 +45,7 @@ namespace PRO
         {
             var role = rolePoolDic[roleTypeName].TakeOut();
             role.TakeOut(scene, guid);
+            role.transform.SetParent(scene.RoleNode);
             scene.ActiveRole_Guid.Add(role.GUID, role);
             scene.ActiveRole_Trans.Add(role.transform, role);
             return role;

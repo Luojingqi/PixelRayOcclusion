@@ -26,16 +26,23 @@ namespace PRO
         public void SwitchScene(SceneEntity scene)
         {
             BlockMaterial.DrawApplyQueue.Clear();
-            if (NowScene != null)
+            if (nowScene != null)
             {
-                NowScene.sceneCatalog.cameraPos = Camera.main.transform.position;
-                NowScene.sceneCatalog.mainRound = GamePlayMain.Inst.Round?.GUID;
-                BlockMaterial.ClearBind(NowScene);
+                nowScene.gameObject.SetActive(false);
+                nowScene.sceneCatalog.cameraPos = Camera.main.transform.position;
+                nowScene.sceneCatalog.mainRound = GamePlayMain.Inst.Round?.GUID;
+                BlockMaterial.ClearBind(nowScene);
             }
-            Camera.main.transform.position = scene.sceneCatalog.cameraPos;
-            if (scene.sceneCatalog.mainRound != null)
-                GamePlayMain.Inst.Round = scene.ActiveRound[scene.sceneCatalog.mainRound];
-            BlockMaterial.Bind(scene);
+
+            if (scene != null)
+            {
+                scene.gameObject.SetActive(true);
+                Camera.main.transform.position = scene.sceneCatalog.cameraPos;
+                if (scene.sceneCatalog.mainRound != null)
+                    GamePlayMain.Inst.Round = scene.ActiveRound[scene.sceneCatalog.mainRound];
+                BlockMaterial.Bind(scene);
+            }
+
             nowScene = scene;
         }
         public void TimeAwake()

@@ -89,7 +89,8 @@ namespace PRO
             building.TriggerCollider = go.AddComponent<BoxCollider2D>();
             building.TriggerCollider.isTrigger = true;
             building._scene = scene;
-
+            building.transform.SetParent(scene.BuildingNode);
+            scene.ActiveBuilding.Add(guid, building);
             go.layer = (int)GameLayer.Building;
             return building;
         }
