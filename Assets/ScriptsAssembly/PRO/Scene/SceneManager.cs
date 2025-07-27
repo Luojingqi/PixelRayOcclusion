@@ -60,8 +60,8 @@ namespace PRO
             //加载所有的存档目录
             var catalogList = GameSaveCatalog.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
-            GameSaveCatalog nowSave = catalogList.Find((info) => info.name == "testSave");            //选择存档的第一个场景
-            SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];
+            GameSaveCatalog nowSave = catalogList.Find((info) => info.name == "testSave");            
+            SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];//选择存档的第一个场景
             //转换为实体数据
             SceneEntity scene = SceneEntity.TakeOut(sceneCatalog);
             scenes.Add(nowSave.sceneNameList[0], scene);

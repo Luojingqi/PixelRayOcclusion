@@ -3,6 +3,7 @@ using PRO.DataStructure;
 using PRO.Tool;
 using PRO.TurnBased;
 using System;
+using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
@@ -80,24 +81,25 @@ namespace PRO.AI
             }
 
 #if PRO_MCTS_SERVER
-            public void 访问(Socket removeSocket, FlatBufferBuilder builder, string scenePath)
+            public void 访问(IPEndPoint idleIPEndPoint, FlatBufferBuilder builder, string scenePath)
             {
                 if (chiles.Count == 0)
                 {
                     if (已扩展) return;
                     else
                     {
+                        var nodeList = mcts.main_server.NodeList;
                         var workData = new ClientWorkData();
-                        workData.node = mcts.NodeList[mcts.NodeList.Count - 1];
-                        WorkClientSocketDic.Add(removeSocket, workData);
+                        workData.node = nodeList[nodeList.Count - 1];
+                        mcts.main_server.WorkDataDic.Add(idleIPEndPoint.Port, workData);
                         Add线程占用(1);
                         //第一次访问
                         //没扩展所以没子节点，发送到模拟客户端里扩展并模拟
-                        Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[mcts.NodeList.Count];
-                        Span<int> nodeListOffsetArray = stackalloc int[mcts.NodeList.Count];
-                        for (int i = 0; i < mcts.NodeList.Count; i++)
+                        Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[nodeList.Count];
+                        Span<int> nodeListOffsetArray = stackalloc int[nodeList.Count];
+                        for (int i = 0; i < nodeList.Count; i++)
                         {
-                            var data = mcts.NodeList[i].ToDisk(builder);
+                            var data = nodeList[i].ToDisk(builder);
                             nodeTypeListOffsetArray[i] = data.Item1;
                             nodeListOffsetArray[i] = data.Item2.Value;
                         }
@@ -109,28 +111,14 @@ namespace PRO.AI
                         Flat.Start_Cmd.AddNodes(builder, nodeListOffset);
                         Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
                         builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
-                        removeSocket.Send(builder.ToSpan());
-
-                        //var bb = new FlatBufferBuilder(1024);
-                        //var span = builder.ToSpan();
-                        //var newSpan = bb.DataBuffer.ToSpan(0, 1024);
-                        //for (int i = 0; i < span.Length; i++)
-                        //{
-                        //    newSpan[i] = span[i];
-                        //}
-                        //var diskData = Flat.Start_Cmd.GetRootAsStart_Cmd(bb.DataBuffer);
-                        ////Debug.Log(diskData.Path);
-                        ////for (int i = diskData.NodesLength - 1; i >= 0; i--)
-                        ////{
-                        ////    Debug.Log(diskData.NodesType(i));
-                        ////}
+                        mcts.main_server.server.SendTo(builder.DataBuffer.GetBytes(), builder.DataBuffer.Position, builder.Offset, SocketFlags.None, idleIPEndPoint);
                     }
                 }
                 else
                 {
-                    mcts.NodeList.Add(this);
                     var nextNode = chiles.Dequeue();
-                    nextNode.访问(removeSocket, builder, scenePath);
+                    mcts.main_server.NodeList.Add(nextNode);
+                    nextNode.访问(idleIPEndPoint, builder, scenePath);
                     chiles.Enqueue(nextNode, -nextNode.Get_UCB());
                 }
             }

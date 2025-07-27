@@ -60,6 +60,7 @@ namespace Google.FlatBuffers
         public abstract ReadOnlySpan<byte> ReadOnlySpan { get; }
         public abstract Memory<byte> Memory { get; }
         public abstract ReadOnlyMemory<byte> ReadOnlyMemory { get; }
+        public abstract byte[] Bytes { get; }
 
 #else
         public byte[] Buffer
@@ -108,6 +109,7 @@ namespace Google.FlatBuffers
         public override ReadOnlySpan<byte> ReadOnlySpan => _buffer;
         public override Memory<byte> Memory => _buffer;
         public override ReadOnlyMemory<byte> ReadOnlyMemory => _buffer;
+        public override byte[] Bytes => _buffer;
 #endif
 
         private void InitBuffer()
@@ -168,6 +170,11 @@ namespace Google.FlatBuffers
         public void GrowFront(int newSize)
         {
             _buffer.GrowFront(newSize);
+        }
+
+        public byte[] GetBytes()
+        {
+            return _buffer.Bytes;
         }
 
         public byte[] ToArray(int pos, int len)

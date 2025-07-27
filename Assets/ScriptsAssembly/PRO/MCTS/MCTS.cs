@@ -11,14 +11,39 @@ namespace PRO.AI
 {
     public partial class MCTS
     {
+#if PRO_MCTS_SERVER
+        private MainNode_Server main_server;
+#endif
+#if PRO_MCTS_CLIENT
+        private MainNode_Client main_client;
+#endif
         private MainNode main;
         private RoundFSM round;
         private StartingData startingData = new StartingData();
-        private List<NodeBase> NodeList = new List<NodeBase>(128);
 
-        public MCTS()
+        public enum Mode
         {
-            main = new MainNode(this);
+            Server,
+            Clinet
+        }
+
+        public MCTS(Mode mode)
+        {
+            switch (mode)
+            {
+#if PRO_MCTS_SERVER
+                case Mode.Server: 
+                    main_server = new MainNode_Server(this);
+                    main = main_server;
+                    break;
+#endif
+#if PRO_MCTS_CLIENT
+                case Mode.Clinet:
+                    main_client = new MainNode_Client(this); 
+                    main = main_client;
+                    break;
+#endif
+            }
         }
 
         public void Clear()
@@ -26,12 +51,6 @@ namespace PRO.AI
             main.PutIn();
             round = null;
             startingData.Clear();
-            NodeList.Clear();
-        }
-
-        private struct ClientWorkData
-        {
-            public NodeBase node;
         }
 
         /// <summary>
@@ -65,83 +84,33 @@ namespace PRO.AI
         }
 
         #region Socket
+        private static IPEndPoint serverIPEndPoint = new IPEndPoint(IPAddress.Loopback, 17000);
+#if PRO_MCTS_SERVER
         public static void Init()
         {
-#if PRO_MCTS_SERVER
-            Server.Bind(new IPEndPoint(IPAddress.Loopback, 17000));
-            Server.Listen(100);
-            new Thread(AcceptThread).Start();
-#endif
-#if PRO_MCTS_CLIENT
-            Client.Connect(new IPEndPoint(IPAddress.Loopback, 17000));
-            Debug.Log("连接成功");
+            AcceptServer.Bind(serverIPEndPoint);
             new Thread(() =>
             {
-                FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
-                var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
+                byte[] bytes = new byte[0];
+                EndPoint remotePoint = new IPEndPoint(IPAddress.Any, 0);
                 while (true)
                 {
-                    int length = Client.Receive(buffer);
-                    if (length > 0)
-                    {
-                        Debug.Log("客户端收到消息" + length);
-                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                        ClientReceive.Invoke(Client, builder, length));
-                    }
-                    else if (length == 0)
-                    {
-                        Debug.Log("连接断开");
-                        break;
-                    }
+                    int length = AcceptServer.ReceiveFrom(bytes, ref remotePoint);
+                    var remote = remotePoint as IPEndPoint;
+                    Debug.Log("客户端连接: " + remote.Port);
+                    IdleClientEndPointQueue.Enqueue(remote.Port);
                 }
             }).Start();
-#endif
         }
-#if PRO_MCTS_CLIENT
-        private static event Action<Socket, FlatBufferBuilder, int> ClientReceive;
-        private static Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-#endif
-
-#if PRO_MCTS_SERVER
-        private static object lockObject = new object();
         public void 开始模拟(RoundFSM round)
         {
             this.round = round;
             startingData.Init(round);
-            main.开始模拟();
+            main_server.开始模拟();
         }
-        private static void AcceptThread()
-        {
-            while (true)
-            {
-                Socket remoteSocket = Server.Accept();
-                new Thread(() =>
-                {
-                    FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
-                    var buffer = builder.DataBuffer.ToSpan(0, builder.DataBuffer.Length);
-                    while (true)
-                    {
-                        int length = remoteSocket.Receive(buffer);
-                        if (length > 0)
-                        {
-                            Debug.Log("服务端收到消息" + length);
-                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                            ServerReceive.Invoke(remoteSocket, builder, length));
-                        }
-                        else if (length == 0)
-                        {
-                            Debug.Log("连接断开");
-                            break;
-                        }
-                    }
-                }).Start();
-                IdleClientSocketQueue.Enqueue(remoteSocket);
-            }
-        }
-        private static event Action<Socket, FlatBufferBuilder, int> ServerReceive = (a, b, c) => { };
-        private static Socket Server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        private static Queue<Socket> IdleClientSocketQueue = new Queue<Socket>();
-        private static Dictionary<Socket, ClientWorkData> WorkClientSocketDic = new Dictionary<Socket, ClientWorkData>();
+        private static object lockObject = new object();
+        private static Socket AcceptServer = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private static Queue<int> IdleClientEndPointQueue = new Queue<int>();
 #endif
         #endregion
     }

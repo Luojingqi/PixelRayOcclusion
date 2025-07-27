@@ -16,8 +16,13 @@ namespace PRO
         {
             Inst = this;
             OperateFSMBase.InitOperateType();
+#if PRO_MCTS_SERVER
             MCTS.Init();
-            mcts = new MCTS();
+            mcts_server = new MCTS(MCTS.Mode.Server);
+#endif
+#if PRO_MCTS_CLIENT
+            mcts_client = new MCTS(MCTS.Mode.Clinet);
+#endif
         }
 
 
@@ -44,9 +49,12 @@ namespace PRO
         }
         [ShowInInspector]
         private RoundFSM round;
-
-        private MCTS mcts;
-
+#if PRO_MCTS_SERVER
+        private MCTS mcts_server;
+#endif
+#if PRO_MCTS_CLIENT
+        private MCTS mcts_client;
+#endif
         bool p = false;
 
         public void TimeUpdate()
@@ -88,7 +96,7 @@ namespace PRO
         [Button]
         public void MTCS()
         {
-            mcts.开始模拟(round);
+            mcts_server.开始模拟(round);
         }
 #elif PRO_MCTS_CLIENT
         }
