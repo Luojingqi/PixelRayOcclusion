@@ -5,6 +5,7 @@ using PRO.TurnBased;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using UnityEngine;
 
 namespace PRO.AI
@@ -20,9 +21,13 @@ namespace PRO.AI
                 foreach (var node in chiles)
                     node.PutIn();
                 chiles.Clear();
+#if PRO_MCTS_SERVER
                 for (int i = 0; i < Effects.Length; i++)
                     Effects[i] = default;
                 已扩展 = false;
+                线程占用 = 0;
+                访问次数 = 0;
+#endif
                 turnTimeNum = 0;
             }
 
@@ -234,12 +239,12 @@ namespace PRO.AI
             public int turnTimeNum;
 
 
-            public bool 已扩展 = false;
-
             public NodeBase parent;
             public PriorityQueue<NodeBase> chiles = new PriorityQueue<NodeBase>();
 
             public MCTS mcts;
+#if PRO_MCTS_SERVER
+            public bool 已扩展 = false;
 
             public int 访问次数;
             public int 线程占用;
@@ -263,8 +268,6 @@ namespace PRO.AI
                 return 经验系数 + 探索系数;
             }
 
-
-
             public Effect[] Effects = new Effect[(int)EffectAgent.end];
             public void AddEffect(EffectAgent agent, Effect addEffect)
             {
@@ -273,6 +276,7 @@ namespace PRO.AI
                 Effects[(int)agent] = byEffect;
                 parent?.AddEffect(agent, addEffect);
             }
+#endif
             public struct Effect
             {
                 public int 血量;

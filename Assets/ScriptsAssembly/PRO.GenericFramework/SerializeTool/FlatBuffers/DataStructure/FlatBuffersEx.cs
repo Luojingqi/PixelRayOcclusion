@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using UnityEngine.UIElements;
 
 namespace Google.FlatBuffers
 {
@@ -41,10 +42,13 @@ namespace Google.FlatBuffers
             int allObjectSize = oneObjectSize * datas.Length;
             StartVector(oneObjectSize, datas.Length, oneObjectSize);
             Prep(oneObjectSize, allObjectSize);
-            datas.Reverse();
-            ToLittleEndian(datas, oneObjectSize);
+            Span<T> copyDatas = stackalloc T[datas.Length];
+            fixed (T* src = datas, dest = copyDatas)
+                Buffer.MemoryCopy(src, dest, allObjectSize, allObjectSize);
+            copyDatas.Reverse();
+            ToLittleEndian(copyDatas, oneObjectSize);
             _space -= allObjectSize;
-            fixed (T* prt = datas)
+            fixed (T* prt = copyDatas)
             {
                 Span<byte> datas_byte = new Span<byte>(prt, allObjectSize);
                 datas_byte.CopyTo(_bb.ToSpan(_space, allObjectSize));

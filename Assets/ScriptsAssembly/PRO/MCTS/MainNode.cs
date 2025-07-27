@@ -153,6 +153,7 @@ namespace PRO.AI
             private Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             public MainNode_Client(MCTS mcts) : base(mcts)
             {
+                TimeManager.enableUpdate = false;
                 client.Bind(new IPEndPoint(IPAddress.Loopback, UnityEngine.Random.Range(10000, 30000)));
                 client.SendTo(new byte[0], serverIPEndPoint);
                 new Thread(() =>
@@ -214,28 +215,26 @@ namespace PRO.AI
                             node = nowNode;
                         }
                         builder.Clear();
-                        NodeBase rootNode = mcts.main.chiles.Dequeue();
-                        if (rootNode != null)
+
+                        NodeBase rootNode = mcts.main.chiles.Peek();
+                        Action<FlatBufferBuilder> action = null;
+                        TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
+                            rootNode.访问(builder, action));
+                        Span<int> nodesOffsetArray = stackalloc int[node.chiles.Count];
+                        Span<Flat.NodeBase> nodeTypesOffsetArray = stackalloc Flat.NodeBase[node.chiles.Count];
+                        for (int i = 0; i < node.chiles.Count; i++)
                         {
-                            Action<FlatBufferBuilder> action = null;
-                            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                                rootNode.访问(builder, action));
-                            Span<int> nodesOffsetArray = stackalloc int[node.chiles.Count];
-                            Span<Flat.NodeBase> nodeTypesOffsetArray = stackalloc Flat.NodeBase[node.chiles.Count];
-                            for (int i = 0; i < node.chiles.Count; i++)
-                            {
-                                var data = node.chiles[i].ToDisk(builder);
-                                nodeTypesOffsetArray[i] = data.Item1;
-                                nodesOffsetArray[i] = data.Item2.Value;
-                            }
-                            var nodeTypesOffsetArrayOffset = builder.CreateVector_Data(nodeTypesOffsetArray);
-                            var nodesOffsetArrayOffset = builder.CreateVector_Offset(nodesOffsetArray);
-                            Flat.Start_Rst.StartStart_Rst(builder);
-                            Flat.Start_Rst.AddNodes(builder, nodesOffsetArrayOffset);
-                            Flat.Start_Rst.AddNodesType(builder, nodeTypesOffsetArrayOffset);
-                            action?.Invoke(builder);
-                            builder.Finish(Flat.Start_Rst.EndStart_Rst(builder).Value);
+                            var data = node.chiles[i].ToDisk(builder);
+                            nodeTypesOffsetArray[i] = data.Item1;
+                            nodesOffsetArray[i] = data.Item2.Value;
                         }
+                        var nodeTypesOffsetArrayOffset = builder.CreateVector_Data(nodeTypesOffsetArray);
+                        var nodesOffsetArrayOffset = builder.CreateVector_Offset(nodesOffsetArray);
+                        Flat.Start_Rst.StartStart_Rst(builder);
+                        Flat.Start_Rst.AddNodes(builder, nodesOffsetArrayOffset);
+                        Flat.Start_Rst.AddNodesType(builder, nodeTypesOffsetArrayOffset);
+                        action?.Invoke(builder);
+                        builder.Finish(Flat.Start_Rst.EndStart_Rst(builder).Value);
                         CountdownEvent countdown_PutIn = null;
                         TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                         {

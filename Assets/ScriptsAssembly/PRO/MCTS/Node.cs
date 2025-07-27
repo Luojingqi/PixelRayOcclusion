@@ -3,6 +3,9 @@ using PRO.Skill;
 using PRO.Tool;
 using PRO.TurnBased;
 using System;
+using System.Text;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace PRO.AI
 {
