@@ -3,9 +3,9 @@ using PRO.DataStructure;
 using PRO.Tool;
 using PRO.TurnBased;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using UnityEngine;
 
 namespace PRO.AI
@@ -31,6 +31,16 @@ namespace PRO.AI
                 turnTimeNum = 0;
             }
 
+
+#if PRO_MCTS_SERVER
+            public void 访问(List<NodeBase> nodeList)
+            {
+                nodeList.Add(this);
+                访问次数++;
+                if (chiles.Count != 0) chiles[0].访问(nodeList);
+            }
+#endif
+#if PRO_MCTS_CLIENT
             private bool 结束检查(Span<Effect> effects)
             {
                 if (this is Node node && node.operate is Skill.Skill_0_0)
@@ -85,51 +95,6 @@ namespace PRO.AI
                 return false;
             }
 
-#if PRO_MCTS_SERVER
-            public void 访问(IPEndPoint idleIPEndPoint, FlatBufferBuilder builder, string scenePath)
-            {
-                访问次数++;
-                if (chiles.Count == 0)
-                {
-                    if (已扩展) return;
-                    else
-                    {
-                        var nodeList = mcts.main_server.NodeList;
-                        var workData = new ClientWorkData();
-                        workData.node = nodeList[nodeList.Count - 1];
-                        mcts.main_server.WorkDataDic.Add(idleIPEndPoint.Port, workData);
-                        Add线程占用(1);
-                        //第一次访问
-                        //没扩展所以没子节点，发送到模拟客户端里扩展并模拟
-                        Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[nodeList.Count];
-                        Span<int> nodeListOffsetArray = stackalloc int[nodeList.Count];
-                        for (int i = 0; i < nodeList.Count; i++)
-                        {
-                            var data = nodeList[i].ToDisk(builder);
-                            nodeTypeListOffsetArray[i] = data.Item1;
-                            nodeListOffsetArray[i] = data.Item2.Value;
-                        }
-                        var pathOffset = builder.CreateString(scenePath);
-                        var nodeTypeListOffset = builder.CreateVector_Data(nodeTypeListOffsetArray);
-                        var nodeListOffset = builder.CreateVector_Offset(nodeListOffsetArray);
-                        Flat.Start_Cmd.StartStart_Cmd(builder);
-                        Flat.Start_Cmd.AddPath(builder, pathOffset);
-                        Flat.Start_Cmd.AddNodes(builder, nodeListOffset);
-                        Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
-                        builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
-                        mcts.main_server.server.SendTo(builder.DataBuffer.GetBytes(), builder.DataBuffer.Position, builder.Offset, SocketFlags.None, idleIPEndPoint);
-                    }
-                }
-                else
-                {
-                    var nextNode = chiles.Dequeue();
-                    mcts.main_server.NodeList.Add(nextNode);
-                    nextNode.访问(idleIPEndPoint, builder, scenePath);
-                    chiles.Enqueue(nextNode, -nextNode.Get_UCB());
-                }
-            }
-#endif
-#if PRO_MCTS_CLIENT
             public void 访问(FlatBufferBuilder builder, Action<FlatBufferBuilder> action)
             {
                 执行();
@@ -215,13 +180,23 @@ namespace PRO.AI
                         node.turnTimeNum = turnTimeNum;
                         chiles.Enqueue(node, float.MinValue);
                     }
+                    reusableList.Dispose();
                 }
-                for (int i = maxTurnTimeNum - turnTimeNum; i > 0; i--)
+                //for (int i = maxTurnTimeNum - turnTimeNum; i > 0; i--)
+                //{
+                //    var node = TimeNode.TakeOut();
+                //    node.parent = this;
+                //    node.mcts = mcts;
+                //    node.timeNum = i;
+                //    node.turnTimeNum = turnTimeNum + node.timeNum;
+                //    chiles.Enqueue(node, float.MinValue);
+                //}
+                if (turnTimeNum < maxTurnTimeNum)
                 {
                     var node = TimeNode.TakeOut();
                     node.parent = this;
                     node.mcts = mcts;
-                    node.timeNum = i;
+                    node.timeNum = 1;
                     node.turnTimeNum = turnTimeNum + node.timeNum;
                     chiles.Enqueue(node, float.MinValue);
                 }
@@ -233,7 +208,7 @@ namespace PRO.AI
             /// <summary>
             /// 每个回合最大的等待时间/每个为0.5s
             /// </summary>
-            private static int maxTurnTimeNum = 12;
+            private static int maxTurnTimeNum = 10;
             /// <summary>
             /// 一个回合已经持续的时间
             /// </summary>
@@ -253,8 +228,7 @@ namespace PRO.AI
             public void Add线程占用(int num)
             {
                 线程占用 += num;
-                if (parent != null)
-                    parent.线程占用 += num;
+                parent?.Add线程占用(num);
             }
 
 

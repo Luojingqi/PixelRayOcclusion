@@ -17,6 +17,7 @@ namespace PRO.AI
             public static Node TakeOut() => pool.TakeOut();
             public override void PutIn()
             {
+                base.PutIn();
                 operate = null;
                 FlatBufferBuilder.PutIn(builder);
                 builder = null;
@@ -39,9 +40,11 @@ namespace PRO.AI
 
             public override (Flat.NodeBase, Offset<int>) ToDisk(FlatBufferBuilder builder)
             {
+                //To(this.builder.ToSpan());
                 var roleOffset = builder.CreateString(operate.Agent.GUID);
                 var operateOffset = builder.CreateString(operate.GUID);
                 var builderOffset = builder.CreateVector_Builder(this.builder);
+                //To(this.builder.ToSpan());
                 Flat.Node.StartNode(builder);
                 Flat.Node.AddTurnTimeNum(builder, turnTimeNum);
                 Flat.Node.AddRole(builder, roleOffset);
@@ -61,7 +64,17 @@ namespace PRO.AI
                 Span<byte> builderByteSpan = node.builder.DataBuffer.ToSpan(0, length);
                 for (int i = length - 1; i >= 0; i--)
                     builderByteSpan[length - i - 1] = diskData.Builder(i);
+                node.builder.Offset = length;
+                //To(node.builder.DataBuffer.ToSpan(0, length));
                 return node;
+            }
+
+            public static void To(Span<byte> bytes)
+            {
+                StringBuilder sb = new StringBuilder(bytes.Length);
+                for (int i = 0; i < bytes.Length; i++)
+                    sb.Append(bytes[i]);
+                Debug.Log(sb.ToString());
             }
         }
     }

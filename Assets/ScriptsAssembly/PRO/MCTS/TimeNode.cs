@@ -13,6 +13,7 @@ namespace PRO.AI
 
             public override void PutIn()
             {
+                base.PutIn();
                 timeNum = 0;
                 pool.PutIn(this);
             }
@@ -22,7 +23,7 @@ namespace PRO.AI
             public override void 执行()
             {
                 turnTimeNum += timeNum;
-                float time = timeNum * 0.5f;
+                float time = timeNum * 0.4f;
                 while (time > 0)
                 {
                     time -= TimeManager.physicsDeltaTime;

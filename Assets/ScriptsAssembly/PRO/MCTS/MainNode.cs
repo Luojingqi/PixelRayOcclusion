@@ -23,12 +23,12 @@ namespace PRO.AI
             public override void PutIn()
             {
                 base.PutIn();
-                WorkDataDic.Clear();
-                NodeList.Clear();
+                workDataDic.Clear();
+                nodeList.Clear();
             }
-            public List<NodeBase> NodeList = new List<NodeBase>(128);
-            public Dictionary<int, ClientWorkData> WorkDataDic = new Dictionary<int, ClientWorkData>();
-            public Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            private List<NodeBase> nodeList = new List<NodeBase>(128);
+            private Dictionary<int, ClientWorkData> workDataDic = new Dictionary<int, ClientWorkData>();
+            private Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             public MainNode_Server(MCTS mcts) : base(mcts)
             {
                 server.Bind(new IPEndPoint(IPAddress.Loopback, UnityEngine.Random.Range(10000, 30000)));
@@ -42,8 +42,9 @@ namespace PRO.AI
                         int length = server.ReceiveFrom(bytes, ref remotePoint);
                         if (length > 0)
                         {
-                            //Debug.Log("服务器收到消息" + length);
-                            ServerReceive(remotePoint as IPEndPoint, builder, length);
+                            Debug.Log("服务器收到消息" + length);
+                            lock (lockObject)
+                                ServerReceive(remotePoint as IPEndPoint, builder, length);
                         }
                         else break;
                     }
@@ -51,8 +52,8 @@ namespace PRO.AI
                 }).Start();
             }
 
-            private int 单次模拟最大等待时间 = 10000;
-            private int max = 100;
+            private int 单次模拟最大等待时间 = 5000;
+            private int max = 300;
             public void 开始模拟()
             {
                 var round = mcts.round;
@@ -74,6 +75,7 @@ namespace PRO.AI
 
                         for (int i = 0; i < max; i++)
                         {
+                            #region 等待可用模拟器
                             Debug.Log($"第{i}次模拟-等待模拟器中");
                             int time = 单次模拟最大等待时间;
                             while (time > 0)
@@ -89,13 +91,44 @@ namespace PRO.AI
                                 return;
                             }
                             Debug.Log($"第{i}次模拟-等待模拟器成功");
-                            访问次数 += 1;
-                            var nextNode = chiles.Dequeue();
-                            NodeList.Add(nextNode);
-                            nextNode.访问(remoteIPEndPoint, builder, sceneCatalog.directoryInfo.FullName);
-                            chiles.Enqueue(nextNode, -nextNode.Get_UCB());
+                            #endregion
+                            #region 单次访问
+                            访问次数++;
+                            chiles[0].访问(nodeList);
+                            var workData = new ClientWorkData();
+                            workData.node = nodeList[nodeList.Count - 1];
+                            Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[nodeList.Count];
+                            Span<int> nodeListOffsetArray = stackalloc int[nodeList.Count];
+                            for (int n = 0; n < nodeList.Count; n++)
+                            {
+                                var data = nodeList[n].ToDisk(builder);
+                                nodeTypeListOffsetArray[n] = data.Item1;
+                                nodeListOffsetArray[n] = data.Item2.Value;
+                            }
+                            lock (lockObject)
+                            {
+                                线程占用++;
+                                for (int n = 0; n < nodeList.Count; n++)
+                                    nodeList[n].线程占用++;
+                                for (int n = 0; n < nodeList.Count; n++)
+                                {
+                                    var node = nodeList[n];
+                                    node.parent.chiles.Enqueue(node.parent.chiles.Dequeue(), -node.Get_UCB());
+                                }
+                                workDataDic.Add(remoteIPEndPoint.Port, workData);
+                            }
+                            var pathOffset = builder.CreateString(sceneCatalog.directoryInfo.FullName);
+                            var nodeTypeListOffset = builder.CreateVector_Data(nodeTypeListOffsetArray);
+                            var nodeListOffset = builder.CreateVector_Offset(nodeListOffsetArray);
+                            Flat.Start_Cmd.StartStart_Cmd(builder);
+                            Flat.Start_Cmd.AddPath(builder, pathOffset);
+                            Flat.Start_Cmd.AddNodes(builder, nodeListOffset);
+                            Flat.Start_Cmd.AddNodesType(builder, nodeTypeListOffset);
+                            builder.Finish(Flat.Start_Cmd.EndStart_Cmd(builder).Value);
+                            server.SendTo(builder.DataBuffer.GetBytes(), builder.DataBuffer.Position, builder.Offset, SocketFlags.None, remoteIPEndPoint);
                             builder.Clear();
-                            NodeList.Clear();
+                            nodeList.Clear();
+                            #endregion
                         }
                         {
                             int time = 单次模拟最大等待时间;
@@ -105,6 +138,7 @@ namespace PRO.AI
                                 time -= 25;
                                 Thread.Sleep(25);
                             }
+
                             NodeBase node = this;
                             while (true)
                             {
@@ -136,10 +170,9 @@ namespace PRO.AI
 
             private void ServerReceive(IPEndPoint removePoint, FlatBufferBuilder builder, int length)
             {
-                if (WorkDataDic.ContainsKey(removePoint.Port) == false) goto end;
                 var startRstData = Flat.Start_Rst.GetRootAsStart_Rst(builder.DataBuffer);
-                var workData = WorkDataDic[removePoint.Port];
-                WorkDataDic.Remove(removePoint.Port);
+                var workData = workDataDic[removePoint.Port];
+                workDataDic.Remove(removePoint.Port);
 
                 var node = workData.node;
                 node.Add线程占用(-1);
@@ -149,27 +182,28 @@ namespace PRO.AI
                         var effectDiskData = startRstData.Effects(i).Value;
                         node.AddEffect((EffectAgent)((int)EffectAgent.end - i - 1), Effect.ToRAM(effectDiskData));
                     }
-                for (int i = startRstData.NodesLength - 1; i >= 0; i--)
+                if (node.已扩展 == false)
                 {
-                    var nodeType = startRstData.NodesType(i);
-                    NodeBase nextNode = null;
-                    switch (nodeType)
+                    for (int i = startRstData.NodesLength - 1; i >= 0; i--)
                     {
-                        case Flat.NodeBase.Node:
-                            nextNode = Node.ToRAM(startRstData.Nodes<Flat.Node>(i).Value, mcts.round.Scene);
-                            break;
-                        case Flat.NodeBase.TimeNode:
-                            nextNode = TimeNode.ToRAM(startRstData.Nodes<Flat.TimeNode>(i).Value, mcts.round.Scene);
-                            break;
+                        var nodeType = startRstData.NodesType(i);
+                        NodeBase nextNode = null;
+                        switch (nodeType)
+                        {
+                            case Flat.NodeBase.Node:
+                                nextNode = Node.ToRAM(startRstData.Nodes<Flat.Node>(i).Value, mcts.round.Scene);
+                                break;
+                            case Flat.NodeBase.TimeNode:
+                                nextNode = TimeNode.ToRAM(startRstData.Nodes<Flat.TimeNode>(i).Value, mcts.round.Scene);
+                                break;
+                        }
+                        nextNode.parent = node;
+                        nextNode.mcts = mcts;
+                        node.chiles.Enqueue(nextNode, float.MinValue);
                     }
-                    nextNode.parent = node;
-                    nextNode.mcts = mcts;
-                    node.chiles.Enqueue(nextNode, float.MinValue);
                     node.已扩展 = true;
                 }
-            end:
-                lock (lockObject)
-                    IdleClientEndPointQueue.Enqueue(removePoint.Port); 
+                IdleClientEndPointQueue.Enqueue(removePoint.Port);
             }
         }
 #endif
