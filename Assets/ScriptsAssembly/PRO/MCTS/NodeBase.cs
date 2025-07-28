@@ -88,6 +88,7 @@ namespace PRO.AI
 #if PRO_MCTS_SERVER
             public void 访问(IPEndPoint idleIPEndPoint, FlatBufferBuilder builder, string scenePath)
             {
+                访问次数++;
                 if (chiles.Count == 0)
                 {
                     if (已扩展) return;
@@ -262,9 +263,12 @@ namespace PRO.AI
             {
                 float 探索系数 = c * Mathf.Sqrt(2 * Mathf.Log(parent.访问次数 + parent.线程占用) / (访问次数 + 线程占用));
                 float 经验系数 = 0;
-                经验系数 += Effects[0].血量;
-                经验系数 += Effects[1].血量;
-                经验系数 -= Effects[2].血量;
+                经验系数 += Effects[(int)EffectAgent.自己].血量;
+                经验系数 += Effects[(int)EffectAgent.自己].护甲;
+                经验系数 += Effects[(int)EffectAgent.友军].血量;
+                经验系数 += Effects[(int)EffectAgent.友军].护甲;
+                经验系数 -= Effects[(int)EffectAgent.敌军].血量;
+                经验系数 -= Effects[(int)EffectAgent.敌军].护甲;
                 return 经验系数 + 探索系数;
             }
 
@@ -273,6 +277,7 @@ namespace PRO.AI
             {
                 var byEffect = Effects[(int)agent];
                 byEffect.血量 += addEffect.血量;
+                byEffect.护甲 += addEffect.护甲;
                 Effects[(int)agent] = byEffect;
                 parent?.AddEffect(agent, addEffect);
             }
@@ -280,16 +285,17 @@ namespace PRO.AI
             public struct Effect
             {
                 public int 血量;
+                public int 护甲;
 
                 public Offset<Flat.Effect> ToDisk(FlatBufferBuilder builder)
                 {
-                    Debug.Log("创建");
-                    return Flat.Effect.CreateEffect(builder, 血量);
+                    return Flat.Effect.CreateEffect(builder, 血量, 护甲);
                 }
                 public static Effect ToRAM(Flat.Effect diskData)
                 {
                     var effect = new Effect();
                     effect.血量 = diskData.Value0;
+                    effect.护甲 = diskData.Value1;
 
                     return effect;
                 }

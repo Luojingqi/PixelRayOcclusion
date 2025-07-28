@@ -46,9 +46,11 @@ public struct Effect : IFlatbufferObject
   public Effect __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public int Value0 { get { return __p.bb.GetInt(__p.bb_pos + 0); } }
+  public int Value1 { get { return __p.bb.GetInt(__p.bb_pos + 4); } }
 
-  public static Offset<PRO.AI.Flat.Effect> CreateEffect(FlatBufferBuilder builder, int Value0) {
-    builder.Prep(4, 4);
+  public static Offset<PRO.AI.Flat.Effect> CreateEffect(FlatBufferBuilder builder, int Value0, int Value1) {
+    builder.Prep(4, 8);
+    builder.PutInt(Value1);
     builder.PutInt(Value0);
     return new Offset<PRO.AI.Flat.Effect>(builder.Offset);
   }
@@ -252,7 +254,7 @@ public struct Start_Rst : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public Start_Rst __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public PRO.AI.Flat.Effect? Effects(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.AI.Flat.Effect?)(new PRO.AI.Flat.Effect()).__assign(__p.__vector(o) + j * 4, __p.bb) : null; }
+  public PRO.AI.Flat.Effect? Effects(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.AI.Flat.Effect?)(new PRO.AI.Flat.Effect()).__assign(__p.__vector(o) + j * 8, __p.bb) : null; }
   public int EffectsLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
   public PRO.AI.Flat.NodeBase NodesType(int j) { int o = __p.__offset(6); return o != 0 ? (PRO.AI.Flat.NodeBase)__p.bb.Get(__p.__vector(o) + j * 1) : (PRO.AI.Flat.NodeBase)0; }
   public int NodesTypeLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
@@ -278,7 +280,7 @@ public struct Start_Rst : IFlatbufferObject
 
   public static void StartStart_Rst(FlatBufferBuilder builder) { builder.StartTable(3); }
   public static void AddEffects(FlatBufferBuilder builder, VectorOffset effectsOffset) { builder.AddOffset(0, effectsOffset.Value, 0); }
-  public static void StartEffectsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void StartEffectsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 4); }
   public static void AddNodesType(FlatBufferBuilder builder, VectorOffset nodesTypeOffset) { builder.AddOffset(1, nodesTypeOffset.Value, 0); }
   public static VectorOffset CreateNodesTypeVector(FlatBufferBuilder builder, PRO.AI.Flat.NodeBase[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte((byte)data[i]); return builder.EndVector(); }
   public static VectorOffset CreateNodesTypeVectorBlock(FlatBufferBuilder builder, PRO.AI.Flat.NodeBase[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -303,7 +305,7 @@ static public class Start_RstVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyVectorOfData(tablePos, 4 /*Effects*/, 4 /*PRO.AI.Flat.Effect*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 4 /*Effects*/, 8 /*PRO.AI.Flat.Effect*/, false)
       && verifier.VerifyVectorOfData(tablePos, 6 /*NodesType*/, 1 /*PRO.AI.Flat.NodeBase*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

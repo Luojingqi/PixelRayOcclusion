@@ -42,7 +42,7 @@ namespace PRO.AI
                         int length = server.ReceiveFrom(bytes, ref remotePoint);
                         if (length > 0)
                         {
-                            Debug.Log("服务器收到消息" + length);
+                            //Debug.Log("服务器收到消息" + length);
                             ServerReceive(remotePoint as IPEndPoint, builder, length);
                         }
                         else break;
@@ -51,10 +51,10 @@ namespace PRO.AI
                 }).Start();
             }
 
+            private int 单次模拟最大等待时间 = 10000;
             private int max = 100;
             public void 开始模拟()
             {
-                TimeManager.enableUpdate = false;
                 var round = mcts.round;
                 var scene = round.Scene;
                 var root = GameSaveCatalog.LoadGameSaveInfo("MCTS_Temp_GameSave");
@@ -75,14 +75,14 @@ namespace PRO.AI
                         for (int i = 0; i < max; i++)
                         {
                             Debug.Log($"第{i}次模拟-等待模拟器中");
-                            int time = 10000000;
-                            do
+                            int time = 单次模拟最大等待时间;
+                            while (time > 0)
                             {
                                 lock (lockObject)
                                     if (IdleClientEndPointQueue.TryDequeue(out var removePoint)) { remoteIPEndPoint.Port = removePoint; break; }
                                 time -= 25;
                                 Thread.Sleep(25);
-                            } while (time > 0);
+                            }
                             if (time <= 0)
                             {
                                 Debug.Log($"第{i}次模拟-没有空闲的模拟器");
@@ -97,10 +97,35 @@ namespace PRO.AI
                             builder.Clear();
                             NodeList.Clear();
                         }
+                        {
+                            int time = 单次模拟最大等待时间;
+                            while (time > 0)
+                            {
+                                if (线程占用 == 0) break;
+                                time -= 25;
+                                Thread.Sleep(25);
+                            }
+                            NodeBase node = this;
+                            while (true)
+                            {
+                                if (node.chiles.Count > 0)
+                                    node = node.chiles[0];
+                                else break;
+                                if (node != null)
+                                {
+                                    switch (node)
+                                    {
+                                        case Node n: Debug.Log(n.operate.Agent.Name + "|" + n.operate.config.Name); break;
+                                        case TimeNode t: Debug.Log(t.timeNum); break;
+                                    }
+                                }
+                                else break;
+                            }
 
-                        FlatBufferBuilder.PutIn(builder);
-                        mcts.Clear();
-                        sceneCatalog.directoryInfo.Delete();
+                            FlatBufferBuilder.PutIn(builder);
+                            mcts.Clear();
+                            sceneCatalog.directoryInfo.Delete(true);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -111,6 +136,7 @@ namespace PRO.AI
 
             private void ServerReceive(IPEndPoint removePoint, FlatBufferBuilder builder, int length)
             {
+                if (WorkDataDic.ContainsKey(removePoint.Port) == false) goto end;
                 var startRstData = Flat.Start_Rst.GetRootAsStart_Rst(builder.DataBuffer);
                 var workData = WorkDataDic[removePoint.Port];
                 WorkDataDic.Remove(removePoint.Port);
@@ -141,8 +167,9 @@ namespace PRO.AI
                     node.chiles.Enqueue(nextNode, float.MinValue);
                     node.已扩展 = true;
                 }
+            end:
                 lock (lockObject)
-                    IdleClientEndPointQueue.Enqueue(removePoint.Port);
+                    IdleClientEndPointQueue.Enqueue(removePoint.Port); 
             }
         }
 #endif
@@ -166,7 +193,7 @@ namespace PRO.AI
                         int length = client.ReceiveFrom(bytes, ref remotePoint);
                         if (length > 0)
                         {
-                            Debug.Log("客户端收到消息" + length);
+                            //Debug.Log("客户端收到消息" + length);
                             TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                                 ClientReceive(client, remotePoint as IPEndPoint, builder, length));
                         }

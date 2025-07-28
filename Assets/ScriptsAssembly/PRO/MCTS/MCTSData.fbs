@@ -5,6 +5,7 @@ namespace PRO.AI.Flat;
 struct Effect
 {
 	value0 : int;
+	value1 : int;
 }
 
 table TimeNode
