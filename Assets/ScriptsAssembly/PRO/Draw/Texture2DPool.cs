@@ -89,14 +89,13 @@ namespace PRO.Tool
         public static void InitPool()
         {
             SpriteRenderer spriteRenderer = new GameObject("SpriteRenderer").AddComponent<SpriteRenderer>();
-            spriteRenderer.gameObject.SetActive(false);
-            spriteRendererPool = new GameObjectPool<SpriteRenderer>(spriteRenderer.gameObject, SceneManager.Inst.PoolNode);
+            spriteRendererPool = new GameObjectPool<SpriteRenderer>(spriteRenderer, SceneManager.Inst.PoolNode);
         }
-        public static SpriteRenderer TakeOutSpriteRenderer() => spriteRendererPool.TakeOutT();
+        public static SpriteRenderer TakeOutSpriteRenderer() => spriteRendererPool.TakeOut();
         public static void PutIn(SpriteRenderer spriteRenderer)
         {
             spriteRenderer.sprite = null;
-            spriteRendererPool.PutIn(spriteRenderer.gameObject);
+            spriteRendererPool.PutIn(spriteRenderer);
         }
 
         #region 加载磁盘图片

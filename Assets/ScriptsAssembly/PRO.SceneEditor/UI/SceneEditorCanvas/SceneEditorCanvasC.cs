@@ -1,4 +1,3 @@
-using PRO.DataStructure;
 using PRO.Tool;
 using PROTool;
 using System;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace PRO.SceneEditor
 {
-    public class SceneEditorCanvasC : UIControllerBase
+    public class SceneEditorCanvasC : UIControllerBase, ITime_Start, ITime_Update
     {
         public override UIViewBase View => view;
         private SceneEditorCanvasV view = new SceneEditorCanvasV();
@@ -22,15 +21,17 @@ namespace PRO.SceneEditor
 
             Inst = this;
 
+            AddChildUI(view.ElementViewPanel);
+            AddChildUI(view.FileDirectoryInfoTree);
 
             for (int i = 0; i < DerivedBuildingBaseList.Count; i++)
                 view.Dropdown.options.Add(new TMP_Dropdown.OptionData(DerivedBuildingBaseList[i].Name));
         }
 
-        public void Start()
+        public void TimeStart()
         {
             Init("123");
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
 
         private Element_Disk HoldEntity;
@@ -46,8 +47,9 @@ namespace PRO.SceneEditor
             view.HoldIcon.gameObject.SetActive(false);
             HoldEntity = null;
         }
-        void Update()
+        public override void TimeUpdate()
         {
+            base.TimeUpdate();
             if (HoldEntity == null) return;
             if (Input.GetKeyDown(KeyCode.Mouse1)) { ClearHold(); return; }
             Vector2Int global = MousePoint.globalPos;
@@ -62,11 +64,8 @@ namespace PRO.SceneEditor
                     building.TriggerCollider.size = new Vector2(HoldEntity.width, HoldEntity.height) * Pixel.Size;
                     building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
                     building.transform.position = Block.GlobalToWorld(global);
-                    building.global = global;
+                    building.Global = global;
                     building.Size = new Vector2Int(HoldEntity.width, HoldEntity.height);
-
-                    building.Scene.BuildingInRAM.Add(building.GUID, building);
-                    building.Scene.sceneCatalog.buildingTypeDic.Add(building.GUID, building.GetType());
                 }
 
                 for (int y = 0; y < HoldEntity.height; y++)
@@ -78,13 +77,13 @@ namespace PRO.SceneEditor
                         Vector2Int nowGloab = global + new Vector2Int(x, y);
                         BlockBase blockBase = SceneManager.Inst.NowScene.GetBlockBase(view.Toggle.isOn ? BlockBase.BlockType.BackgroundBlock : BlockBase.BlockType.Block, Block.GlobalToBlock(nowGloab));
                         if (blockBase == null) continue;
-                        Pixel pixel = Pixel.TakeOut(typeName, colorName, Block.GlobalToPixel(nowGloab));
-                        blockBase.SetPixel(pixel);
+                        var pixel = blockBase.GetPixel(Block.GlobalToPixel(nowGloab));
+                        pixel.Replace(typeName, colorName);
                         if (building != null)
                         {
                             Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(pixel, new(x, y));
-                            building.Deserialize_AddBuilding_Pixel(building_Pixel);
-                            building.Deserialize_PixelSwitch(building_Pixel, pixel);
+                            building.ToRAM_AddBuilding_Pixel(building_Pixel);
+                            building.ToRAM_PixelSwitch(building_Pixel, pixel);
                         }
                     }
                 if (building != null)

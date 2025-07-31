@@ -1,8 +1,8 @@
-﻿using PRO.Tool;
+﻿using Newtonsoft.Json;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System.IO;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace PRO.Disk.Scene
 {
@@ -11,9 +11,6 @@ namespace PRO.Disk.Scene
     /// </summary>
     public class SceneCatalog
     {
-
-        public Dictionary<string, Type> buildingTypeDic;
-
         /// <summary>
         /// 场景文件夹的目录/{GameSave}/Scene/{SceneName}
         /// </summary>
@@ -21,10 +18,19 @@ namespace PRO.Disk.Scene
         public DirectoryInfo directoryInfo;
         private SceneCatalog() { }
 
+        public string name;
+
+        public Vector3 cameraPos = new Vector3(0, 0, -10);
+
+        public static void Clone(SceneCatalog form, SceneCatalog to)
+        {
+            to.name = form.name;
+            to.cameraPos = form.cameraPos;
+        }
 
         public void Save()
         {
-            JsonTool.StoreText(@$"{directoryInfo.FullName}\SceneCatalog.json", JsonTool.ToJson(this));
+            IOTool.SaveText(@$"{directoryInfo}\SceneCatalog.json", JsonTool.ToJson(this));
         }
 
 
@@ -34,19 +40,25 @@ namespace PRO.Disk.Scene
         /// <param name="name">场景名</param>
         /// <param name="sceneRoot">场景的根目录</param>
         /// <returns></returns>
-        public static SceneCatalog CreateFile(string name, GameSaveCatalog saveInfo, DirectoryInfo sceneRoot)
+        public static SceneCatalog CreateFile(string name, GameSaveCatalog saveInfo)
         {
             SceneCatalog info = new SceneCatalog();
             //创建场景根文件夹
-            DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{sceneRoot.FullName}\{name}");
+            DirectoryInfo sceneDirectory = Directory.CreateDirectory(@$"{saveInfo.directoryInfo}\Scene\{name}");
             //创建块文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Block");
+            Directory.CreateDirectory(@$"{sceneDirectory}\Block");
             //创建建筑文件夹
-            Directory.CreateDirectory(@$"{sceneDirectory.FullName}\Building");
+            Directory.CreateDirectory(@$"{sceneDirectory}\Building");
+            //创建角色文件夹
+            Directory.CreateDirectory(@$"{sceneDirectory}\Role");
+            //创建战斗文件夹
+            Directory.CreateDirectory(@$"{sceneDirectory}\Round");
+
+
+
             saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
-            info.buildingTypeDic = new Dictionary<string, Type>();
-            // typeInfo.buildingTypeDic.Add(Guid.NewGuid().ToString(), typeof(BuildingBase));
+            info.name = name;
             info.Save();
             return info;
         }
@@ -58,7 +70,7 @@ namespace PRO.Disk.Scene
         /// <returns></returns>
         public static SceneCatalog LoadSceneInfo(DirectoryInfo saveDirectoryInfo)
         {
-            if (JsonTool.LoadText(@$"{saveDirectoryInfo.FullName}\SceneCatalog.json", out string sceneInfoText))
+            if (IOTool.LoadText(@$"{saveDirectoryInfo}\SceneCatalog.json", out string sceneInfoText))
             {
                 SceneCatalog sceneCatalog = JsonTool.ToObject<SceneCatalog>(sceneInfoText);
                 if (sceneCatalog != null)

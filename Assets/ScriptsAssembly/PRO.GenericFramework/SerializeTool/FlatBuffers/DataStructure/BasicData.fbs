@@ -1,0 +1,72 @@
+﻿namespace PRO.Flat;
+
+struct Vector2
+{
+	x : float;
+	y : float;
+}
+struct Vector3
+{
+	x : float;
+	y : float;
+	z : float;
+}
+
+
+struct Vector2Int
+{
+	x : int;
+	y : int;
+}
+struct Vector3Int
+{
+	x : int;
+	y : int;
+	z : int;
+}
+
+struct Quaternion
+{
+	x : float;
+	y : float;
+	z : float;
+	w : float;
+}
+
+struct Vector2Byte
+{
+	x : ubyte;
+	y : ubyte;
+}
+
+struct Color32
+{
+	r : ubyte;
+	g : ubyte;
+	b : ubyte;
+	a : ubyte;
+}
+
+
+struct Transform
+{
+	position : Vector3;
+	rotation : Quaternion;
+	local_scale : Vector3;
+}
+
+struct Rigidbody2D
+{
+	velocity : Vector2;
+	angular_velocity : float;
+	simulated : bool;
+}
+
+struct RaycastHit2D
+{
+	centroid : Vector2;
+	distance : float;
+	fraction : float;
+	normal : Vector2;
+	point : Vector2;
+}

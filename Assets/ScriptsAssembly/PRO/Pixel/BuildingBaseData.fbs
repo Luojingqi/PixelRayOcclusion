@@ -1,0 +1,26 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.Flat;
+
+struct Building_PixelData
+{
+	type_index : int;
+	color_index : int;
+	offset : Vector2Int;
+	block_type : int;
+}
+
+table BuildingBaseData
+{
+	type_name : string;
+	name : string;
+	global : Vector2Int;
+	size : Vector2Int;
+
+	pixel_type_name_array : [string];
+	pixel_color_name_array : [string];
+
+	all_pixel : [Building_PixelData];
+
+	extend_data : [ubyte];
+}

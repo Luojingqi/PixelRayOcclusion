@@ -1,8 +1,8 @@
-using Sirenix.OdinInspector;
 using System;
+using System.Collections.Generic;
 namespace PRO
 {
-    public abstract class UIControllerBase : SerializedMonoBehaviour
+    public abstract class UIControllerBase : MonoScriptBase
     {
 
         public abstract UIViewBase View { get; }
@@ -20,7 +20,7 @@ namespace PRO
         /// </summary>
         public virtual void Init(string uiName)
         {
-            View.Init(transform);
+            View.Init(this);
             this.UIName = uiName;
         }
 
@@ -68,6 +68,21 @@ namespace PRO
             IsPause = false;
             View.canvasGroup.blocksRaycasts = true;
             View.canvasGroup.alpha = 1f;
+        }
+
+        protected List<ITime_Update> ChildUITimeUpdateList = new List<ITime_Update>();
+        protected void AddChildUI(UIChildControllerBase childUI)
+        {
+            childUI.Init();
+            if (childUI is ITime_Update i)
+            {
+                ChildUITimeUpdateList.Add(i);
+            }
+        }
+        public virtual void TimeUpdate()
+        {
+            foreach (var childUI in ChildUITimeUpdateList)
+                childUI.TimeUpdate();
         }
 
     }

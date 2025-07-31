@@ -6,12 +6,10 @@ namespace PRO.SceneEditor
     {
         public Transform Content { get; private set; }
         public ElementC Element { get; private set; }
-        
-        public override void Init(Transform transform)
+
+        public override void Init(UIChildControllerBase controller)
         {
-            base.Init(transform);
-
-
+            base.Init(controller);
             Content = transform.Find("Viewport/Content");
             Element = transform.Find("Viewport/Content/Element").GetComponent<ElementC>();
         }

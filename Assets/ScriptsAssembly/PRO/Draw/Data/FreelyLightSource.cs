@@ -1,5 +1,6 @@
 ﻿using PRO.Disk;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace PRO
 {
@@ -38,7 +39,6 @@ namespace PRO
                     }
                 }
                 gloabPos = value;
-
             }
         }
         public int Radius

@@ -22,7 +22,7 @@ namespace PRO.SceneEditor
             {
                 FileDirectoryInfoC infoC = FileDirectoryInfoTreeC.Inst.TakeOutInfo();
                 infoList.Add(infoC);
-                infoC.transform.parent = transform;
+                infoC.transform.SetParent(transform);
                 infoC.SetDirectoryInfo(directories[i]);
                 if (directories[i] == null) Log.Print("123");
                 if (directories[i].FullName == mark?.FullName)

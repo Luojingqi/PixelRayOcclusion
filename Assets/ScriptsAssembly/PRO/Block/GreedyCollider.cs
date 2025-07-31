@@ -15,24 +15,22 @@ namespace PRO
         public static void InitBoxCollider2DPool()
         {
             GameObject boxCollider2DPoolGo = new GameObject("BoxCollider2DPool");
-            boxCollider2DPoolGo.transform.parent = SceneManager.Inst.PoolNode;
+            boxCollider2DPoolGo.transform.SetParent(SceneManager.Inst.PoolNode);
             BoxCollider2D boxCollider = new GameObject("boxCollider").AddComponent<BoxCollider2D>();
-            boxCollider.gameObject.SetActive(false);
             boxCollider.gameObject.layer = (int)GameLayer.Block;
-            boxCollider.transform.parent = boxCollider2DPoolGo.transform;
-            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider.gameObject, boxCollider2DPoolGo.transform);
+            BoxCollider2DPool = new GameObjectPool<BoxCollider2D>(boxCollider, boxCollider2DPoolGo.transform);
 
         }
         public static BoxCollider2D TakeOut()
         {
-            BoxCollider2D box = BoxCollider2DPool.TakeOutT();
+            BoxCollider2D box = BoxCollider2DPool.TakeOut();
 
             return box;
         }
         public static void PutIn(BoxCollider2D box)
         {
             box.isTrigger = false;
-            BoxCollider2DPool.PutIn(box.gameObject);
+            BoxCollider2DPool.PutIn(box);
         }
         #endregion
         public struct ColliderData
@@ -54,13 +52,22 @@ namespace PRO
             /// </summary>
             public Vector2Byte length;
         }
+
+        private static ObjectPoolArbitrary<HashSet<Vector2Int>> pool_set = new ObjectPoolArbitrary<HashSet<Vector2Int>>(() => new HashSet<Vector2Int>(Block.Size.x * Block.Size.y));
+        private static ObjectPoolArbitrary<List<ColliderData>> pool_list = new ObjectPoolArbitrary<List<ColliderData>>(() => new List<ColliderData>(Block.Size.x));
         /// <summary>
         /// 返回用于创建碰撞箱的数据集合
         /// </summary>
         public static List<ColliderData> CreateColliderDataList(this Block block, Vector2Byte min, Vector2Byte max)
         {
-            HashSet<Vector2Int> hash = new HashSet<Vector2Int>();
-            List<ColliderData> colliderDataList = new List<ColliderData>();
+            HashSet<Vector2Int> hash;
+            List<ColliderData> colliderDataList;
+            lock (pool_list)
+            {
+                hash = pool_set.TakeOut();
+                colliderDataList = pool_list.TakeOut();
+            }
+
             for (int y = max.y; y >= min.y; y--)
                 for (int x = min.x; x <= max.x; x++)
                     if (!hash.Contains(new Vector2Int(x, y)) && block.GetPixelRelocation(x, y).typeInfo.collider)
@@ -104,6 +111,11 @@ namespace PRO
                         colliderData.pos = new Vector2Byte(x, yShifting);
                         colliderDataList.Add(colliderData);
                     }
+            lock (pool_list)
+            {
+                hash.Clear();
+                pool_set.PutIn(hash);
+            }
             return colliderDataList;
         }
 
@@ -121,11 +133,15 @@ namespace PRO
                 box.transform.position = data.position;
 
                 box.offset = box.size / 2f;
-                box.transform.parent = block.colliderNode;
+                box.transform.SetParent(block.colliderNode);
                 for (byte x = data.pos.x; x < data.pos.x + data.length.x; x++)
                     for (byte y = data.pos.y; y < data.pos.y + data.length.y; y++)
                         block.allCollider[x, y] = box;
-                    
+            }
+            lock (pool_list)
+            {
+                colliderDataList.Clear();
+                pool_list.PutIn(colliderDataList);
             }
         }
         /// <summary>
@@ -167,7 +183,7 @@ namespace PRO
                 box.size = new Vector2(Pixel.Size, Pixel.Size);
                 box.offset = box.size / 2;
                 box.transform.position = block.PixelToWorld(pos);
-                box.transform.parent = block.colliderNode;
+                box.transform.SetParent(block.colliderNode);
                 block.allCollider[pos.x, pos.y] = box;
             }
         }

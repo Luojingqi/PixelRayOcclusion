@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PRO.GenericFramework
+namespace PRO.Tool
 {
     public abstract class FSMManager<T> where T : Enum
     {
@@ -42,9 +42,9 @@ namespace PRO.GenericFramework
             else return;
         }
 
-        public void SwitchState(int nextState)
+        public void SetState(T setState)
         {
-
+            NowState = stateDic[setState];
         }
 
         public virtual void Update()

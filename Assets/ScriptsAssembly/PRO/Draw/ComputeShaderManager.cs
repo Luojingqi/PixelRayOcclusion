@@ -9,6 +9,7 @@ namespace PRO.Renderer
         public void Init()
         {
             LoadComputeShader();
+            FirstBind();
         }
         private void LoadComputeShader()
         {
@@ -24,7 +25,7 @@ namespace PRO.Renderer
             }
         }
 
-        public void FirstBind()
+        private void FirstBind()
         {
             //光缓存块里左下角的坐标
             Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
@@ -35,23 +36,20 @@ namespace PRO.Renderer
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
                     Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    //指的是提交到cpu的区块里的本地坐标，总左下角开始算起
+                    //指的是提交到cpu的区块里的本地坐标，从左下角开始算起
                     Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
 
                     lightResultBufferCSArray[lightIndex].FirstBind(globalBlockPos, localBlockBufferPos);
                 }
         }
-        public void UpdateBind()
+        public void UpdateBind(SceneEntity scene)
         {
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-
             for (int y = 0; y < LightResultBufferBlockSize.y; y++)
                 for (int x = 0; x < LightResultBufferBlockSize.x; x++)
                 {
-                    Vector2Int globalBlockPos = minLightBufferBlockPos + new Vector2Int(x, y);
-                    Vector2Int localBlockBufferPos = globalBlockPos - minBlockBufferPos;
+                    Vector2Int globalBlockPos = MinLightBufferBlockPos + new Vector2Int(x, y);
+                    Vector2Int localBlockBufferPos = globalBlockPos - MinBlockBufferPos;
                     int lightIndex = x + y * LightResultBufferBlockSize.x;
 
                     lightResultBufferCSArray[lightIndex].UpdateBind(globalBlockPos, localBlockBufferPos);
@@ -59,26 +57,26 @@ namespace PRO.Renderer
 
             for (int i = 0; i < LightResultBufferLength; i++)
             {
-                lightResultBufferCSArray[i].UpdateStaticLightSource();
-                lightResultBufferCSArray[i].UpdateFreelyLightSource();
+                lightResultBufferCSArray[i].UpdateStaticLightSource(scene);
+                lightResultBufferCSArray[i].UpdateFreelyLightSource(scene);
             }
         }
         
         private int offset = 0;
-        public void Update()
+        public void Update(SceneEntity scene)
         {
             for (int i = 0; i < LightResultBufferLength; i++)
             {
                 int index = (offset + i) % LightResultBufferLength;
                 if (i < FrameUpdateBlockNum)
                 {
-                    lightResultBufferCSArray[index].UpdateStaticLightSource();
-                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                    lightResultBufferCSArray[index].UpdateStaticLightSource(scene);
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource(scene);
                 }
                 else
                 {
                     lightResultBufferCSArray[index].SubtractionFreelyLightResultBuffer();
-                    lightResultBufferCSArray[index].UpdateFreelyLightSource();
+                    lightResultBufferCSArray[index].UpdateFreelyLightSource(scene);
                 }
             }
             offset = (offset + FrameUpdateBlockNum) % LightResultBufferLength;

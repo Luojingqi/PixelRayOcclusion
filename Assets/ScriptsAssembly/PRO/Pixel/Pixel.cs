@@ -1,6 +1,8 @@
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -8,6 +10,7 @@ namespace PRO
 {
     public class Pixel
     {
+        public override string ToString() => $"{pos} {posG} {typeInfo.typeName} {colorInfo.colorName} {blockBase?.BlockPos} {buildingSet.Count}";
         /// <summary>
         /// 在块内坐标，不可设置
         /// </summary>
@@ -15,7 +18,7 @@ namespace PRO
         /// <summary>
         /// 全局坐标，不可设置
         /// </summary>
-        public Vector2Int posG;
+        public Vector2Int posG => Block.PixelToGlobal(blockBase.BlockPos, pos);
         /// <summary>
         /// 像素类型，不可设置
         /// </summary>
@@ -31,68 +34,121 @@ namespace PRO
         /// <summary>
         /// 所属的建筑，不可设置
         /// </summary>
-        public List<BuildingBase> buildingSet = new List<BuildingBase>();
+        public HashSet<BuildingBase> buildingSet = new HashSet<BuildingBase>();
         /// <summary>
         /// 耐久度
         /// </summary>
-        public int durability { get => _durability; set { _durability = value; if (blockBase != null) { blockBase.SetPixelInfoToShader(pos); blockBase.DrawPixelAsync(pos, colorInfo.color); } } }
-        public int _durability = -1;
+        public int durability
+        {
+            get => _durability; 
+            set
+            {
+                _durability = value;
+#if PRO_RENDER
+                blockBase.SetPixelInfoToShader(pos);
+                blockBase.DrawPixelAsync(pos, colorInfo.color);
+#endif
+            }
+        }
+        private int _durability;
         /// <summary>
         /// 透明度影响系数
         /// </summary>
-        public float affectsTransparency { get => _affectsTransparency; set { _affectsTransparency = value; if (blockBase != null) { blockBase.SetPixelInfoToShader(pos); blockBase.DrawPixelAsync(pos, colorInfo.color); } } }
-        private float _affectsTransparency = 1;
-        /// <summary>
-        /// 请不要使用构造函数，使用Pixel.New()方法与重载，因为要对构造合法性进行检查
-        /// </summary>
-        public Pixel() { }
-        /// <summary>
-        /// 克隆
-        /// 仅{ 像素类型，颜色类型，坐标，耐久，透明度影响系数 }相同
-        /// </summary>
-        public Pixel Clone()
+        public float affectsTransparency
         {
-            Pixel pixel = pixelPool.TakeOut();
-            InitPixel(pixel, typeInfo, colorInfo, pos, durability);
-            pixel._affectsTransparency = _affectsTransparency;
-            pixel.posG = posG;
-            return pixel;
+            get => _affectsTransparency; 
+            set
+            {
+                _affectsTransparency = value;
+#if PRO_RENDER
+                blockBase.SetPixelInfoToShader(pos); 
+                blockBase.DrawPixelAsync(pos, colorInfo.color);
+#endif
+            }
         }
-        /// <summary>
-        /// 克隆后重新设置局部坐标
-        /// 仅{ 像素类型，颜色类型，局部坐标，耐久，透明度影响系数 }相同
-        /// </summary>
-        public Pixel Clone(Vector2Byte pos)
+        private float _affectsTransparency;
+
+        public Pixel(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, BlockBase blockBase, Vector2Byte pos)
         {
-            Pixel pixel = pixelPool.TakeOut();
-            InitPixel(pixel, typeInfo, colorInfo, pos, durability);
-            pixel._affectsTransparency = _affectsTransparency;
-            return pixel;
+            this.typeInfo = typeInfo;
+            this.colorInfo = colorInfo;
+            this.pos = pos;
+            this.blockBase = blockBase;
+            this._durability = typeInfo.durability;
+            this._affectsTransparency = 1;
         }
-        /// <summary>
-        /// 克隆后重新设置局部坐标
-        /// 仅{ 像素类型，颜色类型，局部坐标，耐久，透明度影响系数 }相同
-        /// </summary>
-        public Pixel CloneTo(Pixel pixel, Vector2Byte pos)
+        public void Replace(string typeInfoName, int colorIndex)
         {
-            InitPixel(pixel, typeInfo, colorInfo, pos, durability);
-            pixel._affectsTransparency = _affectsTransparency;
-            return pixel;
+            var typeInfo = Pixel.GetPixelTypeInfo(typeInfoName);
+            if (typeInfo == null || typeInfo.availableColors.Length == 0) return;
+            if (colorIndex > typeInfo.availableColors.Length) colorIndex = typeInfo.availableColors.Length - 1;
+            var colorInfo = Pixel.GetPixelColorInfo(typeInfo.availableColors[colorIndex]);
+            if (colorInfo == null) return;
+            Replace(typeInfo, colorInfo);
+        }
+        public void Replace(string typeInfoName, string colorInfoName)
+        {
+            var typeInfo = Pixel.GetPixelTypeInfo(typeInfoName);
+            var colorInfo = Pixel.GetPixelColorInfo(colorInfoName);
+            if (typeInfo != null && colorInfo != null)
+                Replace(typeInfo, colorInfo);
+        }
+        public void Replace(Pixel pixel)
+        {
+            Replace(pixel.typeInfo, pixel.colorInfo);
+            _durability = pixel.durability;
+            _affectsTransparency = pixel.affectsTransparency;
+        }
+        public void Replace(PixelTypeInfo newTypeInfo, PixelColorInfo newColorInfo)
+        {
+            var oldTypeInfo = typeInfo;
+            var oldColorInfo = colorInfo;
+
+            typeInfo = newTypeInfo;
+            colorInfo = newColorInfo;
+            _durability = newTypeInfo.durability;
+            _affectsTransparency = 1;
+
+            //切换建筑这个点的状态（死亡||存活
+            foreach (var building in buildingSet)
+                building.PixelSwitch(building.GetBuilding_Pixel(posG, blockBase.blockType), oldTypeInfo, oldColorInfo);
+
+#if PRO_RENDER
+            if (newColorInfo.luminousRadius > 0 && newColorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
+                blockBase.AddLightSource(pos, newColorInfo);
+            else if (oldColorInfo.luminousRadius > 0)
+                blockBase.RemoveLightSource(pos);
+            blockBase.textureData.SetPixelInfoToShader(this);
+            blockBase.DrawPixelAsync(pos, newColorInfo.color);
+#endif
+
+            if (blockBase is Block block)
+            {
+                block.ChangeCollider(oldTypeInfo, newTypeInfo, pos);
+                for (int y = -2; y <= 2; y++)
+                    for (int x = -2; x <= 2; x++)
+                        Block.AddFluidUpdateHash(posG + new Vector2Int(x, y));
+            }
+
+            if (newTypeInfo.typeName == "火焰") blockBase.queue_火焰.Enqueue(pos);
         }
 
-        public static void InitPixel(Pixel pixel, PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability)
+        public void ToRAM(Flat.PixelData pixelDiskData, PixelTypeInfo[] typeInfoArray, PixelColorInfo[] colorInfoArray, BuildingBase[] buildingArray)
         {
-            pixel.pos = pixelPos;
-            pixel.typeInfo = typeInfo;
-            pixel.colorInfo = colorInfo;
-            if (durability == 0)
-                pixel._durability = typeInfo.durability;
-            else
-                pixel._durability = durability;
+            typeInfo = typeInfoArray[pixelDiskData.TypeIndex];
+            colorInfo = colorInfoArray[pixelDiskData.ColorIndex];
+            _durability = pixelDiskData.Durability;
+            _affectsTransparency = pixelDiskData.AffectsTransparency;
+            for (int i = pixelDiskData.BuildingListLength - 1; i >= 0; i--)
+            {
+                var building = buildingArray[pixelDiskData.BuildingList(i)];
+                building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(posG, blockBase.blockType), this);
+            }
+#if PRO_RENDER
+            blockBase.textureData.SetPixelInfoToShader(this);
+#endif
         }
-
-
-        #region 静态对象池等数据
+        #region 静态数据
 
         /// <summary>
         /// 每个像素点占世界空间的大小
@@ -102,59 +158,15 @@ namespace PRO
         private static List<PixelTypeInfo> pixelTypeInfoList = new List<PixelTypeInfo>();
         private static Dictionary<string, PixelTypeInfo> name_pixelTypeInfo_Dic = new Dictionary<string, PixelTypeInfo>();
         private static Dictionary<string, List<PixelColorInfo>> tag_pixelTypeInfoList_Dic = new Dictionary<string, List<PixelColorInfo>>();
-        #region 对象池
-        public readonly static ObjectPool<Pixel> pixelPool = new ObjectPool<Pixel>();
-        public static void PutIn(Pixel pixel)
+        public void Clear()
         {
-            if (pixel == null) return;
-            pixel.typeInfo = null;
-            pixel.colorInfo = null;
-            pixel.pos = Vector2Byte.max;
-            pixel.posG = new Vector2Int(int.MaxValue, int.MaxValue);
-            pixel.blockBase = null;
-            pixel._durability = 0;
-            pixel._affectsTransparency = 1;
-            foreach (var building in pixel.buildingSet)
-                building.UnloadPixel(pixel);
-            pixel.buildingSet.Clear();
-
-            pixelPool.PutIn(pixel);
-        }
-        public static Pixel TakeOut(PixelTypeInfo typeInfo, PixelColorInfo colorInfo, Vector2Byte pixelPos, int durability = 0)
-        {
-            if (Block.Check(pixelPos))
-            {
-                Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
-                return pixel;
-            }
-            else return null;
-        }
-        public static Pixel TakeOut(string typeName, string colorName, Vector2Byte pixelPos, int durability = 0)
-        {
-            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
-            {
-                Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
-                return pixel;
-            }
-            else return null;
-        }
-        public static Pixel TakeOut(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = 0)
-        {
-            if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
-            {
-                Pixel pixel = pixelPool.TakeOut();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
-                return pixel;
-            }
-            else return null;
-        }
-        #endregion
-        public static string[] GetPixelAvailableColors(string typeName)
-        {
-            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out PixelTypeInfo info)) return info.availableColors;
-            else return null;
+            typeInfo = null;
+            colorInfo = null;
+            _durability = 0;
+            _affectsTransparency = 1;
+            foreach (var building in buildingSet)
+                building.UnloadPixel(building.GetBuilding_Pixel(posG, blockBase.blockType));
+            buildingSet.Clear();
         }
 
         public static PixelTypeInfo GetPixelTypeInfo(string typeName)
@@ -162,71 +174,14 @@ namespace PRO
             if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out PixelTypeInfo info)) return info;
             else return null;
         }
+        public static PixelColorInfo GetPixelColorInfo(string colorName)
+        {
+            if (BlockMaterial.pixelColorInfoDic.TryGetValue(colorName, out PixelColorInfo value)) return value;
+            else Debug.Log($"没有像素颜色名称为{colorName}");
+            return null;
+        }
         public static Pixel 空气;
 
-        #region 构造函数
-        /// <summary>
-        /// 请不要使用构造函数，使用此方法与重载，因为要对构造合法性进行检查
-        /// </summary>
-        /// <returns></returns>
-        public static Pixel New(string typeName, string colorName, Vector2Byte pixelPos, int durability = 0)
-        {
-            if (CheckNew(typeName, colorName, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
-            {
-                Pixel pixel = new Pixel();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
-                return pixel;
-            }
-            else return null;
-        }
-        public static Pixel New(string typeName, int colorIndex, Vector2Byte pixelPos, int durability = 0)
-        {
-            if (CheckNew(typeName, colorIndex, pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo))
-            {
-                Pixel pixel = new Pixel();
-                InitPixel(pixel, typeInfo, colorInfo, pixelPos, durability);
-                return pixel;
-            }
-            else return null;
-        }
-
-        private static bool CheckNew(string typeName, string colorName, Vector2Byte pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo)
-        {
-            typeInfo = null;
-            colorInfo = null;
-            if (Block.Check(pixelPos) == false) return false;
-            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out typeInfo))
-            {
-                colorInfo = BlockMaterial.GetPixelColorInfo(colorName);
-                if (colorInfo != null) return true;
-                else return false;
-            }
-            else
-            {
-                Log.Print($"没有名称为 {typeName} 的像素类型", Color.red);
-                return false;
-            }
-        }
-        private static bool CheckNew(string typeName, int colorIndex, Vector2Byte pixelPos, out PixelTypeInfo typeInfo, out PixelColorInfo colorInfo)
-        {
-            typeInfo = null;
-            colorInfo = null;
-            if (Block.Check(pixelPos) == false) return false;
-            if (name_pixelTypeInfo_Dic.TryGetValue(typeName, out typeInfo))
-            {
-                string colorName = typeInfo.availableColors[Mathf.Min(colorIndex, typeInfo.availableColors.Length - 1)];
-                colorInfo = BlockMaterial.GetPixelColorInfo(colorName);
-                if (colorInfo != null) return true;
-                else return false;
-            }
-            else
-            {
-                Log.Print($"没有名称为 {typeName} 的像素类型", Color.red);
-                return false;
-            }
-        }
-
-        #endregion
         /// <summary>
         /// 加载像素类型信息
         /// </summary>
@@ -239,7 +194,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelTypeInfo") continue;
-                JsonTool.LoadText(fileInfo.FullName, out string infoText);
+                IOTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelTypeInfo[]>(infoText);
@@ -261,6 +216,7 @@ namespace PRO
                     }
                 }
             }
+            空气 = new Pixel(GetPixelTypeInfo("空气"), GetPixelColorInfo("空气色"), null, new());
         }
         #endregion
     }

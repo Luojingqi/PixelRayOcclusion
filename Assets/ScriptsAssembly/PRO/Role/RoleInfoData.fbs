@@ -1,0 +1,36 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.Flat;
+
+struct EventData_Int32Data
+{
+	value0 : int;
+	value1 : double;
+	value2 : int;
+	value3 : int;
+}
+struct EventData_DoubleData
+{
+	value0 : double;
+	value1 : double;
+	value2 : double;
+	value3 : double;
+}
+
+table RoleInfoData {
+	value1 : EventData_Int32Data;
+	value2 : EventData_Int32Data;
+	value3 : EventData_Int32Data;
+	value4 : EventData_Int32Data;
+	value5 : EventData_Int32Data;
+	value6 : EventData_DoubleData;
+	value7 : EventData_DoubleData;
+	value8 : [EventData_Int32Data];
+	value9 : EventData_DoubleData;
+	value10 : EventData_DoubleData;
+	value11 : EventData_DoubleData;
+	value12 : EventData_Int32Data;
+
+	mould_size : Vector2Int;
+	mould_offset : Vector2Int;
+}

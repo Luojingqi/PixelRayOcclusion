@@ -4,44 +4,9 @@ using UnityEngine;
 
 namespace PRO
 {
-    public class Nav
+    public static class Nav
     {
-        /// <summary>
-        /// 角色模型大小与偏移
-        /// </summary>
-        public NavAgentMould AgentMould { get; private set; }
-        /// <summary>
-        /// 检查盒子，角色模型的内边框
-        /// </summary>
-        public Vector2Int[] chackBox { get; private set; }
-        /// <summary>
-        /// 角色每次可以移动的下一个点的集合
-        /// </summary>
-        public Vector2Int[] walkRing { get; private set; }
-        public Nav(NavAgentMould NavAgentMould)
-        {
-            AgentMould = NavAgentMould;
-            chackBox = new Vector2Int[AgentMould.size.x * 2 + AgentMould.size.y * 2 - 4];
-            int index = 0;
-            for (int x = 0; x < AgentMould.size.x; x++)
-            {
-                chackBox[index++] = new Vector2Int(x, 0);
-                chackBox[index++] = new Vector2Int(x, AgentMould.size.y - 1);
-            }
-            for (int y = 1; y < AgentMould.size.y - 1; y++)
-            {
-                chackBox[index++] = new Vector2Int(0, y);
-                chackBox[index++] = new Vector2Int(AgentMould.size.x - 1, y);
-            }
-            index = 0;
-            walkRing = new Vector2Int[10];
-            for (int x = -1; x <= 1; x++)
-                for (int y = -2; y <= 2; y++)
-                    if (x != 0)
-                        walkRing[index++] = new Vector2Int(x, y);
-
-        }
-        public List<Vector2Int> TryNav(SceneEntity scene, Vector2Int start_G, Vector2Int end_G, PriorityQueue<Vector2Int> queue = null, Dictionary<Vector2Int, Vector2Int> dic = null, List<Vector2Int> navList = null)
+        public static List<Vector2Int> TryNav(SceneEntity scene, AgentNavMould navMould, Vector2Int start_G, Vector2Int end_G, PriorityQueue<Vector2Int> queue = null, Dictionary<Vector2Int, Vector2Int> dic = null, List<Vector2Int> navList = null)
         {
             if (queue == null) queue = new PriorityQueue<Vector2Int>(); else queue.Clear();
             if (dic == null) dic = new Dictionary<Vector2Int, Vector2Int>(); else dic.Clear();
@@ -58,10 +23,10 @@ namespace PRO
                     success = true;
                     break;
                 }
-                for (int i = 0; i < walkRing.Length; i++)
+                for (int i = 0; i < navMould.walkRing.Length; i++)
                 {
-                    Vector2Int r = walkRing[i] + now;
-                    if (dic.ContainsKey(r) == false && ChackCanNav(scene, r))
+                    Vector2Int r = navMould.walkRing[i] + now;
+                    if (dic.ContainsKey(r) == false && ChackCanNav(scene, navMould, r))
                     {
                         queue.Enqueue(r, FastDistance(r, end_G));
                         dic.Add(r, now);
@@ -81,17 +46,16 @@ namespace PRO
                 }
                 navList.Reverse();
             }
-
             return navList;
         }
 
-        public bool ChackCanNav(SceneEntity scene, Vector2Int globalPos)
+        public static bool ChackCanNav(SceneEntity scene, AgentNavMould navMould, Vector2Int globalPos)
         {
             Block block = null;
             //检查角色的内边框是否有遮挡
-            for (int i = 0; i < chackBox.Length; i++)
+            for (int i = 0; i < navMould.chackBox.Length; i++)
             {
-                var pos = globalPos + chackBox[i] - AgentMould.offset;
+                var pos = globalPos + navMould.chackBox[i] - navMould.mould.offset;
                 var blockPos = Block.GlobalToBlock(pos);
                 if (block == null || block.BlockPos != blockPos)
                 {
@@ -102,9 +66,9 @@ namespace PRO
                 if (pixel.typeInfo.collider) return false;
             }
             //检查角色的脚下是否有至少一个方块
-            for (int x = 0; x < AgentMould.size.x; x++)
+            for (int x = 0; x < navMould.mould.size.x; x++)
             {
-                var pos = globalPos + new Vector2Int(x, -1) - AgentMould.offset;
+                var pos = globalPos + new Vector2Int(x, -1) - navMould.mould.offset;
                 var blockPos = Block.GlobalToBlock(pos);
                 if (block == null || block.BlockPos != blockPos)
                 {

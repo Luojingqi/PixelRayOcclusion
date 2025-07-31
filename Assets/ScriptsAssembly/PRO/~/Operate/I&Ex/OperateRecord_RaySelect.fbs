@@ -1,0 +1,13 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.Skill.Flat;
+
+table OperateRecord_RaySelect
+{
+	//射线起点
+	start_pos : Flat.Vector2;
+	//射线终点
+	end_pos : Flat.Vector2;
+	//射线目标
+	by_role_guid : string;
+}

@@ -1,0 +1,1395 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &912934031878306939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6820475295318779551}
+  - component: {fileID: 6887161720608651765}
+  m_Layer: 0
+  m_Name: RangeBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6820475295318779551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912934031878306939}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1166993291722542029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &6887161720608651765
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912934031878306939}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 15
+  m_Sprite: {fileID: -393904191, guid: 21e7cef10ff32854fa01d7629ca32eb3, type: 3}
+  m_Color: {r: 0.56078434, g: 0.3372549, b: 0.23137255, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.55, y: 1.55}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &4385062083436642017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2757843495409796448}
+  m_Layer: 0
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2757843495409796448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385062083436642017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1166993291722542029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6004400880972091283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1166993291722542029}
+  - component: {fileID: 6673958335295971675}
+  m_Layer: 0
+  m_Name: "\u901A\u7528"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1166993291722542029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6004400880972091283}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6820475295318779551}
+  - {fileID: 2757843495409796448}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6673958335295971675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6004400880972091283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ec4f31569a6db4a8ef1a5d5715f72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: -523463430, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1487607057, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1931733535, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1256608772, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 936333220, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1939856618, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 150536725, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 2042420615, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1199764855, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 895698026, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1720653818, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1559427548, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1459990057, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 568399471, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1464787167, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1403624040, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -573978146, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1072950590, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 910236181, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 641138019, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2030803871, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -834249760, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -987671024, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1740933299, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1686220104, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 354240645, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1889816141, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 2026183623, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 401918961, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1166609492, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1857497457, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1659098638, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1485772859, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1553211043, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1173256685, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -181723369, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -890729037, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -35548148, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1455058310, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -385990981, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1803074492, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1430736370, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1277923391, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -158512119, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 27740532, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1581878383, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1009770624, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1270674563, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2040943651, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -263690875, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 171840965, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1952124213, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 809550918, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -446502748, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -913569754, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 339640088, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1712403561, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 239326483, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -930983598, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 89101513, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 461029316, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2006135289, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 883417684, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 268662286, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 232702005, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1374471916, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1891020360, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2116357607, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1080131577, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -565313941, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 623413444, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -392568842, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2070918637, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -933599327, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -115986234, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1780266410, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 755041127, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1313340531, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1685999204, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1789633701, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1609011103, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1207169929, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1208148748, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 667470216, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -193403216, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1265540535, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -765869637, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 216646629, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -774185556, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1886528403, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -710631831, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1147395026, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -2001702094, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 712411953, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 410404630, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1733376510, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -314147714, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 2144390177, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1557387576, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -899872098, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1944235280, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 912698572, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 517275202, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1707880144, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 894277047, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 228995210, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -1251186446, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -448022806, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: 1899050569, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    - {fileID: -769363653, guid: a1827f2f0fe0ffe44a8eb636de1a0de8, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: pointerList
+      Entry: 7
+      Data: "0|System.Collections.Generic.List`1[[PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly]], mscorlib"
+    - Name: 
+      Entry: 12
+      Data: 110
+    - Name: 
+      Entry: 7
+      Data: "1|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "2|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "3|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "4|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "5|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "6|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "7|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "8|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "9|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "10|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "11|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "12|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "13|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "14|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "15|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "16|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "17|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "18|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "19|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "20|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "21|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "22|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 21
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "23|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 22
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "24|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 23
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "25|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 24
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "26|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "27|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 26
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "28|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 27
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "29|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 28
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "30|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 29
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "31|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "32|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 31
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "33|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 32
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "34|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 33
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "35|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 34
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "36|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 35
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "37|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 36
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "38|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 37
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "39|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 38
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "40|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 39
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "41|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 40
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "42|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 41
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "43|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "44|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 43
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "45|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 44
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "46|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 45
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "47|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 46
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "48|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 47
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "49|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 48
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "50|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 49
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "51|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "52|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 51
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "53|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 52
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "54|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 53
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "55|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 54
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "56|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 55
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "57|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 56
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "58|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 57
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "59|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 58
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "60|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 59
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "61|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "62|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 61
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "63|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 62
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "64|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 63
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "65|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 64
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "66|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 65
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "67|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 66
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "68|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 67
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "69|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 68
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "70|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 69
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "71|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 70
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "72|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 71
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "73|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 72
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "74|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 73
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "75|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 74
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "76|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 75
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "77|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 76
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "78|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 77
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "79|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 78
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "80|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 79
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "81|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 80
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "82|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 81
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "83|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 82
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "84|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 83
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "85|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 84
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "86|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 85
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "87|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 86
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "88|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 87
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "89|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 88
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "90|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 89
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "91|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 90
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "92|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 91
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "93|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 92
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "94|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 93
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "95|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 94
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "96|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 95
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "97|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 96
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "98|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 97
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "99|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 98
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "100|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 99
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "101|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "102|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 101
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "103|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 102
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "104|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 103
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "105|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 104
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "106|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 105
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "107|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 106
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "108|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 107
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "109|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 108
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "110|PRO.Skill.SkillPointer_\u8303\u56F4\u5185\u9009\u62E9\u7C7B+OnePointer,
+        PRO.Assembly"
+    - Name: sprite
+      Entry: 10
+      Data: 109
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 

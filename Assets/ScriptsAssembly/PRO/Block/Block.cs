@@ -1,8 +1,11 @@
+using Google.FlatBuffers;
 using PRO.DataStructure;
 using PRO.Disk;
+using PRO.Flat.Ex;
 using PRO.Renderer;
 using PRO.Tool;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 namespace PRO
 {
@@ -19,12 +22,12 @@ namespace PRO
         public static Vector2Int WorldToBlock(Vector2 worldPos) => GlobalToBlock(WorldToGlobal(worldPos));
         public static Vector2Int WorldToGlobal(Vector2 worldPos)
         {
-           // float absX = Mathf.Abs(worldPos.x);
-           // float absY = Mathf.Abs(worldPos.y);
+            // float absX = Mathf.Abs(worldPos.x);
+            // float absY = Mathf.Abs(worldPos.y);
             int x = (int)Mathf.Floor((int)(worldPos.x * 100) / 100f / Pixel.Size);
             int y = (int)Mathf.Floor((int)(worldPos.y * 100) / 100f / Pixel.Size);
-          //  if (worldPos.x < 0 && absX % Pixel.Size > 0) x = -x - 1;
-          //  if (worldPos.y < 0 && absY % Pixel.Size > 0) y = -y - 1;
+            //  if (worldPos.x < 0 && absX % Pixel.Size > 0) x = -x - 1;
+            //  if (worldPos.y < 0 && absY % Pixel.Size > 0) y = -y - 1;
             return new Vector2Int(x, y);
         }
         /// <summary>
@@ -97,80 +100,100 @@ namespace PRO
         #endregion
 
         #region 静态对象池
-        private static Transform BlockNode;
         private static GameObjectPool<Block> BlockPool;
         public static void InitPool()
         {
-            BlockNode = new GameObject("BlockNode").transform;
             #region 加载Block初始GameObject
             GameObject go = new GameObject("Block");
             SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
             renderer.sharedMaterial = BlockShareMaterialManager.ShareMaterial;
-            go.gameObject.SetActive(false);
-            go.AddComponent<Block>();
+            Block block = go.AddComponent<Block>();
             #endregion
             GameObject blockPoolGo = new GameObject("BlockPool");
-            blockPoolGo.transform.parent = SceneManager.Inst.PoolNode;
-            BlockPool = new GameObjectPool<Block>(go, blockPoolGo.transform);
-            BlockPool.CreateEventT += (g, t) =>
-            {
-                t.Init();
-            };
-            go.transform.parent = blockPoolGo.transform;
+            blockPoolGo.transform.SetParent(SceneManager.Inst.PoolNode);
+            BlockPool = new GameObjectPool<Block>(block, blockPoolGo.transform);
+            BlockPool.CreateEvent += t => t.Init();
         }
 
-        public static Block TakeOut(SceneEntity scene)
+        public static Block TakeOut(SceneEntity scene, Vector2Int blockPos)
         {
-            Block block = BlockPool.TakeOutT();
-            block.transform.parent = BlockNode;
+            Block block = BlockPool.TakeOut();
             block._screen = scene;
+            block.name = $"Block{blockPos}";
+            block.transform.position = Block.BlockToWorld(blockPos);
+            block.BlockPos = blockPos;
+            block.transform.SetParent(scene.BlockNode);
+            block.background.TakeOut(scene, blockPos);
+
             return block;
         }
 
-        public static void PutIn(Block block)
+        public static void PutIn(Block block, CountdownEvent countdown)
         {
-            block.gameObject.SetActive(false);
+            countdown.AddCount();
+            block.PutIn();
+            HashSet<BoxCollider2D> boxHash = new HashSet<BoxCollider2D>(10);
             for (int y = 0; y < Block.Size.y; y++)
-            {
                 for (int x = 0; x < Block.Size.x; x++)
                 {
-                    Pixel pixel = block.allPixel[x, y];
-                    block.allPixel[x, y] = null;
-
-                    Pixel.PutIn(pixel);
+                    block.GetPixel(new(x, y)).Clear();
 
                     BoxCollider2D box = block.allCollider[x, y];
                     if (box != null)
                     {
+                        boxHash.Add(box);
                         block.allCollider[x, y] = null;
-                        GreedyCollider.PutIn(box);
                     }
                 }
-            }
-            block.name = "Block(Clone)";
-            block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
 
-            block._screen = null;
-            BlockPool.PutIn(block.gameObject);
+            for (int i = 0; i < Block.Size.y; i++)
+            {
+                block.fluidUpdateHash1[i].Clear();
+                block.fluidUpdateHash2[i].Clear();
+                block.fluidUpdateHash3[i].Clear();
+            }
+            block.FreelyLightSourceHash.Clear();
+            block.background.PutIn(countdown);
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+            {
+#if PRO_RENDER
+                block.name = "Block(Clone)";
+                block.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+#endif
+                BlockPool.PutIn(block);
+                foreach (var box in boxHash)
+                    GreedyCollider.PutIn(box);
+                countdown.Signal();
+            });
         }
-        #endregion 
+        #endregion
+
+        /// <summary>
+        /// 卸载倒计时
+        /// </summary>
+        public float UnLoadCountdown;
+        public void ResetUnLoadCountdown() => UnLoadCountdown = BlockMaterial.proConfig.AutoUnLoadBlockCountdownTime;
+
         public override void Init()
         {
             base.Init();
             for (int i = 0; i < Block.Size.y; i++)
             {
-                fluidUpdateHash1[i] = new HashSet<Vector2Byte>();
-                fluidUpdateHash2[i] = new HashSet<Vector2Byte>();
-                fluidUpdateHash3[i] = new HashSet<Vector2Byte>();
+                fluidUpdateHash1[i] = new HashSet<Vector2Byte>(16);
+                fluidUpdateHash2[i] = new HashSet<Vector2Byte>(16);
+                fluidUpdateHash3[i] = new HashSet<Vector2Byte>(16);
             }
             colliderNode = new GameObject("ColliderNode").transform;
-            colliderNode.parent = transform;
+            colliderNode.SetParent(transform);
 
             spriteRenderer.sortingOrder = 10;
 
             _blockType = BlockType.Block;
+            background = BackgroundBlock.Create();
+            background.transform.SetParent(transform);
         }
-
+        [HideInInspector]
+        public BackgroundBlock background;
 
         /// <summary>
         /// 获取点（如果点不在此区块会被修正到对应区块）
@@ -242,10 +265,9 @@ namespace PRO
         public void UpdateFluid1()
         {
             SceneEntity scene = SceneManager.Inst.NowScene;
-            Random.InitState((int)(Time.deltaTime * 1000000));
+            Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = 0; i < fluidUpdateHash1.Length; i++)
             {
-                _posList.Clear();
                 foreach (var pos in fluidUpdateHash1[i])
                     _posList.Add(pos);
                 foreach (var pos in _posList)
@@ -298,14 +320,6 @@ namespace PRO
                             {
                                 SwapFluid(nextPosG, pixel.posG);
                                 stopUpdate = false;
-                                #region 将被交换点附近3x3的点都加入流体更新队列
-                                for (int y = -2; y <= 2; y++)
-                                    for (int x = -2; x <= 2; x++)
-                                    {
-                                        var tempG = nextPosG + new Vector2Int(x, y);
-                                        AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
-                                    }
-                                #endregion
 
                                 #region 处理特殊像素
                                 {
@@ -341,16 +355,15 @@ namespace PRO
                         RemoveFluidUpdateHash(pos);
                     }
                 }
-
+                _posList.Clear();
             }
         }
         public void UpdateFluid2()
         {
             SceneEntity scene = SceneManager.Inst.NowScene;
-            Random.InitState((int)(Time.deltaTime * 1000000));
+            Random.InitState((int)(TimeManager.deltaTime * 1000000));
             for (int i = fluidUpdateHash2.Length - 1; i >= 0; i--)
             {
-                _posList.Clear();
                 foreach (var pos in fluidUpdateHash2[i])
                     _posList.Add(pos);
                 foreach (var pos in _posList)
@@ -407,14 +420,6 @@ namespace PRO
                             {
                                 SwapFluid(nextPosG, pixel.posG);
                                 stopUpdate = false;
-                                #region 将被交换点附近3x3的点都加入流体更新队列
-                                for (int y = -2; y <= 2; y++)
-                                    for (int x = -2; x <= 2; x++)
-                                    {
-                                        var tempG = nextPosG + new Vector2Int(x, y);
-                                        AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
-                                    }
-                                #endregion
 
                                 #region 处理特殊像素
                                 {
@@ -424,7 +429,7 @@ namespace PRO
                                         pixel_next.affectsTransparency -= Random.Range(0, 0.05f);
                                         if (pixel_next.affectsTransparency < 0.07f)
                                         {
-                                            SetPixel(Pixel.空气.Clone(pixel_next.pos));
+                                            pixel_next.Replace(Pixel.空气);
                                             stopUpdate = true;
                                             if (Random.Range(0, 100) < 25)
                                             {
@@ -447,7 +452,7 @@ namespace PRO
                         RemoveFluidUpdateHash(pos);
                     }
                 }
-
+                _posList.Clear();
             }
         }
         public void UpdateFluid3()
@@ -455,7 +460,6 @@ namespace PRO
             SceneEntity scene = SceneManager.Inst.NowScene;
             for (int i = 0; i < fluidUpdateHash3.Length; i++)
             {
-                _posList.Clear();
                 foreach (var pos in fluidUpdateHash3[i])
                     _posList.Add(pos);
                 foreach (var pos in _posList)
@@ -469,7 +473,7 @@ namespace PRO
                         goto end;
                     //根据概率来看优先向哪个方向移动
                     AddQueueHash(pixel.posG + Vector2Int.down);
-                    Random.InitState((int)(Time.deltaTime * 1000000));
+                    Random.InitState((int)(TimeManager.deltaTime * 1000000));
                     //if (Random.Range(0, 100) >= 50)
                     //{
                     //    AddQueueHash(g + Vector2Int.right);
@@ -506,14 +510,6 @@ namespace PRO
                             (nextPixel.typeInfo.fluidType == 2) ||  //下个点为气体
                             (nextPixel.typeInfo.fluidType == 3 && pixel.typeInfo.fluidDensity > nextPixel.typeInfo.fluidDensity && Random.Range(0, 100) >= 50))//下个点为固体，当密度比他大的时候概率会沉入
                         {
-                            //将被交换点附近3x3的点都加入流体更新队列
-                            for (int y = -1; y <= 1; y++)
-                                for (int x = -1; x <= 1; x++)
-                                {
-                                    //  var tempG = nextPosG + new Vector2Int(0, 0);
-                                    var tempG = nextPosG + new Vector2Int(x, y);
-                                    AddFluidUpdateHash(scene.GetPixel(BlockType.Block, tempG));
-                                }
                             SwapFluid(nextPosG, pixel.posG);
                             stopUpdate = false;
 
@@ -526,7 +522,7 @@ namespace PRO
                         RemoveFluidUpdateHash(pos);
                     }
                 }
-
+                _posList.Clear();
             }
         }
 
@@ -542,10 +538,14 @@ namespace PRO
             var block1 = _screen.GetBlock(GlobalToBlock(p1_G));
             var p0 = block0.GetPixel(Block.GlobalToPixel(p0_G));
             var p1 = block1.GetPixel(Block.GlobalToPixel(p1_G));
-            var p0_Clone = p0.Clone(p1.pos);
-            var p1_Clone = p1.Clone(p0.pos);
-            block1.SetPixel(p0_Clone, true, false, false);
-            block0.SetPixel(p1_Clone, true, false, false);
+            var tempTypeInfo = p0.typeInfo;
+            var tempColorInfo = p0.colorInfo;
+            var tempDurability = p0.durability;
+            var tempAffectsTransparency = p0.affectsTransparency;
+            p0.Replace(p1);
+            p1.Replace(tempTypeInfo, tempColorInfo);
+            p1.durability = tempDurability;
+            p1.affectsTransparency = tempAffectsTransparency;
         }
 
         #region 更新流体的临时变量
@@ -560,16 +560,86 @@ namespace PRO
         #endregion
         #endregion
 
+        [HideInInspector]
         public Transform colliderNode;
+        [HideInInspector]
         public readonly BoxCollider2D[,] allCollider = new BoxCollider2D[Block.Size.x, Block.Size.y];
-        public void ChangeCollider(PixelTypeInfo old, Pixel nowPixel)
+        public void ChangeCollider(PixelTypeInfo old, PixelTypeInfo now, Vector2Byte pos)
         {
             bool oldCollider = (old == null || !old.collider) ? false : true;
             //原本无碰撞箱，现在有就创建，反之删除
-            if (oldCollider == false && nowPixel.typeInfo.collider) GreedyCollider.TryExpandCollider(this, nowPixel.pos);
-            else if (oldCollider && nowPixel.typeInfo.collider == false) GreedyCollider.TryShrinkCollider(this, nowPixel.pos);
+            if (oldCollider == false && now.collider) GreedyCollider.TryExpandCollider(this, pos);
+            else if (oldCollider && now.collider == false) GreedyCollider.TryShrinkCollider(this, pos);
         }
 
+        /// <summary>
+        /// 自由光源
+        /// </summary>
         public HashSet<FreelyLightSource> FreelyLightSourceHash = new HashSet<FreelyLightSource>();
+
+        public override System.Action ToDisk(FlatBufferBuilder builder)
+        {
+            int count = queue_火焰.Count;
+            Flat.BlockBaseData.StartBlockFlameQueueVector(builder, count);
+            for (int i = 0; i < count; i++)
+            {
+                var pos = queue_火焰.Dequeue();
+                pos.ToDisk(builder);
+                queue_火焰.Enqueue(pos);
+            }
+            var blockFlameQueueOffset = builder.EndVector();
+
+
+            var offset1 = AddFluidUpdateHash(builder, fluidUpdateHash1);
+            var offset2 = AddFluidUpdateHash(builder, fluidUpdateHash2);
+            var offset3 = AddFluidUpdateHash(builder, fluidUpdateHash3);
+            return () =>
+            {
+                Flat.BlockBaseData.AddBlockFlameQueue(builder, blockFlameQueueOffset);
+                Flat.BlockBaseData.AddFluidUpdateHash1(builder, offset1);
+                Flat.BlockBaseData.AddFluidUpdateHash2(builder, offset2);
+                Flat.BlockBaseData.AddFluidUpdateHash3(builder, offset3);
+            };
+        }
+        private VectorOffset AddFluidUpdateHash(FlatBufferBuilder builder, HashSet<Vector2Byte>[] fluidUpdateHash)
+        {
+            int length = 0;
+            foreach (var hash in fluidUpdateHash)
+                length += hash.Count;
+            Flat.BlockBaseData.StartFluidUpdateHash1Vector(builder, length);
+            foreach (var hash in fluidUpdateHash)
+                foreach (var pos in hash)
+                    pos.ToDisk(builder);
+            return builder.EndVector();
+        }
+
+        public override void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown)
+        {
+            countdown.AddCount();
+            for (int i = blockDiskData.FluidUpdateHash1Length - 1; i >= 0; i--)
+            {
+                var pos = blockDiskData.FluidUpdateHash1(i).Value.ToRAM();
+                AddHashSet(fluidUpdateHash1[pos.y], pos);
+            }
+            for (int i = blockDiskData.FluidUpdateHash2Length - 1; i >= 0; i--)
+            {
+                var pos = blockDiskData.FluidUpdateHash2(i).Value.ToRAM();
+                AddHashSet(fluidUpdateHash2[pos.y], pos);
+            }
+            for (int i = blockDiskData.FluidUpdateHash3Length - 1; i >= 0; i--)
+            {
+                var pos = blockDiskData.FluidUpdateHash3(i).Value.ToRAM();
+                AddHashSet(fluidUpdateHash3[pos.y], pos);
+            }
+            var colliderDataList = GreedyCollider.CreateColliderDataList(this, new(0, 0), new(Block.Size.x - 1, Block.Size.y - 1));
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+            {
+                GreedyCollider.CreateColliderAction(this, colliderDataList);
+#if PRO_RENDER
+                BlockMaterial.SetBlock(this);
+#endif
+                countdown.Signal();
+            });
+        }
     }
 }

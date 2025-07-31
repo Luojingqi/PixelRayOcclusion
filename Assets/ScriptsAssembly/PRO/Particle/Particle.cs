@@ -1,4 +1,7 @@
-﻿using PRO.SkillEditor;
+﻿using Google.FlatBuffers;
+using PRO.Flat.Ex;
+using PRO.Proto.Ex;
+using PRO.SkillEditor;
 using System;
 using UnityEngine;
 
@@ -50,10 +53,6 @@ namespace PRO
         /// </summary>
         public string loadPath { get; private set; }
         /// <summary>
-        /// 是否在场景中活跃
-        /// </summary>
-        public bool Active { get; set; }
-        /// <summary>
         /// 当前是否已被回收
         /// </summary>
         public bool RecyleState { get; private set; }
@@ -62,17 +61,12 @@ namespace PRO
         private SceneEntity _scene;
 
         public void UpdateRemainTime(int cutDown)
-        {            
-            if (Scene.GetBlock(Block.WorldToBlock(transform.position)) == null)
-            {
-                ParticleManager.Inst.GetPool(loadPath).PutIn(this);
-                return;
-            }
+        {
             // transform.rotation = Quaternion.FromToRotation(Vector3.up, Rig2D.velocity);
             remainTime -= cutDown;
             elapsedTime += cutDown;
-            UpdateEvent?.Invoke(this);
-            if (RemainTime <= 0) RemainTimeIsZeroEvent?.Invoke(this);
+            UpdateEvent?.Invoke();
+            if (RemainTime <= 0) RemainTimeIsZeroEvent?.Invoke();
         }
 
         public virtual void Init(string loadPath)
@@ -88,7 +82,6 @@ namespace PRO
         public virtual void TakeOut(SceneEntity scene)
         {
             RemainTime = UnityEngine.Random.Range(SurviveTimeRange.x, SurviveTimeRange.y);
-            Active = true;
             RecyleState = false;
             _scene = scene;
         }
@@ -122,29 +115,28 @@ namespace PRO
                 SkillPlayAgent.Skill = null;
                 SkillPlayAgent.ClearTimeAndBuffer();
             }
-            Active = false;
             RecyleState = true;
         }
-        public event Action<Particle> UpdateEvent;
+        public event Action UpdateEvent;
         /// <summary>
         /// 发生碰撞事件
         /// </summary>
-        public event Action<Particle, Collision2D> CollisionEnterEvent;
+        public event Action<Collision2D> CollisionEnterEvent;
         /// <summary>
         /// 碰撞退出事件
         /// </summary>
-        public event Action<Particle, Collision2D> CollisionExitEvent;
+        public event Action<Collision2D> CollisionExitEvent;
         /// <summary>
         /// 存活事件结束事件
         /// </summary>
-        public event Action<Particle> RemainTimeIsZeroEvent;
+        public event Action RemainTimeIsZeroEvent;
         protected void OnCollisionEnter2D(Collision2D collision)
         {
-            CollisionEnterEvent?.Invoke(this, collision);
+            CollisionEnterEvent?.Invoke(collision);
         }
         protected void OnCollisionExit2D(Collision2D collision)
         {
-            CollisionExitEvent?.Invoke(this, collision);
+            CollisionExitEvent?.Invoke(collision);
         }
 
 
@@ -153,5 +145,43 @@ namespace PRO
         {
             transform.position = Block.GlobalToWorld(global) + new Vector3(pixelSizeHalf, pixelSizeHalf);
         }
+
+        public Offset<Flat.ParticleData> ToDisk(FlatBufferBuilder builder, FlatBufferBuilder extendBuilder = null)
+        {
+            bool extendBuilderIsNull = extendBuilder == null;
+            if (extendBuilderIsNull) extendBuilder = FlatBufferBuilder.TakeOut(1024);
+            var loadPathOffset = builder.CreateString(loadPath);
+            ExtendDataToDisk(extendBuilder);
+            var extendDataOffset = builder.CreateVector_Builder(extendBuilder);
+            if (extendBuilderIsNull) 
+                FlatBufferBuilder.PutIn(extendBuilder);
+            else
+                extendBuilder.Clear();
+            var skillPlayAgentOffset = SkillPlayAgent.ToDisk(builder);
+
+            Flat.ParticleData.StartParticleData(builder);
+            Flat.ParticleData.AddLoadPath(builder, loadPathOffset);
+            Flat.ParticleData.AddTransform(builder, transform.ToDisk(builder));
+            Flat.ParticleData.AddRigidbody(builder, Rig2D.ToDisk(builder));
+            Flat.ParticleData.AddSkillPlayAgent(builder, skillPlayAgentOffset);
+            Flat.ParticleData.AddSurviveTimeRange(builder, surviveTimeRange.ToDisk(builder));
+            Flat.ParticleData.AddRemainTime(builder, remainTime);
+            Flat.ParticleData.AddElapsedTime(builder, elapsedTime);
+            Flat.ParticleData.AddExtendData(builder, extendDataOffset);
+            return Flat.ParticleData.EndParticleData(builder);
+        }
+
+        public void ToRAM(Flat.ParticleData diskData)
+        {
+            transform.ToRAM(diskData.Transform.Value);
+            Rig2D.ToRAM(diskData.Rigidbody.Value);
+            SkillPlayAgent.ToRAM(diskData.SkillPlayAgent.Value);
+            surviveTimeRange = diskData.SurviveTimeRange.Value.ToRAM();
+            remainTime = diskData.RemainTime;
+            elapsedTime = diskData.ElapsedTime;
+        }
+
+        protected virtual void ExtendDataToDisk(FlatBufferBuilder builder) { }
+        protected virtual void ExtendDataToRAM(FlatBufferBuilder builder) { }
     }
 }

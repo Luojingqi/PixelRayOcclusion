@@ -11,7 +11,8 @@
 /[Uu]ser[Ss]ettings/
 
 /Assets/ScriptsAssembly/GamePlay/
-/Assets/StreamingAssets/GameSaveFiles/testSave/
+/Assets/StreamingAssets/GameSaveFiles/
+/Assets/StreamingAssets/AssetBundle/
 ~$*.xlsx
 ~$*.xlsx.meta
 ~$*.xlsm
@@ -75,7 +76,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Temporary auto-generated Android Assets
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
 /Packages
 /ProjectSettings

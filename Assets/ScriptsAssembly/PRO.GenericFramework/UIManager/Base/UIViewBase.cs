@@ -11,9 +11,9 @@ namespace PRO
         public Canvas canvas { get; private set; }
         public CanvasScaler canvasScaler { get; private set; }
 
-        public virtual void Init(Transform transform)
+        public virtual void Init(UIControllerBase controller)
         {
-            this.transform = transform;
+            this.transform = controller.transform;
             rectTransform = transform.GetComponent<RectTransform>();
             canvasGroup = transform.GetComponent<CanvasGroup>();
             canvas = transform.GetComponent<Canvas>();

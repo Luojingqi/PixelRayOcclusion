@@ -1,6 +1,8 @@
 using PRO.Disk;
 using PRO.Renderer;
 using PRO.Tool;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -9,14 +11,32 @@ namespace PRO
 {
     public static class BlockMaterial
     {
+        private static Vector2Int _CameraCenterBlockPos;
         /// <summary>
         /// 相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int CameraCenterBlockPos { get; set; }
+        public static Vector2Int CameraCenterBlockPos
+        {
+            get { return _CameraCenterBlockPos; }
+            private set
+            {
+                LastCameraCenterBlockPos = _CameraCenterBlockPos;
+                _CameraCenterBlockPos = value;
+                MinLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
+                MaxLightBufferBlockPos = MinLightBufferBlockPos + LightResultBufferBlockSize;
+                MinBlockBufferPos = MinLightBufferBlockPos - EachBlockReceiveLightSize / 2;
+                MaxBlockBufferPos = MinBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
+            }
+        }
+        public static Vector2Int MinLightBufferBlockPos { get; private set; }
+        public static Vector2Int MaxLightBufferBlockPos { get; private set; }
+        public static bool IsInLightBufferBlock(Vector2Int blockPos) => !(blockPos.x > MaxLightBufferBlockPos.x || blockPos.y > MaxLightBufferBlockPos.y || blockPos.x < MinLightBufferBlockPos.x || blockPos.y < MinLightBufferBlockPos.y);
+        public static Vector2Int MinBlockBufferPos { get; private set; }
+        public static Vector2Int MaxBlockBufferPos { get; private set; }
         /// <summary>
         /// 上一帧相机中心所在的块坐标
         /// </summary>
-        public static Vector2Int LastCameraCenterBlockPos { get; set; }
+        public static Vector2Int LastCameraCenterBlockPos { get; private set; }
         /// <summary>
         /// 最大光源半径，修改完后需要调用编辑器扩展PRO>2.创建hlsl
         /// 将生成LightRadiusMax个计算着色器函数  每个代表一个不同半径的光源函数
@@ -41,7 +61,7 @@ namespace PRO
 
         public static int BlockBufferLength { get; private set; }
         public static int LightResultBufferLength { get; private set; }
-        private static PROconfig proConfig;
+        public static PROconfig proConfig;
         /// <summary>
         /// 为空的材质区块
         /// </summary>
@@ -57,7 +77,7 @@ namespace PRO
         public static void Init()
         {
             CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-            if (!JsonTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
+            if (!IOTool.LoadText(Application.streamingAssetsPath + @"\Json\PROconfig.json", out string proConfigText))
             {
                 Debug.Log("PROconfig.json加载失败，BlockMaterial无法初始化");
                 return;
@@ -68,12 +88,15 @@ namespace PRO
             LightResultBufferLength = LightResultBufferBlockSize.x * LightResultBufferBlockSize.y;
 
             LoadAllPixelColorInfo();
-
+#if PRO_RENDER
             NullMaterialPropertyBlock = new MaterialPropertyBlock();
 
             blockShareMaterialManager.Init();
             backgroundShareMaterialManager.Init();
             computeShaderManager.Init();
+
+            new Thread(() => DrawThread.LoopDraw()).Start();
+#endif
         }
 
         #region 像素点的颜色属性的加载与缓冲区
@@ -91,7 +114,7 @@ namespace PRO
                 if (fileInfo.Extension != ".json") continue;
                 string[] strArray = fileInfo.Name.Split('^');
                 if (strArray.Length <= 1 || strArray[0] != "PixelColorInfo") continue;
-                JsonTool.LoadText(fileInfo.FullName, out string infoText);
+                IOTool.LoadText(fileInfo.FullName, out string infoText);
                 Log.Print(fileInfo.FullName, Color.green);
                 //加载到的像素数组
                 var InfoArray = JsonTool.ToObject<PixelColorInfo[]>(infoText);
@@ -120,20 +143,9 @@ namespace PRO
             #endregion
         }
         //所有点的颜色数据_顺序索引
-        private static List<PixelColorInfo> pixelColorInfoList = new List<PixelColorInfo>();
+        public static List<PixelColorInfo> pixelColorInfoList = new List<PixelColorInfo>();
         //点颜色数据_字典索引
-        private static Dictionary<string, PixelColorInfo> pixelColorInfoDic = new Dictionary<string, PixelColorInfo>();
-        public static PixelColorInfo GetPixelColorInfo(string colorName)
-        {
-            if (pixelColorInfoDic.TryGetValue(colorName, out PixelColorInfo value)) return value;
-            else Debug.Log($"没有像素颜色名称为{colorName}");
-            return null;
-        }
-        public static PixelColorInfo GetPixelColorInfo(int id)
-        {
-            if (id >= pixelColorInfoList.Count) return null;
-            else return pixelColorInfoList[id];
-        }
+        public static Dictionary<string, PixelColorInfo> pixelColorInfoDic = new Dictionary<string, PixelColorInfo>();
         #endregion
 
         #region 将块数据传递到GPU
@@ -173,48 +185,37 @@ namespace PRO
         }
         #endregion
 
-        public static void FirstBind()
+        public static void ClearBind(SceneEntity scene)
         {
-            blockShareMaterialManager.FirstBind();
-            backgroundShareMaterialManager.FirstBind();
-            computeShaderManager.FirstBind();
-
-            Update();
+            blockShareMaterialManager.ClearLastBind(scene);
+            backgroundShareMaterialManager.ClearLastBind(scene);
         }
-        public static void UpdateBind()
+        public static void Bind(SceneEntity scene)
         {
-            LastCameraCenterBlockPos = CameraCenterBlockPos;
-            CameraCenterBlockPos = Block.WorldToBlock(Camera.main.transform.position);
-
-            Vector2Int minLightBufferBlockPos = CameraCenterBlockPos - LightResultBufferBlockSize / 2;
-            Vector2Int minBlockBufferPos = minLightBufferBlockPos - EachBlockReceiveLightSize / 2;
-            Vector2Int maxBlockBufferPos = minBlockBufferPos + LightResultBufferBlockSize - new Vector2Int(1, 1) + EachBlockReceiveLightSize - new Vector2Int(1, 1);
-
-            for (int y = minBlockBufferPos.y; y <= maxBlockBufferPos.y; y++)
-                for (int x = minBlockBufferPos.x; x <= maxBlockBufferPos.x; x++)
+            blockShareMaterialManager.UpdateBind(scene);
+            backgroundShareMaterialManager.UpdateBind(scene);
+            computeShaderManager.UpdateBind(scene);
+        }
+        /// <summary>
+        /// 更新相机位置，加载更新位置后的区块，延长视野内区块的卸载倒计时
+        /// </summary>
+        public static void Update(SceneEntity scene)
+        {
+            var cameraPos = Camera.main.transform.position;
+            CameraCenterBlockPos = Block.WorldToBlock(cameraPos);
+            if (scene == null) return;
+            scene.sceneCatalog.cameraPos = cameraPos;
+            for (int y = MinBlockBufferPos.y; y <= MaxBlockBufferPos.y; y++)
+                for (int x = MinBlockBufferPos.x; x <= MaxBlockBufferPos.x; x++)
                 {
-                    var block = SceneManager.Inst.NowScene.GetBlock(new Vector2Int(x, y));
-                    if (block == null) SceneManager.Inst.NowScene.ThreadLoadOrCreateBlock(new Vector2Int(x, y),
-                        (blockBase) =>
-                        {
-                            switch (blockBase)
-                            {
-                                case Block block: SetBlock(block); break;
-                                case BackgroundBlock background: SetBackgroundBlock(background); break;
-                            }
-                        });
+                    if (scene.ActiveBlockBase.Contains(new Vector2Int(x, y)) == false)
+                        scene.ThreadLoadOrCreateBlock(scene.sceneCatalog, new Vector2Int(x, y));
+                    else
+                        scene.GetBlock(new Vector2Int(x, y)).ResetUnLoadCountdown();
                 }
-
-            blockShareMaterialManager.ClearLastBind();
-            backgroundShareMaterialManager.ClearLastBind();
-
-            blockShareMaterialManager.UpdateBind();
-            backgroundShareMaterialManager.UpdateBind();
-            computeShaderManager.UpdateBind();
         }
 
-
-        public static void Update()
+        public static void LastUpdate(SceneEntity scene)
         {
             if (Monitor.TryEnter(DrawApplyQueue))
             {
@@ -231,19 +232,19 @@ namespace PRO
                         }
                     }
                 }
-                finally
-                {
-                    Monitor.Exit(DrawApplyQueue);
-                }
+                finally { Monitor.Exit(DrawApplyQueue); }
             }
 
-            Vector2Int nowCameraPos = Block.WorldToBlock(Camera.main.transform.position);
-            if (nowCameraPos != CameraCenterBlockPos)
+            if (scene != null)
             {
-                UpdateBind();
-                return;
+                if (CameraCenterBlockPos != LastCameraCenterBlockPos)
+                {
+                    ClearBind(scene);
+                    Bind(scene);
+                    return;
+                }
+                computeShaderManager.Update(scene);
             }
-            computeShaderManager.Update();
         }
 
         /// <summary>

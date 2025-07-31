@@ -1,58 +1,76 @@
+using Google.FlatBuffers;
+using PRO.DataStructure;
 using PRO.Renderer;
-using PRO.Tool;
+using PRO.Flat.Ex;
+using System;
+using System.Threading;
 using UnityEngine;
+using PRO.Tool;
 
 namespace PRO
 {
     public class BackgroundBlock : BlockBase
     {
         #region æ≤Ã¨∂‘œÛ≥ÿ
-        private static GameObjectPool<BackgroundBlock> BackgroundPool;
-
-        public static void InitPool()
+        private static BackgroundBlock prefab;
+        public static void InitPrefab()
         {
-            #region º”‘ÿBackground≥ı ºGameObject
             GameObject go = new GameObject("BackgroundBlock");
             SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
             renderer.sharedMaterial = BackgroundShareMaterialManager.ShareMaterial;
-            go.gameObject.SetActive(false);
-            go.AddComponent<BackgroundBlock>();
-            #endregion
-            GameObject backgroundPoolGo = new GameObject("BackgroundPool");
-            backgroundPoolGo.transform.parent = SceneManager.Inst.PoolNode;
-            BackgroundPool = new GameObjectPool<BackgroundBlock>(go, backgroundPoolGo.transform);
-            BackgroundPool.CreateEventT += (g, t) =>
-            {
-                t.Init();
-            };
-            go.transform.parent = backgroundPoolGo.transform;
+            BackgroundBlock background = go.AddComponent<BackgroundBlock>();
+            prefab = background;
+            prefab.transform.SetParent(SceneManager.Inst.PoolNode);
         }
-        public static BackgroundBlock TakeOut(SceneEntity scene)
+        public static BackgroundBlock Create()
         {
-            var background = BackgroundPool.TakeOutT();
-            background._screen = scene;
-            return background;
+            var ret = GameObject.Instantiate(prefab);
+            ret.Init();
+            return ret;
+        }
+        public void TakeOut(SceneEntity scene, Vector2Int blockPos)
+        {
+            BlockPos = blockPos;
+            _screen = scene;
         }
 
-        public static void PutIn(BackgroundBlock background)
+        public void PutIn(CountdownEvent countdown)
         {
-            background.gameObject.SetActive(false);
+            countdown.AddCount();
+            PutIn();
             for (int y = 0; y < Block.Size.y; y++)
-            {
                 for (int x = 0; x < Block.Size.x; x++)
-                {
-                    Pixel pixel = background.allPixel[x, y];
-                    background.allPixel[x, y] = null;
-                    Pixel.PutIn(pixel);
-                }
-            }
-            background.spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
-
-            background._screen = null;
-
-            BackgroundPool.PutIn(background.gameObject);
+                    GetPixel(new(x, y)).Clear();
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+            {
+#if PRO_RENDER
+                spriteRenderer.SetPropertyBlock(BlockMaterial.NullMaterialPropertyBlock);
+#endif
+                countdown.Signal();
+            });
         }
         #endregion
+
+        public override void FillPixel()
+        {
+            if (GetPixel(new Vector2Byte(0, 0)) == null)
+            {
+                var typeInfo = Pixel.GetPixelTypeInfo("±≥æ∞");
+                var colorInfo = Pixel.GetPixelColorInfo("±≥æ∞…´2");
+                for (int y = 0; y < Block.Size.y; y++)
+                    for (int x = 0; x < Block.Size.x; x++)
+                    {
+#if PRO_RENDER
+                        var pixel = new Pixel(typeInfo, colorInfo, this, new Vector2Byte(x, y));
+                        allPixel[x, y] = pixel;
+                        this.textureData.SetPixelInfoToShader(pixel);
+                        this.DrawPixelSync(new(x, y), colorInfo.color);
+#else
+                        allPixel[x, y] = new Pixel(typeInfo, colorInfo, this, new Vector2Byte(x, y));
+#endif
+                    }
+            }
+        }
 
         public override void Init()
         {
@@ -60,6 +78,36 @@ namespace PRO
             spriteRenderer.sortingOrder = -10;
 
             _blockType = BlockType.BackgroundBlock;
+        }
+
+        public override Action ToDisk(FlatBufferBuilder builder)
+        {
+            int count = queue_ª—Ê.Count;
+            Flat.BlockBaseData.StartBackgroundFlameQueueVector(builder, count);
+            for (int i = 0; i < count; i++)
+            {
+                var pos = queue_ª—Ê.Dequeue();
+                pos.ToDisk(builder);
+                queue_ª—Ê.Enqueue(pos);
+                Debug.Log(pos);
+            }
+            var blockFlameQueueOffset = builder.EndVector();
+            return () =>
+            {
+                Flat.BlockBaseData.AddBackgroundFlameQueue(builder, blockFlameQueueOffset);
+            };
+        }
+
+        public override void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown)
+        {
+#if PRO_RENDER
+            countdown.AddCount();
+            TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
+            {
+                BlockMaterial.SetBackgroundBlock(this);
+                countdown.Signal();
+            });
+#endif
         }
     }
 }

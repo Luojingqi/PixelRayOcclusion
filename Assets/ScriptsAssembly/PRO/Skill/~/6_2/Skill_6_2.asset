@@ -1,0 +1,409 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2362ee7c1d4867249919b6c045c44770, type: 3}
+  m_Name: Skill_6_2
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: -1594209819, guid: f151d18f370278d4bb0e754a0aaeed07, type: 3}
+    - {fileID: 788943439, guid: f151d18f370278d4bb0e754a0aaeed07, type: 3}
+    - {fileID: 1583203158, guid: f151d18f370278d4bb0e754a0aaeed07, type: 3}
+    - {fileID: 749305745, guid: f151d18f370278d4bb0e754a0aaeed07, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: AnimationTrack2DList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 3|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 2
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 4|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 2
+    - Name: frameLength
+      Entry: 3
+      Data: 2
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: 5|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 4
+    - Name: frameLength
+      Entry: 3
+      Data: 2
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 9
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 6|PRO.SkillEditor.AnimationSlice2D_Disk, PRO.Assembly
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: startFrame
+      Entry: 3
+      Data: 6
+    - Name: frameLength
+      Entry: 3
+      Data: 2
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: sprite
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 9
+      Data: 6
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SpecialEffectTrack2DList
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ParticleTrackList
+      Entry: 7
+      Data: 8|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AttackTestTrack2DList
+      Entry: 7
+      Data: 9|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SceneRuinTrackList
+      Entry: 7
+      Data: 10|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SceneCreateTrackList
+      Entry: 7
+      Data: 11|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: EventTrackList
+      Entry: 7
+      Data: 12|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 13|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 14|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: "15|PRO.SkillEditor.EventDisk_\u5B58\u50A8\u5207\u7247_Vector2Int, PRO.Assembly"
+    - Name: name
+      Entry: 1
+      Data: offset
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: pos
+      Entry: 7
+      Data: UnityEngine.Vector2Int, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickList
+      Entry: 7
+      Data: 17|System.Collections.Generic.List`1[[PRO.SkillEditor.Slice_DiskBase,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 9
+    - Name: 
+      Entry: 7
+      Data: "18|PRO.SkillEditor.EventDisk_\u5439\u98CE, PRO.Assembly"
+    - Name: name
+      Entry: 1
+      Data: "\u5439\u98CE"
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 8
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.25
+    - Name: 
+      Entry: 4
+      Data: 0.125
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: rotation
+      Entry: 7
+      Data: UnityEngine.Quaternion, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: scale
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.5
+    - Name: 
+      Entry: 4
+      Data: 0.25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: force
+      Entry: 4
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 9
+      Data: 18
+    - Name: 
+      Entry: 7
+      Data: "19|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E, PRO.Assembly"
+    - Name: name
+      Entry: 1
+      Data: "\u8DF3\u8F6C->0"
+    - Name: startFrame
+      Entry: 3
+      Data: 8
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: goToFrame
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  MaxFrame: 17
+  FrameTime: 50
+  loadPath: "ScriptsAssembly/GamePlay/\u6280\u80FD/6_2/Skill_6_2.asset"

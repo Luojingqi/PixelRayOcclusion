@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fecc40dded2f2744b69b8be15597dd6, type: 3}
+  m_Name: SkillConfigViewer
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: ec5cdc574509fcd4ba8c46100393f668, type: 2}
+    - {fileID: 11400000, guid: 3953cec2c9c6ab9498cb5a4bd288505a, type: 2}
+    - {fileID: 11400000, guid: 0f5d171dd9c8138458ab5efadbd70531, type: 2}
+    - {fileID: 11400000, guid: c9b6c787e270de846a0a571bdbaf36cf, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: ViewerList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PRO.Skill.Base.SkillConfigViewer+Viewer,
+        PRO.Assembly]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: 1|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
+    - Name: config
+      Entry: 10
+      Data: 0
+    - Name: id
+      Entry: 1
+      Data: 0_0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
+    - Name: config
+      Entry: 10
+      Data: 1
+    - Name: id
+      Entry: 1
+      Data: 1_0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
+    - Name: config
+      Entry: 10
+      Data: 2
+    - Name: id
+      Entry: 1
+      Data: 1_1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|PRO.Skill.Base.SkillConfigViewer+Viewer, PRO.Assembly
+    - Name: config
+      Entry: 10
+      Data: 3
+    - Name: id
+      Entry: 1
+      Data: 3_3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 

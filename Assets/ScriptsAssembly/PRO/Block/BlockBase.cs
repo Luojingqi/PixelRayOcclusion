@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
+using Google.FlatBuffers;
 using PRO.DataStructure;
 using PRO.Disk;
 using PRO.Tool;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -10,7 +12,7 @@ using UnityEngine;
 using static PRO.Renderer.ComputeShaderManager;
 namespace PRO
 {
-    public class BlockBase : MonoBehaviour, IScene
+    public abstract partial class BlockBase : SerializedMonoBehaviour, IScene
     {
         #region 坐标转换
         /// <summary>
@@ -47,64 +49,39 @@ namespace PRO
         public BlockType blockType => _blockType;
 
         #region 像素点集
+        [HideInInspector]
         /// <summary>
         /// 像素点集
         /// </summary>
         protected readonly Pixel[,] allPixel = new Pixel[Block.Size.x, Block.Size.y];
         public Pixel GetPixel(Vector2Byte pos) => allPixel[pos.x, pos.y];
 
-        /// <summary>
-        /// 设置某个点（坐标为Pixel.pos），切记设置完后记得调用异步或者同步更新颜色，不然不会实时更新
-        /// </summary>
-        public void SetPixel(Pixel pixel, bool drawPixelAsync = true, bool updateCollider = true, bool updateLiquidOrGas = true)
+        public virtual void FillPixel()
         {
-            if (pixel == null) return;
-            pixel.posG = PixelToGlobal(pixel.pos);
-            pixel.blockBase = this;
-
-            PixelTypeInfo removeInfo = null;
-            Pixel removePixel = allPixel[pixel.pos.x, pixel.pos.y];
-            //旧点所属于一个建筑且建筑不可被破坏，并且耐久大于0
-            //  if (removePixel != null && removePixel.building != null && removePixel.building.CanByBroken == false && removePixel.durability > 0) return;
-            if (removePixel != null)
+            if (GetPixel(new Vector2Byte(0, 0)) == null)
             {
-                if (removePixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius == 0)//&& removePixel.colorInfo.lightRadius <= BlockMaterial.LightRadiusMax)
-                    RemoveLightSource(removePixel);
-
-                removeInfo = removePixel.typeInfo;
-
-                //切换建筑这个点的状态（死亡||存活
-                foreach (var building in removePixel.buildingSet)
-                {
-                    building.PixelSwitch(building.GetBuilding_Pixel(pixel.posG, removePixel.blockBase.blockType), pixel);
-                }
-
-                removePixel.buildingSet.Clear();
-                Pixel.PutIn(removePixel);
+                var typeInfo = Pixel.GetPixelTypeInfo("空气");
+                var colorInfo = Pixel.GetPixelColorInfo(typeInfo.availableColors[0]);
+                for (int y = 0; y < Block.Size.y; y++)
+                    for (int x = 0; x < Block.Size.x; x++)
+                    {
+#if PRO_RENDER
+                        var pixel = new Pixel(typeInfo, colorInfo, this, new Vector2Byte(x, y));
+                        allPixel[x, y] = pixel;
+                        this.textureData.SetPixelInfoToShader(pixel);
+                        this.DrawPixelSync(new(x, y), colorInfo.color);
+#else
+                        allPixel[x, y] = new Pixel(typeInfo, colorInfo, this, new Vector2Byte(x, y));
+#endif
+                    }
             }
-
-
-            allPixel[pixel.pos.x, pixel.pos.y] = pixel;
-
-            textureData.SetPixelInfoToShader(pixel);
-
-            if (pixel.colorInfo.luminousRadius > 0 && pixel.colorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
-                AddLightSource(pixel);
-
-            if (this is Block)
-            {
-                Block block = this as Block;
-                if (updateCollider)
-                    block.ChangeCollider(removeInfo, pixel);
-                if (updateLiquidOrGas)
-                    for (int y = -1; y <= 1; y++)
-                        for (int x = -1; x <= 1; x++)
-                            Block.AddFluidUpdateHash(pixel.posG + new Vector2Int(x, y));
-            }
-
-            if (pixel.typeInfo.typeName == "火焰") queue_火焰.Enqueue(pixel.pos);
-
-            if (drawPixelAsync) DrawPixelAsync(pixel.pos, pixel.colorInfo.color);
+        }
+        public void PutIn()
+        {
+            _screen = null;
+            DrawPixelTaskQueue.Clear();
+            lightSourceDic.Clear();
+            queue_火焰.Clear();
         }
 
         #endregion
@@ -112,18 +89,18 @@ namespace PRO
         #region 光源集合
 
         public readonly Dictionary<Vector2Byte, LightSource> lightSourceDic = new Dictionary<Vector2Byte, LightSource>();
-        private void AddLightSource(Pixel pixel)
+        public void AddLightSource(Vector2Byte pos, PixelColorInfo colorInfo)
         {
-            var lightSource = new LightSource(pixel.posG, pixel.colorInfo.luminousColor, pixel.colorInfo.luminousRadius);
-            if (lightSourceDic.ContainsKey(pixel.pos))
-                lightSourceDic[pixel.pos] = lightSource;
+            var lightSource = new LightSource(Block.PixelToGlobal(blockPos, pos), colorInfo.luminousColor, colorInfo.luminousRadius);
+            if (lightSourceDic.ContainsKey(pos))
+                lightSourceDic[pos] = lightSource;
             else
-                lightSourceDic.Add(pixel.pos, lightSource);
+                lightSourceDic.Add(pos, lightSource);
         }
 
-        private void RemoveLightSource(Pixel pixel)
+        public void RemoveLightSource(Vector2Byte pos)
         {
-            lightSourceDic.Remove(pixel.pos);
+            lightSourceDic.Remove(pos);
         }
         #endregion
 
@@ -246,66 +223,45 @@ namespace PRO
         #endregion
 
         #region 燃烧
-        int kk = 0;
 
-        public void RandomUpdatePixelList(int time)
+        public void Update_火焰燃烧(int time)
         {
             int num = queue_火焰.Count;
             while (num-- > 0)
             {
                 var v = queue_火焰.Dequeue();
-                //Debug.Log(kk + "|" + v);
-
                 UpdatePixel_燃烧(GetPixel(v), time);
             }
-            kk++;
         }
         private static Vector2Int[] ring = new Vector2Int[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1), new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
-        private Queue<Vector2Byte> queue_火焰 = new Queue<Vector2Byte>();
+        public Queue<Vector2Byte> queue_火焰 = new Queue<Vector2Byte>(50);
         public void UpdatePixel_燃烧(Pixel pixel, int time)
         {
             if (pixel.typeInfo.typeName != "火焰") return;
 
-            int num = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                Vector2Int posG = pixel.posG + ring[i];
-                Vector2Byte pos = Block.GlobalToPixel(posG);
-                {
-                    BlockBase block = Scene.GetBlockBase(BlockType.Block, Block.GlobalToBlock(posG));
-                    if (block != null)
-                    {
-                        Pixel nextPixel = block.GetPixel(pos);
-                        if (nextPixel != null && nextPixel.typeInfo.typeName == "火焰") num++;
-                    }
-                }
-                {
-                    BlockBase block = Scene.GetBlockBase(BlockType.BackgroundBlock, Block.GlobalToBlock(posG));
-                    if (block != null)
-                    {
-                        Pixel nextPixel = block.GetPixel(pos);
-                        if (nextPixel != null && nextPixel.typeInfo.typeName == "火焰") num++;
-                    }
-                }
-            }
             pixel.durability += time;
             if (pixel.durability >= 0)
             {
-                SetPixel(Pixel.空气.Clone(pixel.pos));
+                pixel.Replace(Pixel.空气);
                 return;
             }
             else
             {
+                #region 随机向周围一点尝试扩散
                 {
-                    //随机向周围一点尝试扩散
                     Pixel nextPixel = Scene.GetPixel((BlockType)Random.Range(0, 2), pixel.posG + ring[Random.Range(0, ring.Length)]);
                     if (Random.Range(0, 100) < nextPixel.typeInfo.burnOdds)
-                        nextPixel.blockBase.SetPixel(Pixel.TakeOut(pixel.typeInfo, pixel.colorInfo, nextPixel.pos, -Random.Range(nextPixel.typeInfo.burnTimeRange.x, nextPixel.typeInfo.burnTimeRange.y)));
+                    {
+                        int durability = -Random.Range(nextPixel.typeInfo.burnTimeRange.x, nextPixel.typeInfo.burnTimeRange.y);
+                        nextPixel.Replace(pixel.typeInfo, pixel.colorInfo);
+                        nextPixel.durability = durability;
+                    }
                 }
+                #endregion
 
+                #region 产生火苗粒子
                 if (Random.Range(0, 100) < 50)
                 {
-                    //产生火苗粒子
                     Pixel upPixel0 = Scene.GetPixel(BlockType.Block, pixel.posG + Vector2Int.up);
                     Pixel upPixel1 = Scene.GetPixel(BlockType.BackgroundBlock, pixel.posG + Vector2Int.up);
                     if (upPixel0 != null && upPixel0.typeInfo.typeName != "火焰" && upPixel1 != null && upPixel1.typeInfo.typeName != "火焰")
@@ -315,9 +271,10 @@ namespace PRO
                         particle.Renderer.color = pixel.colorInfo.color;
                     }
                 }
+                #endregion
 
 
-                //模拟正态分布火焰强度变化
+                #region 简单模拟正态分布火焰强度变化
                 int length = pixel.typeInfo.availableColors.Length / 2;
                 float p = Mathf.Clamp(Mathf.Abs((float)pixel.durability / pixel.typeInfo.durability), 0, 1);
                 int colorIndex = length + 1 - (int)(p / (1f / length));
@@ -329,8 +286,39 @@ namespace PRO
                 else if (Random.Range(0, 100) < 23)
                     colorIndex += Random.Range(0, 2) == 0 ? -3 : 3;
                 colorIndex = Mathf.Clamp(colorIndex, 0, length - 1);
-                //处在火焰中心的火焰不发光，防止太亮
-                SetPixel(Pixel.TakeOut(pixel.typeInfo, BlockMaterial.GetPixelColorInfo(pixel.typeInfo.availableColors[num >= 5 ? colorIndex + 8 : colorIndex]), pixel.pos, pixel.durability));
+                #endregion
+
+
+                #region 判断周围一圈有几个火焰
+                int num = 0;
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2Int posG = pixel.posG + ring[i];
+                    Vector2Byte pos = Block.GlobalToPixel(posG);
+                    {
+                        BlockBase block = Scene.GetBlockBase(BlockType.Block, Block.GlobalToBlock(posG));
+                        if (block != null)
+                        {
+                            Pixel nextPixel = block.GetPixel(pos);
+                            if (nextPixel != null && nextPixel.typeInfo.typeName == "火焰") num++;
+                        }
+                    }
+                    {
+                        BlockBase block = Scene.GetBlockBase(BlockType.BackgroundBlock, Block.GlobalToBlock(posG));
+                        if (block != null)
+                        {
+                            Pixel nextPixel = block.GetPixel(pos);
+                            if (nextPixel != null && nextPixel.typeInfo.typeName == "火焰") num++;
+                        }
+                    }
+                }
+                #endregion
+                {
+                    //处在火焰中心的火焰不发光，防止太亮
+                    int durability = pixel.durability;
+                    pixel.Replace(pixel.typeInfo, Pixel.GetPixelColorInfo(pixel.typeInfo.availableColors[num >= 5 ? colorIndex + 8 : colorIndex]));
+                    pixel.durability = durability;
+                }
             }
         }
 
@@ -340,18 +328,22 @@ namespace PRO
         /// <summary>
         /// 尝试破坏像素
         /// </summary>
-        /// <param name="hardness">坚硬度，-1代表无视坚硬度直接对耐久度破坏</param>
+        /// <param name="hardness">坚硬度，-1代表无视坚硬度直接对耐久度破坏，但是无法破坏坚硬度为-1的点</param>
         /// <param name="durability">破坏的耐久度</param>
         public void TryDestroyPixel(Vector2Byte pixelPos, int hardness = -1, int durability = int.MaxValue)
         {
             Pixel pixel = GetPixel(pixelPos);
             if (pixel.typeInfo.typeName == "空气") return;
-            if (hardness == -1 && pixel.typeInfo.hardness != -1 || hardness >= pixel.typeInfo.hardness && pixel.typeInfo.durability >= 0)
+            if (hardness == -1 && pixel.typeInfo.hardness != -1 || hardness >= pixel.typeInfo.hardness)
             {
                 pixel.durability -= durability;
                 if (pixel.durability <= 0)
-                    pixel.blockBase.SetPixel(Pixel.空气.Clone(pixel.pos));
+                    pixel.Replace(Pixel.空气);
             }
         }
+
+
+        public abstract System.Action ToDisk(FlatBufferBuilder builder);
+        public abstract void ToRAM(Flat.BlockBaseData blockDiskData, CountdownEvent countdown);
     }
 }

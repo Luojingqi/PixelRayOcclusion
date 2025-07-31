@@ -1,0 +1,44 @@
+﻿include "PRO/CombatContext/CombatContextData.fbs";
+
+namespace PRO.TurnBased.Flat;
+
+table OperateT2Data
+{
+	guid : string;
+	context : PRO.Flat.CombatContextData;
+	extend_data : [ubyte];
+}
+
+table TurnState1_OperateData
+{
+	now_operate_list_t2 : [OperateT2Data];
+}
+
+table TurnFSMData
+{
+	now_state : int;
+
+	role_guid : string;
+	index : int;
+
+	state_operate : TurnState1_OperateData;
+}
+
+
+table RoundState3_TurnData
+{
+	now_round_num : int;
+	now_turn_index : int;
+
+	turn_fsm_list : [TurnFSMData];
+}
+
+table RoundFSMData
+{
+	guid : string;
+
+	now_state : int;
+	role_hash : [string];
+
+	state3_turn : RoundState3_TurnData;
+}

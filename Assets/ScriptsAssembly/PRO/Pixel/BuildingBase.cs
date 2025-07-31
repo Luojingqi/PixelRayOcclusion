@@ -1,9 +1,17 @@
-﻿using PRO.Tool;
+﻿using PRO.Disk;
+using PRO.Tool;
+using PRO.Tool.Serialize.IO;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using UnityEngine;
-using static PRO.Tool.JsonTool;
+using PRO.Proto.Ex;
+using PRO.Skill;
+using PROTool;
+using System.Buffers;
+using System.Reflection;
+using Google.FlatBuffers;
+using PRO.Flat.Ex;
 
 namespace PRO
 {
@@ -25,7 +33,7 @@ namespace PRO
         }
 
         public SceneEntity Scene => _scene;
-        public SceneEntity _scene;
+        protected SceneEntity _scene;
         public string GUID;
         public string Name;
         public Dictionary<Index, Building_Pixel> AllPixel = new Dictionary<Index, Building_Pixel>();
@@ -33,25 +41,18 @@ namespace PRO
         public HashSet<Index> AllDeathPixel = new HashSet<Index>();
         public HashSet<Index> AllUnloadPixel = new HashSet<Index>();
 
-        public Vector2Int global;
+        public Vector2Int Global;
         public Vector2Int Size;
         public BoxCollider2D TriggerCollider;
 
-        /// <summary>
-        /// 这个建筑是否可以被破坏
-        /// </summary>
-        public bool CanByBroken = true;
-
 
         /// <summary>
-        /// 这个蓝图位置的像素点被更改，将这个蓝图点从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
+        /// 这个蓝图位置的像素点被更改，将这个蓝图点(已加载)从存活与死亡两种状态转换（是否和蓝图对应，对应代表存活，反之死亡）,子类实现以产生相应的行为
         /// </summary>
-        public void PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        public void PixelSwitch(Building_Pixel building_Pixel, PixelTypeInfo oldTypeInfo, PixelColorInfo oldColorInfo)
         {
-            Building_Pixel.State oldState = building_Pixel.GetState();
-            building_Pixel.pixel = pixel;
-            pixel.buildingSet.Add(this);
-            Building_Pixel.State newState = building_Pixel.GetState();
+            Building_Pixel.State oldState = building_Pixel.GetState(oldTypeInfo, oldColorInfo);
+            Building_Pixel.State newState = building_Pixel.GetNowState();
             if (oldState == newState) return;
 
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
@@ -70,27 +71,47 @@ namespace PRO
         }
         protected abstract void PixelSwitch_Death(Building_Pixel pixelB);
         protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
-        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - global), blockType));
+        public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - Global), blockType));
         public abstract void Init();
+        public static BuildingBase New(string typeName, string guid, SceneEntity scene)
+        {
+            BuildingBase ret = null;
+            if (BuildingTypeDic.TryGetValue(typeName, out var type))
+                ret = New(type, guid, scene);
+            return ret;
+        }
         public static BuildingBase New(Type type, string guid, SceneEntity scene)
         {
-            if (typeof(BuildingBase).IsAssignableFrom(type) == false) return null;
             GameObject go = new GameObject(type.Name);
-            BuildingBase building = (BuildingBase)go.AddComponent(type);
+            var building = go.AddComponent(type) as BuildingBase;
             building.Name = type.Name;
             building.GUID = guid;
             building.TriggerCollider = go.AddComponent<BoxCollider2D>();
             building.TriggerCollider.isTrigger = true;
             building._scene = scene;
-
+            building.transform.SetParent(scene.BuildingNode);
+            scene.ActiveBuilding.Add(guid, building);
             go.layer = (int)GameLayer.Building;
             return building;
         }
+        #region 反射创建Building实例
+        private static Dictionary<string, Type> BuildingTypeDic;
+        public static void InitBuildingType()
+        {
+            var typeList = ReflectionTool.GetDerivedClasses(typeof(BuildingBase));
+            BuildingTypeDic = new(typeList.Count);
+            for (int i = 0; i < typeList.Count; i++)
+            {
+                var type = typeList[i];
+                BuildingTypeDic.Add(type.Name, type);
+            }
+        }
+        #endregion
         #region 序列化与反序列化
         /// <summary>
-        /// 反序列化过程1：添加一个蓝图点到建筑中
+        /// 反序列化过程1：添加一个蓝图点到建筑中(未加载状态)
         /// </summary>
-        public virtual void Deserialize_AddBuilding_Pixel(Building_Pixel building_Pixel)
+        public virtual void ToRAM_AddBuilding_Pixel(Building_Pixel building_Pixel)
         {
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
             AllPixel.Add(index, building_Pixel);
@@ -99,13 +120,13 @@ namespace PRO
         /// <summary>
         /// 反序列化过程2：将一个蓝图点由未加载状态改为已加载状态
         /// </summary>
-        public virtual void Deserialize_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
+        public virtual void ToRAM_PixelSwitch(Building_Pixel building_Pixel, Pixel pixel)
         {
-            var index = new Index(building_Pixel.offset, building_Pixel.blockType);
-            AllUnloadPixel.Remove(index);
             building_Pixel.pixel = pixel;
             pixel.buildingSet.Add(this);
-            Building_Pixel.State newState = building_Pixel.GetState();
+            var index = new Index(building_Pixel.offset, building_Pixel.blockType);
+            AllUnloadPixel.Remove(index);
+            Building_Pixel.State newState = building_Pixel.GetNowState();
             if (newState == Building_Pixel.State.Death)
                 AllDeathPixel.Add(index);
             else
@@ -114,119 +135,95 @@ namespace PRO
         /// <summary>
         /// 卸载一个点
         /// </summary>
-        public void UnloadPixel(Pixel pixel)
+        public void UnloadPixel(Building_Pixel building_Pixel)
         {
-            Building_Pixel building_Pixel = GetBuilding_Pixel(pixel.posG, pixel.blockBase.blockType);
             var index = new Index(building_Pixel.offset, building_Pixel.blockType);
-            if (building_Pixel.GetState() == Building_Pixel.State.Survival) AllSurvivalPixel.Remove(index);
+            if (building_Pixel.GetNowState() == Building_Pixel.State.Survival) AllSurvivalPixel.Remove(index);
             else AllDeathPixel.Remove(index);
-            building_Pixel.pixel = null;
             AllUnloadPixel.Add(index);
-        }
-        public virtual string Serialize()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"|{Name}|{global.x}:{global.y}|{Size.x}:{Size.y}");
-            sb.Append($"|{(CanByBroken ? 'T' : 'F')}|");
-            Dictionary<string, int> typeNameDic = new Dictionary<string, int>();
-            Dictionary<string, int> colorNameDic = new Dictionary<string, int>();
-            // |类型索引:颜色索引,类型索引:颜色索引| 
-            foreach (var building_Pixel in AllPixel.Values)
+            if (AllUnloadPixel.Count == AllPixel.Count)
             {
-                if (typeNameDic.TryGetValue(building_Pixel.typeInfo.typeName, out int typeNameIndex) == false)
+                _scene.ActiveBuilding.Remove(GUID);
+                foreach (var item in AllPixel.Values)
                 {
-                    typeNameIndex = typeNameDic.Count;
-                    typeNameDic.Add(building_Pixel.typeInfo.typeName, typeNameIndex);
+                    item.pixel.buildingSet.Remove(this);
+                    Building_Pixel.PutIn(item);
                 }
-                if (colorNameDic.TryGetValue(building_Pixel.colorInfo.colorName, out int colorNameIndex) == false)
-                {
-                    colorNameIndex = colorNameDic.Count;
-                    colorNameDic.Add(building_Pixel.colorInfo.colorName, colorNameIndex);
-                }
-                sb.Append($"{typeNameIndex}:{colorNameIndex}:{building_Pixel.offset.x}:{building_Pixel.offset.y}:{(int)building_Pixel.blockType},");
+                TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() => GameObject.Destroy(gameObject));
             }
-            if (sb[sb.Length - 1] == '|') sb.Append('|');
-            else sb[sb.Length - 1] = '|';
-            // |类型索引,类型|
-            foreach (var kv in typeNameDic)
+            else
             {
-                sb.Append($"{kv.Value}:{kv.Key},");
+                building_Pixel.pixel = null;
             }
-            if (sb[sb.Length - 1] == '|') sb.Append('|');
-            else sb[sb.Length - 1] = '|';
-            // |颜色索引,颜色|
-            foreach (var kv in colorNameDic)
-            {
-                sb.Append($"{kv.Value}:{kv.Key},");
-            }
-            //sb[sb.Length - 1] = '|';
-            sb.Remove(sb.Length - 1, 1);
-            return sb.ToString();
         }
-        public virtual void Deserialize(string text, int lastDelimiter)
+        public void ToDisk(FlatBufferBuilder builder, FlatBufferBuilder builder_Extend)
         {
-            Stack<char> stack = new Stack<char>();
-            StringBuilder sb = new StringBuilder();
-            Dictionary<int, string> colorNameDic = new Dictionary<int, string>();
-            Dictionary<int, string> typeNameDic = new Dictionary<int, string>();
-            int index = -1;
-            string typeName = null;
-            string colorName = null;
-            #region 使用的颜色和类型
-            Deserialize_Data(text, (num) =>
+            var typeNameOffset = builder.CreateString(GetType().Name);
+            var nameOffset = builder.CreateString(Name);
+            var typeNameIndexDic = new Dictionary<string, int>();
+            var colorNameIndexDic = new Dictionary<string, int>();
+            Flat.BuildingBaseData.StartAllPixelVector(builder, AllPixel.Count);
+            foreach (var item in AllPixel.Values)
             {
-                if (num == 0) colorName = StackToString(stack, ref sb);
-                else if (num == 1) index = StackToInt(stack);
-            },
-            () => { colorNameDic.Add(index, colorName); },
-                ref lastDelimiter, ref stack);
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) typeName = StackToString(stack, ref sb);
-                else if (num == 1) index = StackToInt(stack);
-            },
-            () => { typeNameDic.Add(index, typeName); },
-            ref lastDelimiter, ref stack);
-            #endregion
-            #region AllPixel
-            Vector2Int offset = new Vector2Int();
-            BlockBase.BlockType blockType = BlockBase.BlockType.Block;
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) blockType = (BlockBase.BlockType)StackToInt(stack);
-                else if (num == 1) offset.y = StackToInt(stack);
-                else if (num == 2) offset.x = StackToInt(stack);
-                else if (num == 3) colorName = colorNameDic[StackToInt(stack)];
-                else if (num == 4) typeName = typeNameDic[StackToInt(stack)];
-            },
-            () => { Deserialize_AddBuilding_Pixel(Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(typeName), BlockMaterial.GetPixelColorInfo(colorName), offset, blockType)); },
-            ref lastDelimiter, ref stack);
-            #endregion
-            #region CanByBroken
-            Deserialize_Data(text, (num) => { CanByBroken = stack.Peek() == 'T' ? true : false; }, null, ref lastDelimiter, ref stack);
-            #endregion
-            #region Size  global  Name
-            Vector2Int vector2Int = new Vector2Int();
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) vector2Int.y = StackToInt(stack);
-                else if (num == 1) vector2Int.x = StackToInt(stack);
-            },
-            () => { Size = vector2Int; }, ref lastDelimiter, ref stack);
+                if (typeNameIndexDic.TryGetValue(item.typeInfo.typeName, out var typeNameIndex) == false)
+                {
+                    typeNameIndex = typeNameIndexDic.Count;
+                    typeNameIndexDic.Add(item.typeInfo.typeName, typeNameIndex);
+                }
+                if (colorNameIndexDic.TryGetValue(item.colorInfo.colorName, out var colorNameIndex) == false)
+                {
+                    colorNameIndex = colorNameIndexDic.Count;
+                    colorNameIndexDic.Add(item.colorInfo.colorName, colorNameIndex);
+                }
+                Flat.Building_PixelData.CreateBuilding_PixelData(builder, typeNameIndex, colorNameIndex, item.offset.x, item.offset.y, (int)item.blockType);
+            }
+            var allPixelOffset = builder.EndVector();
+            Span<int> typeNameArrayOffsetArray = stackalloc int[typeNameIndexDic.Count];
+            Span<int> colorNameArrayOffsetArray = stackalloc int[colorNameIndexDic.Count];
+            foreach (var kv in typeNameIndexDic)
+                typeNameArrayOffsetArray[kv.Value] = builder.CreateString(kv.Key).Value;
+            foreach (var kv in colorNameIndexDic)
+                colorNameArrayOffsetArray[kv.Value] = builder.CreateString(kv.Key).Value;
+            var typeNameArrayOffset = builder.CreateVector_Offset(typeNameArrayOffsetArray);
+            var colorNameArrayOffset = builder.CreateVector_Offset(colorNameArrayOffsetArray);
 
-            Deserialize_Data(text, (num) =>
-            {
-                if (num == 0) vector2Int.y = StackToInt(stack);
-                else if (num == 1) vector2Int.x = StackToInt(stack);
-            },
-            () => { global = vector2Int; }, ref lastDelimiter, ref stack);
+            ExtendDataToDisk(builder_Extend);
+            var extendDataOffset = builder.CreateVector_Builder(builder_Extend);
 
-            Deserialize_Data(text, (num) => { Name = StackToString(stack, ref sb); }, null, ref lastDelimiter, ref stack);
-            TriggerCollider.size = (Vector2)Size * Pixel.Size;
-            TriggerCollider.offset = TriggerCollider.size / 2f;
-            TriggerCollider.transform.position = Block.GlobalToWorld(global);
-            #endregion
+
+            Flat.BuildingBaseData.StartBuildingBaseData(builder);
+            Flat.BuildingBaseData.AddTypeName(builder, typeNameOffset);
+            Flat.BuildingBaseData.AddName(builder, nameOffset);
+            Flat.BuildingBaseData.AddGlobal(builder, Global.ToDisk(builder));
+            Flat.BuildingBaseData.AddSize(builder, Size.ToDisk(builder));
+            Flat.BuildingBaseData.AddPixelTypeNameArray(builder, typeNameArrayOffset);
+            Flat.BuildingBaseData.AddPixelColorNameArray(builder, colorNameArrayOffset);
+            Flat.BuildingBaseData.AddAllPixel(builder, allPixelOffset);
         }
+        public void ToRAM(Flat.BuildingBaseData diskData, FlatBufferBuilder builder_Extend)
+        {
+            var typeInfoArray = new PixelTypeInfo[diskData.PixelColorNameArrayLength];
+            var colorInfoArray = new PixelColorInfo[diskData.PixelColorNameArrayLength];
+            for (int i = typeInfoArray.Length - 1; i >= 0; i--)
+                typeInfoArray[typeInfoArray.Length - i - 1] = Pixel.GetPixelTypeInfo(diskData.PixelTypeNameArray(i));
+            for (int i = colorInfoArray.Length - 1; i >= 0; i--)
+                colorInfoArray[colorInfoArray.Length - i - 1] = Pixel.GetPixelColorInfo(diskData.PixelColorNameArray(i));
+            for (int i = diskData.AllPixelLength - 1; i >= 0; i--)
+            {
+                var pixelDiskData = diskData.AllPixel(i).Value;
+                var pixel = Building_Pixel.TakeOut();
+                pixel.Init(typeInfoArray[pixelDiskData.TypeIndex], colorInfoArray[pixelDiskData.ColorIndex], pixelDiskData.Offset.ToRAM(), (BlockBase.BlockType)pixelDiskData.BlockType);
+                ToRAM_AddBuilding_Pixel(pixel);
+            }
+            var extendSpan = builder_Extend.DataBuffer.ToSpan(0, diskData.ExtendDataLength);
+            for (int i = extendSpan.Length; i >= 0; i--)
+                extendSpan[extendSpan.Length - i - 1] = diskData.ExtendData(i);
+            ExtendDataToRAM(builder_Extend);
+        }
+
+        protected virtual void ExtendDataToRAM(FlatBufferBuilder builder) { }
+        protected virtual void ExtendDataToDisk(FlatBufferBuilder builder) { }
+
         #endregion
 
         public SpriteRenderer CreateSelectionBox(Color color)
@@ -240,7 +237,7 @@ namespace PRO
             texture.Apply();
             SpriteRenderer spriteRenderer = Texture2DPool.TakeOutSpriteRenderer();
             spriteRenderer.sprite = Texture2DPool.GetOnlySprite(texture);
-            spriteRenderer.transform.position = Block.GlobalToWorld(global - Vector2Int.one);
+            spriteRenderer.transform.position = Block.GlobalToWorld(Global - Vector2Int.one);
             return spriteRenderer;
         }
 
@@ -257,9 +254,20 @@ namespace PRO
         //    return spriteRenderer;
         //}
 
+        /// <summary>
+        /// 彻底卸载并删除一个building
+        /// </summary>
         public void Delete()
         {
-            Scene.DeleteBuilding(GUID);
+            _scene.ActiveBuilding.Remove(GUID);
+            File.Delete(@$"{_scene.sceneCatalog.directoryInfo}/Building/{GUID}{IOTool.protoExtension}");
+            foreach (var item in AllPixel.Values)
+            {
+                item.pixel.buildingSet.Remove(this);
+                item.pixel = null;
+                Building_Pixel.PutIn(item);
+            }
+            GameObject.Destroy(gameObject);
         }
     }
 }

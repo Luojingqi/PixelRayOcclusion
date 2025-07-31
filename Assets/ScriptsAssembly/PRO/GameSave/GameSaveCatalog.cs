@@ -1,9 +1,11 @@
-﻿using PRO.Disk.Scene;
-using PRO.Tool;
+﻿using Newtonsoft.Json;
+using PRO.Disk.Scene;
+using PRO.Tool.Serialize.IO;
+using PRO.Tool.Serialize.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
+using UnityEngine;
 
 namespace PRO
 {
@@ -48,19 +50,21 @@ namespace PRO
         /// <returns></returns>
         public static GameSaveCatalog CreatFile(string name)
         {
+            if (Directory.Exists(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}"))
+            {
+                Directory.Delete(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}", true);
+            }
             GameSaveCatalog gameSaveCatalog = new GameSaveCatalog();
             gameSaveCatalog.name = name;
             gameSaveCatalog.saveTime = DateTime.Now;
 
             //创建存档的根目录
-            DirectoryInfo root = Directory.CreateDirectory(GameSaveManager.SavePath + name);
+            DirectoryInfo root = Directory.CreateDirectory(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}");
             gameSaveCatalog.directoryInfo = root;
-            //创建场景的根目录
-            DirectoryInfo sceneRoot = Directory.CreateDirectory(@$"{root.FullName}\Scene");
             //创建一个场景
-            SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog, sceneRoot);
-            gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
-            JsonTool.StoreText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
+            //SceneCatalog sceneCatalog = SceneCatalog.CreateFile("mainScene", gameSaveCatalog);
+            //gameSaveCatalog.sceneCatalogDic.Add("mainScene", sceneCatalog);
+            //IOTool.SaveText(@$"{root.FullName}\GameSaveCatalog.json", JsonTool.ToJson(gameSaveCatalog));
             return gameSaveCatalog;
         }
 
@@ -71,7 +75,7 @@ namespace PRO
         /// <returns></returns>
         public static GameSaveCatalog LoadGameSaveInfo(DirectoryInfo saveDirectoryInfo)
         {
-            if (JsonTool.LoadText(@$"{saveDirectoryInfo.FullName}\GameSaveCatalog.json", out string GameSaveInfoText))
+            if (IOTool.LoadText(@$"{saveDirectoryInfo.FullName}\GameSaveCatalog.json", out string GameSaveInfoText))
             {
                 //加载存档的目录文件
                 GameSaveCatalog gameSaveCatalog = JsonTool.ToObject<GameSaveCatalog>(GameSaveInfoText);
@@ -90,6 +94,31 @@ namespace PRO
                 }
             }
             return null;
+        }
+
+        public static GameSaveCatalog LoadGameSaveInfo(string name) => LoadGameSaveInfo(new DirectoryInfo(@$"{Application.streamingAssetsPath}\GameSaveFiles\{name}"));
+
+
+        /// <summary>
+        /// 从SavePath中加载所有的存档文件目录
+        /// </summary>
+        /// <returns></returns>
+        public static List<GameSaveCatalog> LoadAllSaveCatalog()
+        {
+            List<GameSaveCatalog> ret = new List<GameSaveCatalog>();
+            DirectoryInfo root = new DirectoryInfo(@$"{Application.streamingAssetsPath}\GameSaveFiles\");
+            DirectoryInfo[] GameSaveDirectoryArray = root.GetDirectories();
+            foreach (DirectoryInfo info in GameSaveDirectoryArray)
+            {
+                //加载每个存档的目录文件
+                GameSaveCatalog gameSaveInfo = LoadGameSaveInfo(info);
+                if (gameSaveInfo != null)
+                {
+                    gameSaveInfo.directoryInfo = info;
+                    ret.Add(gameSaveInfo);
+                }
+            }
+            return ret;
         }
     }
 }

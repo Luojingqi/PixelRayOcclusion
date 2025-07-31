@@ -1,5 +1,5 @@
 ﻿using PRO.SceneEditor;
-using PRO.Tool;
+using PRO.Tool.Serialize.Json;
 using PROTool;
 using Sirenix.OdinInspector;
 using System;
@@ -78,12 +78,12 @@ namespace PRO.SkillEditor
 
         public override void DrawGizmo(SkillPlayAgent agent)
         {
-            
+
         }
 
         public override void DrawHandle(SkillPlayAgent agent)
         {
-            
+
         }
     }
 }
