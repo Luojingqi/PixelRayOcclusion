@@ -1,5 +1,4 @@
-﻿using PRO.TurnBased;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace PRO
@@ -13,15 +12,15 @@ namespace PRO
             Icon = GetComponent<Image>();
             Button = GetComponent<Button>();
         }
-        private TurnFSM turn;
-        public void SetTurn(TurnFSM turn)
-        {
-            this.turn = turn;
-        }
+        //private TurnFSM turn;
+        //public void SetTurn(TurnFSM turn)
+        //{
+        //    this.turn = turn;
+        //}
 
         public void Clear()
         {
-            turn = null;
+            //turn = null;
             Button.onClick.RemoveAllListeners();
         }
     }

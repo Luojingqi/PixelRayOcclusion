@@ -31,9 +31,12 @@ namespace PRO
         public static void PutIn(CombatContext context)
         {
             context.Agent = null;
+            RoleInfo.CloneValue(RoleInfo.empty, context.AgentInfo);
             context.LogBuilder.Clear();
             context.StartCombatEffectDataList.Clear();
-            context.ClearByAgentData();
+            for (int i = 0; i < context.ByAgentDataList.Count; i++)
+                CombatContext_ByAgentData.PutIn(context.ByAgentDataList[i]);
+            context.ByAgentDataList.Clear();
             pool.PutIn(context);
         }
         #endregion
@@ -82,27 +85,19 @@ namespace PRO
             public RoleInfo AgentInfo = new RoleInfo();
             public List<StartCombatEffectData> StartCombatEffectDataList = new List<StartCombatEffectData>();
             public EndCombatEffectData EndCombatEffectData;
-            public InjuryEstimationPanelC InjuryEstimation;
             public bool PlayAffectedAnimation = true;
             public StringBuilder LogBuilder = new StringBuilder(50);
 
             #region CombatContext_ByAgentData对象池
             private static ObjectPool<CombatContext_ByAgentData> pool = new ObjectPool<CombatContext_ByAgentData>();
-            public static CombatContext_ByAgentData TakeOut()
-            {
-                var agentData = pool.TakeOut();
-                agentData.InjuryEstimation = InjuryEstimationPanelC.pool.TakeOut();
-                return agentData;
-            }
+            public static CombatContext_ByAgentData TakeOut() => pool.TakeOut();
             public static void PutIn(CombatContext_ByAgentData agentData)
             {
-                agentData.Agent.UnSelect();
                 agentData.Agent = null;
+                RoleInfo.CloneValue(RoleInfo.empty, agentData.AgentInfo);
                 agentData.StartCombatEffectDataList.Clear();
                 agentData.EndCombatEffectData = new EndCombatEffectData();
                 agentData.LogBuilder.Clear();
-                InjuryEstimationPanelC.pool.PutIn(agentData.InjuryEstimation);
-                agentData.InjuryEstimation = null;
                 agentData.PlayAffectedAnimation = true;
                 pool.PutIn(agentData);
             }
@@ -149,7 +144,7 @@ namespace PRO
             LogBuilder.Insert(0, $"{Agent.Name}：");
         }
 
-        public void AddByAgent(Role byRole, bool triggerBuff_选中)
+        public void AddByAgent(Role byRole)
         {
             var byAgentData = CombatContext_ByAgentData.TakeOut();
             ByAgentDataList.Add(byAgentData);
@@ -158,31 +153,7 @@ namespace PRO
             byAgentData.LogBuilder.Append($"{byRole.Name}：被攻击。");
             foreach (var data in StartCombatEffectDataList)
                 byAgentData.StartCombatEffectDataList.Add(data);
-            if (triggerBuff_选中)
-            {
-                int agentIndex = ByAgentDataList.Count - 1;
-                //这两个buff类型的意义在于
-                //某些buff的影响可以在技能选中敌人的时候就将
-                //效果展示在面板上（命中率与暴击率）
-                Agent.ForEachBuffApplyEffect(BuffTriggerType.技能选中敌人, this, agentIndex);
-                byAgentData.Agent.ForEachBuffApplyEffect(BuffTriggerType.被技能选中, this, agentIndex);
-                //buff效果处理完毕，展示可能的命中率与暴击率，后续还有其他buff影响
-                EndCombatEffectData data = new EndCombatEffectData();
-                data.命中率 = AgentInfo.命中率.Value - byAgentData.AgentInfo.闪避率.Value;
-                data.暴击率 = AgentInfo.暴击率.Value + Mathf.Max(data.命中率 - 1f, 0);
-                byAgentData.EndCombatEffectData = data;
-                byAgentData.InjuryEstimation.Open(this, agentIndex);
-                byRole.Select();
-            }
         }
-        #region 选择全部与取消选择全部等
-        public void ClearByAgentData()
-        {
-            foreach (var data in ByAgentDataList)
-                CombatContext_ByAgentData.PutIn(data);
-            ByAgentDataList.Clear();
-        }
-        #endregion
         /// <summary>
         /// 添加技能伤害
         /// </summary>
@@ -209,14 +180,14 @@ namespace PRO
 
             EndCombatEffectData data = new EndCombatEffectData();
             data.命中率 = AgentInfo.命中率.Value - byAgentInfo.闪避率.Value;
-            data.暴击率 = AgentInfo.暴击率.Value + Mathf.Max(data.命中率 - 1f, 0);
+            data.暴击率 = AgentInfo.暴击率.Value + System.Math.Max(data.命中率 - 1f, 0);
             Calculate_CombatEffect(byAgentData, out data.护甲, out data.血量);
-            Calculate_CombatEffect(byAgentData, out data.护甲_暴击, out data.血量_暴击, AgentInfo.暴击效果.Value);
+            Calculate_CombatEffect(byAgentData, out data.护甲_暴击, out data.血量_暴击, 2.0);
             ByAgentDataList[index].EndCombatEffectData = data;
             return data;
         }
 
-        private void Calculate_CombatEffect(CombatContext_ByAgentData byAgentData, out int 护甲影响, out int 血量影响, float coefficient = 1)
+        private void Calculate_CombatEffect(CombatContext_ByAgentData byAgentData, out int 护甲影响, out int 血量影响, double coefficient = 1.0)
         {
             RoleInfo byAgentInfo = byAgentData.AgentInfo;
             护甲影响 = 0;
@@ -224,34 +195,20 @@ namespace PRO
             foreach (var effectData in byAgentData.StartCombatEffectDataList)
             {
                 int effectValue = (int)(effectData.value * coefficient);
-                if (effectData.type == 属性.治疗)
+                switch (effectData.type)
                 {
-
-                    if (血量影响 + effectValue + byAgentInfo.血量.Value > byAgentInfo.最大血量.Value)
-                    {
-                        护甲影响 += effectValue - (byAgentInfo.最大血量.Value - byAgentInfo.血量.Value) - byAgentInfo.抗性Array[(int)effectData.type].Value;
-                        血量影响 += byAgentInfo.最大血量.Value - byAgentInfo.血量.Value;
-                    }
-                    else
-                    {
-                        血量影响 += effectValue;
-                    }
-                }
-                else if (effectData.type == 属性.真实)
-                {
-                    血量影响 -= effectValue - byAgentInfo.抗性Array[(int)effectData.type].Value;
-                }
-                else
-                {
-                    if (护甲影响 + effectValue > byAgentInfo.临时护甲.Value)
-                    {
-                        血量影响 -= 护甲影响 + effectValue - byAgentInfo.临时护甲.Value - byAgentInfo.抗性Array[(int)effectData.type].Value;
-                        护甲影响 -= byAgentInfo.临时护甲.Value;
-                    }
-                    else
-                    {
-                        护甲影响 -= effectValue;
-                    }
+                    case 属性.治疗: 血量影响 += effectValue; break;
+                    case 属性.护甲修复: 护甲影响 += effectValue; break;
+                    case 属性.真实: 血量影响 -= effectValue; break;
+                    default:
+                        if (护甲影响 + effectValue > byAgentInfo.护甲.Value)
+                        {
+                            血量影响 -= 护甲影响 + effectValue - byAgentInfo.护甲.Value - byAgentInfo.抗性Array[(int)effectData.type].Value;
+                            护甲影响 -= byAgentInfo.护甲.Value;
+                        }
+                        else
+                            护甲影响 -= effectValue;
+                        break;
                 }
             }
         }
@@ -261,11 +218,12 @@ namespace PRO
         /// </summary>
         public void Calculate_最终结算()
         {
+            Agent.ForEachBuffApplyEffect(BuffTriggerType.攻击前, this, -1);
             //遍历所有被攻击人
             for (int i = 0; i < ByAgentDataList.Count; i++)
             {
                 CombatContext_ByAgentData byAgentData = ByAgentDataList[i];
-
+                Agent.ForEachBuffApplyEffect(BuffTriggerType.造成战斗效果前, this, i);
                 byAgentData.Agent.ForEachBuffApplyEffect(BuffTriggerType.受到战斗效果前, this, i);
 
                 Calculate_命中与暴击(i);
@@ -277,8 +235,8 @@ namespace PRO
                     var byAgent = byAgentData.Agent;
                     if (Random.Range(0, 1000) > (int)(byEndCombatEffectData.暴击率 * 1000))
                     {
-                        byAgent.Info.临时护甲.Value += byEndCombatEffectData.护甲;
-                        byAgent.Info.血量.Value += byEndCombatEffectData.血量;
+                        byAgent.Info.护甲.Value_基础 += byEndCombatEffectData.护甲;
+                        byAgent.Info.血量.Value_基础 += byEndCombatEffectData.血量;
 
                         byAgentData.LogBuilder.Append($"命中。");
                         if (byEndCombatEffectData.护甲 != 0) { byAgentData.LogBuilder.Append($"护甲{GetSign(byEndCombatEffectData.护甲)}，"); }
@@ -288,17 +246,17 @@ namespace PRO
                     else
                     {
                         byEndCombatEffectData.is暴击 = true;
-                        byAgent.Info.临时护甲.Value += byEndCombatEffectData.护甲_暴击;
-                        byAgent.Info.血量.Value += byEndCombatEffectData.血量_暴击;
+                        byAgent.Info.护甲.Value_基础 += byEndCombatEffectData.护甲_暴击;
+                        byAgent.Info.血量.Value_基础 += byEndCombatEffectData.血量_暴击;
                         byAgentData.LogBuilder.Append("暴击！");
                         if (byEndCombatEffectData.护甲_暴击 != 0) { byAgentData.LogBuilder.Append($"护甲{GetSign(byEndCombatEffectData.护甲_暴击)}，"); }
                         if (byEndCombatEffectData.血量_暴击 != 0) { byAgentData.LogBuilder.Append($"血量{GetSign(byEndCombatEffectData.血量_暴击)}，"); }
                         byAgentData.LogBuilder.EndCommaToPeriod();
-
                     }
                     byAgentData.EndCombatEffectData = byEndCombatEffectData;
 
                     byAgentData.Agent.ForEachBuffApplyEffect(BuffTriggerType.受到战斗效果后, this, i);
+                    Agent.ForEachBuffApplyEffect(BuffTriggerType.造成战斗效果后, this, i);
                 }
                 else
                 {
@@ -312,6 +270,8 @@ namespace PRO
                 }
                 byAgentData.Agent.UpdateBuffUI();
             }
+
+            Agent.ForEachBuffApplyEffect(BuffTriggerType.攻击后, this, -1);
             Agent.UpdateBuffUI();
         }
 
@@ -325,12 +285,14 @@ namespace PRO
                 StartCombatEffectDataList.Add(data);
                 LogBuilder.Append($"{data.type}{data.value}，");
             }
-            ByAgentDataList.Clear();
-            AddByAgent(Agent, false);
-            ByAgentDataList[0].LogBuilder.Clear();
-            Calculate_最终结算();
+            AddByAgent(Agent);
+            var byData = ByAgentDataList[0];
+            byData.LogBuilder.Clear();
+            Calculate_CombatEffect(byData, out byData.EndCombatEffectData.护甲, out byData.EndCombatEffectData.血量);
+            Agent.Info.护甲.Value_基础 += byData.EndCombatEffectData.护甲;
+            Agent.Info.血量.Value_基础 += byData.EndCombatEffectData.血量;
+            Agent.ForEachBuffApplyEffect(BuffTriggerType.受到战斗效果后, this, 0);
             LogBuilder.Append(ByAgentDataList[0].LogBuilder);
-            ClearByAgentData();
         }
     }
 

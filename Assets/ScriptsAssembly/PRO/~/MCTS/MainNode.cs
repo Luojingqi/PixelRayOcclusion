@@ -93,8 +93,19 @@ namespace PRO.AI
                             Debug.Log($"第{i}次模拟-等待模拟器成功");
                             #endregion
                             #region 单次访问
-                            访问次数++;
-                            chiles[0].访问(nodeList);
+                            lock (lockObject)
+                            {
+                                访问次数++;
+                                chiles[0].访问(nodeList);
+                                线程占用++;
+                                for (int n = 0; n < nodeList.Count; n++)
+                                    nodeList[n].线程占用++;
+                                for (int n = 0; n < nodeList.Count; n++)
+                                {
+                                    var node = nodeList[n];
+                                    node.parent.chiles.Enqueue(node.parent.chiles.Dequeue(), -node.Get_UCB());
+                                }
+                            }
                             var workData = new ClientWorkData();
                             workData.node = nodeList[nodeList.Count - 1];
                             Span<Flat.NodeBase> nodeTypeListOffsetArray = stackalloc Flat.NodeBase[nodeList.Count];
@@ -107,14 +118,6 @@ namespace PRO.AI
                             }
                             lock (lockObject)
                             {
-                                线程占用++;
-                                for (int n = 0; n < nodeList.Count; n++)
-                                    nodeList[n].线程占用++;
-                                for (int n = 0; n < nodeList.Count; n++)
-                                {
-                                    var node = nodeList[n];
-                                    node.parent.chiles.Enqueue(node.parent.chiles.Dequeue(), -node.Get_UCB());
-                                }
                                 workDataDic.Add(remoteIPEndPoint.Port, workData);
                             }
                             var pathOffset = builder.CreateString(sceneCatalog.directoryInfo.FullName);
@@ -134,7 +137,7 @@ namespace PRO.AI
                             int time = 单次模拟最大等待时间;
                             while (time > 0)
                             {
-                                if (线程占用 == 0) break;
+                                if (workDataDic.Count == 0) break;
                                 time -= 25;
                                 Thread.Sleep(25);
                             }
@@ -172,10 +175,9 @@ namespace PRO.AI
             {
                 var startRstData = Flat.Start_Rst.GetRootAsStart_Rst(builder.DataBuffer);
                 var workData = workDataDic[removePoint.Port];
-                workDataDic.Remove(removePoint.Port);
+                
 
                 var node = workData.node;
-                node.Add线程占用(-1);
                 if (startRstData.EffectsLength != 0)
                     for (int i = (int)EffectAgent.end - 1; i >= 0; i--)
                     {
@@ -203,6 +205,8 @@ namespace PRO.AI
                     }
                     node.已扩展 = true;
                 }
+                node.Add线程占用(-1);
+                workDataDic.Remove(removePoint.Port);
                 IdleClientEndPointQueue.Enqueue(removePoint.Port);
             }
         }

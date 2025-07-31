@@ -33,11 +33,11 @@ namespace PRO
         public bool is命中;
         public bool is暴击;
 
-        public float 命中率;
+        public double 命中率;
         public int 护甲;
         public int 血量;
 
-        public float 暴击率;
+        public double 暴击率;
         public int 护甲_暴击;
         public int 血量_暴击;
     }
@@ -57,7 +57,7 @@ namespace PRO
         电,
         冰,
         治疗,
-
+        护甲修复,
         end
     }
 

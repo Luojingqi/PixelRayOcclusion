@@ -1,5 +1,4 @@
 using PRO.Tool;
-using PRO.TurnBased;
 using System.Collections.Generic;
 namespace PRO
 {
@@ -24,24 +23,24 @@ namespace PRO
             WaitPool.CreateEvent += t => t.Init();
         }
         public List<TurnImage> TurnImageList = new List<TurnImage>();
-        public void SetTurn(List<TurnFSM> list, int nowTurn)
-        {
-            Clear();
-            for (int i = 0; i < list.Count; i++)
-            {
-                var turn = list[i];
-                TurnImage ti = null;
-                if (i == nowTurn)
-                    ti = AfootPool.TakeOut();
-                else
+        //public void SetTurn(List<TurnFSM> list, int nowTurn)
+        //{
+        //    Clear();
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        var turn = list[i];
+        //        TurnImage ti = null;
+        //        if (i == nowTurn)
+        //            ti = AfootPool.TakeOut();
+        //        else
 
-                    ti = WaitPool.TakeOut();
-                ti.transform.SetParent(view.ImageNode);
-                ti.Icon.sprite = turn.Agent.Icon;
-                ti.SetTurn(turn);
-                TurnImageList.Add(ti);
-            }
-        }
+        //            ti = WaitPool.TakeOut();
+        //        ti.transform.SetParent(view.ImageNode);
+        //        ti.Icon.sprite = turn.Agent.Icon;
+        //        ti.SetTurn(turn);
+        //        TurnImageList.Add(ti);
+        //    }
+        //}
 
         public void Clear()
         {

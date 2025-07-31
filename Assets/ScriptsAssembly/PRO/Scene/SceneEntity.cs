@@ -5,7 +5,6 @@ using PRO.Disk.Scene;
 using PRO.Flat.Ex;
 using PRO.Tool;
 using PRO.Tool.Serialize.IO;
-using PRO.TurnBased;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -48,7 +47,7 @@ namespace PRO
             scene.ParticleNode.SetParent(scene.transform);
             scene.BuildingNode = new GameObject("BuildingNode").transform;
             scene.BuildingNode.SetParent(scene.transform);
-            scene.gameObject.SetActive(false);  
+            scene.gameObject.SetActive(false);
             return scene;
         }
         public static SceneEntity TakeOut(SceneCatalog sceneCatalog)
@@ -85,12 +84,6 @@ namespace PRO
         /// key：guid  value：building
         /// </summary>
         public Dictionary<string, BuildingBase> ActiveBuilding = new Dictionary<string, BuildingBase>(24);
-
-        /// <summary>
-        /// 在场景中活跃的战斗
-        /// </summary>
-        public Dictionary<string, RoundFSM> ActiveRound = new Dictionary<string, RoundFSM>(4);
-        private List<string> RemoveActiveRoundList = new List<string>(2);
 
         public Block GetBlock(Vector2Int blockPos) => BlockBaseCrossList[blockPos];
         public BackgroundBlock GetBackground(Vector2Int blockPos) => BlockBaseCrossList[blockPos]?.background;
@@ -417,26 +410,6 @@ namespace PRO
         }
         #endregion
 
-        #region Round
-        public void LoadRound(SceneCatalog catalog, string guid)
-        {
-            if (IOTool.LoadFlat(@$"{catalog.directoryInfo}\Round\{guid}", out var builder))
-            {
-                var diskData = TurnBased.Flat.RoundFSMData.GetRootAsRoundFSMData(builder.DataBuffer);
-                var round = new RoundFSM(this, diskData.Guid);
-                round.ToRAM(diskData);
-                FlatBufferBuilder.PutIn(builder);
-            }
-        }
-        private void SaveRound(SceneCatalog catalog, RoundFSM round)
-        {
-            var builder = FlatBufferBuilder.TakeOut(1024 * 2);
-            round.ToDisk(builder);
-            IOTool.SaveFlat(@$"{catalog.directoryInfo}\Round\{round.GUID}", builder);
-            FlatBufferBuilder.PutIn(builder);
-        }
-        #endregion
-
 
         /// <summary>
         /// 保存场景所有数据，内部使用线程池优化，返回等待信号
@@ -468,9 +441,6 @@ namespace PRO
                     countdown_Block.Wait();
                     TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
                     {
-                        foreach (var round in ActiveRound.Values)
-                            SaveRound(catalog, round);
-
                         #region 保存  Particle
                         {
                             //粒子分组
@@ -560,21 +530,6 @@ namespace PRO
                 var builder = FlatBufferBuilder.TakeOut(1024);
                 var blockPosSet = new HashSet<Vector2Int>(ActiveBlockBase.Count);
 
-                Span<int> roundGuidOffsetArray = stackalloc int[ActiveRound.Count];
-                int index = 0;
-                foreach (var round in ActiveRound.Values)
-                {
-                    roundGuidOffsetArray[index++] = builder.CreateString(round.GUID).Value;
-                    foreach (var role in round.RoleHash)
-                    {
-                        var blockPos = Block.WorldToBlock(role.transform.position);
-                        for (int y = -1; y <= 1; y++)
-                            for (int x = -1; x <= 1; x++)
-                                blockPosSet.Add(blockPos + new Vector2Int(x, y));
-                    }
-                }
-                var roundGuidOffset = builder.CreateVector_Offset(roundGuidOffsetArray);
-
                 Flat.SceneEntityData.StartActiveBlockBaseVector(builder, blockPosSet.Count);
                 foreach (var blockPos in blockPosSet)
                     blockPos.ToDisk(builder);
@@ -582,7 +537,6 @@ namespace PRO
 
                 Flat.SceneEntityData.StartSceneEntityData(builder);
                 Flat.SceneEntityData.AddActiveBlockBase(builder, activeBlockOffset);
-                Flat.SceneEntityData.AddRoundGuid(builder, roundGuidOffset);
                 builder.Finish(Flat.SceneEntityData.EndSceneEntityData(builder).Value);
                 IOTool.SaveFlat($@"{catalog.directoryInfo}\SceneEntityData", builder);
                 FlatBufferBuilder.PutIn(builder);
@@ -617,11 +571,6 @@ namespace PRO
                 ThreadPool.QueueUserWorkItem((obj) =>
                 {
                     countdown_block.Wait();
-                    TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear_WaitInvoke(() =>
-                    {
-                        for (int i = diskData.RoundGuidLength - 1; i >= 0; i--)
-                            LoadRound(catalog, diskData.RoundGuid(i));
-                    });
                     FlatBufferBuilder.PutIn(builder);
                     countdown.Signal();
                 });
@@ -645,11 +594,6 @@ namespace PRO
         private CountdownEvent UnLoadAll()
         {
             CountdownEvent countdown = new CountdownEvent(1);
-            #region 卸载 round
-            if (GamePlayMain.Inst.Round != null && ActiveRound.ContainsKey(GamePlayMain.Inst.Round.GUID))
-                GamePlayMain.Inst.Round = null;
-            ActiveRound.Clear();
-            #endregion
             #region 卸载  role
             foreach (var role in ActiveRole_Guid.Values.ToArray())
                 RoleManager.Inst.PutIn(role);
@@ -812,19 +756,6 @@ namespace PRO
                         GetBlock(activeBlockUpdateTempQueue.Dequeue()).UpdateFluid3();
                 }
             }
-            #endregion
-
-            #region 更新  战斗
-            foreach (var round in ActiveRound.Values)
-            {
-                if (round.NowState.EnumName != RoundStateEnum.end)
-                    round.Update();
-                else
-                    RemoveActiveRoundList.Add(round.GUID);
-            }
-            for (int i = 0; i < RemoveActiveRoundList.Count; i++)
-                ActiveRound.Remove(RemoveActiveRoundList[i]);
-            RemoveActiveRoundList.Clear();
             #endregion
 
             #region 更新  粒子

@@ -26,11 +26,6 @@ namespace PRO
                         view.NumText.text = $"{i.StackNumber}";
                         break;
                     }
-                case IBuff_回合 i:
-                    {
-                        view.NumText.text = $"{i.Round}";
-                        break;
-                    }
                 case IBuff_比例 i:
                     {
                         view.NumText.text = $"{i.Proportion * 100:F0}";

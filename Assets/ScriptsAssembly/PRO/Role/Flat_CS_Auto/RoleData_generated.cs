@@ -98,50 +98,42 @@ public struct RoleData : IFlatbufferObject
   public PRO.Flat.Transform? TransformData { get { int o = __p.__offset(4); return o != 0 ? (PRO.Flat.Transform?)(new PRO.Flat.Transform()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public PRO.Flat.Rigidbody2D? Rigidbody2DData { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.Rigidbody2D?)(new PRO.Flat.Rigidbody2D()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public PRO.Flat.SkillPlayerAgentData? SkillPlayAgentData { get { int o = __p.__offset(8); return o != 0 ? (PRO.Flat.SkillPlayerAgentData?)(new PRO.Flat.SkillPlayerAgentData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-  public string NavType { get { int o = __p.__offset(10); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public int Toward { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public string RoleType { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetNavTypeBytes() { return __p.__vector_as_span<byte>(10, 1); }
+  public Span<byte> GetRoleTypeBytes() { return __p.__vector_as_span<byte>(12, 1); }
 #else
-  public ArraySegment<byte>? GetNavTypeBytes() { return __p.__vector_as_arraysegment(10); }
+  public ArraySegment<byte>? GetRoleTypeBytes() { return __p.__vector_as_arraysegment(12); }
 #endif
-  public byte[] GetNavTypeArray() { return __p.__vector_as_array<byte>(10); }
-  public int Toward { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public string RoleType { get { int o = __p.__offset(14); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public byte[] GetRoleTypeArray() { return __p.__vector_as_array<byte>(12); }
+  public string Guid { get { int o = __p.__offset(14); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetRoleTypeBytes() { return __p.__vector_as_span<byte>(14, 1); }
+  public Span<byte> GetGuidBytes() { return __p.__vector_as_span<byte>(14, 1); }
 #else
-  public ArraySegment<byte>? GetRoleTypeBytes() { return __p.__vector_as_arraysegment(14); }
+  public ArraySegment<byte>? GetGuidBytes() { return __p.__vector_as_arraysegment(14); }
 #endif
-  public byte[] GetRoleTypeArray() { return __p.__vector_as_array<byte>(14); }
-  public string Guid { get { int o = __p.__offset(16); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public byte[] GetGuidArray() { return __p.__vector_as_array<byte>(14); }
+  public string Name { get { int o = __p.__offset(16); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetGuidBytes() { return __p.__vector_as_span<byte>(16, 1); }
+  public Span<byte> GetNameBytes() { return __p.__vector_as_span<byte>(16, 1); }
 #else
-  public ArraySegment<byte>? GetGuidBytes() { return __p.__vector_as_arraysegment(16); }
+  public ArraySegment<byte>? GetNameBytes() { return __p.__vector_as_arraysegment(16); }
 #endif
-  public byte[] GetGuidArray() { return __p.__vector_as_array<byte>(16); }
-  public string Name { get { int o = __p.__offset(18); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
-#if ENABLE_SPAN_T
-  public Span<byte> GetNameBytes() { return __p.__vector_as_span<byte>(18, 1); }
-#else
-  public ArraySegment<byte>? GetNameBytes() { return __p.__vector_as_arraysegment(18); }
-#endif
-  public byte[] GetNameArray() { return __p.__vector_as_array<byte>(18); }
-  public PRO.Flat.RoleInfoData? Info { get { int o = __p.__offset(20); return o != 0 ? (PRO.Flat.RoleInfoData?)(new PRO.Flat.RoleInfoData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-  public PRO.Flat.OperatBasiceData? AllOperate(int j) { int o = __p.__offset(22); return o != 0 ? (PRO.Flat.OperatBasiceData?)(new PRO.Flat.OperatBasiceData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int AllOperateLength { get { int o = __p.__offset(22); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public byte[] GetNameArray() { return __p.__vector_as_array<byte>(16); }
+  public PRO.Flat.RoleInfoData? Info { get { int o = __p.__offset(18); return o != 0 ? (PRO.Flat.RoleInfoData?)(new PRO.Flat.RoleInfoData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public PRO.Flat.OperatBasiceData? AllOperate(int j) { int o = __p.__offset(20); return o != 0 ? (PRO.Flat.OperatBasiceData?)(new PRO.Flat.OperatBasiceData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int AllOperateLength { get { int o = __p.__offset(20); return o != 0 ? __p.__vector_len(o) : 0; } }
 
-  public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(10); }
+  public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(9); }
   public static void AddTransformData(FlatBufferBuilder builder, Offset<PRO.Flat.Transform> transformDataOffset) { builder.AddStruct(0, transformDataOffset.Value, 0); }
   public static void AddRigidbody2DData(FlatBufferBuilder builder, Offset<PRO.Flat.Rigidbody2D> rigidbody2DDataOffset) { builder.AddStruct(1, rigidbody2DDataOffset.Value, 0); }
   public static void AddSkillPlayAgentData(FlatBufferBuilder builder, Offset<PRO.Flat.SkillPlayerAgentData> skillPlayAgentDataOffset) { builder.AddOffset(2, skillPlayAgentDataOffset.Value, 0); }
-  public static void AddNavType(FlatBufferBuilder builder, StringOffset navTypeOffset) { builder.AddOffset(3, navTypeOffset.Value, 0); }
-  public static void AddToward(FlatBufferBuilder builder, int toward) { builder.AddInt(4, toward, 0); }
-  public static void AddRoleType(FlatBufferBuilder builder, StringOffset roleTypeOffset) { builder.AddOffset(5, roleTypeOffset.Value, 0); }
-  public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(6, guidOffset.Value, 0); }
-  public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(7, nameOffset.Value, 0); }
-  public static void AddInfo(FlatBufferBuilder builder, Offset<PRO.Flat.RoleInfoData> infoOffset) { builder.AddOffset(8, infoOffset.Value, 0); }
-  public static void AddAllOperate(FlatBufferBuilder builder, VectorOffset allOperateOffset) { builder.AddOffset(9, allOperateOffset.Value, 0); }
+  public static void AddToward(FlatBufferBuilder builder, int toward) { builder.AddInt(3, toward, 0); }
+  public static void AddRoleType(FlatBufferBuilder builder, StringOffset roleTypeOffset) { builder.AddOffset(4, roleTypeOffset.Value, 0); }
+  public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(5, guidOffset.Value, 0); }
+  public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(6, nameOffset.Value, 0); }
+  public static void AddInfo(FlatBufferBuilder builder, Offset<PRO.Flat.RoleInfoData> infoOffset) { builder.AddOffset(7, infoOffset.Value, 0); }
+  public static void AddAllOperate(FlatBufferBuilder builder, VectorOffset allOperateOffset) { builder.AddOffset(8, allOperateOffset.Value, 0); }
   public static VectorOffset CreateAllOperateVector(FlatBufferBuilder builder, Offset<PRO.Flat.OperatBasiceData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, Offset<PRO.Flat.OperatBasiceData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Flat.OperatBasiceData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
@@ -162,13 +154,12 @@ static public class RoleDataVerify
       && verifier.VerifyField(tablePos, 4 /*TransformData*/, 40 /*PRO.Flat.Transform*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*Rigidbody2DData*/, 16 /*PRO.Flat.Rigidbody2D*/, 4, false)
       && verifier.VerifyTable(tablePos, 8 /*SkillPlayAgentData*/, PRO.Flat.SkillPlayerAgentDataVerify.Verify, false)
-      && verifier.VerifyString(tablePos, 10 /*NavType*/, false)
-      && verifier.VerifyField(tablePos, 12 /*Toward*/, 4 /*int*/, 4, false)
-      && verifier.VerifyString(tablePos, 14 /*RoleType*/, false)
-      && verifier.VerifyString(tablePos, 16 /*Guid*/, false)
-      && verifier.VerifyString(tablePos, 18 /*Name*/, false)
-      && verifier.VerifyTable(tablePos, 20 /*Info*/, PRO.Flat.RoleInfoDataVerify.Verify, false)
-      && verifier.VerifyVectorOfTables(tablePos, 22 /*AllOperate*/, PRO.Flat.OperatBasiceDataVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 10 /*Toward*/, 4 /*int*/, 4, false)
+      && verifier.VerifyString(tablePos, 12 /*RoleType*/, false)
+      && verifier.VerifyString(tablePos, 14 /*Guid*/, false)
+      && verifier.VerifyString(tablePos, 16 /*Name*/, false)
+      && verifier.VerifyTable(tablePos, 18 /*Info*/, PRO.Flat.RoleInfoDataVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 20 /*AllOperate*/, PRO.Flat.OperatBasiceDataVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

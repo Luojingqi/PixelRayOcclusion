@@ -11,7 +11,9 @@ namespace PRO.Buff
         {
             private Buff_2_0 buff;
             public Buff_2_0_受到战斗效果前(Buff_2_0 buff) { this.buff = buff; }
-
+            public override void InitValue()
+            {
+            }
             public override BuffTriggerType TriggerType => BuffTriggerType.受到战斗效果前;
 
             public override void ApplyEffect(CombatContext context, int index)
@@ -23,7 +25,7 @@ namespace PRO.Buff
                     var startData = byAgentData.StartCombatEffectDataList[i];
                     if (startData.type == 属性.火)
                     {
-                        startData.value = (int)(startData.value * (1 - buff.Proportion));
+                        startData.value = (int)(startData.value * (1f - buff.Proportion));
                         byAgentData.LogBuilder.AppendLine($"触发“{Name}”：火属性伤害下降{buff.Proportion * 100:F0}%，buff消失。");
                         byAgentData.StartCombatEffectDataList[i] = startData;
                         Vaporize(byAgentData.Agent);
@@ -46,17 +48,20 @@ namespace PRO.Buff
                     }
                 }
             }
+
+         
+
             public void Vaporize(Role agent)
             {
                 var typeInfo = Pixel.GetPixelTypeInfo("水蒸气");
                 var colorInfo = Pixel.GetPixelColorInfo(typeInfo.availableColors[0]);
                 Vector2Int agentGlobal = agent.GlobalPos;
-                int num = (int)(buff.Proportion * agent.nav.AgentMould.area);
-                for (int y = agent.nav.AgentMould.size.y - 1; y >= 0; y--)
-                    for (int x = agent.nav.AgentMould.size.x - 1; x >= 0; x--)
+                int num = (int)(buff.Proportion * agent.Info.NavMould.mould.area);
+                for (int y = agent.Info.NavMould.mould.size.y - 1; y >= 0; y--)
+                    for (int x = agent.Info.NavMould.mould.size.x - 1; x >= 0; x--)
                         if (num > 0)
                         {
-                            Vector2Int pos_G = new Vector2Int(x, y) - agent.nav.AgentMould.offset + agentGlobal;
+                            Vector2Int pos_G = new Vector2Int(x, y) - agent.Info.NavMould.mould.offset + agentGlobal;
                             Block block = agent.Scene.GetBlock(Block.GlobalToBlock(pos_G));
                             if (block == null) continue;
                             num--;

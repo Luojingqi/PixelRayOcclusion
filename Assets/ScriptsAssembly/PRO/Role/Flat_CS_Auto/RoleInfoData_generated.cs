@@ -9,6 +9,51 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
+public struct EventData_Int32Data : IFlatbufferObject
+{
+  private Struct __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Struct(_i, _bb); }
+  public EventData_Int32Data __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public int Value0 { get { return __p.bb.GetInt(__p.bb_pos + 0); } }
+  public double Value1 { get { return __p.bb.GetDouble(__p.bb_pos + 8); } }
+  public int Value2 { get { return __p.bb.GetInt(__p.bb_pos + 16); } }
+  public int Value3 { get { return __p.bb.GetInt(__p.bb_pos + 20); } }
+
+  public static Offset<PRO.Flat.EventData_Int32Data> CreateEventData_Int32Data(FlatBufferBuilder builder, int Value0, double Value1, int Value2, int Value3) {
+    builder.Prep(8, 24);
+    builder.PutInt(Value3);
+    builder.PutInt(Value2);
+    builder.PutDouble(Value1);
+    builder.Pad(4);
+    builder.PutInt(Value0);
+    return new Offset<PRO.Flat.EventData_Int32Data>(builder.Offset);
+  }
+}
+
+public struct EventData_DoubleData : IFlatbufferObject
+{
+  private Struct __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Struct(_i, _bb); }
+  public EventData_DoubleData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public double Value0 { get { return __p.bb.GetDouble(__p.bb_pos + 0); } }
+  public double Value1 { get { return __p.bb.GetDouble(__p.bb_pos + 8); } }
+  public double Value2 { get { return __p.bb.GetDouble(__p.bb_pos + 16); } }
+  public double Value3 { get { return __p.bb.GetDouble(__p.bb_pos + 24); } }
+
+  public static Offset<PRO.Flat.EventData_DoubleData> CreateEventData_DoubleData(FlatBufferBuilder builder, double Value0, double Value1, double Value2, double Value3) {
+    builder.Prep(8, 32);
+    builder.PutDouble(Value3);
+    builder.PutDouble(Value2);
+    builder.PutDouble(Value1);
+    builder.PutDouble(Value0);
+    return new Offset<PRO.Flat.EventData_DoubleData>(builder.Offset);
+  }
+}
+
 public struct RoleInfoData : IFlatbufferObject
 {
   private Table __p;
@@ -19,73 +64,38 @@ public struct RoleInfoData : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public RoleInfoData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Value1 { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Value2 { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Value3 { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Value4(int j) { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(__p.__vector(o) + j * 4) : (int)0; }
-  public int Value4Length { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
-#if ENABLE_SPAN_T
-  public Span<int> GetValue4Bytes() { return __p.__vector_as_span<int>(10, 4); }
-#else
-  public ArraySegment<byte>? GetValue4Bytes() { return __p.__vector_as_arraysegment(10); }
-#endif
-  public int[] GetValue4Array() { return __p.__vector_as_array<int>(10); }
-  public float Value5 { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public float Value6 { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public float Value7 { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public float Value8 { get { int o = __p.__offset(18); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public int Value9 { get { int o = __p.__offset(20); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Value10 { get { int o = __p.__offset(22); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Value11 { get { int o = __p.__offset(24); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Value12 { get { int o = __p.__offset(26); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public PRO.Flat.EventData_Int32Data? Value1 { get { int o = __p.__offset(4); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_Int32Data? Value2 { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_Int32Data? Value3 { get { int o = __p.__offset(8); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_Int32Data? Value4 { get { int o = __p.__offset(10); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_Int32Data? Value5 { get { int o = __p.__offset(12); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_DoubleData? Value6 { get { int o = __p.__offset(14); return o != 0 ? (PRO.Flat.EventData_DoubleData?)(new PRO.Flat.EventData_DoubleData()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_DoubleData? Value7 { get { int o = __p.__offset(16); return o != 0 ? (PRO.Flat.EventData_DoubleData?)(new PRO.Flat.EventData_DoubleData()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_Int32Data? Value8(int j) { int o = __p.__offset(18); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(__p.__vector(o) + j * 24, __p.bb) : null; }
+  public int Value8Length { get { int o = __p.__offset(18); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public PRO.Flat.EventData_DoubleData? Value9 { get { int o = __p.__offset(20); return o != 0 ? (PRO.Flat.EventData_DoubleData?)(new PRO.Flat.EventData_DoubleData()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_DoubleData? Value10 { get { int o = __p.__offset(22); return o != 0 ? (PRO.Flat.EventData_DoubleData?)(new PRO.Flat.EventData_DoubleData()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_DoubleData? Value11 { get { int o = __p.__offset(24); return o != 0 ? (PRO.Flat.EventData_DoubleData?)(new PRO.Flat.EventData_DoubleData()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.EventData_Int32Data? Value12 { get { int o = __p.__offset(26); return o != 0 ? (PRO.Flat.EventData_Int32Data?)(new PRO.Flat.EventData_Int32Data()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.Vector2Int? MouldSize { get { int o = __p.__offset(28); return o != 0 ? (PRO.Flat.Vector2Int?)(new PRO.Flat.Vector2Int()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public PRO.Flat.Vector2Int? MouldOffset { get { int o = __p.__offset(30); return o != 0 ? (PRO.Flat.Vector2Int?)(new PRO.Flat.Vector2Int()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
-  public static Offset<PRO.Flat.RoleInfoData> CreateRoleInfoData(FlatBufferBuilder builder,
-      int value1 = 0,
-      int value2 = 0,
-      int value3 = 0,
-      VectorOffset value4Offset = default(VectorOffset),
-      float value5 = 0.0f,
-      float value6 = 0.0f,
-      float value7 = 0.0f,
-      float value8 = 0.0f,
-      int value9 = 0,
-      int value10 = 0,
-      int value11 = 0,
-      int value12 = 0) {
-    builder.StartTable(12);
-    RoleInfoData.AddValue12(builder, value12);
-    RoleInfoData.AddValue11(builder, value11);
-    RoleInfoData.AddValue10(builder, value10);
-    RoleInfoData.AddValue9(builder, value9);
-    RoleInfoData.AddValue8(builder, value8);
-    RoleInfoData.AddValue7(builder, value7);
-    RoleInfoData.AddValue6(builder, value6);
-    RoleInfoData.AddValue5(builder, value5);
-    RoleInfoData.AddValue4(builder, value4Offset);
-    RoleInfoData.AddValue3(builder, value3);
-    RoleInfoData.AddValue2(builder, value2);
-    RoleInfoData.AddValue1(builder, value1);
-    return RoleInfoData.EndRoleInfoData(builder);
-  }
-
-  public static void StartRoleInfoData(FlatBufferBuilder builder) { builder.StartTable(12); }
-  public static void AddValue1(FlatBufferBuilder builder, int value1) { builder.AddInt(0, value1, 0); }
-  public static void AddValue2(FlatBufferBuilder builder, int value2) { builder.AddInt(1, value2, 0); }
-  public static void AddValue3(FlatBufferBuilder builder, int value3) { builder.AddInt(2, value3, 0); }
-  public static void AddValue4(FlatBufferBuilder builder, VectorOffset value4Offset) { builder.AddOffset(3, value4Offset.Value, 0); }
-  public static VectorOffset CreateValue4Vector(FlatBufferBuilder builder, int[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddInt(data[i]); return builder.EndVector(); }
-  public static VectorOffset CreateValue4VectorBlock(FlatBufferBuilder builder, int[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateValue4VectorBlock(FlatBufferBuilder builder, ArraySegment<int> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateValue4VectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<int>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartValue4Vector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static void AddValue5(FlatBufferBuilder builder, float value5) { builder.AddFloat(4, value5, 0.0f); }
-  public static void AddValue6(FlatBufferBuilder builder, float value6) { builder.AddFloat(5, value6, 0.0f); }
-  public static void AddValue7(FlatBufferBuilder builder, float value7) { builder.AddFloat(6, value7, 0.0f); }
-  public static void AddValue8(FlatBufferBuilder builder, float value8) { builder.AddFloat(7, value8, 0.0f); }
-  public static void AddValue9(FlatBufferBuilder builder, int value9) { builder.AddInt(8, value9, 0); }
-  public static void AddValue10(FlatBufferBuilder builder, int value10) { builder.AddInt(9, value10, 0); }
-  public static void AddValue11(FlatBufferBuilder builder, int value11) { builder.AddInt(10, value11, 0); }
-  public static void AddValue12(FlatBufferBuilder builder, int value12) { builder.AddInt(11, value12, 0); }
+  public static void StartRoleInfoData(FlatBufferBuilder builder) { builder.StartTable(14); }
+  public static void AddValue1(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_Int32Data> value1Offset) { builder.AddStruct(0, value1Offset.Value, 0); }
+  public static void AddValue2(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_Int32Data> value2Offset) { builder.AddStruct(1, value2Offset.Value, 0); }
+  public static void AddValue3(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_Int32Data> value3Offset) { builder.AddStruct(2, value3Offset.Value, 0); }
+  public static void AddValue4(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_Int32Data> value4Offset) { builder.AddStruct(3, value4Offset.Value, 0); }
+  public static void AddValue5(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_Int32Data> value5Offset) { builder.AddStruct(4, value5Offset.Value, 0); }
+  public static void AddValue6(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_DoubleData> value6Offset) { builder.AddStruct(5, value6Offset.Value, 0); }
+  public static void AddValue7(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_DoubleData> value7Offset) { builder.AddStruct(6, value7Offset.Value, 0); }
+  public static void AddValue8(FlatBufferBuilder builder, VectorOffset value8Offset) { builder.AddOffset(7, value8Offset.Value, 0); }
+  public static void StartValue8Vector(FlatBufferBuilder builder, int numElems) { builder.StartVector(24, numElems, 8); }
+  public static void AddValue9(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_DoubleData> value9Offset) { builder.AddStruct(8, value9Offset.Value, 0); }
+  public static void AddValue10(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_DoubleData> value10Offset) { builder.AddStruct(9, value10Offset.Value, 0); }
+  public static void AddValue11(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_DoubleData> value11Offset) { builder.AddStruct(10, value11Offset.Value, 0); }
+  public static void AddValue12(FlatBufferBuilder builder, Offset<PRO.Flat.EventData_Int32Data> value12Offset) { builder.AddStruct(11, value12Offset.Value, 0); }
+  public static void AddMouldSize(FlatBufferBuilder builder, Offset<PRO.Flat.Vector2Int> mouldSizeOffset) { builder.AddStruct(12, mouldSizeOffset.Value, 0); }
+  public static void AddMouldOffset(FlatBufferBuilder builder, Offset<PRO.Flat.Vector2Int> mouldOffsetOffset) { builder.AddStruct(13, mouldOffsetOffset.Value, 0); }
   public static Offset<PRO.Flat.RoleInfoData> EndRoleInfoData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.RoleInfoData>(o);
@@ -98,18 +108,20 @@ static public class RoleInfoDataVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Value1*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*Value2*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*Value3*/, 4 /*int*/, 4, false)
-      && verifier.VerifyVectorOfData(tablePos, 10 /*Value4*/, 4 /*int*/, false)
-      && verifier.VerifyField(tablePos, 12 /*Value5*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 14 /*Value6*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 16 /*Value7*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 18 /*Value8*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 20 /*Value9*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 22 /*Value10*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 24 /*Value11*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 26 /*Value12*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Value1*/, 24 /*PRO.Flat.EventData_Int32Data*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*Value2*/, 24 /*PRO.Flat.EventData_Int32Data*/, 8, false)
+      && verifier.VerifyField(tablePos, 8 /*Value3*/, 24 /*PRO.Flat.EventData_Int32Data*/, 8, false)
+      && verifier.VerifyField(tablePos, 10 /*Value4*/, 24 /*PRO.Flat.EventData_Int32Data*/, 8, false)
+      && verifier.VerifyField(tablePos, 12 /*Value5*/, 24 /*PRO.Flat.EventData_Int32Data*/, 8, false)
+      && verifier.VerifyField(tablePos, 14 /*Value6*/, 32 /*PRO.Flat.EventData_DoubleData*/, 8, false)
+      && verifier.VerifyField(tablePos, 16 /*Value7*/, 32 /*PRO.Flat.EventData_DoubleData*/, 8, false)
+      && verifier.VerifyVectorOfData(tablePos, 18 /*Value8*/, 24 /*PRO.Flat.EventData_Int32Data*/, false)
+      && verifier.VerifyField(tablePos, 20 /*Value9*/, 32 /*PRO.Flat.EventData_DoubleData*/, 8, false)
+      && verifier.VerifyField(tablePos, 22 /*Value10*/, 32 /*PRO.Flat.EventData_DoubleData*/, 8, false)
+      && verifier.VerifyField(tablePos, 24 /*Value11*/, 32 /*PRO.Flat.EventData_DoubleData*/, 8, false)
+      && verifier.VerifyField(tablePos, 26 /*Value12*/, 24 /*PRO.Flat.EventData_Int32Data*/, 8, false)
+      && verifier.VerifyField(tablePos, 28 /*MouldSize*/, 8 /*PRO.Flat.Vector2Int*/, 4, false)
+      && verifier.VerifyField(tablePos, 30 /*MouldOffset*/, 8 /*PRO.Flat.Vector2Int*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

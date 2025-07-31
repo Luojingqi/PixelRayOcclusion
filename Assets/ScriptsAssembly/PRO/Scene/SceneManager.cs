@@ -1,7 +1,5 @@
-using Cysharp.Threading.Tasks;
 using PRO.Disk.Scene;
 using PRO.Tool;
-using PROTool;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Threading;
@@ -32,7 +30,6 @@ namespace PRO
             {
                 nowScene.gameObject.SetActive(false);
                 nowScene.sceneCatalog.cameraPos = Camera.main.transform.position;
-                nowScene.sceneCatalog.mainRound = GamePlayMain.Inst.Round?.GUID;
 #if PRO_RENDER
                 BlockMaterial.ClearBind(nowScene);
 #endif
@@ -42,8 +39,6 @@ namespace PRO
             {
                 scene.gameObject.SetActive(true);
                 Camera.main.transform.position = scene.sceneCatalog.cameraPos;
-                if (scene.sceneCatalog.mainRound != null)
-                    GamePlayMain.Inst.Round = scene.ActiveRound[scene.sceneCatalog.mainRound];
 #if PRO_RENDER
                 BlockMaterial.Bind(scene);
 #endif
@@ -73,7 +68,7 @@ namespace PRO
             //加载所有的存档目录
             var catalogList = GameSaveCatalog.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
-            GameSaveCatalog nowSave = catalogList.Find((info) => info.name == "testSave");            
+            GameSaveCatalog nowSave = catalogList.Find((info) => info.name == "testSave");
             SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];//选择存档的第一个场景
             //转换为实体数据
             SceneEntity scene = SceneEntity.TakeOut(sceneCatalog);

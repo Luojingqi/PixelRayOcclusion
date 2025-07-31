@@ -50,7 +50,7 @@ namespace PRO.TurnBased
             TurnFSM turn = TurnFSMList[nowTurnIndex];
             if (turn.NowState.EnumName == TurnStateEnum.end)
             {
-                turn.Agent.Info.ClearAction();
+                turn.Agent.Info.ClearEvent();
                 //上一位的回合结束
                 //判断是否一个轮次结束了
                 if (++nowTurnIndex >= TurnFSMList.Count)

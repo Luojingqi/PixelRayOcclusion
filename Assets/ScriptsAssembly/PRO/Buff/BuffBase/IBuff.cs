@@ -11,13 +11,6 @@
         /// </summary>
         public int StackNumberMax { get; set; }
     }
-    public interface IBuff_回合
-    {
-        /// <summary>
-        /// 持续回合
-        /// </summary>
-        public int Round { get; set; }
-    }
     public interface IBuff_比例
     {
         /// <summary>
@@ -28,5 +21,10 @@
         /// 最大比例上限
         /// </summary>
         public float ProportionMax { get; set; }
+    }
+    public interface IBuff_倒计时
+    {
+        public float Countdown { get; set; }
+        public float CountdownMax { get; set; }
     }
 }

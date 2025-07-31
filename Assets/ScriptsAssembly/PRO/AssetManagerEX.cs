@@ -31,34 +31,34 @@ namespace PRO
                 return AssetManager.Load_A<Skill_Disk>("skill.ab", $@"{path}.asset");
         }
         private static StringBuilder stringBuilder = new StringBuilder(64);
-        public static Skill_Disk LoadSkillDisk(OperateFSMBase SkillOperate)
-        {
-            string name = SkillOperate.GetType().Name;
-            int i = 0;
-            while (i < name.Length)
-                if (name[i++] == '_') break;
-            while (i < name.Length)
-                stringBuilder.Append(name[i++]);
-            stringBuilder.Append('\\');
-            stringBuilder.Append(name);
-            string path = stringBuilder.ToString();
-            stringBuilder.Clear();
-            return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
-        }
-        public static SkillConfig LoadSkillConfig(OperateFSMBase SkillOperate)
-        {
-            string name = SkillOperate.GetType().Name;
-            int i = 0;
-            while (i < name.Length)
-                if (name[i++] == '_') break;
-            while (i < name.Length)
-                stringBuilder.Append(name[i++]);
-            stringBuilder.Append('\\');
-            stringBuilder.Append($"{name}_Config");
-            string path = stringBuilder.ToString();
-            stringBuilder.Clear();
-            return AssetManager.Load_A<SkillConfig>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
-        }
+        //public static Skill_Disk LoadSkillDisk(OperateFSMBase SkillOperate)
+        //{
+        //    string name = SkillOperate.GetType().Name;
+        //    int i = 0;
+        //    while (i < name.Length)
+        //        if (name[i++] == '_') break;
+        //    while (i < name.Length)
+        //        stringBuilder.Append(name[i++]);
+        //    stringBuilder.Append('\\');
+        //    stringBuilder.Append(name);
+        //    string path = stringBuilder.ToString();
+        //    stringBuilder.Clear();
+        //    return AssetManager.Load_A<Skill_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+        //}
+        //public static SkillConfig LoadSkillConfig(OperateFSMBase SkillOperate)
+        //{
+        //    string name = SkillOperate.GetType().Name;
+        //    int i = 0;
+        //    while (i < name.Length)
+        //        if (name[i++] == '_') break;
+        //    while (i < name.Length)
+        //        stringBuilder.Append(name[i++]);
+        //    stringBuilder.Append('\\');
+        //    stringBuilder.Append($"{name}_Config");
+        //    string path = stringBuilder.ToString();
+        //    stringBuilder.Clear();
+        //    return AssetManager.Load_A<SkillConfig>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
+        //}
         /// <summary>
         /// 加载技能指示器
         /// 

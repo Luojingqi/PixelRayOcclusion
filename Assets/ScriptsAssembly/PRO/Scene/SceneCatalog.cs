@@ -22,13 +22,10 @@ namespace PRO.Disk.Scene
 
         public Vector3 cameraPos = new Vector3(0, 0, -10);
 
-        public string mainRound;
-
         public static void Clone(SceneCatalog form, SceneCatalog to)
         {
             to.name = form.name;
             to.cameraPos = form.cameraPos;
-            to.mainRound = form.mainRound;
         }
 
         public void Save()

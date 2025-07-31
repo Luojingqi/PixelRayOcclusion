@@ -225,10 +225,20 @@ namespace PRO.AI
             public int 访问次数;
             public int 线程占用;
 
+            private static List<NodeBase> nodeList = new List<NodeBase>(16);
             public void Add线程占用(int num)
             {
                 线程占用 += num;
-                parent?.Add线程占用(num);
+                if (parent != null)
+                {
+                    parent.Add线程占用(num);
+                    for (int i = 0; i < parent.chiles.Count; i++)
+                        nodeList.Add(parent.chiles[i]);
+                    parent.chiles.Clear();
+                    for (int i = 0; i < nodeList.Count; i++)
+                        parent.chiles.Enqueue(nodeList[i], -nodeList[i].Get_UCB());
+                    nodeList.Clear();
+                }
             }
 
 

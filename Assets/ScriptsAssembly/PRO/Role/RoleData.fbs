@@ -16,7 +16,6 @@ table RoleData {
   rigidbody_2_d_data : Rigidbody2D;
   skill_play_agent_data : SkillPlayerAgentData;
   
-  nav_type : string;
   toward : int;
   role_type : string;
   guid : string;

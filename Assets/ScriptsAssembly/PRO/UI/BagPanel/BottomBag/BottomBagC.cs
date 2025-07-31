@@ -63,16 +63,16 @@ namespace PRO
             ResetGridObjectGroup();
             int r = 0;
             int c = 0;
-            foreach (var operate in role.AllCanUseOperate.Values)
-            {
-                var grid = GridGroups[r].Grids[c++];
-                if (c >= GridGroups[r].Grids.Length)
-                {
-                    r++;
-                    c = 0;
-                }
-                operate.BuildUI(grid);
-            }
+            //foreach (var operate in role.AllCanUseOperate.Values)
+            //{
+            //    var grid = GridGroups[r].Grids[c++];
+            //    if (c >= GridGroups[r].Grids.Length)
+            //    {
+            //        r++;
+            //        c = 0;
+            //    }
+            //    operate.BuildUI(grid);
+            //}
         }
     }
 }

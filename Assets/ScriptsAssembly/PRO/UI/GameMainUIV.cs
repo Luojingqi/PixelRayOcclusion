@@ -17,7 +17,7 @@ namespace PRO
         /// <summary>
         /// …À∫¶π¿À„‘§÷∆ÃÂ
         /// </summary>
-        public InjuryEstimationPanelC InjuryEstimationPrefab { get; private set; }
+        //public InjuryEstimationPanelC InjuryEstimationPrefab { get; private set; }
 
         public override void Init(UIControllerBase controller)
         {
@@ -25,7 +25,7 @@ namespace PRO
             RoundPanel = transform.Find("RoundPanel").GetComponent<RoundPanelC>();
             BottomBag = transform.Find("BottomBag").GetComponent<BottomBagC>();
             RoleInfoPanel = transform.Find("RoleInfoPanel").GetComponent<RoleInfoPanelC>();
-            InjuryEstimationPrefab = transform.Find("InjuryEstimationPanel").GetComponent<InjuryEstimationPanelC>();
+            //InjuryEstimationPrefab = transform.Find("InjuryEstimationPanel").GetComponent<InjuryEstimationPanelC>();
         }
 
     }

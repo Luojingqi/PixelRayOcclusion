@@ -1,7 +1,3 @@
-using PRO.TurnBased;
-using PRO;
-using System;
-using System.Collections.Generic;
 namespace PRO
 {
     public class GameMainUIC : UIControllerBase, ITime_Awake
@@ -18,7 +14,7 @@ namespace PRO
             view.RoundPanel.gameObject.SetActive(false);
             AddChildUI(view.BottomBag);
             AddChildUI(view.RoleInfoPanel);
-            InjuryEstimationPanelC.InitPool(view.InjuryEstimationPrefab);
+           // InjuryEstimationPanelC.InitPool(view.InjuryEstimationPrefab);
         }
 
         public void TimeAwake()
@@ -26,11 +22,11 @@ namespace PRO
             Init("");
         }
 
-        public void SetTurn(List<TurnFSM> list, int nowTurn)
-        {
-            view.RoundPanel.SetTurn(list, nowTurn);
-            SetRole(list[nowTurn].Agent);
-        }
+        //public void SetTurn(List<TurnFSM> list, int nowTurn)
+        //{
+        //    view.RoundPanel.SetTurn(list, nowTurn);
+        //    SetRole(list[nowTurn].Agent);
+        //}
 
         public Role NowShowRole { get; private set; }
         /// <summary>
@@ -42,7 +38,7 @@ namespace PRO
         {
             if (NowShowRole != null)
             {
-                NowShowRole.Info.ClearAction();
+                NowShowRole.Info.ClearEvent();
             }
 
             view.BottomBag.SetRole(role);

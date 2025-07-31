@@ -22,10 +22,11 @@ namespace PRO.Buff.Base
         {
             config = AssetManagerEX.LoadBuffConfig(this);
             guid = System.Guid.NewGuid().ToString();
+            InitValue();
         }
-        /// <summary>
-        /// 此接口只需重写禁止调用，请使用Role.AddBuff()
-        /// </summary>
+
+        public abstract void InitValue();
+
         public virtual bool RoleAddThis(Role role)
         {
             bool ret = true;
@@ -52,9 +53,7 @@ namespace PRO.Buff.Base
             Agent = role;
             return true && ret;
         }
-        /// <summary>
-        /// 此接口只需重写禁止调用，请使用Role.RemoveBuff()
-        /// </summary>
+
         public virtual bool RoleRemoveThis()
         {
             bool ret = true;

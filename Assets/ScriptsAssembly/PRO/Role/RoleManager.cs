@@ -21,12 +21,11 @@ namespace PRO
             roleNode.SetParent(SceneManager.Inst.PoolNode);
             {
                 var role = AssetManager.Load_A<GameObject>("role.ab", @$"ScriptsAssembly\PRO\Role\Role_默认").GetComponent<Role>();
-                role.nav = NavManager.Inst.GetNav("默认");
+                role.Info.NavMould = RoleInfo.GetNavMould(new(new Vector2Int(2, 7), new Vector2Int(1, 0)));
                 var pool = AddRolePool(role);
                 pool.PutInEvent += t =>
                 {
-                    if (t.nav != null && t.nav.TypeName != "默认")
-                        t.nav = NavManager.Inst.GetNav("默认");
+                    RoleInfo.CloneValue(role.Info, t.Info);
                 };
             }
         }
