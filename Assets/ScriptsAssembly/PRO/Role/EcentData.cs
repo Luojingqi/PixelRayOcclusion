@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace PRO
 {
@@ -104,6 +105,7 @@ namespace PRO
                 InvokeValueChangeEvent(ChangeValueType.额外, nowData, oldData);
             }
         }
+        [ShowInInspector]
         public T Value => value;
 
         #region 事件
@@ -138,7 +140,7 @@ namespace PRO
             }
         }
         #endregion
-        [HideLabel]
+        [HideInInspector]
         public readonly RoleInfo Info;
         public EventData(RoleInfo roleInfo)
         {

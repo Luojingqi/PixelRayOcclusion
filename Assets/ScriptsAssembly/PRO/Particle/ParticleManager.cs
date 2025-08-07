@@ -86,7 +86,7 @@ namespace PRO
             {
                 if (particle.loadPath == "通用0")
                 {
-                    particle.SkillPlayAgent.Skill = null;
+                   // particle.SkillPlayAgent.Skill = null;
                     particle.Renderer.sprite = null;
                 }
                 particle.PutIn();

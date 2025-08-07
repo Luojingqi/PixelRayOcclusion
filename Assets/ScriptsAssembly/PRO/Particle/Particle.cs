@@ -111,9 +111,9 @@ namespace PRO
 
             if (SkillPlayAgent != null)
             {
-                SkillPlayAgent.idle = null;
-                SkillPlayAgent.Skill = null;
-                SkillPlayAgent.ClearTimeAndBuffer();
+                //SkillPlayAgent.idle = null;
+                //SkillPlayAgent.Skill = null;
+                //SkillPlayAgent.ClearTimeAndBuffer();
             }
             RecyleState = true;
         }

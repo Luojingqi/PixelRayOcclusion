@@ -5,6 +5,4 @@ namespace PRO.Flat;
 table SceneEntityData
 {
 	active_block_base : [Vector2Int];
-
-	round_guid : [string];
 }

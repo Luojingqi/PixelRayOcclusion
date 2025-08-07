@@ -72,7 +72,7 @@ namespace PRO
         protected abstract void PixelSwitch_Death(Building_Pixel pixelB);
         protected abstract void PixelSwitch_Survival(Building_Pixel pixelB);
         public Building_Pixel GetBuilding_Pixel(Vector2Int globalPos, BlockBase.BlockType blockType) => AllPixel.GetValueOrDefault(new(PixelPosRotate.New(transform.rotation.eulerAngles).RotatePosInverse(globalPos - Global), blockType));
-        public abstract void Init();
+        public abstract void CreateInit();
         public static BuildingBase New(string typeName, string guid, SceneEntity scene)
         {
             BuildingBase ret = null;

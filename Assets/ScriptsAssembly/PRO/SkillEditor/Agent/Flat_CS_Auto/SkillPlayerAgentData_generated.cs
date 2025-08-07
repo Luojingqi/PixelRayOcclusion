@@ -9,6 +9,70 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
+public struct SkillplayerDataData : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static SkillplayerDataData GetRootAsSkillplayerDataData(ByteBuffer _bb) { return GetRootAsSkillplayerDataData(_bb, new SkillplayerDataData()); }
+  public static SkillplayerDataData GetRootAsSkillplayerDataData(ByteBuffer _bb, SkillplayerDataData obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public SkillplayerDataData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public string SkillVisualPath { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetSkillVisualPathBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetSkillVisualPathBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetSkillVisualPathArray() { return __p.__vector_as_array<byte>(4); }
+  public string SkillLogicGuidList(int j) { int o = __p.__offset(6); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
+  public int SkillLogicGuidListLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public int Time { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public int NowFrame { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+
+  public static Offset<PRO.Flat.SkillplayerDataData> CreateSkillplayerDataData(FlatBufferBuilder builder,
+      StringOffset skill_visual_pathOffset = default(StringOffset),
+      VectorOffset skill_logic_guid_listOffset = default(VectorOffset),
+      int time = 0,
+      int now_frame = 0) {
+    builder.StartTable(4);
+    SkillplayerDataData.AddNowFrame(builder, now_frame);
+    SkillplayerDataData.AddTime(builder, time);
+    SkillplayerDataData.AddSkillLogicGuidList(builder, skill_logic_guid_listOffset);
+    SkillplayerDataData.AddSkillVisualPath(builder, skill_visual_pathOffset);
+    return SkillplayerDataData.EndSkillplayerDataData(builder);
+  }
+
+  public static void StartSkillplayerDataData(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static void AddSkillVisualPath(FlatBufferBuilder builder, StringOffset skillVisualPathOffset) { builder.AddOffset(0, skillVisualPathOffset.Value, 0); }
+  public static void AddSkillLogicGuidList(FlatBufferBuilder builder, VectorOffset skillLogicGuidListOffset) { builder.AddOffset(1, skillLogicGuidListOffset.Value, 0); }
+  public static VectorOffset CreateSkillLogicGuidListVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateSkillLogicGuidListVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateSkillLogicGuidListVectorBlock(FlatBufferBuilder builder, ArraySegment<StringOffset> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateSkillLogicGuidListVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<StringOffset>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartSkillLogicGuidListVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddTime(FlatBufferBuilder builder, int time) { builder.AddInt(2, time, 0); }
+  public static void AddNowFrame(FlatBufferBuilder builder, int nowFrame) { builder.AddInt(3, nowFrame, 0); }
+  public static Offset<PRO.Flat.SkillplayerDataData> EndSkillplayerDataData(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.Flat.SkillplayerDataData>(o);
+  }
+}
+
+
+static public class SkillplayerDataDataVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyString(tablePos, 4 /*SkillVisualPath*/, false)
+      && verifier.VerifyVectorOfStrings(tablePos, 6 /*SkillLogicGuidList*/, false)
+      && verifier.VerifyField(tablePos, 8 /*Time*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 10 /*NowFrame*/, 4 /*int*/, 4, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
 public struct SkillPlayerAgentData : IFlatbufferObject
 {
   private Table __p;
@@ -20,44 +84,26 @@ public struct SkillPlayerAgentData : IFlatbufferObject
   public SkillPlayerAgentData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public bool Play { get { int o = __p.__offset(4); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
-  public float Time { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public int NowFrame { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public string IdleLoadPath { get { int o = __p.__offset(10); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
-#if ENABLE_SPAN_T
-  public Span<byte> GetIdleLoadPathBytes() { return __p.__vector_as_span<byte>(10, 1); }
-#else
-  public ArraySegment<byte>? GetIdleLoadPathBytes() { return __p.__vector_as_arraysegment(10); }
-#endif
-  public byte[] GetIdleLoadPathArray() { return __p.__vector_as_array<byte>(10); }
-  public string SkillLoadPath { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
-#if ENABLE_SPAN_T
-  public Span<byte> GetSkillLoadPathBytes() { return __p.__vector_as_span<byte>(12, 1); }
-#else
-  public ArraySegment<byte>? GetSkillLoadPathBytes() { return __p.__vector_as_arraysegment(12); }
-#endif
-  public byte[] GetSkillLoadPathArray() { return __p.__vector_as_array<byte>(12); }
+  public PRO.Flat.SkillplayerDataData? Datas(int j) { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.SkillplayerDataData?)(new PRO.Flat.SkillplayerDataData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int DatasLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<PRO.Flat.SkillPlayerAgentData> CreateSkillPlayerAgentData(FlatBufferBuilder builder,
       bool play = false,
-      float time = 0.0f,
-      int now_frame = 0,
-      StringOffset idle_load_pathOffset = default(StringOffset),
-      StringOffset skill_load_pathOffset = default(StringOffset)) {
-    builder.StartTable(5);
-    SkillPlayerAgentData.AddSkillLoadPath(builder, skill_load_pathOffset);
-    SkillPlayerAgentData.AddIdleLoadPath(builder, idle_load_pathOffset);
-    SkillPlayerAgentData.AddNowFrame(builder, now_frame);
-    SkillPlayerAgentData.AddTime(builder, time);
+      VectorOffset datasOffset = default(VectorOffset)) {
+    builder.StartTable(2);
+    SkillPlayerAgentData.AddDatas(builder, datasOffset);
     SkillPlayerAgentData.AddPlay(builder, play);
     return SkillPlayerAgentData.EndSkillPlayerAgentData(builder);
   }
 
-  public static void StartSkillPlayerAgentData(FlatBufferBuilder builder) { builder.StartTable(5); }
+  public static void StartSkillPlayerAgentData(FlatBufferBuilder builder) { builder.StartTable(2); }
   public static void AddPlay(FlatBufferBuilder builder, bool play) { builder.AddBool(0, play, false); }
-  public static void AddTime(FlatBufferBuilder builder, float time) { builder.AddFloat(1, time, 0.0f); }
-  public static void AddNowFrame(FlatBufferBuilder builder, int nowFrame) { builder.AddInt(2, nowFrame, 0); }
-  public static void AddIdleLoadPath(FlatBufferBuilder builder, StringOffset idleLoadPathOffset) { builder.AddOffset(3, idleLoadPathOffset.Value, 0); }
-  public static void AddSkillLoadPath(FlatBufferBuilder builder, StringOffset skillLoadPathOffset) { builder.AddOffset(4, skillLoadPathOffset.Value, 0); }
+  public static void AddDatas(FlatBufferBuilder builder, VectorOffset datasOffset) { builder.AddOffset(1, datasOffset.Value, 0); }
+  public static VectorOffset CreateDatasVector(FlatBufferBuilder builder, Offset<PRO.Flat.SkillplayerDataData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateDatasVectorBlock(FlatBufferBuilder builder, Offset<PRO.Flat.SkillplayerDataData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateDatasVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Flat.SkillplayerDataData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateDatasVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.Flat.SkillplayerDataData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartDatasVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<PRO.Flat.SkillPlayerAgentData> EndSkillPlayerAgentData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.SkillPlayerAgentData>(o);
@@ -71,10 +117,7 @@ static public class SkillPlayerAgentDataVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*Play*/, 1 /*bool*/, 1, false)
-      && verifier.VerifyField(tablePos, 6 /*Time*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*NowFrame*/, 4 /*int*/, 4, false)
-      && verifier.VerifyString(tablePos, 10 /*IdleLoadPath*/, false)
-      && verifier.VerifyString(tablePos, 12 /*SkillLoadPath*/, false)
+      && verifier.VerifyVectorOfTables(tablePos, 6 /*Datas*/, PRO.Flat.SkillplayerDataDataVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

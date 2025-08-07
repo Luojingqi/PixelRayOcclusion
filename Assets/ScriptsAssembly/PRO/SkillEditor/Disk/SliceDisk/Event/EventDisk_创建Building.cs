@@ -10,12 +10,11 @@ namespace PRO.SkillEditor
 
         public Vector2Int size;
 
-
         public List<PixelData> pixelList = new List<PixelData>();
 
-        public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
         {
-            if (frameIndex == frameLength - 1)
+            if (frameData.sliceFrame == frameLength - 1)
             {
                 var nor = PixelPosRotate.New(agent.transform.rotation.eulerAngles);
                 Vector2Int agentGlobalPos = Block.WorldToGlobal(agent.transform.position);
@@ -42,7 +41,10 @@ namespace PRO.SkillEditor
                     Pixel pixel = blockBase.GetPixel(Block.GlobalToPixel(globalPos));
                     building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixelData.blockType), pixel);
                 }
-                building.Init();
+                building.CreateInit();
+
+                foreach (var logic in logics)
+                    logic.Agoing_创建Building(this, frameData, building);
             }
         }
 

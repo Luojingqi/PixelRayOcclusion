@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -6,11 +6,32 @@ namespace PRO.SkillEditor
     public abstract class AttackTestSlice2DBase_Disk : Slice_DiskBase
     {
         public Vector2 position;
-        public Quaternion rotation = Quaternion.identity;
-        public Vector2 scale = Vector2.one;
+        public int layerMask;
 
-        public event Action<RaycastHit2D[]> testEvent;
+        private static Queue<RaycastHit2D[]> pool = new Queue<RaycastHit2D[]>();
 
-        protected void InvokeEvent(RaycastHit2D[] value) => testEvent?.Invoke(value);
+        protected static RaycastHit2D[] TakeOut()
+        {
+            if (pool.Count > 0) return pool.Dequeue();
+            else return new RaycastHit2D[256];
+        }
+        protected static void PutIn(RaycastHit2D[] array, int length)
+        {
+            pool.Enqueue(array);
+            for (int i = 0; i < length; i++)
+                array[i] = default;
+        }
+
+        public class AllowLogicChangeValue_AttackTestSlice2DBase_Disk : AllowLogicChangeValueBase
+        {
+            public Vector2 position;
+            public int layerMask;
+
+            protected void Reset(AttackTestSlice2DBase_Disk slice)
+            {
+                position = slice.position;
+                layerMask = slice.layerMask;
+            }
+        }
     }
 }

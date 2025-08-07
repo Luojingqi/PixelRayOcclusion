@@ -36,7 +36,7 @@ namespace PRO.SkillEditor
 
         public List<Color32> colorList = new List<Color32>();
 
-        public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
         {
             try
             {
@@ -51,9 +51,36 @@ namespace PRO.SkillEditor
                     particle.transform.position = agent.transform.rotation * position + agent.transform.position;
                     particle.Rig2D.AddForce(agent.transform.rotation * Vector3.Lerp(directionMin, directionMax, Random.Range(0f, 1f)) * Random.Range(forceRange.x, forceRange.y), ForceMode2D.Impulse);
                 }
+
             }
             catch
             {
+            }
+        }
+
+        public class AllowLogicChangeValue_ParticleSlice_Disk : AllowLogicChangeValueBase
+        {
+            public Vector3 position;
+            public string loadPath;
+            public Vector3 directionMin;
+            public Vector3 directionMax;
+            public Vector2 forceRange;
+            public Vector2Int numRange = new Vector2Int(1, 10);
+            public Vector2Int surviveTimeRange = new Vector2Int(int.MaxValue, int.MaxValue);
+            public List<Color32> colorList = new List<Color32>();
+
+            public void Reset(ParticleSlice_Disk slice)
+            {
+                position = slice.position;
+                loadPath = slice.loadPath;
+                directionMin = slice.directionMin;
+                directionMax = slice.directionMax;
+                forceRange = slice.forceRange;
+                numRange = slice.numRange;
+                surviveTimeRange = slice.surviveTimeRange;
+                slice.colorList.Clear();
+                for (int i = 0; i < slice.colorList.Count; i++)
+                    colorList.Add(slice.colorList[i]);
             }
         }
     }

@@ -58,7 +58,7 @@ namespace PRO
             SkillPlayAgent.Init();
 
             Rig2D = GetComponent<Rigidbody2D>();
-
+            #region ÔÝÊ±ÆúÓÃ
             //CanUseOperateList.Add(new Skill_1_0());
             //CanUseOperateList.Add(new Skill_1_1());
             //CanUseOperateList.Add(new Skill_3_0());
@@ -95,6 +95,7 @@ namespace PRO
             //AddBuff(new Buff_2_9());
             //AddBuff(new Buff_2_10());
             //AddBuff(new Buff_2_11());
+            #endregion
         }
         public void TakeOut(SceneEntity scene, string guid)
         {

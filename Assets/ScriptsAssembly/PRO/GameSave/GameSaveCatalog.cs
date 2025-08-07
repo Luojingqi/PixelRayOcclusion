@@ -41,7 +41,10 @@ namespace PRO
 
         private GameSaveCatalog() { }
 
-
+        public void Save()
+        {
+            IOTool.SaveText(@$"{directoryInfo}\GameSaveCatalog.json", JsonTool.ToJson(this));
+        }
 
         /// <summary>
         /// 创建一个空存档目录，包括文件夹等

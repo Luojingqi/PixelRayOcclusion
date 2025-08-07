@@ -1,15 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.SkillEditor
 {
-    public class AttackTestSlice2D_Rect_Disk :  AttackTestSlice2DBase_Disk
+    public class AttackTestSlice2D_Rect_Disk : AttackTestSlice2DBase_Disk
     {
-        public override void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex)
+        public float angle;
+        public Vector2 scale = Vector2.one;
+
+        public AllowLogicChangeValue_AttackTestSlice2D_Rect_Disk changeValue = new();
+
+
+        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
         {
-            Quaternion quaternion = rotation * agent.transform.rotation;
-            RaycastHit2D[] hits = Physics2D.BoxCastAll(agent.transform.position + agent.transform.rotation * position, scale, quaternion.eulerAngles.z, Vector2.zero, 0, 1 << (int)GameLayer.Role);
-            InvokeEvent(hits);
+            foreach (var logic in logics)
+                logic.Before_AttackTest2D(this, frameData);
+            var array = TakeOut();
+            var trs = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
+                      Matrix4x4.TRS(changeValue.position, Quaternion.Euler(0, 0, changeValue.angle), changeValue.scale);
+            int length = Physics2D.BoxCastNonAlloc(
+                trs.GetPosition(),
+                trs.lossyScale,
+                trs.rotation.eulerAngles.z,
+                Vector2.zero,
+                array, 0, changeValue.layerMask);
+#if UNITY_EDITOR
+            var scale_2 = Vector2.one / 2f;
+            var time = visual.FrameTime / 1000f;
+            var pos0 = trs.MultiplyPoint(new Vector2(scale_2.x, scale_2.y));
+            var pos1 = trs.MultiplyPoint(new Vector2(-scale_2.x, scale_2.y));
+            var pos2 = trs.MultiplyPoint(new Vector2(-scale_2.x, -scale_2.y));
+            var pos3 = trs.MultiplyPoint(new Vector2(scale_2.x, -scale_2.y));
+            Debug.DrawLine(pos0, pos1, Color.green, time);
+            Debug.DrawLine(pos1, pos2, Color.green, time);
+            Debug.DrawLine(pos2, pos3, Color.green, time);
+            Debug.DrawLine(pos3, pos0, Color.green, time);
+#endif
+            foreach (var logic in logics)
+                logic.Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
+            PutIn(array, length);
+
+            if (frameData.sliceFrame == frameLength - 1)
+                foreach (var logic in logics)
+                    logic.After_AttackTest2D(this, frameData);
+
+            changeValue.Reset(this);
+        }
+
+        public class AllowLogicChangeValue_AttackTestSlice2D_Rect_Disk : AllowLogicChangeValue_AttackTestSlice2DBase_Disk
+        {
+            public float angle;
+            public Vector2 scale;
+
+            public void Reset(AttackTestSlice2D_Rect_Disk slice)
+            {
+                base.Reset(slice);
+                angle = slice.angle;
+                scale = slice.scale;
+            }
         }
     }
 }

@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2362ee7c1d4867249919b6c045c44770, type: 3}
+  m_Script: {fileID: 11500000, guid: 082ce336de0be79418159fae9857e0b0, type: 3}
   m_Name: Skill_3_3
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: -394201461, guid: 70927e99fe31ab641b69b5feea94cb98, type: 3}
-    - {fileID: -390673903, guid: 70927e99fe31ab641b69b5feea94cb98, type: 3}
-    - {fileID: 1600883006, guid: 70927e99fe31ab641b69b5feea94cb98, type: 3}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -57,8 +54,8 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: sprite
-      Entry: 10
-      Data: 0
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -78,8 +75,8 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: sprite
-      Entry: 10
-      Data: 1
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -99,8 +96,8 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: sprite
-      Entry: 10
-      Data: 2
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -120,8 +117,8 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: sprite
-      Entry: 10
-      Data: 0
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -141,8 +138,8 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: sprite
-      Entry: 10
-      Data: 1
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -162,8 +159,8 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: sprite
-      Entry: 10
-      Data: 2
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 

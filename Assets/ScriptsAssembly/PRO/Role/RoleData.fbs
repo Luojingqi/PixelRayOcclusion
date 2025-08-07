@@ -22,7 +22,7 @@ table RoleData {
   name : string;
   info : RoleInfoData;
   
-  all_operate : [OperatBasiceData];  
+  //all_operate : [OperatBasiceData];  
   //all_buff_type : [string];             
 }
 

@@ -55,11 +55,14 @@ namespace PRO.Disk.Scene
             Directory.CreateDirectory(@$"{sceneDirectory}\Round");
 
 
-
-            saveInfo.sceneNameList.Add(name);
             info.directoryInfo = sceneDirectory;
             info.name = name;
             info.Save();
+
+
+            saveInfo.sceneNameList.Add(name);
+            saveInfo.sceneCatalogDic.Add(name, info);
+            saveInfo.Save();
             return info;
         }
 

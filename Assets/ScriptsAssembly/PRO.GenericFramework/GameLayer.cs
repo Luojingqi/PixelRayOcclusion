@@ -16,6 +16,6 @@
         Particle_Block_Role = 16,
         Particle_Role = 17,
 
-        NoPhysics = 31
+        NoPhysics = 31,
     }
 }

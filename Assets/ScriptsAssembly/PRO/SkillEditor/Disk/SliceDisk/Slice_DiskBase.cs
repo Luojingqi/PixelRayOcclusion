@@ -1,4 +1,7 @@
-﻿namespace PRO.SkillEditor
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace PRO.SkillEditor
 {
     public abstract class Slice_DiskBase
     {
@@ -10,8 +13,29 @@
         /// 触发帧
         /// </summary>
         /// <param name="agent">执行的行动人</param>>
-        /// <param name="frame">当前轨道执行的帧</param>
-        /// <param name="frameIndex">执行此切片内的索引</param>
-        public abstract void UpdateFrame(SkillPlayAgent agent, int frame, int frameIndex, int trackIndex);
+        public abstract void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData);
+        public abstract class AllowLogicChangeValueBase { }
+    }
+    public struct FrameData
+    {
+        /// <summary>
+        /// 轨道的帧索引
+        /// </summary>
+        public int trackFrame;
+        /// <summary>
+        /// 切片的帧索引
+        /// </summary>
+        public int sliceFrame;
+        /// <summary>
+        /// 轨道索引
+        /// </summary>
+        public int trackIndex;
+
+        public FrameData(int trackFrame, int sliceFrame, int trackIndex)
+        {
+            this.trackFrame = trackFrame;
+            this.sliceFrame = sliceFrame;
+            this.trackIndex = trackIndex;
+        }
     }
 }

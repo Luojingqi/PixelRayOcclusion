@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1458000753, guid: c42964479d4f62540867ad0acdb1ef66, type: 3}
+  m_Name: BehaviorDesignerSettings
+  m_EditorClassIdentifier: 
+  m_ShowHierarchyIcon: 1
+  m_CheckForErrors: 1
+  m_AutoSavePrefab: 0
+  m_MouseWheelScrollsGraph: 0
+  m_GridLineSpacing: 10
+  m_GridLineTransparency: 1
+  m_ShowNodeIcon: 1
+  m_ShowNodeDescription: 1
+  m_SnapToGrid: 1
+  m_ShowNodeDebugInfo: 0
+  m_DefaultGizmosColor: {r: 0, g: 1, b: 0, a: 0.6}

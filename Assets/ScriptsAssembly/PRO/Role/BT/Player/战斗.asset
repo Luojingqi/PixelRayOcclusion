@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ab170e3869205449b993a35614c2084, type: 3}
+  m_Name: "\u6218\u6597"
+  m_EditorClassIdentifier: 
+  m_Data:
+    m_TaskData:
+    - m_ObjectType: Opsive.BehaviorDesigner.Runtime.Tasks.Composites.Selector
+      m_ValueHashes: 
+      m_LongValueHashes: 30b77c28f48d1b2966cb3cf98c4bd96480f6501333363a665b2ed1940de3c60b8ea6435e604d1251
+      m_ValuePositions: 0000000002000000040000000600000006000000
+      m_Values: 0000ffffffff00
+      m_UnityObjects: []
+      m_Version: 3.4
+    - m_ObjectType: Opsive.BehaviorDesigner.Runtime.Tasks.Conditionals.StackedConditional
+      m_ValueHashes: 
+      m_LongValueHashes: 30b77c28f48d1b2966cb3cf98c4bd96480f6501333363a66622a4da7e5588b5847627e5c3afba34a8673c9e107a93a56c326830076ace391748048854eb82df13f2b5a890d4bff0ab86161e3aa35f8b8ad44393cddd33a9f44802441590321c7f326efc46117efa70c7eea5e57d8de641c3c58ef6ae8a90fe4a06bb554569d8946fff10c773614c9
+      m_ValuePositions: 000000000200000004000000060000000a0000001d0000001d00000022000000220000002300000027000000270000003a0000003a0000003b0000003f0000003f000000
+      m_Values: 0100000002000100000050524f2e42542ee79c8be588b0e8a792e889b24167656e7402ffffffffe8a786e9878ee58685e8a792e889b24c697374020000000001000000
+      m_UnityObjects: []
+      m_Version: 3.4
+    - m_ObjectType: "PRO.BT.\u8FFD\u51FB\u654C\u4EBA"
+      m_ValueHashes: 
+      m_LongValueHashes: 30b77c28f48d1b2966cb3cf98c4bd96480f6501333363a66b43b406386307696299677cf28cd527c9e30bc4a10d99c1cdd7de2dd8a04255652d1952cf45449559d1b378e8630769674d29eaee5cd527cc374552bddd99c1cbc0ab30b354124560f957c4d39544955
+      m_ValuePositions: 00000000020000000400000006000000060000000600000006000000070000000b0000000b000000100000001000000011000000
+      m_Values: 02000000ffff01ffffffff4167656e7402ffffffff
+      m_UnityObjects: []
+      m_Version: 3.4
+    m_EventTaskData:
+    - m_ObjectType: Opsive.BehaviorDesigner.Runtime.Tasks.Events.Start
+      m_ValueHashes: 
+      m_LongValueHashes: 59405171878141b1
+      m_ValuePositions: 00000000
+      m_Values: 0000
+      m_UnityObjects: []
+      m_Version: 3.4
+    m_SharedVariableData:
+    - m_ObjectType: Opsive.GraphDesigner.Runtime.Variables.SharedVariable`1[[PRO.Role,
+        PRO.Assembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]
+      m_ValueHashes: 
+      m_LongValueHashes: 0d00eb254f8d1b29baa620a07799d549a996976a4a642789764709c693140000
+      m_ValuePositions: 00000000050000000500000006000000
+      m_Values: 4167656e7402ffffffff
+      m_UnityObjects: []
+      m_Version: 3.4
+    - m_ObjectType: Opsive.GraphDesigner.Runtime.Variables.SharedVariable`1[[System.Collections.Generic.List`1[[PRO.Role,
+        PRO.Assembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+      m_ValueHashes: 
+      m_LongValueHashes: 0d00eb254f8d1b29baa620a07799d549a996976a4a64278955bc978b7c6693e1
+      m_ValuePositions: 00000000130000001300000014000000
+      m_Values: e8a786e9878ee58685e8a792e889b24c6973740200000000
+      m_UnityObjects: []
+      m_Version: 3.4
+    m_DisabledEventNodesData: []
+    m_DisabledLogicNodesData: []
+    m_UniqueID: -1338683415
+    m_LogicNodePropertiesData:
+    - m_ObjectType: Opsive.GraphDesigner.Runtime.LogicNodeProperties
+      m_ValueHashes: 
+      m_LongValueHashes: bc124df8ef5e104cf36ca30dee0de9958dd19827f48d1b29bd8814239a1bb7642f6406e2580d1e294f869cc9196b0c27aea3bc2e18d5b803a034c7c2b541f015557e981535906112a98ff48b9e8a66b37f542abda0a249c23a7f01b1f88d1a7b
+      m_ValuePositions: 00000000240000002c000000300000003000000030000000400000004100000045000000450000004700000049000000
+      m_Values: 34653334353936332d326361612d346234622d393261312d33326536636535363562313798998343ceccc8c2ccccdc42000000000000000000000000000000000000000000ffffffff01
+      m_UnityObjects: []
+      m_Version: 3.4
+    - m_ObjectType: Opsive.GraphDesigner.Runtime.LogicNodeProperties
+      m_ValueHashes: 
+      m_LongValueHashes: bc124df8ef5e104cf36ca30dee0de9958dd19827f48d1b29bd8814239a1bb7642f6406e2580d1e294f869cc9196b0c27aea3bc2e18d5b803a034c7c2b541f015557e981535906112a98ff48b9e8a66b37f542abda0a249c23a7f01b1f88d1a7b
+      m_ValuePositions: 00000000240000002c000000300000003000000030000000400000004100000045000000450000004700000049000000
+      m_Values: 36663938333166342d646434382d346532302d386635652d3133373638653130316364365bb80b434de166429a990d430000000000000000000000000000000000000000000000020000
+      m_UnityObjects: []
+      m_Version: 3.4
+    - m_ObjectType: Opsive.GraphDesigner.Runtime.LogicNodeProperties
+      m_ValueHashes: 
+      m_LongValueHashes: bc124df8ef5e104cf36ca30dee0de9958dd19827f48d1b29bd8814239a1bb7642f6406e2580d1e294f869cc9196b0c27aea3bc2e18d5b803a034c7c2b541f015557e981535906112a98ff48b9e8a66b37f542abda0a249c23a7f01b1f88d1a7b
+      m_ValuePositions: 00000000240000002c000000300000003000000030000000400000004100000045000000450000004700000049000000
+      m_Values: 38646264653537352d396463332d343764632d386565302d36386135383939383837373117aeb743dfa38642ccccdc420000000000000000000000000000000000000000000000ffff00
+      m_UnityObjects: []
+      m_Version: 3.4
+    m_EventNodePropertiesData:
+    - m_ObjectType: Opsive.GraphDesigner.Runtime.NodeProperties
+      m_ValueHashes: 
+      m_LongValueHashes: bc124df8ef5e104cf36ca30dee0de9958dd19827f48d1b29bd8814239a1bb7642f6406e2580d1e294f869cc9196b0c27aea3bc2e18d5b803
+      m_ValuePositions: 00000000240000002c00000030000000300000003000000040000000
+      m_Values: 33303661363635332d326234612d343365302d396638622d38646337373937363530373800008243000020c3ccccdc420000000000000000000000000000000000
+      m_UnityObjects: []
+      m_Version: 3.4
+    m_GroupPropertiesData: []

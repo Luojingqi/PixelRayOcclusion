@@ -121,10 +121,8 @@ public struct RoleData : IFlatbufferObject
 #endif
   public byte[] GetNameArray() { return __p.__vector_as_array<byte>(16); }
   public PRO.Flat.RoleInfoData? Info { get { int o = __p.__offset(18); return o != 0 ? (PRO.Flat.RoleInfoData?)(new PRO.Flat.RoleInfoData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-  public PRO.Flat.OperatBasiceData? AllOperate(int j) { int o = __p.__offset(20); return o != 0 ? (PRO.Flat.OperatBasiceData?)(new PRO.Flat.OperatBasiceData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int AllOperateLength { get { int o = __p.__offset(20); return o != 0 ? __p.__vector_len(o) : 0; } }
 
-  public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(9); }
+  public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(8); }
   public static void AddTransformData(FlatBufferBuilder builder, Offset<PRO.Flat.Transform> transformDataOffset) { builder.AddStruct(0, transformDataOffset.Value, 0); }
   public static void AddRigidbody2DData(FlatBufferBuilder builder, Offset<PRO.Flat.Rigidbody2D> rigidbody2DDataOffset) { builder.AddStruct(1, rigidbody2DDataOffset.Value, 0); }
   public static void AddSkillPlayAgentData(FlatBufferBuilder builder, Offset<PRO.Flat.SkillPlayerAgentData> skillPlayAgentDataOffset) { builder.AddOffset(2, skillPlayAgentDataOffset.Value, 0); }
@@ -133,12 +131,6 @@ public struct RoleData : IFlatbufferObject
   public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(5, guidOffset.Value, 0); }
   public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(6, nameOffset.Value, 0); }
   public static void AddInfo(FlatBufferBuilder builder, Offset<PRO.Flat.RoleInfoData> infoOffset) { builder.AddOffset(7, infoOffset.Value, 0); }
-  public static void AddAllOperate(FlatBufferBuilder builder, VectorOffset allOperateOffset) { builder.AddOffset(8, allOperateOffset.Value, 0); }
-  public static VectorOffset CreateAllOperateVector(FlatBufferBuilder builder, Offset<PRO.Flat.OperatBasiceData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, Offset<PRO.Flat.OperatBasiceData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.Flat.OperatBasiceData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAllOperateVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.Flat.OperatBasiceData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartAllOperateVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<PRO.Flat.RoleData> EndRoleData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.Flat.RoleData>(o);
@@ -159,7 +151,6 @@ static public class RoleDataVerify
       && verifier.VerifyString(tablePos, 14 /*Guid*/, false)
       && verifier.VerifyString(tablePos, 16 /*Name*/, false)
       && verifier.VerifyTable(tablePos, 18 /*Info*/, PRO.Flat.RoleInfoDataVerify.Verify, false)
-      && verifier.VerifyVectorOfTables(tablePos, 20 /*AllOperate*/, PRO.Flat.OperatBasiceDataVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

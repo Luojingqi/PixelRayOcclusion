@@ -6,6 +6,10 @@ namespace PRO
 {
     public static class Nav
     {
+        public static List<Vector2Int> TryNav(Role Agent, Vector2Int start_G, Vector2Int end_G, PriorityQueue<Vector2Int> queue = null, Dictionary<Vector2Int, Vector2Int> dic = null, List<Vector2Int> navList = null)
+        {
+            return TryNav(Agent.Scene, Agent.Info.NavMould, start_G, end_G, queue, dic, navList);
+        }
         public static List<Vector2Int> TryNav(SceneEntity scene, AgentNavMould navMould, Vector2Int start_G, Vector2Int end_G, PriorityQueue<Vector2Int> queue = null, Dictionary<Vector2Int, Vector2Int> dic = null, List<Vector2Int> navList = null)
         {
             if (queue == null) queue = new PriorityQueue<Vector2Int>(); else queue.Clear();
@@ -44,6 +48,7 @@ namespace PRO
                         break;
                     last = pos;
                 }
+                navList.Add(start_G);
                 navList.Reverse();
             }
             return navList;

@@ -23,14 +23,19 @@ namespace PRO
 
         public void SwitchScene(SceneEntity scene)
         {
-#if PRO_RENDER
-            BlockMaterial.DrawApplyQueue.Clear();
-#endif
             if (nowScene != null)
             {
                 nowScene.gameObject.SetActive(false);
                 nowScene.sceneCatalog.cameraPos = Camera.main.transform.position;
 #if PRO_RENDER
+                foreach (var blockPos in nowScene.ActiveBlockBase)
+                {
+                    var block = nowScene.GetBlock(blockPos);
+                    var background = block.background;
+                    block.DrawPixelTaskQueue.Clear();
+                    background.DrawPixelTaskQueue.Clear();
+                }
+                BlockMaterial.DrawApplyQueue.Clear();
                 BlockMaterial.ClearBind(nowScene);
 #endif
             }
@@ -64,11 +69,15 @@ namespace PRO
         {
             BuildingBase.InitBuildingType();
 #if PRO_MCTS_SERVER
-            //GameSaveManager.Inst.CreateGameSaveFile("testSave");
             //加载所有的存档目录
             var catalogList = GameSaveCatalog.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
             GameSaveCatalog nowSave = catalogList.Find((info) => info.name == "testSave");
+            if (nowSave == null)
+            {
+                nowSave = GameSaveCatalog.CreatFile("testSave");
+                SceneCatalog.CreateFile("mainScene", nowSave);
+            }
             SceneCatalog sceneCatalog = nowSave.sceneCatalogDic[nowSave.sceneNameList[0]];//选择存档的第一个场景
             //转换为实体数据
             SceneEntity scene = SceneEntity.TakeOut(sceneCatalog);

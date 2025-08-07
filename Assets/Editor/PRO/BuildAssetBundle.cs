@@ -13,11 +13,11 @@ public class BuildAssetBundle
     {
         string directoryPath = $@"Assets\{AssetManagerEX.SkillDirectoryPath}\";
 
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(Skill_Disk).Name}");
+        string[] guids = AssetDatabase.FindAssets($"t:{typeof(SkillVisual_Disk).Name}");
         foreach (string guid in guids)
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
-            var asset = AssetDatabase.LoadAssetAtPath<Skill_Disk>(path);
+            var asset = AssetDatabase.LoadAssetAtPath<SkillVisual_Disk>(path);
             asset.loadPath = path.Substring(@"Assets\".Length, path.Length - @"Assets\.asset".Length);
             EditorUtility.SetDirty(asset);
         }

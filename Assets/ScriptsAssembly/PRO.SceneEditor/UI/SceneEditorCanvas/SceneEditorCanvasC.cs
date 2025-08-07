@@ -87,7 +87,7 @@ namespace PRO.SceneEditor
                         }
                     }
                 if (building != null)
-                    building.Init();
+                    building.CreateInit();
             }
         }
     }
