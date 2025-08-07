@@ -1,8 +1,9 @@
 ﻿using Google.FlatBuffers;
+using PRO.SkillEditor;
 using System;
 using UnityEngine;
 
-namespace PRO.SkillEditor
+namespace PRO.Skill
 {
     public abstract class SkillLogicBase
     {

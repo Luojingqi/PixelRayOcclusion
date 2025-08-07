@@ -1,9 +1,9 @@
 using Google.FlatBuffers;
+using PRO.Skill;
 using PRO.Tool;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
 namespace PRO.SkillEditor
 {
@@ -153,7 +153,7 @@ namespace PRO.SkillEditor
                 SkillVisual = AssetManagerEX.LoadSkillVisualDisk(diskData.SkillVisualPath, false);
                 for (int i = diskData.SkillLogicGuidListLength - 1; i >= 0; i--)
                 {
-                    
+
                 }
                 time = diskData.Time;
                 nowFrame = diskData.NowFrame;

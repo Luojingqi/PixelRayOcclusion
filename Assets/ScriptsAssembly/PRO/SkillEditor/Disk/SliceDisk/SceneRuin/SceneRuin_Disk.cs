@@ -1,4 +1,4 @@
-﻿using PRO.DataStructure;
+﻿using PRO.Skill;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +23,7 @@ namespace PRO.SkillEditor
         public Sprite sprite;
 
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logic,FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logic, FrameData frameData)
         {
             try
             {
@@ -41,8 +41,8 @@ namespace PRO.SkillEditor
                 Debug.Log("请在运行模式下查看效果：场景破坏轨道");
             }
 #if UNITY_EDITOR
-          //  if (Application.isPlaying == false)
-              //  EditorShow(agent, trackIndex);
+            //  if (Application.isPlaying == false)
+            //  EditorShow(agent, trackIndex);
 #endif
         }
         public void EditorShow(SkillPlayAgent agent, int trackIndex)

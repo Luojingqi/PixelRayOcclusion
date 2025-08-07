@@ -1,3 +1,4 @@
+using PRO.Skill;
 using System.Collections.Generic;
 
 namespace PRO.SkillEditor

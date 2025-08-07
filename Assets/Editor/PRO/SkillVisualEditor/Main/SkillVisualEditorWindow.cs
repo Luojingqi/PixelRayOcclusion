@@ -1,3 +1,4 @@
+using PRO.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,7 +6,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static PlasticPipe.Server.MonitorStats;
 namespace PRO.SkillEditor
 {
     internal class SkillVisualEditorWindow : EditorWindow
@@ -167,9 +167,22 @@ namespace PRO.SkillEditor
             Selection.objects = null;
         }
 
+        private void UpdateValueChange()
+        {
+            valueChangeTime += Time.deltaTime;
+            if (valueChangeTime > 1f)
+            {
+                valueChangeTime = 0;
+                foreach (var slice in SelectSliceHash)
+                    slice.ValueChangeReset();
+            }
+        }
+
+        private float valueChangeTime = 0;
         public void Update()
         {
             PlayFrame();
+            UpdateValueChange();
         }
 
         #region ²¥·Å

@@ -248,17 +248,21 @@ namespace PRO.SkillEditor
                 View.style.borderTopColor = color;
                 View.style.borderLeftColor = color;
                 View.style.borderRightColor = color;
-                FieldInfo field = DiskData.GetType().GetField("changeValue", BindingFlags.Public | BindingFlags.Instance);
-                if (field != null)
-                {
-                    object fieldValue = field.GetValue(DiskData);
-                    MethodInfo resetMethod = fieldValue.GetType().GetMethod("Reset");
-                    resetMethod.Invoke(fieldValue,new object[] { DiskData });
-                }
+                ValueChangeReset();
             }
             catch
             {
                 Debug.Log("脚本发生更改，请重新打开技能编辑器");
+            }
+        }
+        public void ValueChangeReset()
+        {
+            FieldInfo field = DiskData.GetType().GetField("changeValue", BindingFlags.Public | BindingFlags.Instance);
+            if (field != null)
+            {
+                object fieldValue = field.GetValue(DiskData);
+                MethodInfo resetMethod = fieldValue.GetType().GetMethod("Reset");
+                resetMethod.Invoke(fieldValue, new object[] { DiskData });
             }
         }
         #endregion
