@@ -10,7 +10,7 @@ namespace PRO
             Renderer.color = Pixel.GetPixelColorInfo("油色0").color;
             UpdateEvent += UpdateEventAction;
             CollisionEnterEvent += CollisionEnterEventAction;
-            gameObject.layer = (int)GameLayer.Particle_Block_Role;
+            gameObject.layer = GameLayer.Particle_Block_Role.ToUnityLayer();
         }
 
         public override void PutIn()

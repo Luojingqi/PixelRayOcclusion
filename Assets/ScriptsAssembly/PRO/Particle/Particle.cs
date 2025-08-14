@@ -107,7 +107,7 @@ namespace PRO
             RemainTime = int.MinValue;
 
             if (Collider != null) Collider.enabled = true;
-            gameObject.layer = (int)GameLayer.Particle;
+            gameObject.layer = GameLayer.Particle.ToUnityLayer();
 
             if (SkillPlayAgent != null)
             {
@@ -153,7 +153,7 @@ namespace PRO
             var loadPathOffset = builder.CreateString(loadPath);
             ExtendDataToDisk(extendBuilder);
             var extendDataOffset = builder.CreateVector_Builder(extendBuilder);
-            if (extendBuilderIsNull) 
+            if (extendBuilderIsNull)
                 FlatBufferBuilder.PutIn(extendBuilder);
             else
                 extendBuilder.Clear();

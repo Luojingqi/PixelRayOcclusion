@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1299716069439186355}
   - component: {fileID: 2677625915330494701}
   - component: {fileID: 781137128219374400}
-  - component: {fileID: -7105929587879920910}
+  - component: {fileID: 6491417362716654599}
+  - component: {fileID: -2915854876100014136}
   m_Layer: 8
   m_Name: "Role_\u9ED8\u8BA4"
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 410493120367771553}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.01, y: 0.82, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -116,7 +117,6 @@ MonoBehaviour:
       Data: -1
   AgentSprice: {fileID: 3247373880814821730}
   SpecialEffect2DSpriteList: []
-  idle: {fileID: 0}
 --- !u!114 &1299716069439186355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,10 +209,10 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005, y: 0.178}
-  m_Size: {x: 0.06, y: 0.35}
+  m_Offset: {x: 0, y: 0.178}
+  m_Size: {x: 0.1, y: 0.35}
   m_Direction: 0
---- !u!114 &-7105929587879920910
+--- !u!114 &6491417362716654599
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,27 +221,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 410493120367771553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cdaa3305fa954c45a80c9662aa6f425, type: 3}
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_GraphName: Behavior Tree
-  m_Index: 0
-  m_Data:
-    m_TaskData: []
-    m_EventTaskData: []
-    m_SharedVariableData: []
-    m_DisabledEventNodesData: []
-    m_DisabledLogicNodesData: []
-    m_UniqueID: 1741922864
-    m_LogicNodePropertiesData: []
-    m_EventNodePropertiesData: []
-    m_GroupPropertiesData: []
-  m_StartWhenEnabled: 1
-  m_PauseWhenDisabled: 0
-  m_UpdateMode: 0
-  m_EvaluationType: 0
-  m_MaxEvaluationCount: 1
-  m_Subtree: {fileID: 0}
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 3
+  _graph: {fileID: 11400000, guid: 6bf40cb14ebcf0b4790b2a29d747ac3a, type: 2}
+  _blackboard: {fileID: -2915854876100014136}
+--- !u!114 &-2915854876100014136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410493120367771553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parentBlackboard: {fileID: 0}
+  _serializedBlackboard: '{"_variables":{}}'
+  _objectReferences: []
+  _serializedVariables: []
 --- !u!1 &4259730868166575553
 GameObject:
   m_ObjectHideFlags: 0

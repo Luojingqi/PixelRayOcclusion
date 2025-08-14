@@ -7,6 +7,10 @@ namespace PRO.Skill
 {
     public abstract class SkillLogicBase
     {
+        public SkillLogicBase(string guid)
+        {
+            this.guid = guid;
+        }
         public string GUID => guid;
         private string guid;
 
@@ -25,7 +29,7 @@ namespace PRO.Skill
 
         public virtual void After_SkillPlay(SkillVisual_Disk skillVisual) { }
 
-        public abstract void ToDisk(FlatBufferBuilder builder);
-        public abstract void ToRAM(FlatBufferBuilder builder);
+        public virtual void ToDisk(FlatBufferBuilder builder) { }
+        public virtual void ToRAM(FlatBufferBuilder builder) { }
     }
 }

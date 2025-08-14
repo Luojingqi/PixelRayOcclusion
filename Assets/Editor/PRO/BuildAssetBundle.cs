@@ -1,3 +1,4 @@
+using NodeCanvas.BehaviourTrees;
 using PRO;
 using PRO.SkillEditor;
 using System.IO;
@@ -11,18 +12,30 @@ public class BuildAssetBundle
     [MenuItem("PRO/打ab包")]
     public static void Build()
     {
-        string directoryPath = $@"Assets\{AssetManagerEX.SkillDirectoryPath}\";
-
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(SkillVisual_Disk).Name}");
-        foreach (string guid in guids)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            var asset = AssetDatabase.LoadAssetAtPath<SkillVisual_Disk>(path);
-            asset.loadPath = path.Substring(@"Assets\".Length, path.Length - @"Assets\.asset".Length);
-            EditorUtility.SetDirty(asset);
+            string directoryPath = $@"Assets\{AssetManagerEX.SkillDirectoryPath}";
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(SkillVisual_Disk).Name}");
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var asset = AssetDatabase.LoadAssetAtPath<SkillVisual_Disk>(path);
+                asset.loadPath = path.Substring(directoryPath.Length, path.Length - directoryPath.Length - ".asset".Length);
+                EditorUtility.SetDirty(asset);
+            }
+            AssetDatabase.SaveAssets();
         }
-        AssetDatabase.SaveAssets();
-
+        {
+            string directoryPath = $@"Assets\{AssetManagerEX.BTDirectoryPath}";
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(BehaviourTree).Name}");
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var asset = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
+                asset.category = path.Substring(directoryPath.Length, path.Length - directoryPath.Length - ".asset".Length);
+                EditorUtility.SetDirty(asset);
+            }
+            AssetDatabase.SaveAssets();
+        }
 
 
         if (!Application.isPlaying)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using UnityEngine.UIElements;
 
 namespace Google.FlatBuffers
@@ -69,6 +70,15 @@ namespace Google.FlatBuffers
                     elementSpan.Reverse(); // 反转当前元素的字节序
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            var span = ToSpan();
+            StringBuilder sb = new StringBuilder(span.Length);
+            for (int i = 0; i < span.Length; i++)
+                sb.Append(span[i]);
+            return sb.ToString();
         }
 
         private static List<FlatBufferBuilder> pool = new List<FlatBufferBuilder>(26);

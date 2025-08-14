@@ -1,3 +1,4 @@
+using NodeCanvas.BehaviourTrees;
 using PRO.Buff.Base;
 using PRO.Skill;
 using PRO.Skill.Base;
@@ -17,19 +18,25 @@ namespace PRO
         /// <summary>
         /// 技能文件夹的目录
         /// </summary>
-        public static string SkillDirectoryPath = @"ScriptsAssembly\PRO\Skill";
+        public static string SkillDirectoryPath = @"ScriptsAssembly\PRO\";
         /// <summary>
         /// 加载技能轨道数据
         /// 
-        /// Asset\ScriptsAssembly\PRO\技能\
+        /// Asset\ScriptsAssembly\PRO\
         /// </summary>
-        public static SkillVisual_Disk LoadSkillVisualDisk(string path,bool path补全 = true)
+        public static SkillVisual_Disk LoadSkillVisualDisk(string path)
         {
-            if (path补全)
-                return AssetManager.Load_A<SkillVisual_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
-            else
-                return AssetManager.Load_A<SkillVisual_Disk>("skill.ab", $@"{path}.asset");
+            return AssetManager.Load_A<SkillVisual_Disk>("skill.ab", @$"{SkillDirectoryPath}\{path}.asset");
         }
+        /// <summary>
+        /// 技能文件夹的目录
+        /// </summary>
+        public static string BTDirectoryPath = @"ScriptsAssembly\PRO\";
+        public static BehaviourTree LoadBehaviourTree(string path)
+        {
+            return AssetManager.Load_A<BehaviourTree>("skill.ab", @$"{BTDirectoryPath}\{path}.asset");
+        }
+
         private static StringBuilder stringBuilder = new StringBuilder(64);
         //public static Skill_Disk LoadSkillDisk(OperateFSMBase SkillOperate)
         //{

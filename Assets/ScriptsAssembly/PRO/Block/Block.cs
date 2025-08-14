@@ -24,8 +24,10 @@ namespace PRO
         {
             // float absX = Mathf.Abs(worldPos.x);
             // float absY = Mathf.Abs(worldPos.y);
-            int x = (int)Mathf.Floor((int)(worldPos.x * 100) / 100f / Pixel.Size);
-            int y = (int)Mathf.Floor((int)(worldPos.y * 100) / 100f / Pixel.Size);
+            //int x = (int)Mathf.Floor((int)(worldPos.x * 100) / 100f / Pixel.Size);
+            //int y = (int)Mathf.Floor((int)(worldPos.y * 100) / 100f / Pixel.Size);
+            int x = (int)Mathf.Floor(worldPos.x / Pixel.Size);
+            int y = (int)Mathf.Floor(worldPos.y / Pixel.Size);
             //  if (worldPos.x < 0 && absX % Pixel.Size > 0) x = -x - 1;
             //  if (worldPos.y < 0 && absY % Pixel.Size > 0) y = -y - 1;
             return new Vector2Int(x, y);

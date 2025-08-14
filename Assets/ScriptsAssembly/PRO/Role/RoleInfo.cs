@@ -1,7 +1,6 @@
 ﻿using Google.FlatBuffers;
 using PRO.Flat.Ex;
 using PRO.Tool;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,23 +48,25 @@ namespace PRO
         public EventData_Double 闪避率;//10
         public EventData_Double 暴击率;//11
         public EventData_Int32 韧性;//12
-        public AgentNavMould NavMould;//13
+        public EventData_Int32 跳跃高度;//13
+        public AgentNavMould NavMould;//14
         public RoleInfo()
         {
-            最大血量 = new EventData_Int32(this);
-            血量 = new EventData_Int32(this);
-            最大护甲 = new EventData_Int32(this);
-            护甲 = new EventData_Int32(this);
-            攻击力 = new EventData_Int32(this);
-            移动速度 = new EventData_Double(this);
-            攻击速度 = new EventData_Double(this);
+            最大血量 = new(this);
+            血量 = new(this);
+            最大护甲 = new(this);
+            护甲 = new(this);
+            攻击力 = new(this);
+            移动速度 = new(this);
+            攻击速度 = new(this);
             抗性Array = new EventData_Int32[(int)属性.end];
             for (int i = 0; i < 抗性Array.Length; i++)
-                抗性Array[i] = new EventData_Int32(this);
-            命中率 = new EventData_Double(this);
-            闪避率 = new EventData_Double(this);
-            暴击率 = new EventData_Double(this);
-            韧性 = new EventData_Int32(this);
+                抗性Array[i] = new(this);
+            命中率 = new(this);
+            闪避率 = new(this);
+            暴击率 = new(this);
+            韧性 = new(this);
+            跳跃高度 = new(this);
 
             血量.AddValueChangeEvent(EventData<int>.EventType.UnClear, (info, type, nowData, oldData) =>
             {
@@ -95,22 +96,24 @@ namespace PRO
             闪避率.ClearEvent();
             暴击率.ClearEvent();
             韧性.ClearEvent();
+            跳跃高度.ClearEvent();
         }
 
         public static void CloneValue(RoleInfo from, RoleInfo to)
         {
-            EventData<int>.CloneValue(from.最大血量, to.最大血量);
-            EventData<int>.CloneValue(from.血量, to.血量);
-            EventData<int>.CloneValue(from.最大护甲, to.最大护甲);
-            EventData<int>.CloneValue(from.护甲, to.护甲);
-            EventData<int>.CloneValue(from.攻击力, to.攻击力);
-            EventData<double>.CloneValue(from.移动速度, to.移动速度);
-            EventData<double>.CloneValue(from.攻击速度, to.攻击速度);
+            EventData_Int32.CloneValue(from.最大血量, to.最大血量);
+            EventData_Int32.CloneValue(from.血量, to.血量);
+            EventData_Int32.CloneValue(from.最大护甲, to.最大护甲);
+            EventData_Int32.CloneValue(from.护甲, to.护甲);
+            EventData_Int32.CloneValue(from.攻击力, to.攻击力);
+            EventData_Double.CloneValue(from.移动速度, to.移动速度);
+            EventData_Double.CloneValue(from.攻击速度, to.攻击速度);
             for (int i = 0; i < (int)属性.end; i++)
-                EventData<int>.CloneValue(from.抗性Array[i], to.抗性Array[i]);
-            EventData<double>.CloneValue(from.闪避率, to.闪避率);
-            EventData<double>.CloneValue(from.暴击率, to.暴击率);
-            EventData<int>.CloneValue(from.韧性, to.韧性);
+                EventData_Int32.CloneValue(from.抗性Array[i], to.抗性Array[i]);
+            EventData_Double.CloneValue(from.闪避率, to.闪避率);
+            EventData_Double.CloneValue(from.暴击率, to.暴击率);
+            EventData_Int32.CloneValue(from.韧性, to.韧性);
+            EventData_Int32.CloneValue(from.跳跃高度, to.跳跃高度);
             to.NavMould = from.NavMould;
         }
 

@@ -1,10 +1,11 @@
 using Cysharp.Threading.Tasks;
 using Google.FlatBuffers;
+using NodeCanvas.BehaviourTrees;
+using NodeCanvas.Framework;
 using PRO.Buff.Base;
 using PRO.Flat.Ex;
 using PRO.SkillEditor;
 using PRO.Tool;
-using PROTool;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
@@ -19,6 +20,7 @@ namespace PRO
 
         public Rigidbody2D Rig2D { get; private set; }
 
+        public BehaviourTreeOwner BT { get; private set; }
 
         [HideInInspector]
         public FreelyLightSource source;
@@ -48,7 +50,7 @@ namespace PRO
         [NonSerialized]
         [ShowInInspector]
         public RoleInfo Info = new RoleInfo();
-
+        [Button]
         public void Init()
         {
             for (int i = 0; i < AllBuff.Length; i++)
@@ -58,6 +60,9 @@ namespace PRO
             SkillPlayAgent.Init();
 
             Rig2D = GetComponent<Rigidbody2D>();
+
+            BT = GetComponent<BehaviourTreeOwner>();
+
             #region 暂时弃用
             //CanUseOperateList.Add(new Skill_1_0());
             //CanUseOperateList.Add(new Skill_1_1());
@@ -97,10 +102,26 @@ namespace PRO
             //AddBuff(new Buff_2_11());
             #endregion
         }
+
+
+        private FlatBufferBuilder builder = new FlatBufferBuilder(1024 * 10);
+        [Button]
+        public void Save()
+        {
+            builder.Clear();
+            BT.behaviour.ToDisk(builder);
+        }
+        [Button]
+        public void Load()
+        {
+            BT.behaviour.ToRAM(builder);
+        }
+
         public void TakeOut(SceneEntity scene, string guid)
         {
             this.guid = guid;
             _scene = scene;
+            Rig2D.simulated = true;
             source = FreelyLightSource.New(_scene, new Color32(200, 200, 200, 255), 15);
             SkillPlayAgent.SetScene(_scene);
         }
@@ -109,6 +130,7 @@ namespace PRO
             guid = null;
             source.GloabPos = null;
             source = null;
+            Rig2D.simulated = false;
             _scene = null;
             SkillPlayAgent.SetScene(null);
         }
@@ -128,6 +150,7 @@ namespace PRO
                     list.Dispose();
                 }
             }
+            BT.Tick(TimeManager.deltaTime);
         }
         #region 选择方法等
         public async UniTask Play被攻击Animation()
@@ -156,7 +179,11 @@ namespace PRO
             else Toward = Toward.right;
         }
         [ShowInInspector]
-        public Vector2Int GlobalPos { get => Block.WorldToGlobal(transform.position); set => transform.position = Block.GlobalToWorld(value); }
+        public Vector2Int GlobalPos
+        {
+            get => Block.WorldToGlobal(transform.position);
+            set => transform.position = Block.GlobalToWorld(value);
+        }
         public Vector2Int CenterPos => GlobalPos + Info.NavMould.mould.center;
         #endregion
 

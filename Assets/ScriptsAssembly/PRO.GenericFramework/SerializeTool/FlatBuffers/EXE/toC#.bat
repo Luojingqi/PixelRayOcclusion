@@ -3,23 +3,12 @@ chcp 65001 &
 rem chcp 936 > nul
 set "rootPath=E:\Projects\Unity_P\PixelRayOcclusion\Assets\ScriptsAssembly\"
 
-set "inputPath0=PRO.GenericFramework\"
-for /r %rootPath%%inputPath0%  %%i in (*.fbs) do (
+for /r  E:\Projects\Unity_P\PixelRayOcclusion\Assets %%i in (*.fbs) do (
 	if not exist %%~dpiFlat_CS_Auto\	(mkdir %%~dpiFlat_CS_Auto\)
 	flatc --csharp  --gen-onefile		-I %rootPath%	-I %%~dpi 	-o %%~dpiFlat_CS_Auto\ 	%%i
-	echo %%i 生成完成
+	echo %%i 
 )
 echo ----------------------------------------------------------------------
-
-
-set "inputPath1=PRO\"
-for /r %rootPath%%inputPath1%  %%i in (*.fbs) do (
-	if not exist %%~dpiFlat_CS_Auto\	(mkdir %%~dpiFlat_CS_Auto\)
-	flatc --csharp  --gen-onefile		-I %rootPath%	-I %%~dpi 	-o %%~dpiFlat_CS_Auto\ 	%%i
-	echo %%i 生成完成
-)
-echo -----------------------------------------------------------------------
-
 pause
 
 rem echo 完整路径: "%%i"

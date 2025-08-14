@@ -18,6 +18,8 @@ namespace PRO
         /// 上一帧更新花费的时间
         /// </summary>
         public static float deltaTime { get; private set; }
+
+        public static int frameCount { get; private set; }
         /// <summary>
         /// 是否启用更新
         /// </summary>
@@ -126,6 +128,8 @@ namespace PRO
                 { if (mono is ITime_LateUpdate i) time_LastUpdate.Remove(i, mono.Priority); }
             }
             #endregion
+
+            frameCount++;
         }
 
 

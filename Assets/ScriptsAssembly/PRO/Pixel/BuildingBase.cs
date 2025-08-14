@@ -91,7 +91,7 @@ namespace PRO
             building._scene = scene;
             building.transform.SetParent(scene.BuildingNode);
             scene.ActiveBuilding.Add(guid, building);
-            go.layer = (int)GameLayer.Building;
+            go.layer = GameLayer.Building.ToUnityLayer();
             return building;
         }
         #region 反射创建Building实例

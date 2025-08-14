@@ -10,7 +10,8 @@ namespace PRO.SkillEditor
         public float angle;
         public Vector2 scale = Vector2.one;
 
-        public AllowLogicChangeValue_AttackTestSlice2D_Rect_Disk changeValue = new();
+        public new AllowLogicChangeValue_AttackTestSlice2D_Rect_Disk changeValue = new();
+        public AttackTestSlice2D_Rect_Disk() => base.changeValue = changeValue;
 
 
         public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)

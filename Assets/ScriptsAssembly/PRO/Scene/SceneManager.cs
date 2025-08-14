@@ -68,7 +68,6 @@ namespace PRO
         public void TimeStart()
         {
             BuildingBase.InitBuildingType();
-#if PRO_MCTS_SERVER
             //加载所有的存档目录
             var catalogList = GameSaveCatalog.LoadAllSaveCatalog();
             catalogList.ForEach(item => Log.Print(item.name));
@@ -90,12 +89,13 @@ namespace PRO
                 TimeManager.Inst.AddToQueue_MainThreadUpdate_Clear(() =>
                 {
                     SwitchScene(scene);
+
+                    RoleManager.Inst.TakeOut("默认", nowScene, "123").transform.position = new Vector3(-1, 0, 0);
 #if PRO_RENDER
                     source = FreelyLightSource.New(nowScene, Pixel.GetPixelColorInfo("鼠标光源0").color, 20);
 #endif
                 });
             });
-#endif
         }
 
         public FreelyLightSource source;

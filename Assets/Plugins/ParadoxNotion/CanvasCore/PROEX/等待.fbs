@@ -1,0 +1,7 @@
+﻿namespace PRO.BT.Flat;
+
+table WaitData
+{
+	value0 : float;
+	value1 : float;
+}

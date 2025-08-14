@@ -26,10 +26,6 @@ namespace PRO
         /// 检查盒子，角色模型的内边框
         /// </summary>
         public readonly Vector2Int[] chackBox;
-        /// <summary>
-        /// 角色每次可以移动的下一个点的集合
-        /// </summary>
-        public readonly Vector2Int[] walkRing;
 
         public AgentNavMould(Mould mould)
         {
@@ -47,11 +43,6 @@ namespace PRO
                 chackBox[index++] = new Vector2Int(mould.size.x - 1, y);
             }
             index = 0;
-            walkRing = new Vector2Int[10];
-            for (int x = -1; x <= 1; x++)
-                for (int y = -2; y <= 2; y++)
-                    if (x != 0)
-                        walkRing[index++] = new Vector2Int(x, y);
         }
     }
 }

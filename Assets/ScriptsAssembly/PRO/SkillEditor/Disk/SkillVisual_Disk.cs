@@ -12,7 +12,7 @@ namespace PRO.SkillEditor
     [CreateAssetMenu(menuName = "创建一个SkillVisual轨道")]
     public class SkillVisual_Disk : SerializedScriptableObject
     {
-        [LabelText("最大帧")]
+        [LabelText("最大帧"), ReadOnly]
         public int MaxFrame = 5;
         [LabelText("每帧持续时间/ms")]
         public int FrameTime = 100;
@@ -101,7 +101,6 @@ namespace PRO.SkillEditor
         /// <param name="agent">执行人</param>
         /// <param name="frame">更新帧</param>
         /// <param name="playTrack">轨道过滤器</param>
-        /// <param name="callback">执行完此帧的回调</param>
         public void UpdateFrame(SkillPlayAgent agent, IEnumerable<SkillLogicBase> logics, int frame, int playTrack = ~0)
         {
             if (agent == null) return;

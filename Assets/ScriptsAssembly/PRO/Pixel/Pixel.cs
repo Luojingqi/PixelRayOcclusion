@@ -40,7 +40,7 @@ namespace PRO
         /// </summary>
         public int durability
         {
-            get => _durability; 
+            get => _durability;
             set
             {
                 _durability = value;
@@ -56,12 +56,12 @@ namespace PRO
         /// </summary>
         public float affectsTransparency
         {
-            get => _affectsTransparency; 
+            get => _affectsTransparency;
             set
             {
                 _affectsTransparency = value;
 #if PRO_RENDER
-                blockBase.SetPixelInfoToShader(pos); 
+                blockBase.SetPixelInfoToShader(pos);
                 blockBase.DrawPixelAsync(pos, colorInfo.color);
 #endif
             }
@@ -145,6 +145,8 @@ namespace PRO
                 building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(posG, blockBase.blockType), this);
             }
 #if PRO_RENDER
+            if (colorInfo.luminousRadius > 0 && colorInfo.luminousRadius <= BlockMaterial.LightRadiusMax)
+                blockBase.AddLightSource(pos, colorInfo);
             blockBase.textureData.SetPixelInfoToShader(this);
 #endif
         }
@@ -154,6 +156,7 @@ namespace PRO
         /// 每个像素点占世界空间的大小
         /// </summary>
         public static readonly float Size = 0.05f;
+        public static readonly float Size_Half = Size / 2f;
 
         private static List<PixelTypeInfo> pixelTypeInfoList = new List<PixelTypeInfo>();
         private static Dictionary<string, PixelTypeInfo> name_pixelTypeInfo_Dic = new Dictionary<string, PixelTypeInfo>();

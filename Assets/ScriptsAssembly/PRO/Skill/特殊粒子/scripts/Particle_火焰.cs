@@ -14,7 +14,7 @@ namespace PRO
             UpdateEvent += UpdateEventAction;
             CollisionEnterEvent += CollisionEnterEventAction;
             RemainTimeIsZeroEvent += RemainTimeIsZeroEventAction;
-            gameObject.layer = (int)GameLayer.Particle_Block_Role;
+            gameObject.layer = GameLayer.Particle_Block_Role.ToUnityLayer();
         }
 
         private void RemainTimeIsZeroEventAction()

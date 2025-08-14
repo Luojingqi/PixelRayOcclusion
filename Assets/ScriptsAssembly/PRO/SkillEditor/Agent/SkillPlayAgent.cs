@@ -50,6 +50,14 @@ namespace PRO.SkillEditor
             }
             SkillPlayDataDic.Add(skillVisual.loadPath, data);
         }
+        public void AddSkill(SkillVisual_Disk skillVisual, SkillLogicBase logic)
+        {
+            var data = SkillPlayData.TakeOut();
+            data.SkillVisual = skillVisual;
+            data.SkillLogicList.Add(logic);
+            logic.Before_SkillPlay(skillVisual);
+            SkillPlayDataDic.Add(skillVisual.loadPath, data);
+        }
         public SkillPlayData GetSkill(string skillVisual_loadPath)
         {
             SkillPlayDataDic.TryGetValue(skillVisual_loadPath, out var data);
@@ -72,6 +80,7 @@ namespace PRO.SkillEditor
             tempSkillPlayDataList.Clear();
         }
         private List<SkillPlayData> tempSkillPlayDataList = new List<SkillPlayData>();
+        [ShowInInspector]
         private Dictionary<string, SkillPlayData> SkillPlayDataDic = new Dictionary<string, SkillPlayData>();
 
 
@@ -150,7 +159,7 @@ namespace PRO.SkillEditor
             }
             public void ToRAM(Flat.SkillplayerDataData diskData)
             {
-                SkillVisual = AssetManagerEX.LoadSkillVisualDisk(diskData.SkillVisualPath, false);
+                SkillVisual = AssetManagerEX.LoadSkillVisualDisk(diskData.SkillVisualPath);
                 for (int i = diskData.SkillLogicGuidListLength - 1; i >= 0; i--)
                 {
 

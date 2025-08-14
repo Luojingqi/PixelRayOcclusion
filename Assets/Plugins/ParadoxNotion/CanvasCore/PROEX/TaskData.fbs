@@ -1,0 +1,19 @@
+﻿namespace PRO.BT.Flat;
+
+
+
+table ActionTaskData
+{
+	status : ubyte;
+	time_started : float;
+	latch : bool;
+	extend : [ubyte];
+}
+
+table ConditionTaskData
+{
+	yield_return : int;
+	yields : int;
+	is_runtime_enabled : bool;
+	extend : [ubyte];
+}

@@ -9,7 +9,8 @@ namespace PRO.SkillEditor
     {
         public float radius = 0.5f;
 
-        public AllowLogicChangeValue_AttackTestSlice2D_Circle_Disk changeValue = new();
+        public new AllowLogicChangeValue_AttackTestSlice2D_Circle_Disk changeValue = new();
+        public AttackTestSlice2D_Circle_Disk() => base.changeValue = changeValue;
 
         public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
         {

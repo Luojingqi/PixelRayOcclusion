@@ -11,7 +11,7 @@ namespace PRO
             SurviveTimeRange = new Vector2Int(500, 1500);
             Rig2D.gravityScale = Random.Range(-0.05f, -0.001f);
             UpdateEvent += UpdateEventAction;
-            gameObject.layer = (int)GameLayer.Particle;
+            gameObject.layer = GameLayer.Particle.ToUnityLayer();
         }
 
         private void UpdateEventAction()

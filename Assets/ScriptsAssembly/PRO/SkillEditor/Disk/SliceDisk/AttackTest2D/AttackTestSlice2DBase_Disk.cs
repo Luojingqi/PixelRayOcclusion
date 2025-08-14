@@ -8,6 +8,8 @@ namespace PRO.SkillEditor
         public Vector2 position;
         public int layerMask;
 
+        public AllowLogicChangeValue_AttackTestSlice2DBase_Disk changeValue;
+
         private static Queue<RaycastHit2D[]> pool = new Queue<RaycastHit2D[]>();
 
         protected static RaycastHit2D[] TakeOut()
@@ -22,7 +24,7 @@ namespace PRO.SkillEditor
                 array[i] = default;
         }
 
-        public class AllowLogicChangeValue_AttackTestSlice2DBase_Disk : AllowLogicChangeValueBase
+        public abstract class AllowLogicChangeValue_AttackTestSlice2DBase_Disk : AllowLogicChangeValueBase
         {
             public Vector2 position;
             public int layerMask;

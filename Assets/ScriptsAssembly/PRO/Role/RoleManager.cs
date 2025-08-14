@@ -21,9 +21,9 @@ namespace PRO
             roleNode.SetParent(SceneManager.Inst.PoolNode);
             {
                 var role = AssetManager.Load_A<GameObject>("role.ab", @$"ScriptsAssembly\PRO\Role\Role_默认").GetComponent<Role>();
-                role.Info.NavMould = RoleInfo.GetNavMould(new(new Vector2Int(2, 7), new Vector2Int(1, 0)));
+                role.Info.NavMould = RoleInfo.GetNavMould(new(new Vector2Int(3, 7), new Vector2Int(1, 0)));
                 var pool = AddRolePool(role);
-                pool.PutInEvent += t =>
+                pool.TakeOutEvent += t =>
                 {
                     RoleInfo.CloneValue(role.Info, t.Info);
                 };
