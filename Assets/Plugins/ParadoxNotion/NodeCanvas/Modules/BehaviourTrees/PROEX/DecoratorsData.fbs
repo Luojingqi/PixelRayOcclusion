@@ -1,4 +1,4 @@
-﻿namespace PRO.BT.Flat;
+﻿namespace PRO.BT.Flat.Decorator;
 
 table TimeoutData
 {

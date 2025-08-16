@@ -2,7 +2,7 @@ using Google.FlatBuffers;
 using NodeCanvas.Framework;
 using ParadoxNotion;
 using ParadoxNotion.Design;
-using PRO.BT.Flat;
+using PRO.BT.Flat.Composite;
 using UnityEngine;
 
 

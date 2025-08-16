@@ -113,7 +113,7 @@ namespace PRO
         [Button]
         public void Load()
         {
-            BT.behaviour.ToRAM(PRO.BT.Flat.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
+            BT.behaviour.ToRAM(PRO.BT.Flat.Base.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
         }
         public void TakeOut(SceneEntity scene, string guid)
         {

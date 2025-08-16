@@ -58,7 +58,7 @@ namespace NodeCanvas.BehaviourTrees
         protected override void ExtendToRAM(FlatBufferBuilder builder)
         {
             if (_subTree.isDefined || _subTree.value == null) return;
-            _subTree.value.ToRAM(PRO.BT.Flat.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
+            _subTree.value.ToRAM(PRO.BT.Flat.Base.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
         }
     }
 }
