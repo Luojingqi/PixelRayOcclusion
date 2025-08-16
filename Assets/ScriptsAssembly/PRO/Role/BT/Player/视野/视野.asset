@@ -232,4 +232,4 @@ MonoBehaviour:
       Data: 
   MaxFrame: 1
   FrameTime: 200
-  loadPath: "Role/BT/Player/\u6218\u6597/\u89C6\u91CE"
+  loadPath: "Role/BT/Player/\u89C6\u91CE/\u89C6\u91CE"

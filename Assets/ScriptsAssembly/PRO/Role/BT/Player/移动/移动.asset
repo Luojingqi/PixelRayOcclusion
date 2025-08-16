@@ -49,7 +49,7 @@ MonoBehaviour:
       Data: 3|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
       Data: 4|PRO.SkillEditor.SpecialEffectSlice2D_Disk, PRO.Assembly
@@ -91,10 +91,10 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 0.05233596
+      Data: 0.06975647
     - Name: 
       Entry: 4
-      Data: 0.9986295
+      Data: 0.9975641
     - Name: 
       Entry: 8
       Data: 
@@ -163,10 +163,10 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: -0.05233596
+      Data: -0.06975647
     - Name: 
       Entry: 4
-      Data: 0.9986295
+      Data: 0.9975641
     - Name: 
       Entry: 8
       Data: 
@@ -193,6 +193,9 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 8
+      Data: 
+    - Name: 
+      Entry: 6
       Data: 
     - Name: 
       Entry: 13
@@ -267,13 +270,68 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 11|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: SlickArray
+      Entry: 7
+      Data: 12|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: "13|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E, PRO.Assembly"
+    - Name: name
+      Entry: 1
+      Data: "\u8DF3\u8F6C->0"
+    - Name: startFrame
+      Entry: 3
+      Data: 2
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: goToFrame
+      Entry: 3
       Data: 0
+    - Name: changeValue
+      Entry: 7
+      Data: "14|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E+AllowLogicChangeValue_EventDisk_\u8DF3\u8F6C\u64AD\u653E,
+        PRO.Assembly"
+    - Name: goToFrame
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
     - Name: 
       Entry: 8
       Data: 
-  MaxFrame: 2
-  FrameTime: 1000
-  loadPath: "Role/BT/Player/\u6218\u6597/\u79FB\u52A8"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  MaxFrame: 3
+  FrameTime: 250
+  loadPath: "Role/BT/Player/\u79FB\u52A8/\u79FB\u52A8"

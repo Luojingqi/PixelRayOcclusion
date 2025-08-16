@@ -4,7 +4,7 @@ using PRO.SkillEditor;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-namespace PRO.BT.战斗
+namespace PRO.BT.视野
 {
     public class 看到角色 : ConditionTask
     {
@@ -35,11 +35,11 @@ namespace PRO.BT.战斗
 
             public 看到角色 Node;
 
-            public override void Before_AttackTest2D(AttackTestSlice2DBase_Disk slice, FrameData frameData)
+            public override void Before_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData)
             {
                 Node.看到的角色Dic.value.Clear();
             }
-            public override void Agoing_AttackTest2D(AttackTestSlice2DBase_Disk slice, FrameData frameData, Span<RaycastHit2D> hitSpan)
+            public override void Agoing_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData, Span<RaycastHit2D> hitSpan)
             {
                 var role = Node.Agent.value;
                 var set = Node.看到的角色Dic.value;

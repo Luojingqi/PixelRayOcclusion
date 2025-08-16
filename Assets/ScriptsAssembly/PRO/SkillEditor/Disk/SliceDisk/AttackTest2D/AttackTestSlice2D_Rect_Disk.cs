@@ -17,7 +17,7 @@ namespace PRO.SkillEditor
         public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                playData.SkillLogicList[logicIndex].Before_AttackTest2D(this, frameData);
+                playData.SkillLogicList[logicIndex].Before_AttackTest2D(agent, playData, this, frameData);
             var array = TakeOut();
             var trs = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
                       Matrix4x4.TRS(changeValue.position, Quaternion.Euler(0, 0, changeValue.angle), changeValue.scale);
@@ -40,12 +40,12 @@ namespace PRO.SkillEditor
             Debug.DrawLine(pos3, pos0, Color.green, time);
 #endif
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
+                playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(agent, playData, this, frameData, array.AsSpan(0, length));
             PutIn(array, length);
 
             if (frameData.sliceFrame == frameLength - 1)
                 for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].After_AttackTest2D(this, frameData);
+                    playData.SkillLogicList[logicIndex].After_AttackTest2D(agent, playData, this, frameData);
 
             changeValue.Reset(this);
         }

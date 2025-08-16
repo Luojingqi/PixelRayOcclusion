@@ -12,6 +12,9 @@ namespace PRO.SkillEditor
         public AllowLogicChangeValue_SpecialEffectSlice2D_Disk valueChange = new();
         public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].Before_SpecialEffectSlice2D(agent, playData, this, frameData);
+
             #region 生成特效轨道的精灵Render
             if (frameData.trackIndex >= agent.SpecialEffect2DSpriteList.Count)
             {
@@ -29,6 +32,10 @@ namespace PRO.SkillEditor
             renderer.transform.localPosition = position;
             renderer.transform.localRotation = rotation;
             renderer.transform.localScale = scale;
+
+            if (frameData.sliceFrame == frameLength - 1)
+                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                    playData.SkillLogicList[logicIndex].After_SpecialEffectSlice2D(agent, playData, this, frameData);
         }
 
 

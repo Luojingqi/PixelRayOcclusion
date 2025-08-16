@@ -1,4 +1,4 @@
-#define 寻路显示
+//#define 寻路路径显示
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -8,7 +8,7 @@ using PRO.Skill;
 using PRO.SkillEditor;
 using System.Collections.Generic;
 using UnityEngine;
-namespace PRO.BT.战斗
+namespace PRO.BT.移动
 {
     public class 移动 : ActionTask
     {
@@ -21,7 +21,7 @@ namespace PRO.BT.战斗
             public float deltaTime;
             public float oldGravityScale;
             public TweenerCore<Vector3, Vector3, VectorOptions> doTweener;
-#if 寻路显示
+#if 寻路路径显示
             public List<Particle> list = new();
 #endif
             public void Clear()
@@ -32,7 +32,7 @@ namespace PRO.BT.战斗
                 oldGravityScale = 0;
                 doTweener = null;
                 #region 移动路径回收
-#if 寻路显示
+#if 寻路路径显示
                 var pool = ParticleManager.Inst.GetPool("单像素");
                 for (int i = 0; i < list.Count; i++)
                     pool.PutIn(list[i]);
@@ -55,7 +55,7 @@ namespace PRO.BT.战斗
             var agent = Agent.value;
             agent.Info.移动速度.Value_基础 = 5;
             playData.SkillVisual = SkillVisual_移动;
-            playData.SkillLogicList.Add(new SkillLogic_移动(null) { Agent = agent });
+            playData.SkillLogicList.Add(new SkillLogic_移动(null));
             return base.OnInit();
         }
 
@@ -69,7 +69,7 @@ namespace PRO.BT.战斗
             if (data.navList.Count > 1)
             {
                 #region 移动路线显示
-#if 寻路显示
+#if 寻路路径显示
                 var pool = ParticleManager.Inst.GetPool("单像素");
                 for (int i = 0; i < data.navList.Count; i++)
                 {
@@ -119,7 +119,7 @@ namespace PRO.BT.战斗
         protected override void OnStop()
         {
             var agent = Agent.value;
-            playData.ResetFrameIndex();
+            playData.ResetFrameIndex(agent.SkillPlayAgent);
             agent.Rig2D.gravityScale = data.oldGravityScale;
             if (data.doTweener != null)
                 data.doTweener.Kill();
@@ -129,14 +129,27 @@ namespace PRO.BT.战斗
 
         public class SkillLogic_移动 : SkillLogicBase
         {
-            public Role Agent;
-            public SkillVisual_Disk SkillVisual;
-            public SkillLogic_移动(string guid) : base(guid)
+            public SkillLogic_移动(string guid) : base(guid) { }
+
+            private Quaternion startRotation;
+
+            public override void Before_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
             {
+                startRotation = agent.transform.rotation;
             }
-            public override void Before_SpecialEffectSlice2D(SpecialEffectSlice2D_Disk slice, FrameData frameData)
+
+            private TweenerCore<Quaternion, Quaternion, NoOptions> doTween;
+            public override void Before_SpecialEffectSlice2D(SkillPlayAgent agent, SkillPlayData playData, SpecialEffectSlice2D_Disk slice, FrameData frameDataa)
             {
-                Agent.transform.DOLocalRotateQuaternion(slice.rotation, SkillVisual.FrameTime / 1000f);
+                doTween = agent.transform.DOLocalRotateQuaternion(slice.rotation, playData.SkillVisual.FrameTime / 1000f);
+            }
+
+            public override void After_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
+            {
+                if (doTween != null)
+                    doTween.Kill();
+                agent.transform.DOLocalRotateQuaternion(startRotation, playData.SkillVisual.FrameTime / 1000f / 2);
+                startRotation = Quaternion.identity;
             }
         }
     }

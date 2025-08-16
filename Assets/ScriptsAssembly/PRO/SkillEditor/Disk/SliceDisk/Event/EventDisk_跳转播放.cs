@@ -9,7 +9,7 @@ namespace PRO.SkillEditor
         public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                playData.SkillLogicList[logicIndex].Before_Event(this, frameData);
+                playData.SkillLogicList[logicIndex].Before_Event(agent, playData, this, frameData);
             if (changeValue.goToFrame >= 0 && changeValue.goToFrame < playData.SkillVisual.MaxFrame)
             {
                 playData.nowFrame = changeValue.goToFrame;
@@ -18,7 +18,7 @@ namespace PRO.SkillEditor
             }
             if (frameData.sliceFrame == frameLength - 1)
                 for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].After_Event(this, frameData);
+                    playData.SkillLogicList[logicIndex].After_Event(agent, playData, this, frameData);
 
             changeValue.Reset(this);
         }

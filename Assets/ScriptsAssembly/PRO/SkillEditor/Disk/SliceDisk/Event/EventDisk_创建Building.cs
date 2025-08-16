@@ -44,7 +44,7 @@ namespace PRO.SkillEditor
                 building.CreateInit();
 
                 for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].Agoing_创建Building(this, frameData, building);
+                    playData.SkillLogicList[logicIndex].Agoing_创建Building(agent, playData, this, frameData, building);
             }
         }
 

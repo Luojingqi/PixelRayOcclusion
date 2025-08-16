@@ -16,7 +16,7 @@ namespace PRO.SkillEditor
         public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                playData.SkillLogicList[logicIndex].Before_AttackTest2D(this, frameData);
+                playData.SkillLogicList[logicIndex].Before_AttackTest2D(agent, playData, this, frameData);
 
             int count = (int)(changeValue.density * changeValue.angle);
             Span<Vector2> span = stackalloc Vector2[count];
@@ -32,7 +32,7 @@ namespace PRO.SkillEditor
                     trs.MultiplyPoint(span[i]),
                     array, 0, changeValue.layerMask);
                 for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
+                    playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(agent, playData, this, frameData, array.AsSpan(0, length));
                 PutIn(array, length);
             }
 #if UNITY_EDITOR
@@ -42,7 +42,7 @@ namespace PRO.SkillEditor
 #endif
             if (frameData.sliceFrame == frameLength - 1)
                 for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].After_AttackTest2D(this, frameData);
+                    playData.SkillLogicList[logicIndex].After_AttackTest2D(agent, playData, this, frameData);
 
             changeValue.Reset(this);
         }

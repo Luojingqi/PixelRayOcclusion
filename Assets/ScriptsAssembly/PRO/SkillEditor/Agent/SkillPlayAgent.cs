@@ -96,6 +96,7 @@ namespace PRO.SkillEditor
         public int playTrack = ~0;
         private bool firstUpdate = true;
         private bool firstEnd = true;
+
         public bool UpdateFrameScript(SkillPlayAgent agent, float deltaTime) => UpdateFrameScript(agent, (int)(deltaTime * 1000));
         public bool UpdateFrameScript(SkillPlayAgent agent, int deltaTime)
         {
@@ -103,7 +104,7 @@ namespace PRO.SkillEditor
             {
                 firstUpdate = false;
                 for (int i = 0; i < SkillLogicList.Count; i++)
-                    SkillLogicList[i].Before_SkillPlay(SkillVisual);
+                    SkillLogicList[i].Before_SkillPlay(agent, this, SkillVisual);
                 SkillVisual.UpdateFrame(agent, this);
             }
             time += deltaTime;
@@ -117,7 +118,7 @@ namespace PRO.SkillEditor
                     {
                         firstEnd = false;
                         for (int i = 0; i < SkillLogicList.Count; i++)
-                            SkillLogicList[i].Before_SkillPlay(SkillVisual);
+                            SkillLogicList[i].After_SkillPlay(agent, this, SkillVisual);
                     }
                     return true;
                 }
@@ -125,8 +126,11 @@ namespace PRO.SkillEditor
             }
             return false;
         }
-        public void ResetFrameIndex()
+        public void ResetFrameIndex(SkillPlayAgent agent)
         {
+            if (firstUpdate == false && firstEnd)
+                for (int i = 0; i < SkillLogicList.Count; i++)
+                    SkillLogicList[i].After_SkillPlay(agent, this, SkillVisual);
             time = 0;
             nowFrame = 0;
             firstUpdate = true;
@@ -135,17 +139,15 @@ namespace PRO.SkillEditor
 
         private static ObjectPool<SkillPlayData> pool = new ObjectPool<SkillPlayData>();
         public static SkillPlayData TakeOut() => pool.TakeOut();
-        public static void PutIn(SkillPlayData data)
+        public static void PutIn(SkillPlayData playData)
         {
-            for (int i = 0; i < data.SkillLogicList.Count; i++)
-                data.SkillLogicList[i].After_SkillPlay(data.SkillVisual);
-            data.SkillLogicList.Clear();
-            data.SkillVisual = null;
-            data.time = 0;
-            data.nowFrame = 0;
-            data.playTrack = ~0;
-            data.firstUpdate = true;
-            data.firstEnd = true;
+            playData.SkillLogicList.Clear();
+            playData.SkillVisual = null;
+            playData.time = 0;
+            playData.nowFrame = 0;
+            playData.playTrack = ~0;
+            playData.firstUpdate = true;
+            playData.firstEnd = true;
         }
 
         public Offset<Flat.SkillplayerDataData> ToDisk(FlatBufferBuilder builder)
