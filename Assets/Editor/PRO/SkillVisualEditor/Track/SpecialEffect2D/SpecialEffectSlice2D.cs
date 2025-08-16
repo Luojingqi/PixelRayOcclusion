@@ -12,22 +12,44 @@ namespace PRO.SkillEditor
         }
         public override void DrawGizmo(SkillPlayAgent agent)
         {
-            Vector2 wh = new Vector2(diskData.sprite.rect.width / diskData.sprite.pixelsPerUnit, diskData.sprite.rect.height / diskData.sprite.pixelsPerUnit);
+            Vector2 wh = new(0.5f, 0.5f);
+            if (diskData.sprite != null)
+                wh = new Vector2(diskData.sprite.rect.width / diskData.sprite.pixelsPerUnit, diskData.sprite.rect.height / diskData.sprite.pixelsPerUnit);
             Gizmos.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale) * Matrix4x4.TRS(diskData.position, diskData.rotation, diskData.scale);
-            Gizmos.DrawWireCube(wh * (new Vector2(0.5f, 0.5f) - sprite.pivot / new Vector2(sprite.rect.width, sprite.rect.height)), wh);
+            if (diskData.sprite != null)
+                Gizmos.DrawWireCube(wh * (new Vector2(0.5f, 0.5f) - sprite.pivot / new Vector2(sprite.rect.width, sprite.rect.height)), wh);
+            else
+                Gizmos.DrawWireCube(Vector2.zero, wh);
         }
 
         public override void DrawHandle(SkillPlayAgent agent)
         {
-            //HandlePosition(agent, Vector3.zero, diskData.rotation, ref diskData.position);
-            //HandleRotation(agent, diskData.position, ref diskData.rotation);
-            //HandleScale(agent, diskData.position, diskData.rotation, ref diskData.scale);
+            Vector3 position = diskData.position;
+            if (HandlePosition(
+                Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, Vector3.one),
+                ref position))
+                diskData.position = position;
+
+            Quaternion rotation = diskData.rotation;
+            if (HandleRotation(
+                Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
+                Matrix4x4.TRS(diskData.position, Quaternion.identity, Vector3.one),
+                ref rotation))
+                diskData.rotation = rotation;
+
+            Vector3 scale = diskData.scale;
+            if (HandleScale(
+                Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
+                Matrix4x4.TRS(diskData.position, rotation, Vector3.one),
+                ref scale))
+                diskData.scale = scale;
+            SkillVisualEditorWindow.Inst.PlaySlice(this);
         }
         public override void Select()
         {
             base.Select();
             if (SkillVisualEditorWindow.Inst.Config.Agent == null) return;
-           // DiskData.UpdateFrame(SkillVisualEditorWindow.Inst.Config.Agent, DiskData.startFrame, 0, Track.trackIndex);
+            SkillVisualEditorWindow.Inst.PlaySlice(this);
         }
 
         private SpecialEffectSlice2D_Disk diskData => DiskData as SpecialEffectSlice2D_Disk;

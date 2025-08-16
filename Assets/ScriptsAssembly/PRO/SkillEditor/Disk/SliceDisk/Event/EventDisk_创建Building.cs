@@ -1,5 +1,4 @@
-﻿using PRO.Skill;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace PRO.SkillEditor
 
         public List<PixelData> pixelList = new List<PixelData>();
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             if (frameData.sliceFrame == frameLength - 1)
             {
@@ -44,8 +43,8 @@ namespace PRO.SkillEditor
                 }
                 building.CreateInit();
 
-                foreach (var logic in logics)
-                    logic.Agoing_创建Building(this, frameData, building);
+                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                    playData.SkillLogicList[logicIndex].Agoing_创建Building(this, frameData, building);
             }
         }
 

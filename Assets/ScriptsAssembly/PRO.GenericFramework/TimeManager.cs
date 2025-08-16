@@ -18,6 +18,14 @@ namespace PRO
         /// 上一帧更新花费的时间
         /// </summary>
         public static float deltaTime { get; private set; }
+        /// <summary>
+        /// 时间缩放
+        /// </summary>
+        public static float scale { get; set; } = 1f;
+        /// <summary>
+        /// 未缩放的帧花费时间
+        /// </summary>
+        public static float unscaledDeltaTime { get; private set; }
 
         public static int frameCount { get; private set; }
         /// <summary>
@@ -50,10 +58,9 @@ namespace PRO
                 a -= 0.3f;
                 Text.text = (1f / Time.deltaTime).ToString();
             }
+
             if (enableUpdate)
-                ScriptUpdate(Time.deltaTime);
-
-
+                ScriptUpdate(Time.deltaTime , scale);
 
             #region 主线程事件轮训
             if (Monitor.TryEnter(mainThreadUpdateEventLock_UnClear))
@@ -69,9 +76,10 @@ namespace PRO
             #endregion
         }
 
-        public void ScriptUpdate(float deltaTime)
+        public void ScriptUpdate(float deltaTime, float scale)
         {
-            TimeManager.deltaTime = deltaTime;
+            TimeManager.deltaTime = deltaTime * scale;
+            unscaledDeltaTime = deltaTime;
 
             physicsUpdateTime += deltaTime;
             while (physicsUpdateTime > physicsDeltaTime)

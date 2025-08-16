@@ -1,7 +1,4 @@
-﻿using PRO.Skill;
-using System.Collections.Generic;
-
-namespace PRO.SkillEditor
+﻿namespace PRO.SkillEditor
 {
     public abstract class Slice_DiskBase
     {
@@ -13,7 +10,7 @@ namespace PRO.SkillEditor
         /// 触发帧
         /// </summary>
         /// <param name="agent">执行的行动人</param>>
-        public abstract void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData);
+        public abstract void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData);
         public abstract class AllowLogicChangeValueBase { }
     }
     public struct FrameData

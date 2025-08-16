@@ -1,6 +1,11 @@
+#define 寻路显示
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using NodeCanvas.Framework;
-using NUnit.Framework;
 using PRO.DataStructure;
+using PRO.Skill;
+using PRO.SkillEditor;
 using System.Collections.Generic;
 using UnityEngine;
 namespace PRO.BT.战斗
@@ -12,41 +17,59 @@ namespace PRO.BT.战斗
             public PriorityQueue<Nav.Node> queue = new();
             public Dictionary<Nav.Node, Nav.Node> dic = new();
             public List<Nav.Node> navList = new(36);
-            public int index = -1;
-            public float deltaTime = 0;
-
+            public int index;
+            public float deltaTime;
+            public float oldGravityScale;
+            public TweenerCore<Vector3, Vector3, VectorOptions> doTweener;
+#if 寻路显示
             public List<Particle> list = new();
+#endif
             public void Clear()
             {
                 queue.Clear(); dic.Clear(); navList.Clear();
-                index = -1;
+                index = 0;
                 deltaTime = 0;
-
+                oldGravityScale = 0;
+                doTweener = null;
+                #region 移动路径回收
+#if 寻路显示
                 var pool = ParticleManager.Inst.GetPool("单像素");
                 for (int i = 0; i < list.Count; i++)
                     pool.PutIn(list[i]);
                 list.Clear();
+#endif
+                #endregion
             }
         }
         private Data data = new Data();
+        private static float jumpOutDistance = Pixel.Size * 2;
 
 
         public BBParameter<Role> Agent;
         public BBParameter<Vector2Int> 移动目标;
+
+        public SkillVisual_Disk SkillVisual_移动;
+        private SkillPlayData playData = new();
         protected override string OnInit()
         {
             var agent = Agent.value;
-            //agent.Info.移动速度.Value_基础 = 5;
-            agent.Info.跳跃高度.Value_基础 = 10;
+            agent.Info.移动速度.Value_基础 = 5;
+            playData.SkillVisual = SkillVisual_移动;
+            playData.SkillLogicList.Add(new SkillLogic_移动(null) { Agent = agent });
             return base.OnInit();
         }
 
         protected override void OnExecute()
         {
             var agent = Agent.value;
-            Nav.TryNav(agent.Scene, agent.Info.NavMould, agent.Info.移动速度.Value, agent.Info.跳跃高度.Value, agent.GlobalPos, 移动目标.value, data.queue, data.dic, data.navList);
+            data.oldGravityScale = agent.Rig2D.gravityScale;
+            if (Mathf.Abs(agent.Rig2D.velocity.y) > 0.01f) { EndAction(false); return; }
+            if (agent.GlobalPos == 移动目标.value) { EndAction(false); return; }
+            Nav.TryNav(agent.Scene, agent.Info.NavMould, 5, 5, agent.GlobalPos, 移动目标.value, data.queue, data.dic, data.navList);
             if (data.navList.Count > 1)
             {
+                #region 移动路线显示
+#if 寻路显示
                 var pool = ParticleManager.Inst.GetPool("单像素");
                 for (int i = 0; i < data.navList.Count; i++)
                 {
@@ -54,58 +77,67 @@ namespace PRO.BT.战斗
                     p.Rig2D.simulated = false;
                     data.list.Add(p);
                     p.SetGlobal(data.navList[i].globalPos);
-                    if (data.navList[i].jumpValue == 100)
+                    if (data.navList[i].fallingHeight != 0)
                         p.Renderer.color = Color.blue;
                 }
-                data.index = 1;
+#endif
+                #endregion
+                agent.Rig2D.gravityScale = 0;
+            }
+            else
+            {
+                EndAction(false); return;
             }
         }
         protected override void OnUpdate()
         {
-            if (data.index == -1) { EndAction(false); return; }
             var agent = Agent.value;
-            if (Vector2Int.Distance(agent.GlobalPos, data.navList[data.index - 1].globalPos) > 1.5f)
-            { EndAction(false); return; }
-            if (agent.GlobalPos == data.navList[data.index].globalPos)
+            playData.UpdateFrameScript(agent.SkillPlayAgent, TimeManager.deltaTime);
+            if (data.deltaTime <= 0)
             {
                 data.index++;
-                if (data.index >= data.navList.Count)
+                if (data.navList.Count > data.index && data.navList[data.index].fallingHeight == 0)
                 {
-                    EndAction(true);
-                    return;
+                    data.deltaTime = (float)(1 / agent.Info.移动速度.Value);
+                    data.doTweener = agent.transform.DOMove(Block.GlobalToWorld(data.navList[data.index].globalPos) + new Vector3(Pixel.Size_Half, 0), data.deltaTime);
                 }
                 else
                 {
-                    var startPos = agent.transform.position;
-                    var endPos = Block.GlobalToWorld(data.navList[data.index].globalPos);
-                    var v = (endPos - startPos).normalized * (float)agent.Info.移动速度.Value;
-                    //agent.V
+                    EndAction(true); return;
                 }
             }
-
-            //data.deltaTime += TimeManager.deltaTime;
-
-            //var startPos = agent.GlobalPos;
-            //var endPos = data.navList[data.index].globalPos;
-            //if (startPos.y != endPos.y)
-            //{
-            //    if (startPos.y > endPos.y)
-            //        endPos = new Vector2Int(endPos.x, startPos.y);
-            //    else
-            //        endPos = new Vector2Int(startPos.x, endPos.y);
-            //}
-            //var d = ((Vector2)endPos - startPos).normalized * Pixel.Size * data.deltaTime * (float)agent.Info.移动速度.Value;
-            //if (d.sqrMagnitude > minDSpr)
-            //{
-            //    agent.Rig2D.MovePosition((Vector2)agent.transform.position + d);
-            //    data.deltaTime = 0;
-            //}
+            else
+            {
+                if (Vector2.Distance(agent.transform.position, (Vector2)Block.GlobalToWorld(data.navList[data.index - 1].globalPos) + new Vector2(Pixel.Size_Half, 0)) > jumpOutDistance
+                    && Vector2.Distance(agent.transform.position, (Vector2)Block.GlobalToWorld(data.navList[data.index].globalPos) + new Vector2(Pixel.Size_Half, 0)) > jumpOutDistance)
+                {
+                    EndAction(false); return;
+                }
+            }
+            data.deltaTime -= TimeManager.deltaTime;
         }
         protected override void OnStop()
         {
+            var agent = Agent.value;
+            playData.ResetFrameIndex();
+            agent.Rig2D.gravityScale = data.oldGravityScale;
+            if (data.doTweener != null)
+                data.doTweener.Kill();
             data.Clear();
         }
 
-        private static float minDSpr = Mathf.Pow(0.005f, 2);
+
+        public class SkillLogic_移动 : SkillLogicBase
+        {
+            public Role Agent;
+            public SkillVisual_Disk SkillVisual;
+            public SkillLogic_移动(string guid) : base(guid)
+            {
+            }
+            public override void Before_SpecialEffectSlice2D(SpecialEffectSlice2D_Disk slice, FrameData frameData)
+            {
+                Agent.transform.DOLocalRotateQuaternion(slice.rotation, SkillVisual.FrameTime / 1000f);
+            }
+        }
     }
 }

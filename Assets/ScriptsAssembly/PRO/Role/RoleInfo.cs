@@ -48,8 +48,7 @@ namespace PRO
         public EventData_Double 闪避率;//10
         public EventData_Double 暴击率;//11
         public EventData_Int32 韧性;//12
-        public EventData_Int32 跳跃高度;//13
-        public AgentNavMould NavMould;//14
+        public AgentNavMould NavMould;//13
         public RoleInfo()
         {
             最大血量 = new(this);
@@ -66,7 +65,6 @@ namespace PRO
             闪避率 = new(this);
             暴击率 = new(this);
             韧性 = new(this);
-            跳跃高度 = new(this);
 
             血量.AddValueChangeEvent(EventData<int>.EventType.UnClear, (info, type, nowData, oldData) =>
             {
@@ -96,7 +94,6 @@ namespace PRO
             闪避率.ClearEvent();
             暴击率.ClearEvent();
             韧性.ClearEvent();
-            跳跃高度.ClearEvent();
         }
 
         public static void CloneValue(RoleInfo from, RoleInfo to)
@@ -113,7 +110,6 @@ namespace PRO
             EventData_Double.CloneValue(from.闪避率, to.闪避率);
             EventData_Double.CloneValue(from.暴击率, to.暴击率);
             EventData_Int32.CloneValue(from.韧性, to.韧性);
-            EventData_Int32.CloneValue(from.跳跃高度, to.跳跃高度);
             to.NavMould = from.NavMould;
         }
 

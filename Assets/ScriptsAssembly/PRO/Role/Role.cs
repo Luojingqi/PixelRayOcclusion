@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Google.FlatBuffers;
 using NodeCanvas.BehaviourTrees;
-using NodeCanvas.Framework;
 using PRO.Buff.Base;
 using PRO.Flat.Ex;
 using PRO.SkillEditor;
@@ -22,10 +21,10 @@ namespace PRO
 
         public BehaviourTreeOwner BT { get; private set; }
 
-        [HideInInspector]
-        public FreelyLightSource source;
+        private FreelyLightSource source;
 
         public SceneEntity Scene => _scene;
+        [ShowInInspector]
         private SceneEntity _scene;
 
         [OdinSerialize]
@@ -116,7 +115,6 @@ namespace PRO
         {
             BT.behaviour.ToRAM(builder);
         }
-
         public void TakeOut(SceneEntity scene, string guid)
         {
             this.guid = guid;

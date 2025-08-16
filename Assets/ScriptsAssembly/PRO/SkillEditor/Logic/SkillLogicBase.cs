@@ -15,6 +15,7 @@ namespace PRO.Skill
         private string guid;
 
         public virtual void Before_SkillPlay(SkillVisual_Disk skillVisual) { }
+        public virtual void Before_SpecialEffectSlice2D(SpecialEffectSlice2D_Disk slice, FrameData frameData) { }
         public virtual void Before_AttackTest2D(AttackTestSlice2DBase_Disk slice, FrameData frameData) { }
         public virtual void Before_Event(EventDisk_Base slice, FrameData frameData) { }
 
@@ -23,7 +24,7 @@ namespace PRO.Skill
         public virtual void Agoing_创建Building(EventDisk_创建Building slice, FrameData frameData, BuildingBase building) { }
 
 
-
+        public virtual void After_SpecialEffectSlice2D(SpecialEffectSlice2D_Disk slice, FrameData frameData) { }
         public virtual void After_AttackTest2D(AttackTestSlice2DBase_Disk slice, FrameData frameData) { }
         public virtual void After_Event(EventDisk_Base slice, FrameData frameData) { }
 

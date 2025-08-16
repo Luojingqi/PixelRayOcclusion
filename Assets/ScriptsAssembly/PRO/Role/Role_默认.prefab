@@ -141,9 +141,6 @@ MonoBehaviour:
     - Name: priority
       Entry: 3
       Data: -1
-    - Name: source
-      Entry: 6
-      Data: 
     - Name: toward
       Entry: 3
       Data: 0
@@ -210,7 +207,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.178}
-  m_Size: {x: 0.1, y: 0.35}
+  m_Size: {x: 0.14, y: 0.35}
   m_Direction: 0
 --- !u!114 &6491417362716654599
 MonoBehaviour:

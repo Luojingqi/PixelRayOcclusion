@@ -1,6 +1,4 @@
-﻿using PRO.Skill;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -15,10 +13,10 @@ namespace PRO.SkillEditor
         public new AllowLogicChangeValue_AttackTestSlice2D_FanShaped_Disk changeValue = new();
         public AttackTestSlice2D_FanShaped_Disk() => base.changeValue = changeValue;
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
-            foreach (var logic in logics)
-                logic.Before_AttackTest2D(this, frameData);
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].Before_AttackTest2D(this, frameData);
 
             int count = (int)(changeValue.density * changeValue.angle);
             Span<Vector2> span = stackalloc Vector2[count];
@@ -33,18 +31,18 @@ namespace PRO.SkillEditor
                     startPos,
                     trs.MultiplyPoint(span[i]),
                     array, 0, changeValue.layerMask);
-                foreach (var logic in logics)
-                    logic.Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
+                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                    playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
                 PutIn(array, length);
             }
 #if UNITY_EDITOR
-            var time = visual.FrameTime / 1000f;
+            var time = playData.SkillVisual.FrameTime / 1000f;
             for (int i = 0; i < span.Length; i++)
                 Debug.DrawLine(startPos, trs.MultiplyPoint(span[i]), Color.green, time);
 #endif
             if (frameData.sliceFrame == frameLength - 1)
-                foreach (var logic in logics)
-                    logic.After_AttackTest2D(this, frameData);
+                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                    playData.SkillLogicList[logicIndex].After_AttackTest2D(this, frameData);
 
             changeValue.Reset(this);
         }

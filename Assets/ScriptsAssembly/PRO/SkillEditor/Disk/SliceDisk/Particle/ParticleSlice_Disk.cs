@@ -37,7 +37,7 @@ namespace PRO.SkillEditor
 
         public List<Color32> colorList = new List<Color32>();
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             try
             {

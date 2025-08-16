@@ -1,6 +1,4 @@
-﻿using PRO.Skill;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PRO.SkillEditor
 {
@@ -10,7 +8,9 @@ namespace PRO.SkillEditor
         public Quaternion rotation = Quaternion.identity;
         public Vector3 scale = Vector3.one;
         public Sprite sprite;
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logic, FrameData frameData)
+
+        public AllowLogicChangeValue_SpecialEffectSlice2D_Disk valueChange = new();
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             #region 生成特效轨道的精灵Render
             if (frameData.trackIndex >= agent.SpecialEffect2DSpriteList.Count)
@@ -29,6 +29,23 @@ namespace PRO.SkillEditor
             renderer.transform.localPosition = position;
             renderer.transform.localRotation = rotation;
             renderer.transform.localScale = scale;
+        }
+
+
+        public class AllowLogicChangeValue_SpecialEffectSlice2D_Disk : AllowLogicChangeValueBase
+        {
+            public Vector3 position;
+            public Quaternion rotation = Quaternion.identity;
+            public Vector3 scale = Vector3.one;
+            public Sprite sprite;
+
+            protected void Reset(SpecialEffectSlice2D_Disk slice)
+            {
+                position = slice.position;
+                rotation = slice.rotation;
+                scale = slice.scale;
+                sprite = slice.sprite;
+            }
         }
     }
 }

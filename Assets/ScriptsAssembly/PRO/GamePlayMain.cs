@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 namespace PRO
 {
@@ -8,11 +9,13 @@ namespace PRO
         public void TimeAwake()
         {
             Inst = this;
+            DOTween.defaultAutoPlay = AutoPlay.None;
         }
         bool p = false;
 
         public void TimeUpdate()
         {
+            DOTween.ManualUpdate(TimeManager.deltaTime, TimeManager.unscaledDeltaTime);
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (p) Time.timeScale = 1;

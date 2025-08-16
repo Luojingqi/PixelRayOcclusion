@@ -15,7 +15,7 @@ namespace PRO.SkillEditor
         /// </summary>
         public bool tryRuinOrForceRuin = true;
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logic, FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
             try
             {

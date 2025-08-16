@@ -1,6 +1,4 @@
-﻿using PRO.Skill;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PRO.SkillEditor
 {
@@ -9,7 +7,7 @@ namespace PRO.SkillEditor
         public Sprite sprite;
 
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
 
 

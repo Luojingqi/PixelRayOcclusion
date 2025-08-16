@@ -95,28 +95,26 @@ namespace PRO.SkillEditor
                 }
             }
         }
+
         /// <summary>
         /// 更新某一帧的所有指定轨道的帧切片
         /// </summary>
-        /// <param name="agent">执行人</param>
-        /// <param name="frame">更新帧</param>
-        /// <param name="playTrack">轨道过滤器</param>
-        public void UpdateFrame(SkillPlayAgent agent, IEnumerable<SkillLogicBase> logics, int frame, int playTrack = ~0)
+        public void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData)
         {
             if (agent == null) return;
             for (int i = 0; i < 7; i++)
             {
-                int trackIndex = playTrack & (1 << i);
+                int trackIndex = playData.playTrack & (1 << i);
                 int index = 0;
                 foreach (var track in this[(PlayTrack)trackIndex])
-                    UpdateFrame(track, agent, logics, frame, index++);
+                    UpdateTrackFrame(agent, track, playData, index++);
             }
         }
-        private void UpdateFrame(Track_Disk track, SkillPlayAgent agent, IEnumerable<SkillLogicBase> logics, int frame, int trackIndex)
+        private void UpdateTrackFrame(SkillPlayAgent agent, Track_Disk track, SkillPlayData playData, int trackIndex)
         {
-            Slice_DiskBase slice = track.SlickArray[frame];
+            Slice_DiskBase slice = track.SlickArray[playData.nowFrame];
             if (slice != null && slice.enable)
-                slice.UpdateFrame(agent, this, logics, new FrameData(frame, frame - slice.startFrame, trackIndex));
+                slice.UpdateFrame(agent, playData, new FrameData(playData.nowFrame, playData.nowFrame - slice.startFrame, trackIndex));
         }
 
         [Button("设置最大帧")]

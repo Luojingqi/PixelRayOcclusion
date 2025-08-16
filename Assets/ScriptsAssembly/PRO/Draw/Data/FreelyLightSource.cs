@@ -1,6 +1,5 @@
 ﻿using PRO.Disk;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace PRO
 {
@@ -11,7 +10,6 @@ namespace PRO
         private Vector2Int? gloabPos;
         private int radius = 1;
         public Vector3Int color;
-
 
         public Vector2Int? GloabPos
         {

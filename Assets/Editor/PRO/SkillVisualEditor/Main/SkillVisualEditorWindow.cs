@@ -1,4 +1,3 @@
-using PRO.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -224,20 +223,21 @@ namespace PRO.SkillEditor
             lastTime = DateTime.Now;
         }
 
-        public static List<SkillLogicBase> LogicBaseList = new();
+        private SkillPlayData playData = new();
         public void UpdateFrame()
         {
-            Config.Skill_Disk?.UpdateFrame(Config.Agent, LogicBaseList, TimeScaleAxis.NowFrame);
+            playData.nowFrame = TimeScaleAxis.NowFrame;
+            Config.Skill_Disk?.UpdateFrame(Config.Agent, playData);
         }
         public void PlaySlice(Slice_DiskBase slice, int trackIndex)
         {
             if (Config.Agent == null) return;
-            slice.UpdateFrame(Config.Agent, Config.Skill_Disk, LogicBaseList, new FrameData(slice.startFrame, 0, trackIndex));
+            playData.nowFrame = slice.startFrame;
+            slice.UpdateFrame(Config.Agent, playData, new FrameData(slice.startFrame, 0, trackIndex));
         }
         public void PlaySlice(SliceBase slice)
         {
-            if (Config.Agent == null) return;
-            slice.DiskData.UpdateFrame(Config.Agent, Config.Skill_Disk, LogicBaseList, new FrameData(slice.DiskData.startFrame, 0, slice.Track.trackIndex));
+            PlaySlice(slice.DiskData, slice.Track.trackIndex);
         }
         #endregion
 

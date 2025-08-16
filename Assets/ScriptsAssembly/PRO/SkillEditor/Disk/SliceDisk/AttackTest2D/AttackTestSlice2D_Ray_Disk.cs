@@ -13,10 +13,10 @@ namespace PRO.SkillEditor
         public new AllowLogicChangeValue_AttackTestSlice2D_Ray_Disk changeValue = new();
         public AttackTestSlice2D_Ray_Disk() => base.changeValue = changeValue;
 
-        public override void UpdateFrame(SkillPlayAgent agent, SkillVisual_Disk visual, IEnumerable<SkillLogicBase> logics, FrameData frameData)
+        public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
-            foreach (var logic in logics)
-                logic.Before_AttackTest2D(this, frameData);
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].Before_AttackTest2D(this, frameData);
 
             Matrix4x4 trs = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
                            Matrix4x4.TRS(changeValue.position, Quaternion.identity, Vector3.one);
@@ -30,15 +30,15 @@ namespace PRO.SkillEditor
             Debug.DrawRay(
                 trs.GetPosition(),
                 trs.rotation * changeValue.direction * changeValue.distance,
-                Color.green, visual.FrameTime / 1000f);
+                Color.green, playData.SkillVisual.FrameTime / 1000f);
 #endif
-            foreach (var logic in logics)
-                logic.Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(this, frameData, array.AsSpan(0, length));
             PutIn(array, length);
 
             if (frameData.sliceFrame == frameLength - 1)
-                foreach (var logic in logics)
-                    logic.After_AttackTest2D(this, frameData);
+                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                    playData.SkillLogicList[logicIndex].After_AttackTest2D(this, frameData);
 
             changeValue.Reset(this);
         }
