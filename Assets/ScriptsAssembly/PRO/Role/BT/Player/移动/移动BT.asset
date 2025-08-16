@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: "\u79FB\u52A8BT"
+  m_EditorClassIdentifier: 
+  _serializedGraph: "{\"type\":\"NodeCanvas.BehaviourTrees.BehaviourTree\",\"nodes\":[{\"_position\":{\"x\":452.0,\"y\":84.8},\"$type\":\"NodeCanvas.BehaviourTrees.Sequencer\",\"$id\":\"0\"},{\"_action\":{\"Agent\":{\"_name\":\"Agent\",\"_targetVariableID\":\"35066540-2118-4b64-9936-1d7731c1811a\"},\"\u79FB\u52A8\u76EE\u6807\":{\"_name\":\"\\u79fb\\u52a8\\u76ee\\u6807\",\"_targetVariableID\":\"94b8dd75-0361-4cd5-af35-0f90a41075ec\"},\"SkillVisual_\u79FB\u52A8\":1,\"$type\":\"PRO.BT.\\u79fb\\u52a8.\\u79fb\\u52a8\"},\"_position\":{\"x\":450.4,\"y\":247.2001},\"$type\":\"NodeCanvas.BehaviourTrees.ActionNode\",\"$id\":\"1\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.BehaviourTrees.BTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"Agent\":{\"_name\":\"Agent\",\"_id\":\"35066540-2118-4b64-9936-1d7731c1811a\",\"_isPublic\":true,\"$type\":\"NodeCanvas.Framework.Variable`1[[PRO.Role,
+    PRO.Assembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\"},\"\u79FB\u52A8\u76EE\u6807\":{\"_name\":\"\\u79fb\\u52a8\\u76ee\\u6807\",\"_id\":\"94b8dd75-0361-4cd5-af35-0f90a41075ec\",\"_isPublic\":true,\"$type\":\"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector2Int,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]\"}}},\"derivedData\":{\"repeat\":true,\"$type\":\"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData\"}}"
+  _objectReferences:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 230bdadb9c8b2384aa0886e257de5a12, type: 2}
+  _graphSource:
+    _version: 3.33
+    _category: "Role/BT/Player/\u79FB\u52A8/\u79FB\u52A8BT"
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _haltSerialization: 0
+  _externalSerializationFile: {fileID: 0}

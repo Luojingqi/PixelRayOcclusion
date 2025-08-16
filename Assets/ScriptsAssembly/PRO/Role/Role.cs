@@ -108,12 +108,12 @@ namespace PRO
         public void Save()
         {
             builder.Clear();
-            BT.behaviour.ToDisk(builder);
+            builder.Finish(BT.behaviour.ToDisk(builder).Value);
         }
         [Button]
         public void Load()
         {
-            BT.behaviour.ToRAM(builder);
+            BT.behaviour.ToRAM(PRO.BT.Flat.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
         }
         public void TakeOut(SceneEntity scene, string guid)
         {

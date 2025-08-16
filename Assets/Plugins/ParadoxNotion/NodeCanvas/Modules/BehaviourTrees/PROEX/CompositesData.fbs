@@ -1,0 +1,17 @@
+﻿namespace PRO.BT.Flat;
+
+table ParallelData
+{
+	finished_connections : [bool];
+	finished_connections_count : int;
+}
+
+table SelectorData
+{
+	last_running_node_index : int;
+}
+
+table SequencerData
+{
+	last_running_node_index : int;
+}

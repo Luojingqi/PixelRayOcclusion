@@ -1,3 +1,4 @@
+using Google.FlatBuffers;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
@@ -21,27 +22,43 @@ namespace NodeCanvas.BehaviourTrees
 
         ///----------------------------------------------------------------------------------------------
 
-        protected override Status OnExecute(Component agent, IBlackboard blackboard) {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
 
-            if ( subGraph == null || subGraph.primeNode == null ) {
+            if (subGraph == null || subGraph.primeNode == null)
+            {
                 return Status.Optional;
             }
 
-            if ( status == Status.Resting ) {
+            if (status == Status.Resting)
+            {
                 this.TryStartSubGraph(agent);
             }
 
             currentInstance.UpdateGraph(this.graph.deltaTime);
 
-            if ( currentInstance.repeat && currentInstance.rootStatus != Status.Running ) {
+            if (currentInstance.repeat && currentInstance.rootStatus != Status.Running)
+            {
                 this.TryReadAndUnbindMappedVariables();
             }
 
             return currentInstance.rootStatus;
         }
 
-        protected override void OnReset() {
+        protected override void OnReset()
+        {
             currentInstance?.Stop();
+        }
+
+        protected override void ExtendToDisk(FlatBufferBuilder builder)
+        {
+            if (_subTree.isDefined || _subTree.value == null) return;
+            builder.Finish(_subTree.value.ToDisk(builder).Value);
+        }
+        protected override void ExtendToRAM(FlatBufferBuilder builder)
+        {
+            if (_subTree.isDefined || _subTree.value == null) return;
+            _subTree.value.ToRAM(PRO.BT.Flat.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
         }
     }
 }

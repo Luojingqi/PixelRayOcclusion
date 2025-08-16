@@ -14,7 +14,7 @@ namespace NodeCanvas.Framework
 
     ///<summary>ActionList is an ActionTask itself that holds multiple ActionTasks which can be executed either in parallel or in sequence.</summary>
     [DoNotList]
-    public class ActionList : ActionTask
+    public partial class ActionList : ActionTask
     {
 
         public enum ActionsExecutionMode

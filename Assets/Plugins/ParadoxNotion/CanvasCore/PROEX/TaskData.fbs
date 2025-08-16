@@ -10,10 +10,22 @@ table ActionTaskData
 	extend : [ubyte];
 }
 
+table ActionTaskListData
+{
+	current_action_index : int;
+	finished_indeces : [bool];
+	actions : [ActionTaskData];
+}
+
 table ConditionTaskData
 {
 	yield_return : int;
 	yields : int;
 	is_runtime_enabled : bool;
 	extend : [ubyte];
+}
+
+table ConditionTaskListData
+{
+	conditions : [ConditionTaskData];
 }

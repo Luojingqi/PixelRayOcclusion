@@ -1,5 +1,6 @@
 ﻿using Google.FlatBuffers;
 using PRO.BT.Flat;
+using System;
 namespace NodeCanvas.Framework
 {
     partial class Task
@@ -10,7 +11,7 @@ namespace NodeCanvas.Framework
 
     partial class ConditionTask
     {
-        public void ToDisk(FlatBufferBuilder builder)
+        public Offset<ConditionTaskData> ToDisk(FlatBufferBuilder builder)
         {
             var extendBuilder = FlatBufferBuilder.TakeOut(1024 * 2);
             ExtendToDisk(extendBuilder);
@@ -21,12 +22,11 @@ namespace NodeCanvas.Framework
             ConditionTaskData.AddYields(builder, yields);
             ConditionTaskData.AddIsRuntimeEnabled(builder, isRuntimeEnabled);
             ConditionTaskData.AddExtend(builder, extendBuilderOffset);
-            builder.Finish(builder.EndTable());
+            return ConditionTaskData.EndConditionTaskData(builder);
         }
 
-        public void ToRAM(FlatBufferBuilder builder)
+        public void ToRAM(ConditionTaskData diskData)
         {
-            var diskData = ConditionTaskData.GetRootAsConditionTaskData(builder.DataBuffer);
             yieldReturn = diskData.YieldReturn;
             yields = diskData.Yields;
             isRuntimeEnabled = diskData.IsRuntimeEnabled;
@@ -41,9 +41,31 @@ namespace NodeCanvas.Framework
         }
     }
 
+    partial class ConditionList
+    {
+        protected override void ExtendToDisk(FlatBufferBuilder builder)
+        {
+            Span<int> conditionOffsetArray = stackalloc int[conditions.Count];
+            var conditionBuilder = FlatBufferBuilder.TakeOut(1024 * 4);
+            for (int i = 0; i < conditions.Count; i++)
+                conditionOffsetArray[i] = conditions[i].ToDisk(builder).Value;
+            var conditionOffsetArrayOffset = builder.CreateVector_Offset(conditionOffsetArray);
+
+            ConditionTaskListData.StartConditionTaskListData(builder);
+            ConditionTaskListData.AddConditions(builder, conditionOffsetArrayOffset);
+            builder.Finish(builder.EndTable());
+        }
+        protected override void ExtendToRAM(FlatBufferBuilder builder)
+        {
+            var diskData = ConditionTaskListData.GetRootAsConditionTaskListData(builder.DataBuffer);
+            for (int i = conditions.Count - 1; i >= 0; i--)
+                conditions[conditions.Count - i - 1].ToRAM(diskData.Conditions(i).Value);
+        }
+    }
+
     partial class ActionTask
     {
-        public void ToDisk(FlatBufferBuilder builder)
+        public Offset<ActionTaskData> ToDisk(FlatBufferBuilder builder)
         {
             var extendBuilder = FlatBufferBuilder.TakeOut(1024 * 2);
             ExtendToDisk(extendBuilder);
@@ -54,12 +76,11 @@ namespace NodeCanvas.Framework
             ActionTaskData.AddTimeStarted(builder, timeStarted);
             ActionTaskData.AddLatch(builder, latch);
             ActionTaskData.AddExtend(builder, extendBuilderOffset);
-            builder.Finish(builder.EndTable());
+            return ActionTaskData.EndActionTaskData(builder);
         }
 
-        public void ToRAM(FlatBufferBuilder builder)
+        public void ToRAM(ActionTaskData diskData)
         {
-            var diskData = ActionTaskData.GetRootAsActionTaskData(builder.DataBuffer);
             status = (Status)diskData.Status;
             timeStarted = diskData.TimeStarted;
             latch = diskData.Latch;
@@ -71,6 +92,34 @@ namespace NodeCanvas.Framework
                 span[span.Length - i - 1] = diskData.Extend(i);
             ExtendToRAM(extendBuilder);
             FlatBufferBuilder.PutIn(extendBuilder);
+        }
+    }
+
+    partial class ActionList
+    {
+        protected override void ExtendToDisk(FlatBufferBuilder builder)
+        {
+            var finishedIndecesOffset = builder.CreateVector_Data(finishedIndeces.AsSpan());
+            Span<int> actionOffsetArray = stackalloc int[actions.Count];
+            for (int i = 0; i < actions.Count; i++)
+                actionOffsetArray[i] = actions[i].ToDisk(builder).Value;
+            var actionOffsetArrayOffset = builder.CreateVector_Offset(actionOffsetArray);
+
+            ActionTaskListData.StartActionTaskListData(builder);
+            ActionTaskListData.AddCurrentActionIndex(builder, currentActionIndex);
+            ActionTaskListData.AddFinishedIndeces(builder, finishedIndecesOffset);
+            ActionTaskListData.AddActions(builder, actionOffsetArrayOffset);
+            builder.Finish(builder.EndTable());
+
+        }
+        protected override void ExtendToRAM(FlatBufferBuilder builder)
+        {
+            var diskData = ActionTaskListData.GetRootAsActionTaskListData(builder.DataBuffer);
+            currentActionIndex = diskData.CurrentActionIndex;
+            for (int i = finishedIndeces.Length - 1; i >= 0; i--)
+                finishedIndeces[finishedIndeces.Length - i - 1] = diskData.FinishedIndeces(i);
+            for (int i = actions.Count - 1; i >= 0; i--)
+                actions[actions.Count - i - 1].ToRAM(diskData.Actions(i).Value);
         }
     }
 }

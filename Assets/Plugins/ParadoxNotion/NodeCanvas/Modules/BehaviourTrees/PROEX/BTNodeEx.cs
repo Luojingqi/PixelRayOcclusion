@@ -5,7 +5,7 @@ namespace NodeCanvas.BehaviourTrees
 {
     partial class BehaviourTree
     {
-        public void ToDisk(FlatBufferBuilder builder)
+        public Offset<BehaviourTreeData> ToDisk(FlatBufferBuilder builder)
         {
             Span<int> allNodeOffsetArray = stackalloc int[allNodes.Count];
             for (int i = 0; i < allNodes.Count; i++)
@@ -18,12 +18,11 @@ namespace NodeCanvas.BehaviourTrees
             BehaviourTreeData.AddRootStatus(builder, (byte)_rootStatus);
             BehaviourTreeData.AddIntervalCounter(builder, intervalCounter);
             BehaviourTreeData.AddAllNode(builder, allNodeOffsetArrayOffset);
-            builder.Finish(BehaviourTreeData.EndBehaviourTreeData(builder).Value);
+            return BehaviourTreeData.EndBehaviourTreeData(builder);
         }
 
-        public void ToRAM(FlatBufferBuilder builder)
+        public void ToRAM(BehaviourTreeData diskData)
         {
-            var diskData = BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer);
             deltaTime = diskData.DeltaTime;
             elapsedTime = diskData.ElapsedTime;
             _rootStatus = (Framework.Status)diskData.RootStatus;

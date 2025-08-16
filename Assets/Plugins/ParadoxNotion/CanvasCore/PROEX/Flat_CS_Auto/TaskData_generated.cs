@@ -73,6 +73,71 @@ static public class ActionTaskDataVerify
       && verifier.VerifyTableEnd(tablePos);
   }
 }
+public struct ActionTaskListData : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static ActionTaskListData GetRootAsActionTaskListData(ByteBuffer _bb) { return GetRootAsActionTaskListData(_bb, new ActionTaskListData()); }
+  public static ActionTaskListData GetRootAsActionTaskListData(ByteBuffer _bb, ActionTaskListData obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public ActionTaskListData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public int CurrentActionIndex { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public bool FinishedIndeces(int j) { int o = __p.__offset(6); return o != 0 ? 0!=__p.bb.Get(__p.__vector(o) + j * 1) : false; }
+  public int FinishedIndecesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<bool> GetFinishedIndecesBytes() { return __p.__vector_as_span<bool>(6, 1); }
+#else
+  public ArraySegment<byte>? GetFinishedIndecesBytes() { return __p.__vector_as_arraysegment(6); }
+#endif
+  public bool[] GetFinishedIndecesArray() { return __p.__vector_as_array<bool>(6); }
+  public PRO.BT.Flat.ActionTaskData? Actions(int j) { int o = __p.__offset(8); return o != 0 ? (PRO.BT.Flat.ActionTaskData?)(new PRO.BT.Flat.ActionTaskData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ActionsLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
+
+  public static Offset<PRO.BT.Flat.ActionTaskListData> CreateActionTaskListData(FlatBufferBuilder builder,
+      int current_action_index = 0,
+      VectorOffset finished_indecesOffset = default(VectorOffset),
+      VectorOffset actionsOffset = default(VectorOffset)) {
+    builder.StartTable(3);
+    ActionTaskListData.AddActions(builder, actionsOffset);
+    ActionTaskListData.AddFinishedIndeces(builder, finished_indecesOffset);
+    ActionTaskListData.AddCurrentActionIndex(builder, current_action_index);
+    return ActionTaskListData.EndActionTaskListData(builder);
+  }
+
+  public static void StartActionTaskListData(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void AddCurrentActionIndex(FlatBufferBuilder builder, int currentActionIndex) { builder.AddInt(0, currentActionIndex, 0); }
+  public static void AddFinishedIndeces(FlatBufferBuilder builder, VectorOffset finishedIndecesOffset) { builder.AddOffset(1, finishedIndecesOffset.Value, 0); }
+  public static VectorOffset CreateFinishedIndecesVector(FlatBufferBuilder builder, bool[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddBool(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateFinishedIndecesVectorBlock(FlatBufferBuilder builder, bool[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateFinishedIndecesVectorBlock(FlatBufferBuilder builder, ArraySegment<bool> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateFinishedIndecesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<bool>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartFinishedIndecesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
+  public static void AddActions(FlatBufferBuilder builder, VectorOffset actionsOffset) { builder.AddOffset(2, actionsOffset.Value, 0); }
+  public static VectorOffset CreateActionsVector(FlatBufferBuilder builder, Offset<PRO.BT.Flat.ActionTaskData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateActionsVectorBlock(FlatBufferBuilder builder, Offset<PRO.BT.Flat.ActionTaskData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateActionsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.BT.Flat.ActionTaskData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateActionsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.BT.Flat.ActionTaskData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartActionsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static Offset<PRO.BT.Flat.ActionTaskListData> EndActionTaskListData(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.BT.Flat.ActionTaskListData>(o);
+  }
+}
+
+
+static public class ActionTaskListDataVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyField(tablePos, 4 /*CurrentActionIndex*/, 4 /*int*/, 4, false)
+      && verifier.VerifyVectorOfData(tablePos, 6 /*FinishedIndeces*/, 1 /*bool*/, false)
+      && verifier.VerifyVectorOfTables(tablePos, 8 /*Actions*/, PRO.BT.Flat.ActionTaskDataVerify.Verify, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
 public struct ConditionTaskData : IFlatbufferObject
 {
   private Table __p;
@@ -134,6 +199,49 @@ static public class ConditionTaskDataVerify
       && verifier.VerifyField(tablePos, 6 /*Yields*/, 4 /*int*/, 4, false)
       && verifier.VerifyField(tablePos, 8 /*IsRuntimeEnabled*/, 1 /*bool*/, 1, false)
       && verifier.VerifyVectorOfData(tablePos, 10 /*Extend*/, 1 /*byte*/, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
+public struct ConditionTaskListData : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static ConditionTaskListData GetRootAsConditionTaskListData(ByteBuffer _bb) { return GetRootAsConditionTaskListData(_bb, new ConditionTaskListData()); }
+  public static ConditionTaskListData GetRootAsConditionTaskListData(ByteBuffer _bb, ConditionTaskListData obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public ConditionTaskListData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public PRO.BT.Flat.ConditionTaskData? Conditions(int j) { int o = __p.__offset(4); return o != 0 ? (PRO.BT.Flat.ConditionTaskData?)(new PRO.BT.Flat.ConditionTaskData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ConditionsLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+
+  public static Offset<PRO.BT.Flat.ConditionTaskListData> CreateConditionTaskListData(FlatBufferBuilder builder,
+      VectorOffset conditionsOffset = default(VectorOffset)) {
+    builder.StartTable(1);
+    ConditionTaskListData.AddConditions(builder, conditionsOffset);
+    return ConditionTaskListData.EndConditionTaskListData(builder);
+  }
+
+  public static void StartConditionTaskListData(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddConditions(FlatBufferBuilder builder, VectorOffset conditionsOffset) { builder.AddOffset(0, conditionsOffset.Value, 0); }
+  public static VectorOffset CreateConditionsVector(FlatBufferBuilder builder, Offset<PRO.BT.Flat.ConditionTaskData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateConditionsVectorBlock(FlatBufferBuilder builder, Offset<PRO.BT.Flat.ConditionTaskData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateConditionsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<PRO.BT.Flat.ConditionTaskData>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateConditionsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<PRO.BT.Flat.ConditionTaskData>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartConditionsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static Offset<PRO.BT.Flat.ConditionTaskListData> EndConditionTaskListData(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.BT.Flat.ConditionTaskListData>(o);
+  }
+}
+
+
+static public class ConditionTaskListDataVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyVectorOfTables(tablePos, 4 /*Conditions*/, PRO.BT.Flat.ConditionTaskDataVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

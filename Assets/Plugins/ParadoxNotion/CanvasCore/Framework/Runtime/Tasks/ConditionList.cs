@@ -14,7 +14,7 @@ namespace NodeCanvas.Framework
 
     ///<summary> ConditionList is a ConditionTask itself that holds many ConditionTasks. It can be set to either require all true or any true.</summary>
     [DoNotList]
-    public class ConditionList : ConditionTask
+    public partial class ConditionList : ConditionTask
     {
 
         public enum ConditionsCheckMode

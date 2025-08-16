@@ -63,7 +63,7 @@ namespace PRO.BT.移动
         {
             var agent = Agent.value;
             data.oldGravityScale = agent.Rig2D.gravityScale;
-            if (Mathf.Abs(agent.Rig2D.velocity.y) > 0.01f) { EndAction(false); return; }
+            if (Mathf.Abs(agent.Rig2D.velocity.sqrMagnitude) > 0.01f) { EndAction(false); return; }
             if (agent.GlobalPos == 移动目标.value) { EndAction(false); return; }
             Nav.TryNav(agent.Scene, agent.Info.NavMould, 5, 5, agent.GlobalPos, 移动目标.value, data.queue, data.dic, data.navList);
             if (data.navList.Count > 1)

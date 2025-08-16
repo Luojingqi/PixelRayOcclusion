@@ -1,6 +1,7 @@
 using Google.FlatBuffers;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
+using PRO.BT.Flat;
 using UnityEngine;
 
 
@@ -17,41 +18,49 @@ namespace NodeCanvas.BehaviourTrees
         [SerializeField]
         private ConditionTask _condition;
 
-        public Task task {
+        public Task task
+        {
             get { return condition; }
             set { condition = (ConditionTask)value; }
         }
 
-        public ConditionTask condition {
+        public ConditionTask condition
+        {
             get { return _condition; }
             set { _condition = value; }
         }
 
         public override string name => base.name.ToUpper();
 
-        protected override Status OnExecute(Component agent, IBlackboard blackboard) {
-            if ( condition == null ) {
+        protected override Status OnExecute(Component agent, IBlackboard blackboard)
+        {
+            if (condition == null)
+            {
                 return Status.Optional;
             }
 
-            if ( status == Status.Resting ) {
+            if (status == Status.Resting)
+            {
                 condition.Enable(agent, blackboard);
             }
 
             return condition.Check(agent, blackboard) ? Status.Success : Status.Failure;
         }
 
-        protected override void OnReset() {
+        protected override void OnReset()
+        {
             condition?.Disable();
         }
 
         protected override void ExtendToDisk(FlatBufferBuilder builder)
         {
-            condition?.ToDisk(builder);
+            if (condition != null) return;
+            builder.Finish(condition.ToDisk(builder).Value);
         }
         protected override void ExtendToRAM(FlatBufferBuilder builder)
         {
-            condition?.ToRAM(builder);
+            if (condition != null) return;
+            condition.ToRAM(ConditionTaskData.GetRootAsConditionTaskData(builder.DataBuffer));
         }
     }
 }

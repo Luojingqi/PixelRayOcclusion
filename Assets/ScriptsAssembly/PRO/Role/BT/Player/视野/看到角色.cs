@@ -37,6 +37,7 @@ namespace PRO.BT.视野
 
             public override void Before_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData)
             {
+                slice.changeValue.position = (Vector2)Node.Agent.value.Info.NavMould.mould.center * Pixel.Size;
                 Node.看到的角色Dic.value.Clear();
             }
             public override void Agoing_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData, Span<RaycastHit2D> hitSpan)
