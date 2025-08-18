@@ -1,5 +1,4 @@
 using Google.FlatBuffers;
-using PRO.Skill;
 using PRO.Tool;
 using Sirenix.OdinInspector;
 using System;
@@ -22,9 +21,7 @@ namespace PRO.SkillEditor
         }
         [LabelText("动画轨道精灵渲染器")]
         public SpriteRenderer AgentSprice;
-        /// <summary>
-        /// 特效轨道的精灵图渲染器
-        /// </summary>
+        [LabelText("特效轨道的精灵图渲染器")]
         public List<SpriteRenderer> SpecialEffect2DSpriteList = new List<SpriteRenderer>();
 
 
@@ -38,52 +35,48 @@ namespace PRO.SkillEditor
             set { play = value; }
         }
         private bool play = false;
-
-        public void AddSkill(SkillPlayData playData) => SkillPlayDataSet.Add(playData);
-        public bool RemoveSkill(SkillPlayData playData) => SkillPlayDataSet.Remove(playData);
+        [Button]
+        public void AddSkill(SkillPlayData playData) => SkillPlayDataList.Add(playData);
+        public bool RemoveSkill(SkillPlayData playData) => SkillPlayDataList.Remove(playData);
 
         public void TimeUpdate()
         {
-            if (Play == false || SkillPlayDataSet.Count == 0) return;
-            int deltaTime = (int)(TimeManager.deltaTime * 1000);
-            foreach (var data in SkillPlayDataSet)
-                if (data.UpdateFrameScript(this, deltaTime))
-                    tempSkillPlayDataList.Add(data);
-            for (int i = 0; i < tempSkillPlayDataList.Count; i++)
+            if (Play == false || SkillPlayDataList.Count == 0) return;
+            for (int i = 0; i < SkillPlayDataList.Count; i++)
             {
-                var data = tempSkillPlayDataList[i];
-                SkillPlayDataSet.Remove(data);
-                SkillPlayData.PutIn(data);
+                var data = SkillPlayDataList[i];
+                if (data.UpdateFrameScript(this, TimeManager.deltaTime))
+                {
+                    SkillPlayDataList.RemoveAt(i);
+                    i--;
+                    SkillPlayData.PutIn(data);
+                }
             }
-            tempSkillPlayDataList.Clear();
         }
-        private List<SkillPlayData> tempSkillPlayDataList = new();
         [ShowInInspector]
-        private HashSet<SkillPlayData> SkillPlayDataSet = new();
-
-
+        private List<SkillPlayData> SkillPlayDataList = new();
 
         public Offset<Flat.SkillPlayerAgentData> ToDisk(FlatBufferBuilder builder)
         {
-            Span<int> datasOffsetArray = stackalloc int[SkillPlayDataSet.Count];
+            Span<int> datasOffsetArray = stackalloc int[SkillPlayDataList.Count];
             int dataIndex = 0;
-            foreach (var data in SkillPlayDataSet)
+            foreach (var data in SkillPlayDataList)
                 datasOffsetArray[dataIndex++] = data.ToDisk(builder).Value;
             var datasOffsetArrayOffset = builder.CreateVector_Offset(datasOffsetArray);
 
             Flat.SkillPlayerAgentData.StartSkillPlayerAgentData(builder);
             Flat.SkillPlayerAgentData.AddPlay(builder, play);
-            Flat.SkillPlayerAgentData.AddDatas(builder, datasOffsetArrayOffset);
+            Flat.SkillPlayerAgentData.AddDataList(builder, datasOffsetArrayOffset);
             return Flat.SkillPlayerAgentData.EndSkillPlayerAgentData(builder);
         }
         public void ToRAM(Flat.SkillPlayerAgentData diskData)
         {
             play = diskData.Play;
-            for (int i = diskData.DatasLength - 1; i >= 0; i--)
+            for (int i = diskData.DataListLength - 1; i >= 0; i--)
             {
                 var data = SkillPlayData.TakeOut();
-                data.ToRAM(diskData.Datas(i).Value);
-                SkillPlayDataSet.Add(data);
+                data.ToRAM(diskData.DataList(i).Value);
+                SkillPlayDataList.Add(data);
             }
         }
     }
@@ -91,14 +84,13 @@ namespace PRO.SkillEditor
     {
         public SkillVisual_Disk SkillVisual;
         public List<SkillLogicBase> SkillLogicList = new List<SkillLogicBase>(4);
-        public int time;
+        public float time;
         public int nowFrame;
         public int playTrack = ~0;
         private bool firstUpdate = true;
         private bool firstEnd = true;
 
-        public bool UpdateFrameScript(SkillPlayAgent agent, float deltaTime) => UpdateFrameScript(agent, (int)(deltaTime * 1000));
-        public bool UpdateFrameScript(SkillPlayAgent agent, int deltaTime)
+        public bool UpdateFrameScript(SkillPlayAgent agent, float deltaTime)
         {
             if (firstUpdate)
             {
@@ -108,6 +100,14 @@ namespace PRO.SkillEditor
                 SkillVisual.UpdateFrame(agent, this);
             }
             time += deltaTime;
+            for (int trackIndex = 0; trackIndex < SkillVisual.EventTrackList.Count; trackIndex++)
+            {
+                var slice = SkillVisual.EventTrackList[trackIndex].SlickArray[nowFrame];
+                if (slice.enable == false) continue;
+                var eventDisk = slice as EventDisk_Base;
+                var sliceFrame = nowFrame - eventDisk.startFrame;
+                eventDisk.Update(agent, this, new FrameData(nowFrame, sliceFrame, trackIndex), deltaTime, time + sliceFrame * SkillVisual.FrameTime);
+            }
             while (time >= SkillVisual.FrameTime)
             {
                 nowFrame++;
@@ -150,26 +150,29 @@ namespace PRO.SkillEditor
             playData.firstEnd = true;
         }
 
-        public Offset<Flat.SkillplayerDataData> ToDisk(FlatBufferBuilder builder)
+        public Offset<Flat.SkillPlayerDataData> ToDisk(FlatBufferBuilder builder)
         {
             var visualPathOffset = builder.CreateString(SkillVisual.loadPath);
-            Span<int> logicGuidOffsetArray = stackalloc int[SkillLogicList.Count];
+            Span<int> logicOffsetArray = stackalloc int[SkillLogicList.Count];
             for (int i = 0; i < SkillLogicList.Count; i++)
-                logicGuidOffsetArray[i] = builder.CreateString(SkillLogicList[i].GUID).Value;
-            var logicGuidOffsetArrayOffset = builder.CreateVector_Offset(logicGuidOffsetArray);
-            Flat.SkillplayerDataData.StartSkillplayerDataData(builder);
-            Flat.SkillplayerDataData.AddSkillVisualPath(builder, visualPathOffset);
-            Flat.SkillplayerDataData.AddSkillLogicGuidList(builder, logicGuidOffsetArrayOffset);
-            Flat.SkillplayerDataData.AddTime(builder, time);
-            Flat.SkillplayerDataData.AddNowFrame(builder, nowFrame);
-            return Flat.SkillplayerDataData.EndSkillplayerDataData(builder);
+                logicOffsetArray[i] = SkillLogicList[i].ToDisk(builder).Value;
+            var logicOffsetArrayOffset = builder.CreateVector_Offset(logicOffsetArray);
+            Flat.SkillPlayerDataData.StartSkillPlayerDataData(builder);
+            Flat.SkillPlayerDataData.AddSkillVisualPath(builder, visualPathOffset);
+            Flat.SkillPlayerDataData.AddSkillLogicList(builder, logicOffsetArrayOffset);
+            Flat.SkillPlayerDataData.AddTime(builder, time);
+            Flat.SkillPlayerDataData.AddNowFrame(builder, nowFrame);
+            return Flat.SkillPlayerDataData.EndSkillPlayerDataData(builder);
         }
-        public void ToRAM(Flat.SkillplayerDataData diskData)
+        public void ToRAM(Flat.SkillPlayerDataData diskData)
         {
             SkillVisual = AssetManagerEX.LoadSkillVisualDisk(diskData.SkillVisualPath);
-            for (int i = diskData.SkillLogicGuidListLength - 1; i >= 0; i--)
+            for (int i = diskData.SkillLogicListLength - 1; i >= 0; i--)
             {
-
+                var logicDiskData = diskData.SkillLogicList(i).Value;
+                var logic = SkillLogicBase.CreateSkillLogic(logicDiskData.Type);
+                logic.ToRAM(logicDiskData);
+                SkillLogicList.Add(logic);
             }
             time = diskData.Time;
             nowFrame = diskData.NowFrame;

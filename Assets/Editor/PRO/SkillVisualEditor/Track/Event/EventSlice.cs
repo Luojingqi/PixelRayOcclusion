@@ -2,7 +2,7 @@
 
 namespace PRO.SkillEditor
 {
-    internal class EventSlice : SliceBase
+    internal abstract class EventSlice : SliceBase
     {
         public override void Init(Slice_DiskBase sliceDisk)
         {
@@ -11,16 +11,6 @@ namespace PRO.SkillEditor
             {
                 Name = sliceDisk.GetType().Name.Split('_', 2)[1];
             }
-        }
-
-        public override void DrawGizmo(SkillPlayAgent agent)
-        {
-            
-        }
-
-        public override void DrawHandle(SkillPlayAgent agent)
-        {
-            
         }
     }
 }

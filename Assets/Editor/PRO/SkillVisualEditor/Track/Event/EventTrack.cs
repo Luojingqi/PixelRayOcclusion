@@ -12,17 +12,17 @@ namespace PRO.SkillEditor
         {
             Heading.NameText.text = "ÊÂ¼þ¹ìµÀ";
             List<Type> EventDisk_Base_List = ReflectionTool.GetDerivedClasses(typeof(EventDisk_Base));
-            foreach (var item in EventDisk_Base_List)
+
+            View.AddManipulator(new ContextualMenuManipulator(evt =>
             {
-                View.AddManipulator(new ContextualMenuManipulator(evt =>
-                {
+                int index = LocalPointToSliceIndex(evt.localMousePosition.x);
+                foreach (var item in EventDisk_Base_List)
                     evt.menu.AppendAction(item.Name.Split('_', 2)[1], _ =>
                     {
                         var diskData = Activator.CreateInstance(item) as Slice_DiskBase;
-                        AddSlice(DiskToSlice(diskData), LocalPointToSliceIndex(evt.localMousePosition.x));
+                        AddSlice(DiskToSlice(diskData), index);
                     });
-                }));
-            }
+            }));
         }
         protected override bool ForeachSliceDiskToSlice(Slice_DiskBase sliceDisk)
         {

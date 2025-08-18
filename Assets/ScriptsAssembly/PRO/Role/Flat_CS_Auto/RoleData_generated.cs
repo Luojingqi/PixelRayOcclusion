@@ -97,7 +97,7 @@ public struct RoleData : IFlatbufferObject
 
   public PRO.Flat.Transform? TransformData { get { int o = __p.__offset(4); return o != 0 ? (PRO.Flat.Transform?)(new PRO.Flat.Transform()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public PRO.Flat.Rigidbody2D? Rigidbody2DData { get { int o = __p.__offset(6); return o != 0 ? (PRO.Flat.Rigidbody2D?)(new PRO.Flat.Rigidbody2D()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public PRO.Flat.SkillPlayerAgentData? SkillPlayAgentData { get { int o = __p.__offset(8); return o != 0 ? (PRO.Flat.SkillPlayerAgentData?)(new PRO.Flat.SkillPlayerAgentData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public PRO.SkillEditor.Flat.SkillPlayerAgentData? SkillPlayAgentData { get { int o = __p.__offset(8); return o != 0 ? (PRO.SkillEditor.Flat.SkillPlayerAgentData?)(new PRO.SkillEditor.Flat.SkillPlayerAgentData()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
   public int Toward { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public string RoleType { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
@@ -125,7 +125,7 @@ public struct RoleData : IFlatbufferObject
   public static void StartRoleData(FlatBufferBuilder builder) { builder.StartTable(8); }
   public static void AddTransformData(FlatBufferBuilder builder, Offset<PRO.Flat.Transform> transformDataOffset) { builder.AddStruct(0, transformDataOffset.Value, 0); }
   public static void AddRigidbody2DData(FlatBufferBuilder builder, Offset<PRO.Flat.Rigidbody2D> rigidbody2DDataOffset) { builder.AddStruct(1, rigidbody2DDataOffset.Value, 0); }
-  public static void AddSkillPlayAgentData(FlatBufferBuilder builder, Offset<PRO.Flat.SkillPlayerAgentData> skillPlayAgentDataOffset) { builder.AddOffset(2, skillPlayAgentDataOffset.Value, 0); }
+  public static void AddSkillPlayAgentData(FlatBufferBuilder builder, Offset<PRO.SkillEditor.Flat.SkillPlayerAgentData> skillPlayAgentDataOffset) { builder.AddOffset(2, skillPlayAgentDataOffset.Value, 0); }
   public static void AddToward(FlatBufferBuilder builder, int toward) { builder.AddInt(3, toward, 0); }
   public static void AddRoleType(FlatBufferBuilder builder, StringOffset roleTypeOffset) { builder.AddOffset(4, roleTypeOffset.Value, 0); }
   public static void AddGuid(FlatBufferBuilder builder, StringOffset guidOffset) { builder.AddOffset(5, guidOffset.Value, 0); }
@@ -145,7 +145,7 @@ static public class RoleDataVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*TransformData*/, 40 /*PRO.Flat.Transform*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*Rigidbody2DData*/, 16 /*PRO.Flat.Rigidbody2D*/, 4, false)
-      && verifier.VerifyTable(tablePos, 8 /*SkillPlayAgentData*/, PRO.Flat.SkillPlayerAgentDataVerify.Verify, false)
+      && verifier.VerifyTable(tablePos, 8 /*SkillPlayAgentData*/, PRO.SkillEditor.Flat.SkillPlayerAgentDataVerify.Verify, false)
       && verifier.VerifyField(tablePos, 10 /*Toward*/, 4 /*int*/, 4, false)
       && verifier.VerifyString(tablePos, 12 /*RoleType*/, false)
       && verifier.VerifyString(tablePos, 14 /*Guid*/, false)

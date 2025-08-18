@@ -6,7 +6,7 @@ set "rootPath=E:\Projects\Unity_P\PixelRayOcclusion\Assets\ScriptsAssembly\"
 for /r  E:\Projects\Unity_P\PixelRayOcclusion\Assets %%i in (*.fbs) do (
 	if not exist %%~dpiFlat_CS_Auto\	(mkdir %%~dpiFlat_CS_Auto\)
 	flatc --csharp  --gen-onefile		-I %rootPath%	-I %%~dpi 	-o %%~dpiFlat_CS_Auto\ 	%%i
-	echo %%i 
+	 echo  %%i
 )
 echo ----------------------------------------------------------------------
 pause

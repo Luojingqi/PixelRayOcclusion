@@ -143,7 +143,7 @@ namespace PRO.SkillEditor
                 SkillVisualEditorWindow.Inst.Config.Skill_Disk.SetMaxFrame(value);
 
                 maxFrame = value;
-
+                SkillVisualEditorWindow.Inst.ReLoadDisk(SkillVisualEditorWindow.Inst.Config.Skill_Disk);
             }
         }
 

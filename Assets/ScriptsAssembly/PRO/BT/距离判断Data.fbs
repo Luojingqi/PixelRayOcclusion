@@ -1,1 +1,8 @@
-﻿namespace PRO.BT.Flat.Tool;
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.BT.Flat.Tool;
+
+table DistanceAssessment_Vector2
+{
+	//pos0 : Vector2;
+}

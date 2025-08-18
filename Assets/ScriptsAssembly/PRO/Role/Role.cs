@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Google.FlatBuffers;
 using NodeCanvas.BehaviourTrees;
 using PRO.Buff.Base;
@@ -14,7 +14,7 @@ namespace PRO
 {
     public class Role : MonoScriptBase, IScene, ITime_Update
     {
-        public SpriteRenderer SpriteRenderer { get; private set; }
+        public RoleRenderer RoleRenderer { get; private set; }
         public SkillPlayAgent SkillPlayAgent { get; private set; }
 
         public Rigidbody2D Rig2D { get; private set; }
@@ -37,7 +37,10 @@ namespace PRO
             {
                 if (toward == value) return;
                 toward = value;
-                SpriteRenderer.flipX = !SpriteRenderer.flipX;
+                var y180 = Quaternion.Euler(0, 180, 0);
+                transform.rotation *= y180;
+                RoleRenderer.Axis0.transform.localRotation *= y180;
+                RoleRenderer.Axis0.DOBlendableLocalRotateBy(new(0, 180, 0), 1);
             }
         }
         public string RoleTypeName;
@@ -54,7 +57,7 @@ namespace PRO
         {
             for (int i = 0; i < AllBuff.Length; i++)
                 AllBuff[i] = new SortList<BuffBase>(8);
-            SpriteRenderer = GetComponent<SpriteRenderer>();
+            RoleRenderer = transform.Find("RoleRenderer").GetComponent<RoleRenderer>();
             SkillPlayAgent = GetComponent<SkillPlayAgent>();
             SkillPlayAgent.Init();
 
@@ -115,6 +118,7 @@ namespace PRO
         {
             BT.behaviour.ToRAM(PRO.BT.Flat.Base.BehaviourTreeData.GetRootAsBehaviourTreeData(builder.DataBuffer));
         }
+        [Button]
         public void TakeOut(SceneEntity scene, string guid)
         {
             this.guid = guid;
@@ -151,26 +155,26 @@ namespace PRO
             BT.Tick(TimeManager.deltaTime);
         }
         #region 选择方法等
-        public async UniTask Play被攻击Animation()
-        {
-            SpriteRenderer.color = Color.red;
-            await UniTask.Delay(150);
-            SpriteRenderer.color = Color.white;
-        }
-        public async UniTask Play被治疗Animation()
-        {
-            SpriteRenderer.color = Color.green;
-            await UniTask.Delay(150);
-            SpriteRenderer.color = Color.white;
-        }
-        public void Select()
-        {
-            SpriteRenderer.color = Color.yellow;
-        }
-        public void UnSelect()
-        {
-            SpriteRenderer.color = Color.white;
-        }
+        //public async UniTask Play被攻击Animation()
+        //{
+        //    RoleRenderer.color = Color.red;
+        //    await UniTask.Delay(150);
+        //    RoleRenderer.color = Color.white;
+        //}
+        //public async UniTask Play被治疗Animation()
+        //{
+        //    RoleRenderer.color = Color.green;
+        //    await UniTask.Delay(150);
+        //    RoleRenderer.color = Color.white;
+        //}
+        //public void Select()
+        //{
+        //    RoleRenderer.color = Color.yellow;
+        //}
+        //public void UnSelect()
+        //{
+        //    RoleRenderer.color = Color.white;
+        //}
         public void LookAt(Vector2 look)
         {
             if (look.x < transform.position.x) Toward = Toward.left;

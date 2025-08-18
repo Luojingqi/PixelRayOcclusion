@@ -1,10 +1,17 @@
-﻿namespace PRO.Flat;
+﻿namespace PRO.SkillEditor.Flat;
 
-table SkillplayerDataData
+table SkillLogicData
+{
+	type : string;
+	data : [ubyte];
+}
+
+
+table SkillPlayerDataData
 {
 	skill_visual_path : string;
-	skill_logic_guid_list : [string];
-	time : int;
+	skill_logic_list : [SkillLogicData];
+	time : float;
 	now_frame : int;
 }
 
@@ -12,5 +19,5 @@ table SkillplayerDataData
 table SkillPlayerAgentData
 {
 	play : bool;
-	datas : [SkillplayerDataData];
+	data_list : [SkillPlayerDataData];
 }

@@ -265,8 +265,8 @@ namespace PRO
 
                 if (byAgentData.PlayAffectedAnimation)
                 {
-                    if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 < 0) byAgentData.Agent.Play被攻击Animation();
-                    else if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 > 0) byAgentData.Agent.Play被治疗Animation();
+                  //  if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 < 0) byAgentData.Agent.Play被攻击Animation();
+                  //  else if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 > 0) byAgentData.Agent.Play被治疗Animation();
                 }
                 byAgentData.Agent.UpdateBuffUI();
             }

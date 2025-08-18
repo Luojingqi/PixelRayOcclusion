@@ -1,5 +1,4 @@
 using NodeCanvas.Framework;
-using PRO.Skill;
 using PRO.SkillEditor;
 using System;
 using System.Collections.Generic;
@@ -26,12 +25,11 @@ namespace PRO.BT.视野
         }
 
         public SkillVisual_Disk SkillVisual_视野;
-        private SkillLogic_视野 SkillVisual_视野_Logic = new(null);
+        private SkillLogic_视野 SkillVisual_视野_Logic = new();
         private SkillPlayData PlayData = new();
 
         public class SkillLogic_视野 : SkillLogicBase
         {
-            public SkillLogic_视野(string guid) : base(guid) { }
 
             public 看到角色 Node;
 
@@ -46,7 +44,7 @@ namespace PRO.BT.视野
                 var set = Node.看到的角色Dic.value;
                 for (int i = 0; i < hitSpan.Length; i++)
                 {
-                    Debug.Log(hitSpan[i].transform.name);
+                    Debug.Log(Node.Agent.value.name + "看到 " + hitSpan[i].transform.name);
                     var byTransform = hitSpan[i].transform;
                     if (byTransform == role.transform) continue;
                     var byRole = role.Scene.GetRole(byTransform);

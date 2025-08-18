@@ -1,0 +1,15 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+
+namespace PRO.Flat;
+
+struct DoTweenData_Vector3
+{
+	end_value : Vector3;
+	end_time : float;
+}
+
+struct DoTweenData_Quaternion
+{
+	end_value : Quaternion;
+	end_time : float;
+}

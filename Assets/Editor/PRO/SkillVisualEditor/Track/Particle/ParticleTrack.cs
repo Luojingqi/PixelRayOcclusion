@@ -10,7 +10,6 @@ namespace PRO.SkillEditor
             View.AddManipulator(new ContextualMenuManipulator(evt =>
             {
                 int index = LocalPointToSliceIndex(evt.localMousePosition.x);
-                evt.menu.AppendAction("添加粒子切片", _ => AddSlice(CreateSlice<ParticleSlice>(new ParticleSlice_Disk()), index));
                 evt.menu.AppendAction("添加单像素粒子切片", _ => AddSlice(CreateSlice<ParticleSlice>(new ParticleSlice_Disk() { loadPath = "单像素" }), index));
             }));
         }

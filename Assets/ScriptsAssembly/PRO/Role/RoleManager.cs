@@ -61,7 +61,7 @@ namespace PRO
         public Role Load(SceneEntity scene, SceneCatalog catalog, string guid)
         {
             Role role = null;
-            if (scene.ActiveRole_Guid.ContainsKey(guid)) return role;
+            if (scene.ActiveRole_Guid.TryGetValue(guid, out role)) return role;
             if (IOTool.LoadFlat(@$"{catalog.directoryInfo}\Role\{guid}", out var builder))
             {
                 var diskData = Flat.RoleData.GetRootAsRoleData(builder.DataBuffer);

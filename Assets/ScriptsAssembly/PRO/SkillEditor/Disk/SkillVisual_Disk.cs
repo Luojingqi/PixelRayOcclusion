@@ -1,5 +1,4 @@
-﻿using PRO.Skill;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +13,8 @@ namespace PRO.SkillEditor
     {
         [LabelText("最大帧"), ReadOnly]
         public int MaxFrame = 5;
-        [LabelText("每帧持续时间/ms")]
-        public int FrameTime = 100;
+        [LabelText("每帧持续时间/s")]
+        public float FrameTime = 0.1f;
 
         [LabelText("2D动画轨道"), Button(nameof(AddTrack))]
         public List<Track_Disk> AnimationTrack2DList = new List<Track_Disk>();

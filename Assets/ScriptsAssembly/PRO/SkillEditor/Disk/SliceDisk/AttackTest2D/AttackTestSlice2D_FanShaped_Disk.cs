@@ -21,7 +21,7 @@ namespace PRO.SkillEditor
             int count = (int)(changeValue.density * changeValue.angle);
             Span<Vector2> span = stackalloc Vector2[count];
             CreateRayEndPos(span);
-            var trs = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
+            var trs = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, Vector3.one) *
                            Matrix4x4.TRS(changeValue.position, Quaternion.identity, Vector3.one);
             var startPos = trs.GetPosition();
             for (int i = 0; i < span.Length; i++)

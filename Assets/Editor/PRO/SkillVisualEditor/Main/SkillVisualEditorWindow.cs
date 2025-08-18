@@ -37,11 +37,7 @@ namespace PRO.SkillEditor
             configField.objectType = typeof(SkillVisual_Disk);
             configField.RegisterValueChangedCallback(evt =>
             {
-                Save();
-                ClearTrack();
-                Config.Skill_Disk = evt.newValue as SkillVisual_Disk;
-                if (evt.newValue == null) return;
-                LoadFromDisk();
+                ReLoadDisk(evt.newValue as SkillVisual_Disk);
             });
             var agentField = root.Q<ObjectField>("AgentField");
             agentField.objectType = typeof(SkillPlayAgent);
@@ -204,8 +200,20 @@ namespace PRO.SkillEditor
         private DateTime lastTime;
         private void PlayFrame()
         {
-            if (IsUpdate == false) return;
-            nowFrameTime += (DateTime.Now - lastTime).TotalMilliseconds;
+            if (IsUpdate == false || Config.Agent == null) return;
+            var deltaTime = (DateTime.Now - lastTime).TotalSeconds;
+            nowFrameTime += deltaTime;
+
+
+            playData.nowFrame = TimeScaleAxis.NowFrame;
+            playData.SkillVisual = Config.Skill_Disk;
+            for (int trackIndex = 0; trackIndex < Config.Skill_Disk.EventTrackList.Count; trackIndex++)
+            {
+                var eventDisk = Config.Skill_Disk.EventTrackList[trackIndex].SlickArray[TimeScaleAxis.NowFrame] as EventDisk_Base;
+                if (eventDisk == null || eventDisk.enable == false) continue;
+                var sliceFrame = TimeScaleAxis.NowFrame - eventDisk.startFrame;
+                eventDisk.Update(Config.Agent, playData, new FrameData(TimeScaleAxis.NowFrame, sliceFrame, trackIndex), (float)deltaTime, (float)nowFrameTime + sliceFrame * Config.Skill_Disk.FrameTime);
+            }
             if (nowFrameTime >= Config.Skill_Disk.FrameTime)
             {
                 if (TimeScaleAxis.NowFrame + 1 >= TimeScaleAxis.MaxFrame)
@@ -227,12 +235,14 @@ namespace PRO.SkillEditor
         public void UpdateFrame()
         {
             playData.nowFrame = TimeScaleAxis.NowFrame;
+            playData.SkillVisual = Config.Skill_Disk;
             Config.Skill_Disk?.UpdateFrame(Config.Agent, playData);
         }
         public void PlaySlice(Slice_DiskBase slice, int trackIndex)
         {
             if (Config.Agent == null) return;
             playData.nowFrame = slice.startFrame;
+            playData.SkillVisual = Config.Skill_Disk;
             slice.UpdateFrame(Config.Agent, playData, new FrameData(slice.startFrame, 0, trackIndex));
         }
         public void PlaySlice(SliceBase slice)
@@ -262,11 +272,16 @@ namespace PRO.SkillEditor
         #endregion
 
         #region 加载技能文件
-
+        public void ReLoadDisk(SkillVisual_Disk newSkillVisual)
+        {
+            Save();
+            ClearTrack();
+            Config.Skill_Disk = newSkillVisual;
+            if (newSkillVisual == null) return;
+            LoadFromDisk();
+        }
         public void LoadFromDisk()
         {
-            TimeScaleAxis.MaxFrame = Config.Skill_Disk.MaxFrame;
-            Console.SetMaxFrameText(TimeScaleAxis.MaxFrame);
             int index = 0;
             Config.Skill_Disk.AnimationTrack2DList.ForEach(disk => AddTrack(new AnimationTrack2D(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.SpecialEffectTrack2DList.ForEach(disk => AddTrack(new SpecialEffectTrack2D(disk) { trackIndex = index++ })); index = 0;
@@ -275,6 +290,9 @@ namespace PRO.SkillEditor
             Config.Skill_Disk.SceneRuinTrackList.ForEach(disk => AddTrack(new SceneRuinTrack(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.SceneCreateTrackList.ForEach(disk => AddTrack(new SceneCreateTrack(disk) { trackIndex = index++ })); index = 0;
             Config.Skill_Disk.EventTrackList.ForEach(disk => AddTrack(new EventTrack(disk) { trackIndex = index++ })); index = 0;
+
+            TimeScaleAxis.MaxFrame = Config.Skill_Disk.MaxFrame;
+            Console.SetMaxFrameText(TimeScaleAxis.MaxFrame);
         }
         #endregion
     }

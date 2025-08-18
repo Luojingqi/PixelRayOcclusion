@@ -1,0 +1,27 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/DoTweenData.fbs";
+
+namespace PRO.BT.Flat.Tool;
+
+struct NavNodeData
+{
+	global_pos : PRO.Flat.Vector2Int;
+	falling_height : byte;
+}
+
+struct SkillLogic_Move
+{
+	start_rotation : PRO.Flat.Quaternion;
+	do_tween_rotate : PRO.Flat.DoTweenData_Quaternion;
+}
+
+table MoveData
+{
+	nav_list : [NavNodeData];
+	index : int;
+	delta_time : float;
+	old_gravity_scale : float;
+	do_tweener_move : PRO.Flat.DoTweenData_Vector3;
+	move_target : PRO.Flat.Vector2Int;
+	//skill_logic
+}

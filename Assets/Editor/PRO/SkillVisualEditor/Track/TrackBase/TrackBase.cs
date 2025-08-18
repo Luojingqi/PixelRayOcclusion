@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -143,7 +142,11 @@ namespace PRO.SkillEditor
             slice.Track = this;
             if (startFrame != -1)     //说明此数据是新添加的
             {
-                if (sliceArray[startFrame] != null) return;
+                if (sliceArray[startFrame] != null)
+                {
+                    Debug.Log($"索引{startFrame}已有切片");
+                    return;
+                }
                 slice.StartFrame = startFrame;
                 slice.FrameLength = 1;
 
@@ -245,8 +248,8 @@ namespace PRO.SkillEditor
             if (slice.DiskData.frameLength == newLength) return;
 
             int d = newLength - slice.DiskData.frameLength;
-          
-           
+
+
             if (d > 0)
             {
                 List<int> nullIndexList = new List<int>();
@@ -268,7 +271,7 @@ namespace PRO.SkillEditor
                     sliceArray[i + slice.StartFrame] = null;
                 slice.FrameLength = newFrameLength;
             }
-           
+
             Reset();
         }
         #endregion

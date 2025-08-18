@@ -40,19 +40,84 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ParticleTrackList
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AttackTestTrack2DList
+      Entry: 7
+      Data: 3|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SceneRuinTrackList
+      Entry: 7
+      Data: 4|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: SceneCreateTrackList
+      Entry: 7
+      Data: 5|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: EventTrackList
+      Entry: 7
+      Data: 6|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 2|PRO.SkillEditor.Track_Disk, PRO.Assembly
+      Data: 7|PRO.SkillEditor.Track_Disk, PRO.Assembly
     - Name: SlickArray
       Entry: 7
-      Data: 3|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
+      Data: 8|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 4|PRO.SkillEditor.SpecialEffectSlice2D_Disk, PRO.Assembly
+      Data: 9|EventDisk_Transform, PRO.Assembly
     - Name: name
       Entry: 1
       Data: "\u5DE6"
@@ -91,10 +156,10 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 0.06975647
+      Data: 0.0436193869
     - Name: 
       Entry: 4
-      Data: 0.9975641
+      Data: 0.999048233
     - Name: 
       Entry: 8
       Data: 
@@ -113,18 +178,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: sprite
-      Entry: 6
-      Data: 
-    - Name: valueChange
-      Entry: 6
-      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 5|PRO.SkillEditor.SpecialEffectSlice2D_Disk, PRO.Assembly
+      Data: 10|EventDisk_Transform, PRO.Assembly
     - Name: name
       Entry: 1
       Data: "\u53F3"
@@ -163,10 +222,10 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: -0.06975647
+      Data: -0.0436193869
     - Name: 
       Entry: 4
-      Data: 0.9975641
+      Data: 0.999048233
     - Name: 
       Entry: 8
       Data: 
@@ -185,110 +244,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: sprite
-      Entry: 6
-      Data: 
-    - Name: valueChange
-      Entry: 6
-      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: ParticleTrackList
       Entry: 7
-      Data: 6|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: AttackTestTrack2DList
-      Entry: 7
-      Data: 7|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: SceneRuinTrackList
-      Entry: 7
-      Data: 8|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: SceneCreateTrackList
-      Entry: 7
-      Data: 9|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: EventTrackList
-      Entry: 7
-      Data: 10|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 11|PRO.SkillEditor.Track_Disk, PRO.Assembly
-    - Name: SlickArray
-      Entry: 7
-      Data: 12|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "13|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E, PRO.Assembly"
+      Data: "11|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E, PRO.Assembly"
     - Name: name
       Entry: 1
       Data: "\u8DF3\u8F6C->0"
@@ -306,7 +267,7 @@ MonoBehaviour:
       Data: 0
     - Name: changeValue
       Entry: 7
-      Data: "14|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E+AllowLogicChangeValue_EventDisk_\u8DF3\u8F6C\u64AD\u653E,
+      Data: "12|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E+AllowLogicChangeValue_EventDisk_\u8DF3\u8F6C\u64AD\u653E,
         PRO.Assembly"
     - Name: goToFrame
       Entry: 3

@@ -16,7 +16,7 @@ namespace PRO.SkillEditor
                 playData.SkillLogicList[logicIndex].Before_AttackTest2D(agent, playData, this, frameData);
 
             var array = TakeOut();
-            var trs = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
+            var trs = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, Vector3.one) *
                       Matrix4x4.TRS(changeValue.position, Quaternion.identity, Vector3.one);
             int length = Physics2D.CircleCastNonAlloc(
                 trs.GetPosition(),

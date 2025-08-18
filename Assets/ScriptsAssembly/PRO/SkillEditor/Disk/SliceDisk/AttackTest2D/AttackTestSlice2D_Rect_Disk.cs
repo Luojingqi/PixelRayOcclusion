@@ -1,6 +1,4 @@
-﻿using PRO.Skill;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -19,7 +17,7 @@ namespace PRO.SkillEditor
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
                 playData.SkillLogicList[logicIndex].Before_AttackTest2D(agent, playData, this, frameData);
             var array = TakeOut();
-            var trs = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
+            var trs = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, Vector3.one) *
                       Matrix4x4.TRS(changeValue.position, Quaternion.Euler(0, 0, changeValue.angle), changeValue.scale);
             int length = Physics2D.BoxCastNonAlloc(
                 trs.GetPosition(),

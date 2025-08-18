@@ -122,6 +122,24 @@ namespace PRO
             ActiveRole_Trans.TryGetValue(transform, out role);
             return role;
         }
+        /// <summary>
+        /// 获取一个角色，如果场景中没有就尝试加载
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public Role GetOrLoadRole(string guid)
+        {
+            Role role = null;
+            ActiveRole_Guid.TryGetValue(guid, out role);
+            if (role == null)
+            {
+                role = RoleManager.Inst.Load(this, sceneCatalog, guid);
+                var blockPos = Block.WorldToBlock(role.transform.position);
+                if (ActiveBlockBase.Contains(blockPos) == false)
+                    ThreadLoadOrCreateBlock(sceneCatalog, blockPos);
+            }
+            return role;
+        }
 
 
         #endregion

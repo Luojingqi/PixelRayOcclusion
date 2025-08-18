@@ -42,6 +42,9 @@ namespace PRO.BT.移动
             }
         }
         private Data data = new Data();
+        /// <summary>
+        /// 移动时偏离两个位移点超过这么大时跳出
+        /// </summary>
         private static float jumpOutDistance = Pixel.Size * 2;
 
 
@@ -55,7 +58,7 @@ namespace PRO.BT.移动
             var agent = Agent.value;
             agent.Info.移动速度.Value_基础 = 5;
             playData.SkillVisual = SkillVisual_移动;
-            playData.SkillLogicList.Add(new SkillLogic_移动(null));
+            playData.SkillLogicList.Add(new SkillLogic_移动() { Agent = agent });
             return base.OnInit();
         }
 
@@ -63,8 +66,8 @@ namespace PRO.BT.移动
         {
             var agent = Agent.value;
             data.oldGravityScale = agent.Rig2D.gravityScale;
-            if (Mathf.Abs(agent.Rig2D.velocity.sqrMagnitude) > 0.01f) { EndAction(false); return; }
-            if (agent.GlobalPos == 移动目标.value) { EndAction(false); return; }
+            if (Mathf.Abs(agent.Rig2D.velocity.sqrMagnitude) > 0.01f) { EndAction(true); return; }
+            if (agent.GlobalPos == 移动目标.value) { EndAction(true); return; }
             Nav.TryNav(agent.Scene, agent.Info.NavMould, 5, 5, agent.GlobalPos, 移动目标.value, data.queue, data.dic, data.navList);
             if (data.navList.Count > 1)
             {
@@ -98,8 +101,10 @@ namespace PRO.BT.移动
                 data.index++;
                 if (data.navList.Count > data.index && data.navList[data.index].fallingHeight == 0)
                 {
+                    var endPos = Block.GlobalToWorld(data.navList[data.index].globalPos) + new Vector3(Pixel.Size_Half, 0);
+                    agent.LookAt(endPos);
                     data.deltaTime = (float)(1 / agent.Info.移动速度.Value);
-                    data.doTweener = agent.transform.DOMove(Block.GlobalToWorld(data.navList[data.index].globalPos) + new Vector3(Pixel.Size_Half, 0), data.deltaTime);
+                    data.doTweener = agent.transform.DOMove(endPos, data.deltaTime);
                 }
                 else
                 {
@@ -129,26 +134,27 @@ namespace PRO.BT.移动
 
         public class SkillLogic_移动 : SkillLogicBase
         {
-            public SkillLogic_移动(string guid) : base(guid) { }
-
             private Quaternion startRotation;
+            public Role Agent;
 
             public override void Before_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
             {
-                startRotation = agent.transform.rotation;
+                startRotation = Agent.RoleRenderer.Axis1.localRotation;
             }
 
-            private TweenerCore<Quaternion, Quaternion, NoOptions> doTween;
-            public override void Before_SpecialEffectSlice2D(SkillPlayAgent agent, SkillPlayData playData, SpecialEffectSlice2D_Disk slice, FrameData frameDataa)
+            private Tweener doTween;
+            public override void Before_Event(SkillPlayAgent agent, SkillPlayData playData, EventDisk_Base slice, FrameData frameData)
             {
-                doTween = agent.transform.DOLocalRotateQuaternion(slice.rotation, playData.SkillVisual.FrameTime / 1000f);
+                if (frameData.sliceFrame != 0) return;
+                var slice_Transform = slice as EventDisk_Transform;
+                doTween = Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(slice_Transform.rotation, playData.SkillVisual.FrameTime / 1000f * slice.frameLength);
             }
 
             public override void After_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
             {
                 if (doTween != null)
                     doTween.Kill();
-                agent.transform.DOLocalRotateQuaternion(startRotation, playData.SkillVisual.FrameTime / 1000f / 2);
+                Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(startRotation, playData.SkillVisual.FrameTime / 1000f / 2);
                 startRotation = Quaternion.identity;
             }
         }

@@ -9,7 +9,7 @@ table ParticleData
 	transform : Transform;
 	rigidbody : Rigidbody2D;
 
-	skill_play_agent : SkillPlayerAgentData;
+	skill_play_agent : SkillEditor.Flat.SkillPlayerAgentData;
 	survive_time_range : Vector2Int;
 	remain_time : int;
 	elapsed_time : int;
