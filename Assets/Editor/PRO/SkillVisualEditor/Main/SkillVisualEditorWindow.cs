@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -187,51 +188,54 @@ namespace PRO.SkillEditor
             set
             {
                 if (Config.Agent == null) { Debug.Log("«ÎÃÌº”÷¥––»À"); return; }
-                nowFrameTime = TimeLine.Offset % TimeScaleAxis.Spacing / TimeScaleAxis.Spacing * Config.Skill_Disk.FrameTime;
-                lastTime = DateTime.Now;
+                if (value == true)
+                {
+                    TimeScaleAxis.Align();
+                    playData = new SkillPlayData();
+                    playData.time = TimeLine.Offset % TimeScaleAxis.Spacing / TimeScaleAxis.Spacing * Config.Skill_Disk.FrameTime;
+                    playData.nowFrame = TimeScaleAxis.nowFrame;
+                    lastTime = DateTime.Now;
+                    playData.SkillVisual = Config.Skill_Disk;
+                    Config.Agent.SkillPlayDataList.Add(playData);
+                }
                 isPlay = value;
-                UpdateFrame();
             }
             get { return isPlay; }
         }
 
 
-        private double nowFrameTime = 0;
         private DateTime lastTime;
         private void PlayFrame()
         {
             if (IsUpdate == false || Config.Agent == null) return;
+            
+
             var deltaTime = (DateTime.Now - lastTime).TotalSeconds;
-            nowFrameTime += deltaTime;
 
-
-            playData.nowFrame = TimeScaleAxis.NowFrame;
-            playData.SkillVisual = Config.Skill_Disk;
-            for (int trackIndex = 0; trackIndex < Config.Skill_Disk.EventTrackList.Count; trackIndex++)
+            if (playData.UpdateFrameScript(Config.Agent, (float)deltaTime))
             {
-                var eventDisk = Config.Skill_Disk.EventTrackList[trackIndex].SlickArray[TimeScaleAxis.NowFrame] as EventDisk_Base;
-                if (eventDisk == null || eventDisk.enable == false) continue;
-                var sliceFrame = TimeScaleAxis.NowFrame - eventDisk.startFrame;
-                eventDisk.Update(Config.Agent, playData, new FrameData(TimeScaleAxis.NowFrame, sliceFrame, trackIndex), (float)deltaTime, (float)nowFrameTime + sliceFrame * Config.Skill_Disk.FrameTime);
+                Config.Agent.SkillPlayDataList.Remove(playData);
+                isPlay = false;
+                TimeScaleAxis.nowFrame = 0;
+                Console.FrameUpdate();
+                Console.SetNowFrameText(TimeScaleAxis.nowFrame);
+                TimeScaleAxis.Align();
             }
-            if (nowFrameTime >= Config.Skill_Disk.FrameTime)
+            else
             {
-                if (TimeScaleAxis.NowFrame + 1 >= TimeScaleAxis.MaxFrame)
+                if (playData.nowFrame != TimeScaleAxis.nowFrame)
                 {
-                    isPlay = false;
-                    TimeScaleAxis.NowFrame = 0;
-                    TimeScaleAxis.Align();
-                    return;
+                    TimeScaleAxis.nowFrame = playData.nowFrame;
+                    Console.FrameUpdate();
+                    Console.SetNowFrameText(TimeScaleAxis.nowFrame);
                 }
-                nowFrameTime -= Config.Skill_Disk.FrameTime;
-                TimeScaleAxis.NowFrame++;
+                TimeScaleAxis.Align();
+                TimeLine.Offset += (playData.time / Config.Skill_Disk.FrameTime * TimeScaleAxis.Spacing);
+                lastTime = DateTime.Now;
             }
-            TimeScaleAxis.Align();
-            TimeLine.Offset += (float)(nowFrameTime / Config.Skill_Disk.FrameTime * TimeScaleAxis.Spacing);
-            lastTime = DateTime.Now;
         }
 
-        private SkillPlayData playData = new();
+        private SkillPlayData playData;
         public void UpdateFrame()
         {
             playData.nowFrame = TimeScaleAxis.NowFrame;
@@ -241,9 +245,10 @@ namespace PRO.SkillEditor
         public void PlaySlice(Slice_DiskBase slice, int trackIndex)
         {
             if (Config.Agent == null) return;
+            var playData = new SkillPlayData();
             playData.nowFrame = slice.startFrame;
             playData.SkillVisual = Config.Skill_Disk;
-            slice.UpdateFrame(Config.Agent, playData, new FrameData(slice.startFrame, 0, trackIndex));
+            slice.UpdateFrame(Config.Agent, playData, new FrameData(slice.frameLength, 0, trackIndex));
         }
         public void PlaySlice(SliceBase slice)
         {

@@ -69,22 +69,20 @@ namespace PRO.SkillEditor
             }
         }
 
-        private int nowFrame = 0;
+        public int nowFrame = 0;
         public int NowFrame
         {
             get
             {
-                //if (SkillVisualEditorWindow.Inst.Config.Agent != null)
-                //    return SkillVisualEditorWindow.Inst.Config.Agent.GetSkill(SkillVisualEditorWindow.Inst.Config.Skill_Disk.loadPath).nowFrame;
-                //else
-                    return nowFrame;
+                return nowFrame;
             }
             set
             {
                 if (value == nowFrame) return;
+                if (value < 0) return;
+                if (value >= SkillVisualEditorWindow.Inst.Config.Skill_Disk.MaxFrame) return;
+
                 nowFrame = value;
-                //if (SkillVisualEditorWindow.Inst.Config.Agent != null)
-                //    SkillVisualEditorWindow.Inst.Config.Agent.GetSkill(SkillVisualEditorWindow.Inst.Config.Skill_Disk.loadPath).nowFrame = value;
                 SkillVisualEditorWindow.Inst.Console.FrameUpdate();
                 SkillVisualEditorWindow.Inst.UpdateFrame();
                 SkillVisualEditorWindow.Inst.Console.SetNowFrameText(NowFrame);

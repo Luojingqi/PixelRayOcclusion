@@ -58,6 +58,10 @@ namespace PRO.SkillEditor
             {
             }
         }
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            
+        }
 
         public class AllowLogicChangeValue_ParticleSlice_Disk : AllowLogicChangeValueBase
         {

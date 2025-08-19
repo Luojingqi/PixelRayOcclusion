@@ -9,12 +9,14 @@ namespace PRO.SkillEditor
 
         public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
-
-
             agent.AgentSprice.sprite = sprite;
-
-
         }
+
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            
+        }
+
 
         public class AllowLogicChangeValue_AnimationSlice2D_Disk : AllowLogicChangeValueBase
         {

@@ -9,6 +9,59 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
+public struct SliceHashData : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static SliceHashData GetRootAsSliceHashData(ByteBuffer _bb) { return GetRootAsSliceHashData(_bb, new SliceHashData()); }
+  public static SliceHashData GetRootAsSliceHashData(ByteBuffer _bb, SliceHashData obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public SliceHashData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public int TrackIndex { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public string SliceName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetSliceNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
+#else
+  public ArraySegment<byte>? GetSliceNameBytes() { return __p.__vector_as_arraysegment(6); }
+#endif
+  public byte[] GetSliceNameArray() { return __p.__vector_as_array<byte>(6); }
+  public int SliceStartFrame { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+
+  public static Offset<PRO.SkillEditor.Flat.SliceHashData> CreateSliceHashData(FlatBufferBuilder builder,
+      int track_index = 0,
+      StringOffset slice_nameOffset = default(StringOffset),
+      int slice_start_frame = 0) {
+    builder.StartTable(3);
+    SliceHashData.AddSliceStartFrame(builder, slice_start_frame);
+    SliceHashData.AddSliceName(builder, slice_nameOffset);
+    SliceHashData.AddTrackIndex(builder, track_index);
+    return SliceHashData.EndSliceHashData(builder);
+  }
+
+  public static void StartSliceHashData(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void AddTrackIndex(FlatBufferBuilder builder, int trackIndex) { builder.AddInt(0, trackIndex, 0); }
+  public static void AddSliceName(FlatBufferBuilder builder, StringOffset sliceNameOffset) { builder.AddOffset(1, sliceNameOffset.Value, 0); }
+  public static void AddSliceStartFrame(FlatBufferBuilder builder, int sliceStartFrame) { builder.AddInt(2, sliceStartFrame, 0); }
+  public static Offset<PRO.SkillEditor.Flat.SliceHashData> EndSliceHashData(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<PRO.SkillEditor.Flat.SliceHashData>(o);
+  }
+}
+
+
+static public class SliceHashDataVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyField(tablePos, 4 /*TrackIndex*/, 4 /*int*/, 4, false)
+      && verifier.VerifyString(tablePos, 6 /*SliceName*/, false)
+      && verifier.VerifyField(tablePos, 8 /*SliceStartFrame*/, 4 /*int*/, 4, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
 public struct SkillLogicData : IFlatbufferObject
 {
   private Table __p;

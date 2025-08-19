@@ -1,5 +1,4 @@
-﻿using PRO.Skill;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace PRO.SkillEditor
@@ -44,6 +43,10 @@ namespace PRO.SkillEditor
             //  if (Application.isPlaying == false)
             //  EditorShow(agent, trackIndex);
 #endif
+        }
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            
         }
         public void EditorShow(SkillPlayAgent agent, int trackIndex)
         {

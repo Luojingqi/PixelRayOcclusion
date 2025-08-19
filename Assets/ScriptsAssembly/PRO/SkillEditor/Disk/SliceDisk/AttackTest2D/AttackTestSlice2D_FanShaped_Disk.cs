@@ -40,11 +40,14 @@ namespace PRO.SkillEditor
             for (int i = 0; i < span.Length; i++)
                 Debug.DrawLine(startPos, trs.MultiplyPoint(span[i]), Color.green, time);
 #endif
-            if (frameData.sliceFrame == frameLength - 1)
-                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].After_AttackTest2D(agent, playData, this, frameData);
 
             changeValue.Reset(this);
+        }
+
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].After_AttackTest2D(agent, playData, this, frameData);
         }
 
         public void CreateRayEndPos(Span<Vector2> span)

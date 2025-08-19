@@ -1,5 +1,12 @@
 ﻿namespace PRO.SkillEditor.Flat;
 
+table SliceHashData
+{
+	track_index : int;
+	slice_name : string;
+	slice_start_frame : int;
+}
+
 table SkillLogicData
 {
 	type : string;

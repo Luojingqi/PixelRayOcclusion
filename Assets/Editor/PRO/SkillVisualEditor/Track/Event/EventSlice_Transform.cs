@@ -6,7 +6,7 @@ namespace PRO.SkillEditor
     {
         public override void DrawGizmo(SkillPlayAgent agent)
         {
-            Gizmos.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale) * Matrix4x4.TRS(diskData.position, diskData.rotation, diskData.scale);
+            Gizmos.matrix = Matrix4x4.TRS(agent.transform.position, agent.transform.rotation, agent.transform.lossyScale) * Matrix4x4.TRS(diskData.position, Quaternion.Euler(diskData.rotation), diskData.scale);
             Gizmos.DrawWireCube(Vector2.zero, new(0.5f, 0.5f));
         }
 
@@ -18,12 +18,12 @@ namespace PRO.SkillEditor
                 ref position))
                 diskData.position = position;
 
-            Quaternion rotation = diskData.rotation;
+            Quaternion rotation = Quaternion.Euler(diskData.rotation);
             if (HandleRotation(
                 Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one) *
                 Matrix4x4.TRS(diskData.position, Quaternion.identity, Vector3.one),
                 ref rotation))
-                diskData.rotation = rotation;
+                diskData.rotation = rotation.eulerAngles;
 
             Vector3 scale = diskData.scale;
             if (HandleScale(
@@ -41,7 +41,7 @@ namespace PRO.SkillEditor
         public Vector3 Position { get => diskData.position; set => diskData.position = value; }
         [LabelText("Ðý×ª")]
         [ShowInInspector]
-        public Quaternion Rotation { get => diskData.rotation; set => diskData.rotation = value; }
+        public Vector3 Rotation { get => diskData.rotation; set { diskData.rotation = value; } }
         [LabelText("Ëõ·Å")]
         [ShowInInspector]
         public Vector3 Scale { get => diskData.scale; set => diskData.scale = value; }

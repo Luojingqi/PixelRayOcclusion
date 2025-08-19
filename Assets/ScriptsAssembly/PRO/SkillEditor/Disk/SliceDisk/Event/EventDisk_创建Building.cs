@@ -14,38 +14,38 @@ namespace PRO.SkillEditor
 
         public override void UpdateFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
         {
-            if (frameData.sliceFrame == frameLength - 1)
+        }
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            var nor = PixelPosRotate.New(agent.transform.rotation.eulerAngles);
+            Vector2Int agentGlobalPos = Block.WorldToGlobal(agent.transform.position);
+
+            var building = BuildingBase.New(type, Guid.NewGuid().ToString(), agent.Scene);
+            building.TriggerCollider.size = (Vector2)size * Pixel.Size;
+            building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
+            building.transform.position = Block.GlobalToWorld(agentGlobalPos);
+            building.transform.rotation = agent.transform.rotation;
+            building.Global = agentGlobalPos;
+            building.Size = size;
+
+            foreach (var pixelData in pixelList)
             {
-                var nor = PixelPosRotate.New(agent.transform.rotation.eulerAngles);
-                Vector2Int agentGlobalPos = Block.WorldToGlobal(agent.transform.position);
-
-                var building = BuildingBase.New(type, Guid.NewGuid().ToString(), agent.Scene);
-                building.TriggerCollider.size = (Vector2)size * Pixel.Size;
-                building.TriggerCollider.offset = building.TriggerCollider.size / 2f;
-                building.transform.position = Block.GlobalToWorld(agentGlobalPos);
-                building.transform.rotation = agent.transform.rotation;
-                building.Global = agentGlobalPos;
-                building.Size = size;
-
-                foreach (var pixelData in pixelList)
-                {
-                    Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(pixelData.typeName), Pixel.GetPixelColorInfo(pixelData.colorName), pixelData.pos, pixelData.blockType);
-                    building.ToRAM_AddBuilding_Pixel(building_Pixel);
-                }
-
-                foreach (var pixelData in pixelList)
-                {
-                    Vector2Int globalPos = agentGlobalPos + nor.RotatePos(pixelData.pos);
-                    BlockBase blockBase = building.Scene.GetBlockBase(pixelData.blockType, Block.GlobalToBlock(globalPos));
-                    if (blockBase == null) continue;
-                    Pixel pixel = blockBase.GetPixel(Block.GlobalToPixel(globalPos));
-                    building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixelData.blockType), pixel);
-                }
-                building.CreateInit();
-
-                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].Agoing_创建Building(agent, playData, this, frameData, building);
+                Building_Pixel building_Pixel = Building_Pixel.TakeOut().Init(Pixel.GetPixelTypeInfo(pixelData.typeName), Pixel.GetPixelColorInfo(pixelData.colorName), pixelData.pos, pixelData.blockType);
+                building.ToRAM_AddBuilding_Pixel(building_Pixel);
             }
+
+            foreach (var pixelData in pixelList)
+            {
+                Vector2Int globalPos = agentGlobalPos + nor.RotatePos(pixelData.pos);
+                BlockBase blockBase = building.Scene.GetBlockBase(pixelData.blockType, Block.GlobalToBlock(globalPos));
+                if (blockBase == null) continue;
+                Pixel pixel = blockBase.GetPixel(Block.GlobalToPixel(globalPos));
+                building.ToRAM_PixelSwitch(building.GetBuilding_Pixel(pixel.posG, pixelData.blockType), pixel);
+            }
+            building.CreateInit();
+
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].Agoing_创建Building(agent, playData, this, frameData, building);
         }
 
         public struct PixelData

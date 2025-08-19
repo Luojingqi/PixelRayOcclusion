@@ -16,11 +16,14 @@ namespace PRO.SkillEditor
                 playData.time = 0;
                 playData.SkillVisual.UpdateFrame(agent, playData);
             }
-            if (frameData.sliceFrame == frameLength - 1)
-                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].After_Event(agent, playData, this, frameData);
 
             changeValue.Reset(this);
+        }
+
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].After_Event(agent, playData, this, frameData);
         }
 
         public class AllowLogicChangeValue_EventDisk_Ìø×ª²¥·Å : AllowLogicChangeValueBase

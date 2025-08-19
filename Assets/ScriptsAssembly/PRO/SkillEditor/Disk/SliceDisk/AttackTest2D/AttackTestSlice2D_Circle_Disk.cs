@@ -31,11 +31,12 @@ namespace PRO.SkillEditor
                 playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(agent, playData, this, frameData, array.AsSpan(0, length));
             PutIn(array, length);
 
-            if (frameData.sliceFrame == frameLength - 1)
-                for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
-                    playData.SkillLogicList[logicIndex].After_AttackTest2D(agent, playData, this, frameData);
-
             changeValue.Reset(this);
+        }
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
+                playData.SkillLogicList[logicIndex].After_AttackTest2D(agent, playData, this, frameData);
         }
 #if UNITY_EDITOR
         private void DrawCircle(Vector3 center, float radius, Color color, float duration, int segments = 32)

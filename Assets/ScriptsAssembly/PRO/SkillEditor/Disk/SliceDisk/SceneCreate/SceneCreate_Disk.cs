@@ -1,5 +1,4 @@
-﻿using PRO.Skill;
-using PRO.DataStructure;
+﻿using PRO.DataStructure;
 using PRO.Disk;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,6 +64,10 @@ namespace PRO.SkillEditor
             {
                 Debug.Log("请在运行模式下查看效果：场景创建轨道");
             }
+        }
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+
         }
 
         public struct PixelData

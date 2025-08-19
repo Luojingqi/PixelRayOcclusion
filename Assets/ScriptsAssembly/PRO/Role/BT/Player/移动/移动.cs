@@ -147,7 +147,7 @@ namespace PRO.BT.移动
             {
                 if (frameData.sliceFrame != 0) return;
                 var slice_Transform = slice as EventDisk_Transform;
-                doTween = Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(slice_Transform.rotation, playData.SkillVisual.FrameTime / 1000f * slice.frameLength);
+                //doTween = Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(slice_Transform.rotation, playData.SkillVisual.FrameTime / 1000f * slice.frameLength);
             }
 
             public override void After_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)

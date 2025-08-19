@@ -36,6 +36,10 @@ namespace PRO.SkillEditor
             renderer.transform.localRotation = rotation;
             renderer.transform.localScale = scale;
         }
+        public override void EndFrame(SkillPlayAgent agent, SkillPlayData playData, FrameData frameData)
+        {
+            agent.SpecialEffect2DSpriteList[frameData.trackIndex].gameObject.SetActive(false);
+        }
 
 
         public class AllowLogicChangeValue_SpecialEffectSlice2D_Disk : AllowLogicChangeValueBase

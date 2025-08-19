@@ -1,0 +1,15 @@
+﻿include "PRO.GenericFramework/SerializeTool/FlatBuffers/DataStructure/BasicData.fbs";
+include "PRO/SkillEditor/Agent/SkillPlayerAgentData.fbs";
+
+namespace PRO.SkillEditor.Flat;
+
+table EventDisk_Transform_LogicData
+{
+	start_position : PRO.Flat.Vector3;
+	start_rotation : PRO.Flat.Vector3;
+	start_scale : PRO.Flat.Vector3;
+	end_position : PRO.Flat.Vector3;
+	end_rotation : PRO.Flat.Vector3;
+	end_scale : PRO.Flat.Vector3;
+	slice_hash : SliceHashData;
+}

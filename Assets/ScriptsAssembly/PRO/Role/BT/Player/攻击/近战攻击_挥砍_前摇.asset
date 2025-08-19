@@ -114,10 +114,10 @@ MonoBehaviour:
       Data: 8|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
     - Name: 
       Entry: 12
-      Data: 10
+      Data: 3
     - Name: 
       Entry: 7
-      Data: 9|EventDisk_Transform, PRO.Assembly
+      Data: 9|PRO.SkillEditor.EventDisk_Transform, PRO.Assembly
     - Name: name
       Entry: 1
       Data: Transform
@@ -126,7 +126,7 @@ MonoBehaviour:
       Data: 0
     - Name: frameLength
       Entry: 3
-      Data: 1
+      Data: 3
     - Name: enable
       Entry: 5
       Data: true
@@ -147,7 +147,7 @@ MonoBehaviour:
       Data: 
     - Name: rotation
       Entry: 7
-      Data: UnityEngine.Quaternion, UnityEngine.CoreModule
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
     - Name: 
       Entry: 4
       Data: 0
@@ -156,10 +156,7 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 0.008726535
-    - Name: 
-      Entry: 4
-      Data: 0.9999619
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -178,99 +175,24 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 10|EventDisk_Transform, PRO.Assembly
-    - Name: name
-      Entry: 1
-      Data: Transform
-    - Name: startFrame
-      Entry: 3
-      Data: 7
-    - Name: frameLength
-      Entry: 3
-      Data: 3
-    - Name: enable
+    - Name: isPosition
       Entry: 5
-      Data: false
-    - Name: position
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: rotation
-      Entry: 7
-      Data: UnityEngine.Quaternion, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: -0.1305262
-    - Name: 
-      Entry: 4
-      Data: 0.9914449
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: scale
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
+      Data: true
+    - Name: isRotation
+      Entry: 5
+      Data: true
+    - Name: isScale
+      Entry: 5
+      Data: true
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 9
-      Data: 10
+      Data: 9
     - Name: 
       Entry: 9
-      Data: 10
+      Data: 9
     - Name: 
       Entry: 13
       Data: 
@@ -286,6 +208,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  MaxFrame: 10
-  FrameTime: 0.1
-  loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u524D\u6447"
+  MaxFrame: 3
+  FrameTime: 2
+  loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u6325\u780D_\u524D\u6447"

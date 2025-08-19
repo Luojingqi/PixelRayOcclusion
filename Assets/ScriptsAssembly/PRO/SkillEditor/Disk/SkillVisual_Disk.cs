@@ -115,7 +115,24 @@ namespace PRO.SkillEditor
             if (slice != null && slice.enable)
                 slice.UpdateFrame(agent, playData, new FrameData(playData.nowFrame, playData.nowFrame - slice.startFrame, trackIndex));
         }
-
+        public void UpdateEndFrame(SkillPlayAgent agent, SkillPlayData playData)
+        {
+            if (agent == null) return;
+            for (int i = 0; i < 7; i++)
+            {
+                int trackIndex = playData.playTrack & (1 << i);
+                int index = 0;
+                foreach (var track in this[(PlayTrack)trackIndex])
+                    UpdateTrackEndFrame(agent, track, playData, index++);
+            }
+        }
+        private void UpdateTrackEndFrame(SkillPlayAgent agent, Track_Disk track, SkillPlayData playData, int trackIndex)
+        {
+            Slice_DiskBase slice = track.SlickArray[playData.nowFrame];
+            var nextFrame = playData.nowFrame + 1;
+            if (slice != null && slice.enable && slice.startFrame + slice.frameLength == nextFrame)
+                slice.EndFrame(agent, playData, new FrameData(nextFrame, nextFrame - slice.startFrame, trackIndex));
+        }
         [Button("设置最大帧")]
         public void SetMaxFrame(int maxFrame)
         {

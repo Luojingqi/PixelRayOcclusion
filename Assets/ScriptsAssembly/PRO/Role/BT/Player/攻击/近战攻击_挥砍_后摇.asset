@@ -116,83 +116,20 @@ MonoBehaviour:
       Entry: 12
       Data: 5
     - Name: 
-      Entry: 7
-      Data: 9|EventDisk_Transform, PRO.Assembly
-    - Name: name
-      Entry: 1
-      Data: Transform
-    - Name: startFrame
-      Entry: 3
-      Data: 0
-    - Name: frameLength
-      Entry: 3
-      Data: 5
-    - Name: enable
-      Entry: 5
-      Data: true
-    - Name: position
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: rotation
-      Entry: 7
-      Data: UnityEngine.Quaternion, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: scale
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
     - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
     - Name: 
-      Entry: 9
-      Data: 9
+      Entry: 6
+      Data: 
     - Name: 
-      Entry: 9
-      Data: 9
+      Entry: 6
+      Data: 
     - Name: 
-      Entry: 9
-      Data: 9
-    - Name: 
-      Entry: 9
-      Data: 9
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -210,4 +147,4 @@ MonoBehaviour:
       Data: 
   MaxFrame: 5
   FrameTime: 50
-  loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u540E\u6447"
+  loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u6325\u780D_\u540E\u6447"

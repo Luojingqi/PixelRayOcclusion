@@ -36,8 +36,7 @@ namespace PRO.SkillEditor
         }
         private bool play = false;
         [Button]
-        public void AddSkill(SkillPlayData playData) => SkillPlayDataList.Add(playData);
-        public bool RemoveSkill(SkillPlayData playData) => SkillPlayDataList.Remove(playData);
+        private void AddSkill(SkillPlayData playData) => SkillPlayDataList.Add(playData);
 
         public void TimeUpdate()
         {
@@ -53,8 +52,8 @@ namespace PRO.SkillEditor
                 }
             }
         }
-        [ShowInInspector]
-        private List<SkillPlayData> SkillPlayDataList = new();
+        
+        public List<SkillPlayData> SkillPlayDataList = new();
 
         public Offset<Flat.SkillPlayerAgentData> ToDisk(FlatBufferBuilder builder)
         {
@@ -100,16 +99,20 @@ namespace PRO.SkillEditor
                 SkillVisual.UpdateFrame(agent, this);
             }
             time += deltaTime;
-            for (int trackIndex = 0; trackIndex < SkillVisual.EventTrackList.Count; trackIndex++)
-            {
-                var slice = SkillVisual.EventTrackList[trackIndex].SlickArray[nowFrame];
-                if (slice.enable == false) continue;
-                var eventDisk = slice as EventDisk_Base;
-                var sliceFrame = nowFrame - eventDisk.startFrame;
-                eventDisk.Update(agent, this, new FrameData(nowFrame, sliceFrame, trackIndex), deltaTime, time + sliceFrame * SkillVisual.FrameTime);
-            }
             while (time >= SkillVisual.FrameTime)
             {
+                //更新到下一帧前，调用上一帧的最后一次补间，不然可能会直接越过导致补间时间不够
+                for (int trackIndex = 0; trackIndex < SkillVisual.EventTrackList.Count; trackIndex++)
+                {
+                    var slice = SkillVisual.EventTrackList[trackIndex].SlickArray[nowFrame];
+                    if (slice == null || slice.enable == false) continue;
+                    var eventDisk = slice as EventDisk_Base;
+                    var sliceFrame = nowFrame - eventDisk.startFrame;
+                    for (int i = 0; i < SkillLogicList.Count; i++)
+                        SkillLogicList[i].Update_Event(agent, this, eventDisk, new FrameData(nowFrame, sliceFrame, trackIndex), SkillVisual.FrameTime - (time - deltaTime), (sliceFrame + 1) * SkillVisual.FrameTime);
+                }
+                SkillVisual.UpdateEndFrame(agent, this);
+
                 nowFrame++;
                 time -= SkillVisual.FrameTime;
                 if (nowFrame >= SkillVisual.MaxFrame)
@@ -123,6 +126,15 @@ namespace PRO.SkillEditor
                     return true;
                 }
                 SkillVisual.UpdateFrame(agent, this);
+            }
+            for (int trackIndex = 0; trackIndex < SkillVisual.EventTrackList.Count; trackIndex++)
+            {
+                var slice = SkillVisual.EventTrackList[trackIndex].SlickArray[nowFrame];
+                if (slice == null || slice.enable == false) continue;
+                var eventDisk = slice as EventDisk_Base;
+                var sliceFrame = nowFrame - eventDisk.startFrame;
+                for (int i = 0; i < SkillLogicList.Count; i++)
+                    SkillLogicList[i].Update_Event(agent, this, eventDisk, new FrameData(nowFrame, sliceFrame, trackIndex), deltaTime, time + sliceFrame * SkillVisual.FrameTime);
             }
             return false;
         }

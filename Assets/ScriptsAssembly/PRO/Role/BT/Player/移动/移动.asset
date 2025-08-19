@@ -116,140 +116,14 @@ MonoBehaviour:
       Entry: 12
       Data: 3
     - Name: 
-      Entry: 7
-      Data: 9|EventDisk_Transform, PRO.Assembly
-    - Name: name
-      Entry: 1
-      Data: "\u5DE6"
-    - Name: startFrame
-      Entry: 3
-      Data: 0
-    - Name: frameLength
-      Entry: 3
-      Data: 1
-    - Name: enable
-      Entry: 5
-      Data: true
-    - Name: position
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: rotation
-      Entry: 7
-      Data: UnityEngine.Quaternion, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0.0436193869
-    - Name: 
-      Entry: 4
-      Data: 0.999048233
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: scale
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
     - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
     - Name: 
       Entry: 7
-      Data: 10|EventDisk_Transform, PRO.Assembly
-    - Name: name
-      Entry: 1
-      Data: "\u53F3"
-    - Name: startFrame
-      Entry: 3
-      Data: 1
-    - Name: frameLength
-      Entry: 3
-      Data: 1
-    - Name: enable
-      Entry: 5
-      Data: true
-    - Name: position
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: rotation
-      Entry: 7
-      Data: UnityEngine.Quaternion, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: -0.0436193869
-    - Name: 
-      Entry: 4
-      Data: 0.999048233
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: scale
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: "11|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E, PRO.Assembly"
+      Data: "9|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E, PRO.Assembly"
     - Name: name
       Entry: 1
       Data: "\u8DF3\u8F6C->0"
@@ -267,7 +141,7 @@ MonoBehaviour:
       Data: 0
     - Name: changeValue
       Entry: 7
-      Data: "12|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E+AllowLogicChangeValue_EventDisk_\u8DF3\u8F6C\u64AD\u653E,
+      Data: "10|PRO.SkillEditor.EventDisk_\u8DF3\u8F6C\u64AD\u653E+AllowLogicChangeValue_EventDisk_\u8DF3\u8F6C\u64AD\u653E,
         PRO.Assembly"
     - Name: goToFrame
       Entry: 3
