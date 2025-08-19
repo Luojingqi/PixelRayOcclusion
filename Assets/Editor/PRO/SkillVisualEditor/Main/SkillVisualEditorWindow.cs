@@ -208,7 +208,7 @@ namespace PRO.SkillEditor
         private void PlayFrame()
         {
             if (IsUpdate == false || Config.Agent == null) return;
-            
+
 
             var deltaTime = (DateTime.Now - lastTime).TotalSeconds;
 
@@ -248,7 +248,7 @@ namespace PRO.SkillEditor
             var playData = new SkillPlayData();
             playData.nowFrame = slice.startFrame;
             playData.SkillVisual = Config.Skill_Disk;
-            slice.UpdateFrame(Config.Agent, playData, new FrameData(slice.frameLength, 0, trackIndex));
+            slice.UpdateFrame(Config.Agent, playData, new FrameData(-1, 0, (SkillVisual_Disk.PlayTrack)(-1), trackIndex));
         }
         public void PlaySlice(SliceBase slice)
         {

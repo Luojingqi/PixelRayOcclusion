@@ -21,51 +21,54 @@ namespace PRO.SkillEditor
     public struct FrameData
     {
         /// <summary>
-        /// 轨道的帧索引
+        /// 轨道内的帧索引
         /// </summary>
         public int trackFrame;
         /// <summary>
-        /// 切片的帧索引
+        /// 切片内的帧索引
         /// </summary>
         public int sliceFrame;
+
+        public SkillVisual_Disk.PlayTrack track;
         /// <summary>
         /// 轨道索引
         /// </summary>
         public int trackIndex;
 
-        public FrameData(int trackFrame, int sliceFrame, int trackIndex)
+        public FrameData(int trackFrame, int sliceFrame, SkillVisual_Disk.PlayTrack track, int trackIndex)
         {
             this.trackFrame = trackFrame;
             this.sliceFrame = sliceFrame;
+            this.track = track;
             this.trackIndex = trackIndex;
         }
     }
     public struct SliceHash
     {
+        public SkillVisual_Disk.PlayTrack track;
         public int trackIndex;
-        public string sliceName;
         public int sliceStartFrame;
 
-        public SliceHash(Slice_DiskBase slice, int trackIndex)
+        public SliceHash(Slice_DiskBase slice, SkillVisual_Disk.PlayTrack track, int trackIndex)
         {
+            this.track = track;
             this.trackIndex = trackIndex;
-            sliceName = slice.name;
             sliceStartFrame = slice.startFrame;
         }
 
-        public bool Equals(Slice_DiskBase slice, int trackIndex)
+        public bool Equals(Slice_DiskBase slice, SkillVisual_Disk.PlayTrack track, int trackIndex)
         {
-            return this.trackIndex == trackIndex &&
-                sliceName == slice.name &&
+            return
+                this.track == track &&
+                this.trackIndex == trackIndex &&
                 sliceStartFrame == slice.startFrame;
         }
 
         public Offset<Flat.SliceHashData> ToDisk(FlatBufferBuilder builder)
         {
-            var sliceNameOffset = builder.CreateString(sliceName);
             Flat.SliceHashData.StartSliceHashData(builder);
+            Flat.SliceHashData.AddTrack(builder, (int)track);
             Flat.SliceHashData.AddTrackIndex(builder, trackIndex);
-            Flat.SliceHashData.AddSliceName(builder, sliceNameOffset);
             Flat.SliceHashData.AddSliceStartFrame(builder, sliceStartFrame);
             return Flat.SliceHashData.EndSliceHashData(builder);
         }
@@ -76,8 +79,8 @@ namespace PRO.SkillEditor
         {
             return new SliceHash()
             {
+                track = (SkillVisual_Disk.PlayTrack)diskData.Track,
                 trackIndex = diskData.TrackIndex,
-                sliceName = diskData.SliceName,
                 sliceStartFrame = diskData.SliceStartFrame
             };
         }

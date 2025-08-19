@@ -2,8 +2,8 @@
 
 table SliceHashData
 {
+	track : int;
 	track_index : int;
-	slice_name : string;
 	slice_start_frame : int;
 }
 

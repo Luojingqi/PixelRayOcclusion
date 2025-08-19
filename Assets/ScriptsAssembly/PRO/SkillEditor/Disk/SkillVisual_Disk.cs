@@ -46,7 +46,7 @@ namespace PRO.SkillEditor
             EventTrackList.Clear();
         }
         [Flags]
-        public enum PlayTrack : ulong
+        public enum PlayTrack
         {
             /// <summary>
             /// 2D动画轨道
@@ -113,7 +113,7 @@ namespace PRO.SkillEditor
         {
             Slice_DiskBase slice = track.SlickArray[playData.nowFrame];
             if (slice != null && slice.enable)
-                slice.UpdateFrame(agent, playData, new FrameData(playData.nowFrame, playData.nowFrame - slice.startFrame, trackIndex));
+                slice.UpdateFrame(agent, playData, new FrameData(playData.nowFrame, playData.nowFrame - slice.startFrame, track.TrackEnum, trackIndex));
         }
         public void UpdateEndFrame(SkillPlayAgent agent, SkillPlayData playData)
         {
@@ -131,7 +131,7 @@ namespace PRO.SkillEditor
             Slice_DiskBase slice = track.SlickArray[playData.nowFrame];
             var nextFrame = playData.nowFrame + 1;
             if (slice != null && slice.enable && slice.startFrame + slice.frameLength == nextFrame)
-                slice.EndFrame(agent, playData, new FrameData(nextFrame, nextFrame - slice.startFrame, trackIndex));
+                slice.EndFrame(agent, playData, new FrameData(nextFrame, nextFrame - slice.startFrame, track.TrackEnum, trackIndex));
         }
         [Button("设置最大帧")]
         public void SetMaxFrame(int maxFrame)
@@ -154,7 +154,7 @@ namespace PRO.SkillEditor
         [Button("添加轨道")]
         public void AddTrack(PlayTrack track)
         {
-            this[track].Add(new Track_Disk(MaxFrame));
+            this[track].Add(new Track_Disk(track, MaxFrame));
         }
     }
 }

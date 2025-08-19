@@ -19,30 +19,24 @@ public struct SliceHashData : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public SliceHashData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int TrackIndex { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public string SliceName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
-#if ENABLE_SPAN_T
-  public Span<byte> GetSliceNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
-#else
-  public ArraySegment<byte>? GetSliceNameBytes() { return __p.__vector_as_arraysegment(6); }
-#endif
-  public byte[] GetSliceNameArray() { return __p.__vector_as_array<byte>(6); }
+  public int Track { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public int TrackIndex { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public int SliceStartFrame { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
   public static Offset<PRO.SkillEditor.Flat.SliceHashData> CreateSliceHashData(FlatBufferBuilder builder,
+      int track = 0,
       int track_index = 0,
-      StringOffset slice_nameOffset = default(StringOffset),
       int slice_start_frame = 0) {
     builder.StartTable(3);
     SliceHashData.AddSliceStartFrame(builder, slice_start_frame);
-    SliceHashData.AddSliceName(builder, slice_nameOffset);
     SliceHashData.AddTrackIndex(builder, track_index);
+    SliceHashData.AddTrack(builder, track);
     return SliceHashData.EndSliceHashData(builder);
   }
 
   public static void StartSliceHashData(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddTrackIndex(FlatBufferBuilder builder, int trackIndex) { builder.AddInt(0, trackIndex, 0); }
-  public static void AddSliceName(FlatBufferBuilder builder, StringOffset sliceNameOffset) { builder.AddOffset(1, sliceNameOffset.Value, 0); }
+  public static void AddTrack(FlatBufferBuilder builder, int track) { builder.AddInt(0, track, 0); }
+  public static void AddTrackIndex(FlatBufferBuilder builder, int trackIndex) { builder.AddInt(1, trackIndex, 0); }
   public static void AddSliceStartFrame(FlatBufferBuilder builder, int sliceStartFrame) { builder.AddInt(2, sliceStartFrame, 0); }
   public static Offset<PRO.SkillEditor.Flat.SliceHashData> EndSliceHashData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -56,8 +50,8 @@ static public class SliceHashDataVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*TrackIndex*/, 4 /*int*/, 4, false)
-      && verifier.VerifyString(tablePos, 6 /*SliceName*/, false)
+      && verifier.VerifyField(tablePos, 4 /*Track*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*TrackIndex*/, 4 /*int*/, 4, false)
       && verifier.VerifyField(tablePos, 8 /*SliceStartFrame*/, 4 /*int*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }

@@ -36,7 +36,7 @@ namespace PRO.SkillEditor
             {
                 var logic = playData.SkillLogicList[logicIndex];
                 if (logic is EventDisk_Transform_Logic transformLogic)
-                    if (transformLogic.sliceHash.Equals(this, frameData.trackIndex))
+                    if (transformLogic.sliceHash.Equals(this, frameData.track, frameData.trackIndex))
                     {
                         playData.SkillLogicList.RemoveAt(logicIndex);
                         return;
@@ -73,7 +73,7 @@ namespace PRO.SkillEditor
 
             public void Start(SkillPlayAgent agent, EventDisk_Transform eventSlice, FrameData frameData)
             {
-                sliceHash = new SliceHash(eventSlice, frameData.trackIndex);
+                sliceHash = new SliceHash(eventSlice, frameData.track, frameData.trackIndex);
 
                 if (eventSlice.isPosition)
                 {
@@ -93,7 +93,7 @@ namespace PRO.SkillEditor
             }
             public override void Update_Event(SkillPlayAgent agent, SkillPlayData playData, EventDisk_Base slice, FrameData frameData, float deltaTime, float time)
             {
-                if (sliceHash.Equals(slice, frameData.trackIndex) == false) return;
+                if (sliceHash.Equals(slice, frameData.track, frameData.trackIndex) == false) return;
                 var eventSlice = slice as EventDisk_Transform;
                 var tweenTime = time / (slice.frameLength * playData.SkillVisual.FrameTime);
                 if (eventSlice.isPosition)
@@ -106,7 +106,6 @@ namespace PRO.SkillEditor
 
             protected override void ExtendDataToDisk(FlatBufferBuilder builder)
             {
-                var sliceHashOffset = sliceHash.ToDisk(builder);
                 EventDisk_Transform_LogicData.StartEventDisk_Transform_LogicData(builder);
                 EventDisk_Transform_LogicData.AddStartPosition(builder, startPosition.ToDisk(builder));
                 EventDisk_Transform_LogicData.AddStartRotation(builder, startRotation.ToDisk(builder));
@@ -114,7 +113,7 @@ namespace PRO.SkillEditor
                 EventDisk_Transform_LogicData.AddEndPosition(builder, endPosition.ToDisk(builder));
                 EventDisk_Transform_LogicData.AddEndRotation(builder, endRotation.ToDisk(builder));
                 EventDisk_Transform_LogicData.AddEndScale(builder, endScale.ToDisk(builder));
-                EventDisk_Transform_LogicData.AddSliceHash(builder, sliceHashOffset);
+                EventDisk_Transform_LogicData.AddSliceHash(builder, sliceHash.ToDisk(builder));
                 builder.Finish(builder.EndTable());
             }
             protected override void ExtendDataToRAM(FlatBufferBuilder builder)

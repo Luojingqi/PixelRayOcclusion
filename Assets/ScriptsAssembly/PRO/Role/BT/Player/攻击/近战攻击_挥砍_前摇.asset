@@ -109,6 +109,9 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 7|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: TrackEnum
+      Entry: 3
+      Data: 0
     - Name: SlickArray
       Entry: 7
       Data: 8|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
