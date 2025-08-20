@@ -137,13 +137,16 @@ public struct SkillPlayerDataData : IFlatbufferObject
   public int SkillLogicListLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
   public float Time { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
   public int NowFrame { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public float Scale { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
 
   public static Offset<PRO.SkillEditor.Flat.SkillPlayerDataData> CreateSkillPlayerDataData(FlatBufferBuilder builder,
       StringOffset skill_visual_pathOffset = default(StringOffset),
       VectorOffset skill_logic_listOffset = default(VectorOffset),
       float time = 0.0f,
-      int now_frame = 0) {
-    builder.StartTable(4);
+      int now_frame = 0,
+      float scale = 0.0f) {
+    builder.StartTable(5);
+    SkillPlayerDataData.AddScale(builder, scale);
     SkillPlayerDataData.AddNowFrame(builder, now_frame);
     SkillPlayerDataData.AddTime(builder, time);
     SkillPlayerDataData.AddSkillLogicList(builder, skill_logic_listOffset);
@@ -151,7 +154,7 @@ public struct SkillPlayerDataData : IFlatbufferObject
     return SkillPlayerDataData.EndSkillPlayerDataData(builder);
   }
 
-  public static void StartSkillPlayerDataData(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static void StartSkillPlayerDataData(FlatBufferBuilder builder) { builder.StartTable(5); }
   public static void AddSkillVisualPath(FlatBufferBuilder builder, StringOffset skillVisualPathOffset) { builder.AddOffset(0, skillVisualPathOffset.Value, 0); }
   public static void AddSkillLogicList(FlatBufferBuilder builder, VectorOffset skillLogicListOffset) { builder.AddOffset(1, skillLogicListOffset.Value, 0); }
   public static VectorOffset CreateSkillLogicListVector(FlatBufferBuilder builder, Offset<PRO.SkillEditor.Flat.SkillLogicData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
@@ -161,6 +164,7 @@ public struct SkillPlayerDataData : IFlatbufferObject
   public static void StartSkillLogicListVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static void AddTime(FlatBufferBuilder builder, float time) { builder.AddFloat(2, time, 0.0f); }
   public static void AddNowFrame(FlatBufferBuilder builder, int nowFrame) { builder.AddInt(3, nowFrame, 0); }
+  public static void AddScale(FlatBufferBuilder builder, float scale) { builder.AddFloat(4, scale, 0.0f); }
   public static Offset<PRO.SkillEditor.Flat.SkillPlayerDataData> EndSkillPlayerDataData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<PRO.SkillEditor.Flat.SkillPlayerDataData>(o);
@@ -177,6 +181,7 @@ static public class SkillPlayerDataDataVerify
       && verifier.VerifyVectorOfTables(tablePos, 6 /*SkillLogicList*/, PRO.SkillEditor.Flat.SkillLogicDataVerify.Verify, false)
       && verifier.VerifyField(tablePos, 8 /*Time*/, 4 /*float*/, 4, false)
       && verifier.VerifyField(tablePos, 10 /*NowFrame*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 12 /*Scale*/, 4 /*float*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

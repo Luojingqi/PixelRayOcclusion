@@ -6,13 +6,13 @@ namespace PRO.BT.Tool
 {
     public class 播放SkillVisual : BTDecorator
     {
-        public BBParameter<SkillPlayData> playData;
-        public BBParameter<SkillPlayAgent> playAgent;
+        public BBParameter<SkillPlayData> PlayData;
+        public BBParameter<SkillPlayAgent> PlayAgent;
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard)
         {
-            var dataValue = playData.value;
-            var agentValue = playAgent.value;
+            var dataValue = PlayData.value;
+            var agentValue = PlayAgent.value;
             if (dataValue.UpdateFrameScript(agentValue, TimeManager.deltaTime))
             {
                 dataValue.ResetFrameIndex(agentValue);

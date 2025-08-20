@@ -20,6 +20,7 @@ table SkillPlayerDataData
 	skill_logic_list : [SkillLogicData];
 	time : float;
 	now_frame : int;
+	scale : float;
 }
 
 

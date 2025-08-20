@@ -50,7 +50,7 @@ namespace NodeCanvas.Framework
         private string _taskDescription;
         private string _obsoleteInfo;
         private bool _isRuntimeActive;
-        private bool _isInitSuccess;
+        protected bool _isInitSuccess;
         private EventRouter _eventRouter;
         //
 

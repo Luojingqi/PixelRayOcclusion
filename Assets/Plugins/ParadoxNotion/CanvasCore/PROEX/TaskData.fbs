@@ -4,6 +4,7 @@
 
 table ActionTaskData
 {
+	is_init_success : bool;
 	status : ubyte;
 	time_started : float;
 	latch : bool;
@@ -19,6 +20,7 @@ table ActionTaskListData
 
 table ConditionTaskData
 {
+	is_init_success : bool;
 	yield_return : int;
 	yields : int;
 	is_runtime_enabled : bool;

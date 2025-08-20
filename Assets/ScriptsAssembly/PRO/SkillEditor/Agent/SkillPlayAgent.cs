@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 namespace PRO.SkillEditor
 {
     /// <summary>
@@ -86,6 +87,7 @@ namespace PRO.SkillEditor
         public float time;
         public int nowFrame;
         public int playTrack = ~0;
+        public float scale = 1f;
         private bool firstUpdate = true;
         private bool firstEnd = true;
 
@@ -98,6 +100,7 @@ namespace PRO.SkillEditor
                     SkillLogicList[i].Before_SkillPlay(agent, this, SkillVisual);
                 SkillVisual.UpdateFrame(agent, this);
             }
+            deltaTime *= scale;
             time += deltaTime;
             while (time >= SkillVisual.FrameTime)
             {
@@ -147,6 +150,7 @@ namespace PRO.SkillEditor
                     SkillLogicList[i].After_SkillPlay(agent, this, SkillVisual);
             time = 0;
             nowFrame = 0;
+            scale = 1f;
             firstUpdate = true;
             firstEnd = true;
         }
@@ -159,6 +163,7 @@ namespace PRO.SkillEditor
             playData.SkillVisual = null;
             playData.time = 0;
             playData.nowFrame = 0;
+            playData.scale = 1f;
             playData.playTrack = ~0;
             playData.firstUpdate = true;
             playData.firstEnd = true;
@@ -176,6 +181,7 @@ namespace PRO.SkillEditor
             Flat.SkillPlayerDataData.AddSkillLogicList(builder, logicOffsetArrayOffset);
             Flat.SkillPlayerDataData.AddTime(builder, time);
             Flat.SkillPlayerDataData.AddNowFrame(builder, nowFrame);
+            Flat.SkillPlayerDataData.AddScale(builder, scale);
             return Flat.SkillPlayerDataData.EndSkillPlayerDataData(builder);
         }
         public void ToRAM(Flat.SkillPlayerDataData diskData)
@@ -190,6 +196,7 @@ namespace PRO.SkillEditor
             }
             time = diskData.Time;
             nowFrame = diskData.NowFrame;
+            scale = diskData.Scale;
         }
     }
 }

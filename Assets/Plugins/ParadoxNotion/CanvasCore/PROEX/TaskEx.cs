@@ -18,6 +18,7 @@ namespace NodeCanvas.Framework
             var extendBuilderOffset = builder.CreateVector_Builder(extendBuilder);
             FlatBufferBuilder.PutIn(extendBuilder);
             ConditionTaskData.StartConditionTaskData(builder);
+            ConditionTaskData.AddIsInitSuccess(builder, _isInitSuccess);
             ConditionTaskData.AddYieldReturn(builder, yieldReturn);
             ConditionTaskData.AddYields(builder, yields);
             ConditionTaskData.AddIsRuntimeEnabled(builder, isRuntimeEnabled);
@@ -27,6 +28,7 @@ namespace NodeCanvas.Framework
 
         public void ToRAM(ConditionTaskData diskData)
         {
+            _isInitSuccess = diskData.IsInitSuccess;
             yieldReturn = diskData.YieldReturn;
             yields = diskData.Yields;
             isRuntimeEnabled = diskData.IsRuntimeEnabled;
@@ -72,6 +74,7 @@ namespace NodeCanvas.Framework
             var extendBuilderOffset = builder.CreateVector_Builder(extendBuilder);
             FlatBufferBuilder.PutIn(extendBuilder);
             ActionTaskData.StartActionTaskData(builder);
+            ActionTaskData.AddIsInitSuccess(builder, _isInitSuccess);
             ActionTaskData.AddStatus(builder, (byte)status);
             ActionTaskData.AddTimeStarted(builder, timeStarted);
             ActionTaskData.AddLatch(builder, latch);
@@ -81,6 +84,7 @@ namespace NodeCanvas.Framework
 
         public void ToRAM(ActionTaskData diskData)
         {
+            _isInitSuccess = diskData.IsInitSuccess;
             status = (Status)diskData.Status;
             timeStarted = diskData.TimeStarted;
             latch = diskData.Latch;
@@ -116,8 +120,12 @@ namespace NodeCanvas.Framework
         {
             var diskData = ActionTaskListData.GetRootAsActionTaskListData(builder.DataBuffer);
             currentActionIndex = diskData.CurrentActionIndex;
-            for (int i = finishedIndeces.Length - 1; i >= 0; i--)
-                finishedIndeces[finishedIndeces.Length - i - 1] = diskData.FinishedIndeces(i);
+            if (_isInitSuccess)
+            {
+                finishedIndeces = new bool[diskData.FinishedIndecesLength];
+                for (int i = finishedIndeces.Length - 1; i >= 0; i--)
+                    finishedIndeces[finishedIndeces.Length - i - 1] = diskData.FinishedIndeces(i);
+            }
             for (int i = actions.Count - 1; i >= 0; i--)
                 actions[actions.Count - i - 1].ToRAM(diskData.Actions(i).Value);
         }

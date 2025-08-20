@@ -259,8 +259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e285373f0e9b444da92acd1c2b30e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Axis0: {fileID: 5883793460075133658}
-  Axis1: {fileID: 1789718925159019530}
+  Axis0: {fileID: 8281176044195792105}
+  Axis1: {fileID: 4267562370846551420}
   Renderer: {fileID: 1402176616537607167}
 --- !u!1 &2663493926688427803
 GameObject:

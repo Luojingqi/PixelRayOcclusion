@@ -19,36 +19,40 @@ public struct ActionTaskData : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public ActionTaskData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public byte Status { get { int o = __p.__offset(4); return o != 0 ? __p.bb.Get(o + __p.bb_pos) : (byte)0; } }
-  public float TimeStarted { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public bool Latch { get { int o = __p.__offset(8); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
-  public byte Extend(int j) { int o = __p.__offset(10); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
-  public int ExtendLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public bool IsInitSuccess { get { int o = __p.__offset(4); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+  public byte Status { get { int o = __p.__offset(6); return o != 0 ? __p.bb.Get(o + __p.bb_pos) : (byte)0; } }
+  public float TimeStarted { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public bool Latch { get { int o = __p.__offset(10); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+  public byte Extend(int j) { int o = __p.__offset(12); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int ExtendLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetExtendBytes() { return __p.__vector_as_span<byte>(10, 1); }
+  public Span<byte> GetExtendBytes() { return __p.__vector_as_span<byte>(12, 1); }
 #else
-  public ArraySegment<byte>? GetExtendBytes() { return __p.__vector_as_arraysegment(10); }
+  public ArraySegment<byte>? GetExtendBytes() { return __p.__vector_as_arraysegment(12); }
 #endif
-  public byte[] GetExtendArray() { return __p.__vector_as_array<byte>(10); }
+  public byte[] GetExtendArray() { return __p.__vector_as_array<byte>(12); }
 
   public static Offset<PRO.BT.Flat.Base.ActionTaskData> CreateActionTaskData(FlatBufferBuilder builder,
+      bool is_init_success = false,
       byte status = 0,
       float time_started = 0.0f,
       bool latch = false,
       VectorOffset extendOffset = default(VectorOffset)) {
-    builder.StartTable(4);
+    builder.StartTable(5);
     ActionTaskData.AddExtend(builder, extendOffset);
     ActionTaskData.AddTimeStarted(builder, time_started);
     ActionTaskData.AddLatch(builder, latch);
     ActionTaskData.AddStatus(builder, status);
+    ActionTaskData.AddIsInitSuccess(builder, is_init_success);
     return ActionTaskData.EndActionTaskData(builder);
   }
 
-  public static void StartActionTaskData(FlatBufferBuilder builder) { builder.StartTable(4); }
-  public static void AddStatus(FlatBufferBuilder builder, byte status) { builder.AddByte(0, status, 0); }
-  public static void AddTimeStarted(FlatBufferBuilder builder, float timeStarted) { builder.AddFloat(1, timeStarted, 0.0f); }
-  public static void AddLatch(FlatBufferBuilder builder, bool latch) { builder.AddBool(2, latch, false); }
-  public static void AddExtend(FlatBufferBuilder builder, VectorOffset extendOffset) { builder.AddOffset(3, extendOffset.Value, 0); }
+  public static void StartActionTaskData(FlatBufferBuilder builder) { builder.StartTable(5); }
+  public static void AddIsInitSuccess(FlatBufferBuilder builder, bool isInitSuccess) { builder.AddBool(0, isInitSuccess, false); }
+  public static void AddStatus(FlatBufferBuilder builder, byte status) { builder.AddByte(1, status, 0); }
+  public static void AddTimeStarted(FlatBufferBuilder builder, float timeStarted) { builder.AddFloat(2, timeStarted, 0.0f); }
+  public static void AddLatch(FlatBufferBuilder builder, bool latch) { builder.AddBool(3, latch, false); }
+  public static void AddExtend(FlatBufferBuilder builder, VectorOffset extendOffset) { builder.AddOffset(4, extendOffset.Value, 0); }
   public static VectorOffset CreateExtendVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateExtendVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateExtendVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
@@ -66,10 +70,11 @@ static public class ActionTaskDataVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Status*/, 1 /*byte*/, 1, false)
-      && verifier.VerifyField(tablePos, 6 /*TimeStarted*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*Latch*/, 1 /*bool*/, 1, false)
-      && verifier.VerifyVectorOfData(tablePos, 10 /*Extend*/, 1 /*byte*/, false)
+      && verifier.VerifyField(tablePos, 4 /*IsInitSuccess*/, 1 /*bool*/, 1, false)
+      && verifier.VerifyField(tablePos, 6 /*Status*/, 1 /*byte*/, 1, false)
+      && verifier.VerifyField(tablePos, 8 /*TimeStarted*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 10 /*Latch*/, 1 /*bool*/, 1, false)
+      && verifier.VerifyVectorOfData(tablePos, 12 /*Extend*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -148,36 +153,40 @@ public struct ConditionTaskData : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public ConditionTaskData __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int YieldReturn { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public int Yields { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public bool IsRuntimeEnabled { get { int o = __p.__offset(8); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
-  public byte Extend(int j) { int o = __p.__offset(10); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
-  public int ExtendLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public bool IsInitSuccess { get { int o = __p.__offset(4); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+  public int YieldReturn { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public int Yields { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public bool IsRuntimeEnabled { get { int o = __p.__offset(10); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+  public byte Extend(int j) { int o = __p.__offset(12); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int ExtendLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetExtendBytes() { return __p.__vector_as_span<byte>(10, 1); }
+  public Span<byte> GetExtendBytes() { return __p.__vector_as_span<byte>(12, 1); }
 #else
-  public ArraySegment<byte>? GetExtendBytes() { return __p.__vector_as_arraysegment(10); }
+  public ArraySegment<byte>? GetExtendBytes() { return __p.__vector_as_arraysegment(12); }
 #endif
-  public byte[] GetExtendArray() { return __p.__vector_as_array<byte>(10); }
+  public byte[] GetExtendArray() { return __p.__vector_as_array<byte>(12); }
 
   public static Offset<PRO.BT.Flat.Base.ConditionTaskData> CreateConditionTaskData(FlatBufferBuilder builder,
+      bool is_init_success = false,
       int yield_return = 0,
       int yields = 0,
       bool is_runtime_enabled = false,
       VectorOffset extendOffset = default(VectorOffset)) {
-    builder.StartTable(4);
+    builder.StartTable(5);
     ConditionTaskData.AddExtend(builder, extendOffset);
     ConditionTaskData.AddYields(builder, yields);
     ConditionTaskData.AddYieldReturn(builder, yield_return);
     ConditionTaskData.AddIsRuntimeEnabled(builder, is_runtime_enabled);
+    ConditionTaskData.AddIsInitSuccess(builder, is_init_success);
     return ConditionTaskData.EndConditionTaskData(builder);
   }
 
-  public static void StartConditionTaskData(FlatBufferBuilder builder) { builder.StartTable(4); }
-  public static void AddYieldReturn(FlatBufferBuilder builder, int yieldReturn) { builder.AddInt(0, yieldReturn, 0); }
-  public static void AddYields(FlatBufferBuilder builder, int yields) { builder.AddInt(1, yields, 0); }
-  public static void AddIsRuntimeEnabled(FlatBufferBuilder builder, bool isRuntimeEnabled) { builder.AddBool(2, isRuntimeEnabled, false); }
-  public static void AddExtend(FlatBufferBuilder builder, VectorOffset extendOffset) { builder.AddOffset(3, extendOffset.Value, 0); }
+  public static void StartConditionTaskData(FlatBufferBuilder builder) { builder.StartTable(5); }
+  public static void AddIsInitSuccess(FlatBufferBuilder builder, bool isInitSuccess) { builder.AddBool(0, isInitSuccess, false); }
+  public static void AddYieldReturn(FlatBufferBuilder builder, int yieldReturn) { builder.AddInt(1, yieldReturn, 0); }
+  public static void AddYields(FlatBufferBuilder builder, int yields) { builder.AddInt(2, yields, 0); }
+  public static void AddIsRuntimeEnabled(FlatBufferBuilder builder, bool isRuntimeEnabled) { builder.AddBool(3, isRuntimeEnabled, false); }
+  public static void AddExtend(FlatBufferBuilder builder, VectorOffset extendOffset) { builder.AddOffset(4, extendOffset.Value, 0); }
   public static VectorOffset CreateExtendVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateExtendVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateExtendVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
@@ -195,10 +204,11 @@ static public class ConditionTaskDataVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*YieldReturn*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*Yields*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*IsRuntimeEnabled*/, 1 /*bool*/, 1, false)
-      && verifier.VerifyVectorOfData(tablePos, 10 /*Extend*/, 1 /*byte*/, false)
+      && verifier.VerifyField(tablePos, 4 /*IsInitSuccess*/, 1 /*bool*/, 1, false)
+      && verifier.VerifyField(tablePos, 6 /*YieldReturn*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 8 /*Yields*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 10 /*IsRuntimeEnabled*/, 1 /*bool*/, 1, false)
+      && verifier.VerifyVectorOfData(tablePos, 12 /*Extend*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
