@@ -30,6 +30,7 @@ namespace PRO
         [OdinSerialize]
         private Toward toward = Toward.right;
 
+        [ShowInInspector]
         public Toward Toward
         {
             get { return toward; }
@@ -40,7 +41,9 @@ namespace PRO
                 var y180 = Quaternion.Euler(0, 180, 0);
                 transform.rotation *= y180;
                 RoleRenderer.Axis0.transform.localRotation *= y180;
-                RoleRenderer.Axis0.DOBlendableLocalRotateBy(new(0, 180, 0), 1);
+                
+               // RoleRenderer.Axis0.
+                //RoleRenderer.Axis0.DOBlendableLocalRotateBy(new(0, 180, 0), 1);
             }
         }
         public string RoleTypeName;

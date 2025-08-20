@@ -27,18 +27,18 @@ namespace PRO.SkillEditor
             for (int i = 0; i < span.Length; i++)
             {
                 var array = TakeOut();
-                int length = Physics2D.RaycastNonAlloc(
+                int length = Physics2D.LinecastNonAlloc(
                     startPos,
-                    trs.MultiplyPoint(span[i]),
-                    array, 0, changeValue.layerMask);
+                    trs.MultiplyPoint(span[i] * changeValue.distance),
+                    array, changeValue.layerMask);
                 for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
                     playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(agent, playData, this, frameData, array.AsSpan(0, length));
                 PutIn(array, length);
             }
 #if UNITY_EDITOR
-            var time = playData.SkillVisual.FrameTime / 1000f;
+            var time = playData.SkillVisual.FrameTime;
             for (int i = 0; i < span.Length; i++)
-                Debug.DrawLine(startPos, trs.MultiplyPoint(span[i]), Color.green, time);
+                Debug.DrawLine(startPos, trs.MultiplyPoint(span[i] * changeValue.distance), Color.green, time);
 #endif
 
             changeValue.Reset(this);
@@ -58,7 +58,7 @@ namespace PRO.SkillEditor
             {
                 float currentAngle = -halfAngle + i * angleStep;
                 Quaternion rotation = Quaternion.Euler(0, 0, currentAngle);
-                Vector2 endPoint = rotation * changeValue.direction * changeValue.distance;
+                Vector2 endPoint = rotation * changeValue.direction;
                 span[i] = endPoint;
             }
         }

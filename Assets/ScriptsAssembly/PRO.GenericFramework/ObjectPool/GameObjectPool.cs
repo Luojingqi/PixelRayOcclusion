@@ -3,7 +3,7 @@ namespace PRO.Tool
 {
     public class GameObjectPool<T> : ObjectPoolBase<T> where T : Component
     {
-        private T holdPrefab;
+        public readonly T holdPrefab;
         public readonly Transform toolParent;
 
         public GameObjectPool(T prefab, Transform parent)

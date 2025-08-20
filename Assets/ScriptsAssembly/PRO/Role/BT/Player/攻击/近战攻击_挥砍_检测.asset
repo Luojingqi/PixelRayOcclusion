@@ -66,7 +66,128 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 4|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: TrackEnum
+      Entry: 3
+      Data: 8
+    - Name: SlickArray
+      Entry: 7
+      Data: 5|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|PRO.SkillEditor.AttackTestSlice2D_Ray_Disk, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: "\u5C04\u7EBF"
+    - Name: startFrame
+      Entry: 3
+      Data: 3
+    - Name: frameLength
+      Entry: 3
+      Data: 1
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
       Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: layerMask
+      Entry: 3
+      Data: 0
+    - Name: changeValue
+      Entry: 7
+      Data: 7|PRO.SkillEditor.AttackTestSlice2D_Ray_Disk+AllowLogicChangeValue_AttackTestSlice2D_Ray_Disk,
+        PRO.Assembly
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: layerMask
+      Entry: 3
+      Data: 0
+    - Name: direction
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: distance
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: direction
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: distance
+      Entry: 4
+      Data: 1
+    - Name: AttackTestSlice2D_Ray_Disk+changeValue
+      Entry: 9
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -75,7 +196,7 @@ MonoBehaviour:
       Data: 
     - Name: SceneRuinTrackList
       Entry: 7
-      Data: 4|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+      Data: 8|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
         mscorlib
     - Name: 
       Entry: 12
@@ -88,7 +209,7 @@ MonoBehaviour:
       Data: 
     - Name: SceneCreateTrackList
       Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+      Data: 9|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
         mscorlib
     - Name: 
       Entry: 12
@@ -101,7 +222,7 @@ MonoBehaviour:
       Data: 
     - Name: EventTrackList
       Entry: 7
-      Data: 6|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
+      Data: 10|System.Collections.Generic.List`1[[PRO.SkillEditor.Track_Disk, PRO.Assembly]],
         mscorlib
     - Name: 
       Entry: 12

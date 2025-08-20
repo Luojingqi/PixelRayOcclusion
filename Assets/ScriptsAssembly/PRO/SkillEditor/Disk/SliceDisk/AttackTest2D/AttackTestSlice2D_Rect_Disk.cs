@@ -27,7 +27,7 @@ namespace PRO.SkillEditor
                 array, 0, changeValue.layerMask);
 #if UNITY_EDITOR
             var scale_2 = Vector2.one / 2f;
-            var time = playData.SkillVisual.FrameTime / 1000f;
+            var time = playData.SkillVisual.FrameTime;
             var pos0 = trs.MultiplyPoint(new Vector2(scale_2.x, scale_2.y));
             var pos1 = trs.MultiplyPoint(new Vector2(-scale_2.x, scale_2.y));
             var pos2 = trs.MultiplyPoint(new Vector2(-scale_2.x, -scale_2.y));

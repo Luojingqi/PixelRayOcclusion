@@ -58,7 +58,7 @@ namespace PRO.BT.移动
             var agent = Agent.value;
             agent.Info.移动速度.Value_基础 = 5;
             playData.SkillVisual = SkillVisual_移动;
-            playData.SkillLogicList.Add(new SkillLogic_移动() { Agent = agent });
+         //   playData.SkillLogicList.Add(new SkillLogic_移动() { Agent = agent });
             return base.OnInit();
         }
 
@@ -137,26 +137,26 @@ namespace PRO.BT.移动
             private Quaternion startRotation;
             public Role Agent;
 
-            public override void Before_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
-            {
-                startRotation = Agent.RoleRenderer.Axis1.localRotation;
-            }
+            //public override void Before_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
+            //{
+            //    startRotation = Agent.RoleRenderer.Axis1.localRotation;
+            //}
 
-            private Tweener doTween;
-            public override void Before_Event(SkillPlayAgent agent, SkillPlayData playData, EventDisk_Base slice, FrameData frameData)
-            {
-                if (frameData.sliceFrame != 0) return;
-                var slice_Transform = slice as EventDisk_Transform;
-                //doTween = Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(slice_Transform.rotation, playData.SkillVisual.FrameTime / 1000f * slice.frameLength);
-            }
+            //private Tweener doTween;
+            //public override void Before_Event(SkillPlayAgent agent, SkillPlayData playData, EventDisk_Base slice, FrameData frameData)
+            //{
+            //    if (frameData.sliceFrame != 0) return;
+            //    var slice_Transform = slice as EventDisk_Transform;
+            //    //doTween = Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(slice_Transform.rotation, playData.SkillVisual.FrameTime / 1000f * slice.frameLength);
+            //}
 
-            public override void After_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
-            {
-                if (doTween != null)
-                    doTween.Kill();
-                Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(startRotation, playData.SkillVisual.FrameTime / 1000f / 2);
-                startRotation = Quaternion.identity;
-            }
+            //public override void After_SkillPlay(SkillPlayAgent agent, SkillPlayData playData, SkillVisual_Disk skillVisual)
+            //{
+            //    if (doTween != null)
+            //        doTween.Kill();
+            //    Agent.RoleRenderer.Axis1.DOLocalRotateQuaternion(startRotation, playData.SkillVisual.FrameTime / 1000f / 2);
+            //    startRotation = Quaternion.identity;
+            //}
         }
     }
 }

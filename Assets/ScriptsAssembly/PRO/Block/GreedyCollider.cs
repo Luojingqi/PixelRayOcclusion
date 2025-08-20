@@ -24,7 +24,6 @@ namespace PRO
         public static BoxCollider2D TakeOut()
         {
             BoxCollider2D box = BoxCollider2DPool.TakeOut();
-
             return box;
         }
         public static void PutIn(BoxCollider2D box)
@@ -126,7 +125,7 @@ namespace PRO
         {
             for (int i = 0; i < colliderDataList.Count; i++)
             {
-                Color32 color = new Color32((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255), 255);
+                //Color32 color = new Color32((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255), 255);
                 var data = colliderDataList[i];
                 var box = TakeOut();
                 box.size = data.size;

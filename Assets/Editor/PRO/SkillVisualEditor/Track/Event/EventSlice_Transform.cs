@@ -39,12 +39,18 @@ namespace PRO.SkillEditor
         [LabelText("Î»ÖÃ")]
         [ShowInInspector]
         public Vector3 Position { get => diskData.position; set => diskData.position = value; }
+        [ShowInInspector]
+        public bool IsPosition { get => diskData.isPosition; set => diskData.isPosition = value; }
         [LabelText("Ðý×ª")]
         [ShowInInspector]
         public Vector3 Rotation { get => diskData.rotation; set { diskData.rotation = value; } }
+        [ShowInInspector]
+        public bool IsRotation { get => diskData.isRotation; set => diskData.isRotation = value; }
         [LabelText("Ëõ·Å")]
         [ShowInInspector]
         public Vector3 Scale { get => diskData.scale; set => diskData.scale = value; }
+        [ShowInInspector]
+        public bool IsScale { get => diskData.isScale; set => diskData.isScale = value; }
 
     }
 }

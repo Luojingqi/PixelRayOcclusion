@@ -36,8 +36,6 @@ namespace PRO.SkillEditor
 
         public void Clear()
         {
-            MaxFrame = 0;
-            FrameTime = 200;
             AnimationTrack2DList.Clear();
             SpecialEffectTrack2DList.Clear();
             ParticleTrackList.Clear();

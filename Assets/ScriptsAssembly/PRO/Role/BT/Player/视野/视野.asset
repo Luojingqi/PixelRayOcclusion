@@ -70,6 +70,9 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 4|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: TrackEnum
+      Entry: 3
+      Data: 8
     - Name: SlickArray
       Entry: 7
       Data: 5|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
@@ -96,10 +99,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0
+      Data: -0.04
     - Name: 
       Entry: 4
-      Data: 0
+      Data: 0.206525743
     - Name: 
       Entry: 8
       Data: 
@@ -115,10 +118,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 0
+      Data: -0.04
     - Name: 
       Entry: 4
-      Data: 0
+      Data: 0.206525743
     - Name: 
       Entry: 8
       Data: 
@@ -231,5 +234,5 @@ MonoBehaviour:
       Entry: 8
       Data: 
   MaxFrame: 1
-  FrameTime: 200
+  FrameTime: 0.5
   loadPath: "Role/BT/Player/\u89C6\u91CE/\u89C6\u91CE"

@@ -35,19 +35,21 @@ namespace PRO.BT.视野
 
             public override void Before_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData)
             {
-                slice.changeValue.position = (Vector2)Node.Agent.value.Info.NavMould.mould.center * Pixel.Size;
+                slice.changeValue.layerMask = (int)(GameLayer.Role | GameLayer.Block);
                 Node.看到的角色Dic.value.Clear();
             }
+            private int roleLayer = GameLayer.Role.ToUnityLayer();
             public override void Agoing_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData, Span<RaycastHit2D> hitSpan)
             {
                 var role = Node.Agent.value;
                 var set = Node.看到的角色Dic.value;
                 for (int i = 0; i < hitSpan.Length; i++)
                 {
-                    Debug.Log(Node.Agent.value.name + "看到 " + hitSpan[i].transform.name);
-                    var byTransform = hitSpan[i].transform;
-                    if (byTransform == role.transform) continue;
-                    var byRole = role.Scene.GetRole(byTransform);
+                    var hit = hitSpan[i];
+                    if (hit.transform.gameObject.layer != roleLayer) break;
+                    if (hit.transform == role.transform) continue;
+                    Debug.Log(Node.Agent.value.name + "看到 " + hitSpan[i].transform.name + "|" + hitSpan[i].transform.localPosition + "|" + i);
+                    var byRole = role.Scene.GetRole(hit.transform);
                     if (set.ContainsKey(byRole.GUID) == false)
                         set.Add(byRole.GUID, byRole);
                 }

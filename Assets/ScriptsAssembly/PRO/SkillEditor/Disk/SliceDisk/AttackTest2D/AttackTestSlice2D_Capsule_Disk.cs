@@ -27,7 +27,7 @@ namespace PRO.SkillEditor
                 Vector2.zero,
                 array, 0, changeValue.layerMask);
 #if UNITY_EDITOR
-            var time = playData.SkillVisual.FrameTime / 1000f;
+            var time = playData.SkillVisual.FrameTime;
             DrawCapsule(trs.GetPosition(), trs.lossyScale, trs.rotation.eulerAngles.z, CapsuleDirection2D.Vertical, Color.green, time);
 #endif
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)

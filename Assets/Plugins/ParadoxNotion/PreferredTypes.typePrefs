@@ -143,6 +143,7 @@
     "UnityEngine.Time",
     "UnityEngine.Transform",
     "UnityEngine.Vector2",
+    "UnityEngine.Vector2Int",
     "UnityEngine.Vector3",
     "UnityEngine.Vector4",
     "UnityEngine.AI.NavMesh",
@@ -150,6 +151,5 @@
     "UnityEngine.Audio.AudioMixer",
     "UnityEngine.SceneManagement.SceneManager",
     "UnityEngine.UI.Button",
-    "UnityEngine.UI.Slider",
-    "UnityEngine.Vector2Int"
+    "UnityEngine.UI.Slider"
 ]

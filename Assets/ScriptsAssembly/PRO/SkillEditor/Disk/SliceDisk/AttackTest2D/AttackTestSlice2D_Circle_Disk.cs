@@ -24,7 +24,7 @@ namespace PRO.SkillEditor
                 Vector2.zero,
                 array, 0, changeValue.layerMask);
 #if UNITY_EDITOR
-            var time = playData.SkillVisual.FrameTime / 1000f;
+            var time = playData.SkillVisual.FrameTime;
             DrawCircle(trs.GetPosition(), changeValue.radius, Color.green, time);
 #endif
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)

@@ -20,15 +20,15 @@ namespace PRO.SkillEditor
                            Matrix4x4.TRS(changeValue.position, Quaternion.identity, Vector3.one);
 
             var array = TakeOut();
-            int length = Physics2D.RaycastNonAlloc(
+            int length = Physics2D.LinecastNonAlloc(
                 trs.GetPosition(),
-                trs.rotation * changeValue.direction,
-                array, changeValue.distance, changeValue.layerMask);
+                trs.rotation * changeValue.direction * changeValue.distance,
+                array, changeValue.layerMask);
 #if UNITY_EDITOR
             Debug.DrawRay(
                 trs.GetPosition(),
                 trs.rotation * changeValue.direction * changeValue.distance,
-                Color.green, playData.SkillVisual.FrameTime / 1000f);
+                Color.green, playData.SkillVisual.FrameTime);
 #endif
             for (int logicIndex = 0; logicIndex < playData.SkillLogicList.Count; logicIndex++)
                 playData.SkillLogicList[logicIndex].Agoing_AttackTest2D(agent, playData, this, frameData, array.AsSpan(0, length));

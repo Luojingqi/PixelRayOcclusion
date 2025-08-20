@@ -24,7 +24,7 @@ namespace PRO.SkillEditor
             Gizmos.matrix = Matrix4x4.TRS(agent.transform.position, Quaternion.Euler(0, 0, agent.transform.rotation.eulerAngles.z), Vector3.one)
                         * Matrix4x4.TRS(diskData.position, Quaternion.identity, Vector3.one);
             for (int i = 0; i < span.Length; i++)
-                Gizmos.DrawRay(Vector3.zero, span[i]);
+                Gizmos.DrawRay(Vector3.zero, span[i] * diskData.distance);
         }
 
         public override void DrawHandle(SkillPlayAgent agent)

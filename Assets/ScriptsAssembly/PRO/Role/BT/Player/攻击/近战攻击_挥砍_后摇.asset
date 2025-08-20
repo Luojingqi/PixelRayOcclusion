@@ -109,27 +109,96 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 7|PRO.SkillEditor.Track_Disk, PRO.Assembly
+    - Name: TrackEnum
+      Entry: 3
+      Data: 64
     - Name: SlickArray
       Entry: 7
       Data: 8|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
     - Name: 
       Entry: 12
-      Data: 5
+      Data: 4
     - Name: 
-      Entry: 6
+      Entry: 7
+      Data: 9|PRO.SkillEditor.EventDisk_Transform, PRO.Assembly
+    - Name: name
+      Entry: 1
+      Data: Transform
+    - Name: startFrame
+      Entry: 3
+      Data: 0
+    - Name: frameLength
+      Entry: 3
+      Data: 4
+    - Name: enable
+      Entry: 5
+      Data: true
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: rotation
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: scale
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: isPosition
+      Entry: 5
+      Data: false
+    - Name: isRotation
+      Entry: 5
+      Data: true
+    - Name: isScale
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
       Data: 
     - Name: 
-      Entry: 6
-      Data: 
+      Entry: 9
+      Data: 9
     - Name: 
-      Entry: 6
-      Data: 
+      Entry: 9
+      Data: 9
     - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
+      Entry: 9
+      Data: 9
     - Name: 
       Entry: 13
       Data: 
@@ -145,6 +214,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  MaxFrame: 5
-  FrameTime: 50
+  MaxFrame: 4
+  FrameTime: 0.1
   loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u6325\u780D_\u540E\u6447"

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 082ce336de0be79418159fae9857e0b0, type: 3}
-  m_Name: "\u8FD1\u6218\u653B\u51FB_\u6325\u780D_\u524D\u6447"
+  m_Name: "\u8F6C\u8EAB"
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -117,7 +117,7 @@ MonoBehaviour:
       Data: 8|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
     - Name: 
       Entry: 12
-      Data: 9
+      Data: 1
     - Name: 
       Entry: 7
       Data: 9|PRO.SkillEditor.EventDisk_Transform, PRO.Assembly
@@ -127,168 +127,6 @@ MonoBehaviour:
     - Name: startFrame
       Entry: 3
       Data: 0
-    - Name: frameLength
-      Entry: 3
-      Data: 6
-    - Name: enable
-      Entry: 5
-      Data: true
-    - Name: position
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: rotation
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: scale
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: isPosition
-      Entry: 5
-      Data: false
-    - Name: isRotation
-      Entry: 5
-      Data: true
-    - Name: isScale
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 9
-      Data: 9
-    - Name: 
-      Entry: 9
-      Data: 9
-    - Name: 
-      Entry: 9
-      Data: 9
-    - Name: 
-      Entry: 9
-      Data: 9
-    - Name: 
-      Entry: 9
-      Data: 9
-    - Name: 
-      Entry: 7
-      Data: 10|PRO.SkillEditor.EventDisk_Transform, PRO.Assembly
-    - Name: name
-      Entry: 1
-      Data: Transform
-    - Name: startFrame
-      Entry: 3
-      Data: 6
-    - Name: frameLength
-      Entry: 3
-      Data: 2
-    - Name: enable
-      Entry: 5
-      Data: true
-    - Name: position
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: rotation
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: -20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: scale
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: isPosition
-      Entry: 5
-      Data: false
-    - Name: isRotation
-      Entry: 5
-      Data: true
-    - Name: isScale
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 9
-      Data: 10
-    - Name: 
-      Entry: 7
-      Data: 11|PRO.SkillEditor.EventDisk_Transform, PRO.Assembly
-    - Name: name
-      Entry: 1
-      Data: Transform
-    - Name: startFrame
-      Entry: 3
-      Data: 8
     - Name: frameLength
       Entry: 3
       Data: 1
@@ -318,10 +156,10 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 0
+      Data: 180
     - Name: 
       Entry: 4
-      Data: -15
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -367,6 +205,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  MaxFrame: 9
-  FrameTime: 0.1
-  loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u6325\u780D_\u524D\u6447"
+  MaxFrame: 1
+  FrameTime: 0.25
+  loadPath: "Role/BT/Player/\u79FB\u52A8/\u8F6C\u8EAB"

@@ -62,6 +62,19 @@ MonoBehaviour:
     - Name: priority
       Entry: 3
       Data: -1
+    - Name: SkillPlayDataList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PRO.SkillEditor.SkillPlayData, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   AgentSprice: {fileID: 0}
   SpecialEffect2DSpriteList: []
 --- !u!114 &1299716069439186355
@@ -258,6 +271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1789718925159019530}
+  - component: {fileID: 4267562370846551420}
   m_Layer: 8
   m_Name: Axis1
   m_TagString: Untagged
@@ -274,13 +288,52 @@ Transform:
   m_GameObject: {fileID: 2663493926688427803}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7369582598221864633}
   m_Father: {fileID: 5883793460075133658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4267562370846551420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2663493926688427803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
+    - Name: SkillPlayDataList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PRO.SkillEditor.SkillPlayData, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  AgentSprice: {fileID: 0}
+  SpecialEffect2DSpriteList: []
 --- !u!1 &2913531999537458773
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +360,7 @@ Transform:
   m_GameObject: {fileID: 2913531999537458773}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -374,6 +427,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5883793460075133658}
+  - component: {fileID: 8281176044195792105}
   m_Layer: 8
   m_Name: Axis0
   m_TagString: Untagged
@@ -397,3 +451,42 @@ Transform:
   - {fileID: 1789718925159019530}
   m_Father: {fileID: 1368600328058437413}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8281176044195792105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6442769359183253744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02fe2ca7424e1544a1c392f45147653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: priority
+      Entry: 3
+      Data: -1
+    - Name: SkillPlayDataList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PRO.SkillEditor.SkillPlayData, PRO.Assembly]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  AgentSprice: {fileID: 0}
+  SpecialEffect2DSpriteList: []

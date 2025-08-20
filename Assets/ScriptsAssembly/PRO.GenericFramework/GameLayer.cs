@@ -8,7 +8,6 @@ namespace PRO
     {
         Default = 1 << 0,
 
-        UnRole = 1 << 7,
         Role = 1 << 8,
         Building = 1 << 9,
 
@@ -24,6 +23,6 @@ namespace PRO
     }
     public static class GameLayerEx
     {
-        public static int ToUnityLayer(this GameLayer layer) => (int)Mathf.Log(2, (int)layer);
+        public static int ToUnityLayer(this GameLayer layer) => (int)Math.Log((double)layer, 2.0);
     }
 }

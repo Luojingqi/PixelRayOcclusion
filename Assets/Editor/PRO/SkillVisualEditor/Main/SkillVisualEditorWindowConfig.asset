@@ -22,4 +22,4 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Agent: {fileID: 0}
-  Skill_Disk: {fileID: 11400000, guid: 14df2a2ccb9b498419eb7381c0f5167e, type: 2}
+  Skill_Disk: {fileID: 11400000, guid: 3afad86c5c5489042a64ef75cd513663, type: 2}
