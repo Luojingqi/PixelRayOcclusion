@@ -3395,6 +3395,7 @@ GameObject:
   - component: {fileID: 655462170}
   - component: {fileID: 655462172}
   - component: {fileID: 655462171}
+  - component: {fileID: 655462173}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -3533,7 +3534,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655462165}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
   m_Name: 
@@ -3552,9 +3553,22 @@ MonoBehaviour:
   _disableAction: 0
   _lockBoundGraphPrefabOverrides: 1
   _preInitializeSubGraphs: 0
-  _updateMode: 0
-  _graph: {fileID: 11400000, guid: d7ad46b920b754f498ec2bb83a61b641, type: 2}
+  _updateMode: 3
+  _graph: {fileID: 0}
   _blackboard: {fileID: 655462171}
+--- !u!114 &655462173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655462165}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8700f4cd59d172e4b8b0fe69b299bad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 655462172}
 --- !u!1 &752079205
 GameObject:
   m_ObjectHideFlags: 0
@@ -7543,6 +7557,7 @@ MonoBehaviour:
     - Name: priority
       Entry: 3
       Data: -1
+  WeaponConfig: {fileID: 11400000, guid: dfa2ffadb181e01448a46829f0f35d81, type: 2}
 --- !u!1 &1305003538
 GameObject:
   m_ObjectHideFlags: 0

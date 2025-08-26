@@ -4,6 +4,7 @@ using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using NodeCanvas.Framework;
 using PRO.DataStructure;
+using PRO.EventData;
 using PRO.Skill;
 using PRO.SkillEditor;
 using System.Collections.Generic;
@@ -56,9 +57,8 @@ namespace PRO.BT.移动
         protected override string OnInit()
         {
             var agent = Agent.value;
-            agent.Info.移动速度.Value_基础 = 5;
+            agent.Info.移动速度.GetValue_基础((long)DefaultValueID.默认).Value = 5;
             playData.SkillVisual = SkillVisual_移动;
-         //   playData.SkillLogicList.Add(new SkillLogic_移动() { Agent = agent });
             return base.OnInit();
         }
 
@@ -103,7 +103,7 @@ namespace PRO.BT.移动
                 {
                     var endPos = Block.GlobalToWorld(data.navList[data.index].globalPos) + new Vector3(Pixel.Size_Half, 0);
                     agent.LookAt(endPos);
-                    data.deltaTime = (float)(1 / agent.Info.移动速度.Value);
+                    data.deltaTime = (float)(1 / agent.Info.移动速度.ValueSum);
                     data.doTweener = agent.transform.DOMove(endPos, data.deltaTime);
                 }
                 else

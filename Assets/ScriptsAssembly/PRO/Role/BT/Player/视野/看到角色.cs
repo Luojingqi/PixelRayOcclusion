@@ -35,7 +35,6 @@ namespace PRO.BT.视野
 
             public override void Before_AttackTest2D(SkillPlayAgent agent, SkillPlayData playData, AttackTestSlice2DBase_Disk slice, FrameData frameData)
             {
-                slice.changeValue.layerMask = (int)(GameLayer.Role | GameLayer.Block);
                 Node.看到的角色Dic.value.Clear();
             }
             private int roleLayer = GameLayer.Role.ToUnityLayer();

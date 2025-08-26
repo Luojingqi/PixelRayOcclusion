@@ -23,7 +23,7 @@ namespace PRO.Buff
                 for (int i = 0; i < byAgentData.StartCombatEffectDataList.Count; i++)
                 {
                     var startData = byAgentData.StartCombatEffectDataList[i];
-                    if (startData.type == 属性.火)
+                    if (startData.type == 战斗效果属性.火)
                     {
                         startData.value = (int)(startData.value * (1f - buff.Proportion));
                         byAgentData.LogBuilder.AppendLine($"触发“{Name}”：火属性伤害下降{buff.Proportion * 100:F0}%，buff消失。");
@@ -33,7 +33,7 @@ namespace PRO.Buff
                         RoleRemoveThis();
                         return;
                     }
-                    else if (startData.type == 属性.冰)
+                    else if (startData.type == 战斗效果属性.冰)
                     {
                         //var buff_寒冷 = byAgentData.Agent.GetBuff<Buff_2_7>();
                         //if (buff_寒冷 == null) continue;

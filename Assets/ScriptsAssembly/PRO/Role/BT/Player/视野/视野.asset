@@ -108,7 +108,7 @@ MonoBehaviour:
       Data: 
     - Name: layerMask
       Entry: 3
-      Data: 0
+      Data: 2304
     - Name: changeValue
       Entry: 7
       Data: 7|PRO.SkillEditor.AttackTestSlice2D_FanShaped_Disk+AllowLogicChangeValue_AttackTestSlice2D_FanShaped_Disk,
@@ -127,7 +127,7 @@ MonoBehaviour:
       Data: 
     - Name: layerMask
       Entry: 3
-      Data: 0
+      Data: 2304
     - Name: direction
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

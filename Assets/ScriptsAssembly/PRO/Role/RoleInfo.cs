@@ -1,9 +1,9 @@
 ﻿using Google.FlatBuffers;
 using PRO.Flat.Ex;
 using PRO.Tool;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using PRO.EventData;
 
 namespace PRO
 {
@@ -43,12 +43,13 @@ namespace PRO
         public EventData_Int32 攻击力;//5
         public EventData_Double 移动速度;//6     //移动速度,走一个格子需要多少秒
         public EventData_Double 攻击速度;//7
-        public EventData_Int32[] 抗性Array = new EventData_Int32[(int)属性.end];//8
+        public EventData_Int32[] 抗性Array = new EventData_Int32[(int)战斗效果属性.end];//8
         public EventData_Double 命中率;//9
         public EventData_Double 闪避率;//10
         public EventData_Double 暴击率;//11
         public EventData_Int32 韧性;//12
         public AgentNavMould NavMould;//13
+
         public RoleInfo()
         {
             最大血量 = new(this);
@@ -58,7 +59,7 @@ namespace PRO
             攻击力 = new(this);
             移动速度 = new(this);
             攻击速度 = new(this);
-            抗性Array = new EventData_Int32[(int)属性.end];
+            抗性Array = new EventData_Int32[(int)战斗效果属性.end];
             for (int i = 0; i < 抗性Array.Length; i++)
                 抗性Array[i] = new(this);
             命中率 = new(this);
@@ -66,18 +67,22 @@ namespace PRO
             暴击率 = new(this);
             韧性 = new(this);
 
-            血量.AddValueChangeEvent(EventData<int>.EventType.UnClear, (info, type, nowData, oldData) =>
-            {
-                if (type != EventData<int>.ChangeValueType.基础) return oldData;
-                nowData.value_基础 = Math.Clamp(nowData.value_基础, 0, info.最大血量.Value);
-                return nowData;
-            });
-            护甲.AddValueChangeEvent(EventData<int>.EventType.UnClear, (info, type, nowData, oldData) =>
-            {
-                if (type != EventData<int>.ChangeValueType.基础) return oldData;
-                nowData.value_基础 = Math.Clamp(nowData.value_基础, 0, info.最大护甲.Value);
-                return nowData;
-            });
+            血量.AddValueChangeEvent(EventClear.UnClear,
+                (info, changeValue, oldData, newData) =>
+                {
+                    if (newData.Value > info.最大血量.ValueSum)
+                    {
+                        changeValue.EventData.GetValue_额外((long)DefaultValueID.溢出修正).Value = newData.Value - info.最大血量.ValueSum;
+                    }
+                });
+            护甲.AddValueChangeEvent(EventClear.UnClear,
+                (info, changeValue, oldData, newData) =>
+                {
+                    if (newData.Value > info.最大护甲.ValueSum)
+                    {
+                        changeValue.EventData.GetValue_额外((long)DefaultValueID.溢出修正).Value = newData.Value - info.最大护甲.ValueSum;
+                    }
+                });
         }
 
         public void ClearEvent()
@@ -105,13 +110,58 @@ namespace PRO
             EventData_Int32.CloneValue(from.攻击力, to.攻击力);
             EventData_Double.CloneValue(from.移动速度, to.移动速度);
             EventData_Double.CloneValue(from.攻击速度, to.攻击速度);
-            for (int i = 0; i < (int)属性.end; i++)
+            for (int i = 0; i < (int)战斗效果属性.end; i++)
                 EventData_Int32.CloneValue(from.抗性Array[i], to.抗性Array[i]);
             EventData_Double.CloneValue(from.闪避率, to.闪避率);
             EventData_Double.CloneValue(from.暴击率, to.暴击率);
             EventData_Int32.CloneValue(from.韧性, to.韧性);
             to.NavMould = from.NavMould;
         }
+        //public void Add(RoleInfo info)
+        //{
+        //    最大血量.Add(info.最大血量);
+        //    血量.Add(info.血量);
+        //    最大护甲.Add(info.最大护甲);
+        //    护甲.Add(info.护甲);
+        //    攻击力.Add(info.攻击力);
+        //    移动速度.Add(info.移动速度);
+        //    攻击速度.Add(info.攻击速度);
+        //    for (int i = 0; i < 抗性Array.Length; i++)
+        //        抗性Array[i].Add(info.抗性Array[i]);
+        //    闪避率.Add(info.闪避率);
+        //    暴击率.Add(info.暴击率);
+        //    韧性.Add(info.韧性);
+        //}
+        //public void Subtract(RoleInfo info)
+        //{
+        //    最大血量.Subtract(info.最大血量);
+        //    血量.Subtract(info.血量);
+        //    最大护甲.Subtract(info.最大护甲);
+        //    护甲.Subtract(info.护甲);
+        //    攻击力.Subtract(info.攻击力);
+        //    移动速度.Subtract(info.移动速度);
+        //    攻击速度.Subtract(info.攻击速度);
+        //    for (int i = 0; i < 抗性Array.Length; i++)
+        //        抗性Array[i].Subtract(info.抗性Array[i]);
+        //    闪避率.Subtract(info.闪避率);
+        //    暴击率.Subtract(info.暴击率);
+        //    韧性.Subtract(info.韧性);
+        //}
+        //public void Multiply(double value)
+        //{
+        //    最大血量.Multiply(value);
+        //    血量.Multiply(value);
+        //    最大护甲.Multiply(value);
+        //    护甲.Multiply(value);
+        //    攻击力.Multiply(value);
+        //    移动速度.Multiply(value);
+        //    攻击速度.Multiply(value);
+        //    for (int i = 0; i < 抗性Array.Length; i++)
+        //        抗性Array[i].Multiply(value);
+        //    闪避率.Multiply(value);
+        //    暴击率.Multiply(value);
+        //    韧性.Multiply(value);
+        //}
 
         public Offset<Flat.RoleInfoData> ToDisk(FlatBufferBuilder builder)
         {
@@ -155,7 +205,7 @@ namespace PRO
             攻击力.ToRAM(diskData.Value5.Value);
             移动速度.ToRAM(diskData.Value6.Value);
             攻击速度.ToRAM(diskData.Value7.Value);
-            for (int i = (int)属性.end - 1; i >= 0; i--)
+            for (int i = (int)战斗效果属性.end - 1; i >= 0; i--)
                 抗性Array[i].ToRAM(diskData.Value8(i).Value);
             命中率.ToRAM(diskData.Value9.Value);
             闪避率.ToRAM(diskData.Value10.Value);

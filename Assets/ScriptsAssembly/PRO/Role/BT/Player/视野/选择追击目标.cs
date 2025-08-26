@@ -58,7 +58,7 @@ namespace PRO.BT.视野
                             Role 绝对血量与护甲最少的角色 = null;
                             foreach (var role in 看到的角色Dic.value.Values)
                             {
-                                var 绝对血量与护甲 = role.Info.血量.Value + role.Info.护甲.Value;
+                                var 绝对血量与护甲 = role.Info.血量.ValueSum + role.Info.护甲.ValueSum;
                                 if (绝对血量与护甲 < 绝对血量与护甲最少的值)
                                     绝对血量与护甲最少的角色 = role;
                             }

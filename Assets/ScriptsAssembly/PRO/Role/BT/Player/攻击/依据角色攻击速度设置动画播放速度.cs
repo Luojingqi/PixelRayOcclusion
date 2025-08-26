@@ -10,7 +10,7 @@ namespace PRO.BT.攻击
         public BBParameter<SkillPlayData> PlayData;
         protected override void OnExecute()
         {
-            PlayData.value.scale = (float)Agent.value.Info.攻击速度.Value;
+            PlayData.value.scale = (float)Agent.value.Info.攻击速度.ValueSum;
             EndAction(true);
         }
     }

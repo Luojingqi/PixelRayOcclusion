@@ -1,4 +1,5 @@
 ﻿using Google.FlatBuffers;
+using PRO.EventData;
 using PRO.Tool;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace PRO
         public Role Agent { get; private set; }
         public RoleInfo AgentInfo { get; private set; } = new RoleInfo();
         public List<StartCombatEffectData> StartCombatEffectDataList = new List<StartCombatEffectData>();
-        public 施法方式 施法方式type;
+        public 施法触发方式 施法方式type;
 
 
         public StringBuilder LogBuilder = new StringBuilder(50);
@@ -71,7 +72,7 @@ namespace PRO
             data.AgentInfo.ToRAM(diskData.RoleInfo.Value);
             for (int i = diskData.StartCombatEffectDataListLength - 1; i >= 0; i--)
                 data.StartCombatEffectDataList.Add(StartCombatEffectData.ToRAM(diskData.StartCombatEffectDataList(i).Value));
-            data.施法方式type = (施法方式)diskData.CastASpellType;
+            data.施法方式type = (施法触发方式)diskData.CastASpellType;
             data.LogBuilder.Append(diskData.LogBuilder);
             for (int i = diskData.ByAgentDataListLength - 1; i >= 0; i--)
                 data.ByAgentDataList.Add(CombatContext_ByAgentData.ToRAM(diskData.ByAgentDataList(i).Value, scene));
@@ -157,7 +158,7 @@ namespace PRO
         /// <summary>
         /// 添加技能伤害
         /// </summary>
-        public void Calculate_战斗技能初始化(施法方式 type, List<StartCombatEffectData> startDatas)
+        public void Calculate_战斗技能初始化(施法触发方式 type, List<StartCombatEffectData> startDatas)
         {
             施法方式type = type;
             foreach (var data in startDatas)
@@ -177,10 +178,15 @@ namespace PRO
         {
             CombatContext_ByAgentData byAgentData = ByAgentDataList[index];
             RoleInfo byAgentInfo = byAgentData.AgentInfo;
-
+            for (int i = 0; i < byAgentData.StartCombatEffectDataList.Count; i++)
+            {
+                var oldData = byAgentData.StartCombatEffectDataList[i];
+                var newData = new StartCombatEffectData(oldData.type, Mathf.Max(0, oldData.value));
+                byAgentData.StartCombatEffectDataList[i] = newData;
+            }
             EndCombatEffectData data = new EndCombatEffectData();
-            data.命中率 = AgentInfo.命中率.Value - byAgentInfo.闪避率.Value;
-            data.暴击率 = AgentInfo.暴击率.Value + System.Math.Max(data.命中率 - 1f, 0);
+            data.命中率 = AgentInfo.命中率.ValueSum - byAgentInfo.闪避率.ValueSum;
+            data.暴击率 = AgentInfo.暴击率.ValueSum + System.Math.Max(data.命中率 - 1f, 0);
             Calculate_CombatEffect(byAgentData, out data.护甲, out data.血量);
             Calculate_CombatEffect(byAgentData, out data.护甲_暴击, out data.血量_暴击, 2.0);
             ByAgentDataList[index].EndCombatEffectData = data;
@@ -197,14 +203,14 @@ namespace PRO
                 int effectValue = (int)(effectData.value * coefficient);
                 switch (effectData.type)
                 {
-                    case 属性.治疗: 血量影响 += effectValue; break;
-                    case 属性.护甲修复: 护甲影响 += effectValue; break;
-                    case 属性.真实: 血量影响 -= effectValue; break;
+                    case 战斗效果属性.治疗: 血量影响 += effectValue; break;
+                    case 战斗效果属性.护甲修复: 护甲影响 += effectValue; break;
+                    case 战斗效果属性.真实: 血量影响 -= effectValue; break;
                     default:
-                        if (护甲影响 + effectValue > byAgentInfo.护甲.Value)
+                        if (护甲影响 + effectValue > byAgentInfo.护甲.ValueSum)
                         {
-                            血量影响 -= 护甲影响 + effectValue - byAgentInfo.护甲.Value - byAgentInfo.抗性Array[(int)effectData.type].Value;
-                            护甲影响 -= byAgentInfo.护甲.Value;
+                            血量影响 -= 护甲影响 + effectValue - byAgentInfo.护甲.ValueSum - byAgentInfo.抗性Array[(int)effectData.type].ValueSum;
+                            护甲影响 -= byAgentInfo.护甲.ValueSum;
                         }
                         else
                             护甲影响 -= effectValue;
@@ -235,8 +241,8 @@ namespace PRO
                     var byAgent = byAgentData.Agent;
                     if (Random.Range(0, 1000) > (int)(byEndCombatEffectData.暴击率 * 1000))
                     {
-                        byAgent.Info.护甲.Value_基础 += byEndCombatEffectData.护甲;
-                        byAgent.Info.血量.Value_基础 += byEndCombatEffectData.血量;
+                        byAgent.Info.护甲.GetValue_基础((long)DefaultValueID.默认).Value += byEndCombatEffectData.护甲;
+                        byAgent.Info.血量.GetValue_基础((long)DefaultValueID.默认).Value += byEndCombatEffectData.血量;
 
                         byAgentData.LogBuilder.Append($"命中。");
                         if (byEndCombatEffectData.护甲 != 0) { byAgentData.LogBuilder.Append($"护甲{GetSign(byEndCombatEffectData.护甲)}，"); }
@@ -246,8 +252,8 @@ namespace PRO
                     else
                     {
                         byEndCombatEffectData.is暴击 = true;
-                        byAgent.Info.护甲.Value_基础 += byEndCombatEffectData.护甲_暴击;
-                        byAgent.Info.血量.Value_基础 += byEndCombatEffectData.血量_暴击;
+                        byAgent.Info.护甲.GetValue_基础((long)DefaultValueID.默认).Value += byEndCombatEffectData.护甲_暴击;
+                        byAgent.Info.血量.GetValue_基础((long)DefaultValueID.默认).Value += byEndCombatEffectData.血量_暴击;
                         byAgentData.LogBuilder.Append("暴击！");
                         if (byEndCombatEffectData.护甲_暴击 != 0) { byAgentData.LogBuilder.Append($"护甲{GetSign(byEndCombatEffectData.护甲_暴击)}，"); }
                         if (byEndCombatEffectData.血量_暴击 != 0) { byAgentData.LogBuilder.Append($"血量{GetSign(byEndCombatEffectData.血量_暴击)}，"); }
@@ -265,8 +271,8 @@ namespace PRO
 
                 if (byAgentData.PlayAffectedAnimation)
                 {
-                  //  if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 < 0) byAgentData.Agent.Play被攻击Animation();
-                  //  else if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 > 0) byAgentData.Agent.Play被治疗Animation();
+                    //  if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 < 0) byAgentData.Agent.Play被攻击Animation();
+                    //  else if (byEndCombatEffectData.护甲 + byEndCombatEffectData.血量 > 0) byAgentData.Agent.Play被治疗Animation();
                 }
                 byAgentData.Agent.UpdateBuffUI();
             }
@@ -279,7 +285,7 @@ namespace PRO
 
         public void Calculate_战斗技能初始化_直接对发起人结算(System.Span<StartCombatEffectData> startDatas)
         {
-            施法方式type = 施法方式.直接触发;
+            施法方式type = 施法触发方式.直接;
             foreach (var data in startDatas)
             {
                 StartCombatEffectDataList.Add(data);
@@ -289,8 +295,8 @@ namespace PRO
             var byData = ByAgentDataList[0];
             byData.LogBuilder.Clear();
             Calculate_CombatEffect(byData, out byData.EndCombatEffectData.护甲, out byData.EndCombatEffectData.血量);
-            Agent.Info.护甲.Value_基础 += byData.EndCombatEffectData.护甲;
-            Agent.Info.血量.Value_基础 += byData.EndCombatEffectData.血量;
+            Agent.Info.护甲.GetValue_基础((long)DefaultValueID.默认).Value += byData.EndCombatEffectData.护甲;
+            Agent.Info.血量.GetValue_基础((long)DefaultValueID.默认).Value += byData.EndCombatEffectData.血量;
             Agent.ForEachBuffApplyEffect(BuffTriggerType.受到战斗效果后, this, 0);
             LogBuilder.Append(ByAgentDataList[0].LogBuilder);
         }

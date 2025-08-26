@@ -1,10 +1,13 @@
 using DG.Tweening;
+using PRO.Weapon;
 using UnityEngine;
 namespace PRO
 {
     public class GamePlayMain : MonoScriptBase, ITime_Awake, ITime_Update
     {
         public static GamePlayMain Inst { get; private set; }
+
+        public WeaponConfig WeaponConfig;
 
         public void TimeAwake()
         {

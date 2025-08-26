@@ -52,7 +52,7 @@ namespace PRO.Skill.Base
             public int 施法半径 { get => config.Radius_G; set { config.Radius_G = value; config.Radius_W = value * Pixel.Size; } }
             [TableColumnWidth(0)]
             [ShowInInspector]
-            public 施法方式 施法方式 { get => config.施法type; set => config.施法type = value; }
+            public 施法触发方式 施法方式 { get => config.施法type; set => config.施法type = value; }
             [TableColumnWidth(150)]
             [ShowInInspector]
             [TableList]

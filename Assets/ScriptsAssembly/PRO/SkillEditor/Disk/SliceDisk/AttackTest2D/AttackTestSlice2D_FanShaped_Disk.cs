@@ -5,9 +5,21 @@ namespace PRO.SkillEditor
 {
     public class AttackTestSlice2D_FanShaped_Disk : AttackTestSlice2DBase_Disk
     {
+        /// <summary>
+        /// 方向
+        /// </summary>
         public Vector2 direction = Vector2.right;
+        /// <summary>
+        /// 距离
+        /// </summary>
         public float distance = 1;
+        /// <summary>
+        /// 夹角
+        /// </summary>
         public float angle = 30f;
+        /// <summary>
+        /// 密度
+        /// </summary>
         public float density = 0.3f;
 
         public new AllowLogicChangeValue_AttackTestSlice2D_FanShaped_Disk changeValue = new();
@@ -65,9 +77,21 @@ namespace PRO.SkillEditor
 
         public class AllowLogicChangeValue_AttackTestSlice2D_FanShaped_Disk : AllowLogicChangeValue_AttackTestSlice2DBase_Disk
         {
+            /// <summary>
+            /// 方向
+            /// </summary>
             public Vector2 direction;
+            /// <summary>
+            /// 距离
+            /// </summary>
             public float distance;
+            /// <summary>
+            /// 夹角
+            /// </summary>
             public float angle;
+            /// <summary>
+            /// 密度
+            /// </summary>
             public float density;
 
             public void Reset(AttackTestSlice2D_FanShaped_Disk slice)

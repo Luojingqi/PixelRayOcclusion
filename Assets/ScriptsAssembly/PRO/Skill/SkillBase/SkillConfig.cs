@@ -11,7 +11,7 @@ namespace PRO.Skill.Base
         public int Radius_G;
         public float Radius_W;
 
-        public 施法方式 施法type;
+        public 施法触发方式 施法type;
         public List<StartCombatEffectData> StartCombatEffectDataList = new List<StartCombatEffectData>();
     }
 }

@@ -7,10 +7,10 @@ namespace PRO
     /// </summary>
     public struct StartCombatEffectData
     {
-        public 属性 type;
+        public 战斗效果属性 type;
         public int value;
 
-        public StartCombatEffectData(属性 type, int value)
+        public StartCombatEffectData(战斗效果属性 type, int value)
         {
             this.value = value;
             this.type = type;
@@ -22,7 +22,7 @@ namespace PRO
         }
         public static StartCombatEffectData ToRAM(Flat.StartCombatEffectData diskData)
         {
-            return new StartCombatEffectData((属性)diskData.Type, diskData.Value);
+            return new StartCombatEffectData((战斗效果属性)diskData.Type, diskData.Value);
         }
     }
     /// <summary>
@@ -44,7 +44,7 @@ namespace PRO
     /// <summary>
     /// 战斗效果的属性
     /// </summary>
-    public enum 属性
+    public enum 战斗效果属性
     {
         无属性,
         切割,
@@ -61,9 +61,9 @@ namespace PRO
         end
     }
 
-    public enum 施法方式
+    public enum 施法触发方式
     {
-        直接触发,
+        直接,
         近战,
         远程
     }

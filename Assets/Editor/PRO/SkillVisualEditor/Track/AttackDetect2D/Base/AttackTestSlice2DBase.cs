@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static PRO.Weapon.WeaponBase;
 
 namespace PRO.SkillEditor
 {
@@ -21,6 +22,10 @@ namespace PRO.SkillEditor
         [LabelText("位置")]
         [ShowInInspector]
         public Vector2 Position { get => DiskData_AT.position; set => DiskData_AT.position = value; }
+
+        [LabelText("检测层")]
+        [ShowInInspector, EnumToggleButtons]
+        public GameLayer LayerMask { get => (GameLayer)DiskData_AT.layerMask; set => DiskData_AT.layerMask = (int)value; }
 
         private List<GameLayer> layerMaskList;
         [LabelText("层级")]

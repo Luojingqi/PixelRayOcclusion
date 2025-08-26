@@ -78,25 +78,16 @@ MonoBehaviour:
       Data: 5|PRO.SkillEditor.Slice_DiskBase[], PRO.Assembly
     - Name: 
       Entry: 12
-      Data: 5
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 6
-      Data: 
+      Data: 1
     - Name: 
       Entry: 7
-      Data: 6|PRO.SkillEditor.AttackTestSlice2D_Ray_Disk, PRO.Assembly
+      Data: 6|PRO.SkillEditor.AttackTestSlice2D_FanShaped_Disk, PRO.Assembly
     - Name: name
       Entry: 1
-      Data: "\u5C04\u7EBF"
+      Data: "\u6247\u5F62"
     - Name: startFrame
       Entry: 3
-      Data: 3
+      Data: 0
     - Name: frameLength
       Entry: 3
       Data: 1
@@ -111,16 +102,16 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 0
+      Data: 0.15
     - Name: 
       Entry: 8
       Data: 
     - Name: layerMask
       Entry: 3
-      Data: 0
+      Data: 256
     - Name: changeValue
       Entry: 7
-      Data: 7|PRO.SkillEditor.AttackTestSlice2D_Ray_Disk+AllowLogicChangeValue_AttackTestSlice2D_Ray_Disk,
+      Data: 7|PRO.SkillEditor.AttackTestSlice2D_FanShaped_Disk+AllowLogicChangeValue_AttackTestSlice2D_FanShaped_Disk,
         PRO.Assembly
     - Name: position
       Entry: 7
@@ -130,13 +121,13 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 0
+      Data: 0.15
     - Name: 
       Entry: 8
       Data: 
     - Name: layerMask
       Entry: 3
-      Data: 0
+      Data: 256
     - Name: direction
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -151,7 +142,13 @@ MonoBehaviour:
       Data: 
     - Name: distance
       Entry: 4
-      Data: 1
+      Data: 0
+    - Name: angle
+      Entry: 4
+      Data: 90
+    - Name: density
+      Entry: 4
+      Data: 0.3
     - Name: 
       Entry: 8
       Data: 
@@ -169,15 +166,18 @@ MonoBehaviour:
       Data: 
     - Name: distance
       Entry: 4
-      Data: 1
-    - Name: AttackTestSlice2D_Ray_Disk+changeValue
+      Data: 0
+    - Name: angle
+      Entry: 4
+      Data: 90
+    - Name: density
+      Entry: 4
+      Data: 0.3
+    - Name: AttackTestSlice2D_FanShaped_Disk+changeValue
       Entry: 9
       Data: 7
     - Name: 
       Entry: 8
-      Data: 
-    - Name: 
-      Entry: 6
       Data: 
     - Name: 
       Entry: 13
@@ -233,6 +233,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  MaxFrame: 5
-  FrameTime: 100
+  MaxFrame: 1
+  FrameTime: 0.05
   loadPath: "Role/BT/Player/\u653B\u51FB/\u8FD1\u6218\u653B\u51FB_\u6325\u780D_\u68C0\u6D4B"
